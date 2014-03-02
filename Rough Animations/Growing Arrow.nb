@@ -1,0 +1,102 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      3036,         93]
+NotebookOptionsPosition[      2792,         80]
+NotebookOutlinePosition[      3137,         95]
+CellTagsIndexPosition[      3094,         92]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Animate", "[", 
+  RowBox[{
+   RowBox[{"Graphics3D", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"Blue", ",", 
+         RowBox[{"Arrowheads", "[", ".12", "]"}], ",", 
+         RowBox[{"Arrow", "[", 
+          RowBox[{"Tube", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0", ",", 
+               RowBox[{"M", "-", "1"}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0", ",", "M"}], "}"}]}], "}"}], "]"}], 
+          "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Thickness", "\[Rule]", "0.045"}], ",", "Blue", ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", "0", ",", 
+              RowBox[{"M", "-", "1"}]}], "}"}]}], "}"}], "]"}]}], "}"}]}], 
+      "}"}], ",", 
+     RowBox[{"Axes", "\[Rule]", "None"}], ",", 
+     RowBox[{"AxesLabel", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\"\<x\>\"", ",", "\"\<y\>\"", ",", "\"\<z\>\""}], "}"}]}], 
+     ",", 
+     RowBox[{"Boxed", "\[Rule]", "False"}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "3"}], ",", "3"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "3"}], ",", "8"}], "}"}]}], "}"}]}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"M", ",", "3", ",", "8", ",", "0.01"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.599214163119321*^9, 3.599214163121313*^9}, {
+  3.5992142496563187`*^9, 3.5992142510814896`*^9}, {3.5992142925047555`*^9, 
+  3.599214461382227*^9}, {3.5992145094433365`*^9, 3.5992145841996274`*^9}, {
+  3.5992148047176447`*^9, 3.599214869565889*^9}, {3.5992149015139503`*^9, 
+  3.5992149239407997`*^9}, {3.5992149547997303`*^9, 3.5992149817131405`*^9}, {
+  3.5992150406216373`*^9, 3.599215153265957*^9}, {3.5992156690604987`*^9, 
+  3.5992157336087046`*^9}}]
+},
+WindowSize->{707, 503},
+WindowMargins->{{Automatic, 248}, {Automatic, 42}},
+FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 2231, 58, 132, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
