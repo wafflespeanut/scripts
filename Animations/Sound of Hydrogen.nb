@@ -1,0 +1,73 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      1894,         64]
+NotebookOptionsPosition[      1651,         51]
+NotebookOutlinePosition[      1996,         66]
+CellTagsIndexPosition[      1953,         63]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Play", "[", 
+  RowBox[{
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Sin", "[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"1", "-", 
+          RowBox[{"1", "/", 
+           RowBox[{"n", "^", "2"}]}]}], ")"}], "*", "2", "*", "Pi", "*", "t", 
+        "*", "440"}], "]"}], "+", 
+      RowBox[{"Sin", "[", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"1", "/", "4"}], "-", 
+          RowBox[{"1", "/", 
+           RowBox[{"n", "^", "2"}]}]}], ")"}], "*", "2", "*", "Pi", "*", "t", 
+        "*", "440"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"n", ",", "2", ",", "10"}], "}"}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"t", ",", "0", ",", "10"}], "}"}], ",", 
+   RowBox[{"SampleRate", "\[Rule]", "32000"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.5941154398970275`*^9, 3.5941154732813954`*^9}, {
+  3.5941155094032*^9, 3.594115547966813*^9}, {3.5941155857755938`*^9, 
+  3.59411563951817*^9}, {3.594115691645706*^9, 3.5941157209740443`*^9}, {
+  3.5941158120473843`*^9, 3.5941158215342846`*^9}}]
+},
+WindowSize->{707, 503},
+WindowMargins->{{113, Automatic}, {Automatic, 48}},
+FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 1090, 29, 52, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
