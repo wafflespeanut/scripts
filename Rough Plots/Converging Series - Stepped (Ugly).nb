@@ -1,0 +1,124 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      3560,        115]
+NotebookOptionsPosition[      3261,        100]
+NotebookOutlinePosition[      3661,        117]
+CellTagsIndexPosition[      3618,        114]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Show", "[", 
+  RowBox[{
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"Sum", "[", 
+         RowBox[{
+          RowBox[{"1", "/", 
+           RowBox[{"2", "^", "n"}]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"n", ",", "0", ",", "t"}], "}"}]}], "]"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"Sum", "[", 
+         RowBox[{
+          RowBox[{"n", "/", 
+           RowBox[{"2", "^", "n"}]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"n", ",", "0", ",", "t"}], "}"}]}], "]"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"Sum", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"n", "^", "2"}], "/", 
+           RowBox[{"2", "^", "n"}]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"n", ",", "0", ",", "t"}], "}"}]}], "]"}], "}"}]}], "}"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0", ",", "16"}], "}"}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "0.5"}], ",", "17"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "0.25"}], ",", "6.25"}], "}"}]}], "}"}]}], ",", 
+     RowBox[{"PlotStyle", "\[Rule]", "Thick"}], ",", 
+     RowBox[{"ImageSize", "\[Rule]", "500"}], ",", 
+     RowBox[{"AxesStyle", "\[Rule]", 
+      RowBox[{"Directive", "[", 
+       RowBox[{"Black", ",", "18"}], "]"}]}]}], "]"}], ",", 
+   RowBox[{"Graphics", "[", 
+    RowBox[{"{", 
+     RowBox[{"Thick", ",", 
+      RowBox[{"Darker", "[", "Green", "]"}], ",", "Dashed", ",", 
+      RowBox[{"Line", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "2"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"20", ",", "2"}], "}"}]}], "}"}], "]"}]}], "}"}], "]"}], 
+   ",", 
+   RowBox[{"Graphics", "[", 
+    RowBox[{"{", 
+     RowBox[{"Thick", ",", 
+      RowBox[{"Darker", "[", "Green", "]"}], ",", "Dashed", ",", 
+      RowBox[{"Line", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "6"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"20", ",", "6"}], "}"}]}], "}"}], "]"}]}], "}"}], "]"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQA2IQLb33gOvOU68cX1V+9wHRK4L2hYPoc0/qYkC0Q9mt
+VBA96zdTLoiuOD+xBETzfDgFpifZR9eCaC02oXoQ7Wz9pQVEX/ixuQdEf92r
+NBVEX5n04wiIFsjKPQmi5T7NuAKiRT/M/giiu7i3g+lpmxoNdwHpDuFbfiB6
+yrGZuSA66VZPFYheMLWvAUS3nrjdCaKrK95OANEle67MANHpHffmg2ivTKmt
+IPp+DMdOEP0hMnwviH7xx1D3MZBuD1qkB6JLRK5+AtEqZ2d9BtF3JqX9BNEW
+J9ewPAHSMruf8IBoiyPLhUC0+J8+aRDtJWcqC6Lvt6q9AdEhbza9B9FsnV1v
+C86/cjx9fM07EA0AadrZDw==
+  "]]
+},
+WindowSize->{817, 549},
+WindowMargins->{{Automatic, 224}, {Automatic, 24}},
+ShowSelection->True,
+Magnification->1.100000023841858,
+FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 2700, 78, 113, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
