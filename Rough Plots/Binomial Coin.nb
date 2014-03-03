@@ -1,0 +1,72 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      1863,         62]
+NotebookOptionsPosition[      1599,         48]
+NotebookOutlinePosition[      1965,         64]
+CellTagsIndexPosition[      1922,         61]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"p", "=", "0.5"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"DiscretePlot", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Binomial", "[", 
+       RowBox[{"n", ",", "k"}], "]"}], " ", 
+      RowBox[{"p", "^", "k"}], " ", 
+      RowBox[{"p", "^", 
+       RowBox[{"(", 
+        RowBox[{"n", "-", "k"}], ")"}]}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "0", ",", "n"}], "}"}], ",", 
+     RowBox[{"ImageSize", "\[Rule]", "500"}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"n", ",", "1", ",", "\"\<Number of tosses\>\""}], "}"}], ",", 
+     "1", ",", "80", ",", "1"}], "}"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.6026490581833973`*^9, 3.6026491996473756`*^9}, {
+  3.6026493478232174`*^9, 3.6026493918198195`*^9}, {3.6026494387918043`*^9, 
+  3.602649444612544*^9}, {3.602649488367112*^9, 3.602649588346487*^9}, {
+  3.6026496207406063`*^9, 3.6026496583163805`*^9}, {3.602649746017527*^9, 
+  3.6026498205860043`*^9}}]
+},
+WindowSize->{707, 503},
+WindowMargins->{{249, Automatic}, {Automatic, 31}},
+ShowSelection->True,
+FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 1038, 26, 72, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
+
