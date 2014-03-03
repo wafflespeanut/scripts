@@ -1,0 +1,126 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      3647,        117]
+NotebookOptionsPosition[      3403,        104]
+NotebookOutlinePosition[      3748,        119]
+CellTagsIndexPosition[      3705,        116]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[Mu]", "=", "0.01"}], ";", 
+  RowBox[{"Px", "=", 
+   RowBox[{"-", "1"}]}], ";", 
+  RowBox[{"h", "=", "1"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"f", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"h", "^", "2"}], "/", 
+      RowBox[{"(", 
+       RowBox[{"2", " ", "\[Mu]"}], ")"}]}], ")"}], " ", 
+    RowBox[{"(", 
+     RowBox[{"-", "Px"}], ")"}], " ", 
+    RowBox[{"(", 
+     RowBox[{"1", "-", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"y", "/", "h"}], ")"}], "^", "2"}]}], ")"}]}]}], ";"}], "\n", 
+ RowBox[{"VectorPlot", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"f", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"x", ",", "0", ",", "3"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"y", ",", 
+     RowBox[{"-", "h"}], ",", "h"}], "}"}], ",", 
+   RowBox[{"VectorPoints", "\[Rule]", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"0", ",", "j"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"j", ",", 
+        RowBox[{"-", "1"}], ",", "1", ",", "0.1"}], "}"}]}], "]"}]}], ",", 
+   RowBox[{"VectorScale", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "0.15"}], "}"}]}], ",", 
+   RowBox[{"VectorColorFunction", "\[Rule]", "\"\<Rainbow\>\""}], ",", 
+   RowBox[{"PlotRange", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"0", ",", "3"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"-", "1.2"}], ",", "1.2"}], "}"}]}], "}"}]}], ",", 
+   RowBox[{"Epilog", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"Red", ",", "Thick", ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "1"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"4", ",", "1"}], "}"}]}], "}"}], "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"Red", ",", "Thick", ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", 
+             RowBox[{"-", "1"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"4", ",", 
+             RowBox[{"-", "1"}]}], "}"}]}], "}"}], "]"}]}], "}"}]}], "}"}]}], 
+   ",", 
+   RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+   RowBox[{"FrameTicks", "\[Rule]", "None"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.6003836807152605`*^9, 3.60038368079827*^9}, {
+  3.6003837397645435`*^9, 3.6003837863804665`*^9}, {3.600383836561841*^9, 
+  3.6003838789592323`*^9}, {3.600383947098892*^9, 3.6003839539477615`*^9}, {
+  3.600383994960035*^9, 3.6003840278062077`*^9}, {3.600393699689988*^9, 
+  3.6003937124025927`*^9}, {3.6024867219037347`*^9, 3.6024867676235456`*^9}, {
+  3.6024868201642127`*^9, 3.602486823548646*^9}, {3.602486881211982*^9, 
+  3.6024868869257045`*^9}}]
+},
+WindowSize->{707, 503},
+WindowMargins->{{287, Automatic}, {Automatic, 22}},
+FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 2842, 82, 172, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

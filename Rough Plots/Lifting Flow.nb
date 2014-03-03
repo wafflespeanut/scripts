@@ -1,0 +1,126 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      3773,        117]
+NotebookOptionsPosition[      3529,        104]
+NotebookOutlinePosition[      3874,        119]
+CellTagsIndexPosition[      3831,        116]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"c", "[", "x_", "]"}], "=", 
+   RowBox[{"Graphics", "[", 
+    RowBox[{"{", 
+     RowBox[{"LightBrown", ",", 
+      RowBox[{"Disk", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0"}], "}"}], ",", "x"}], "]"}]}], "}"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"ContourPlot", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"U", " ", "y", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"a", "^", "2"}], "/", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"x", "^", "2"}], "+", 
+               RowBox[{"y", "^", "2"}]}], ")"}]}], ")"}], "-", "1"}], ")"}]}],
+         "-", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"\[CapitalGamma]", "/", 
+           RowBox[{"(", 
+            RowBox[{"2", "\[Pi]"}], ")"}]}], ")"}], "*", 
+         RowBox[{"Log", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"Sqrt", "[", 
+             RowBox[{
+              RowBox[{"x", "^", "2"}], "+", 
+              RowBox[{"y", "^", "2"}]}], "]"}], ")"}], "/", "a"}], "]"}]}]}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", 
+         RowBox[{"-", "8"}], ",", "8"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"y", ",", 
+         RowBox[{"-", "4"}], ",", "4"}], "}"}], ",", 
+       RowBox[{"AspectRatio", "\[Rule]", "0.5"}], ",", 
+       RowBox[{"Frame", "\[Rule]", "False"}], ",", 
+       RowBox[{"Contours", "\[Rule]", "15"}], ",", 
+       RowBox[{"ColorFunction", "\[Rule]", "\"\<BlueGreenYellow\>\""}], ",", 
+       RowBox[{"ImageSize", "\[Rule]", "800"}]}], "]"}], ",", 
+     RowBox[{"c", "[", "a", "]"}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"U", ",", "20", ",", "\"\<Flow velocity\>\""}], "}"}], ",", "1",
+      ",", "40", ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[CapitalGamma]", ",", 
+       RowBox[{"80", "\[Pi]"}], ",", "\"\<Circulation\>\""}], "}"}], ",", 
+     RowBox[{"20", "*", "Pi"}], ",", 
+     RowBox[{"200", "\[Pi]"}], ",", "\[Pi]"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a", ",", "1", ",", "\"\<Radius\>\""}], "}"}], ",", "0.1", ",", 
+     "5", ",", "0.1"}], "}"}]}], "]"}]}], "Input",
+ CellChangeTimes->CompressedData["
+1:eJwdzk0owwEABfAhpNlYLW3SItFaIjY1LdrU4uCwDwdK1BYu8zkHNrFaDlu+
+oiaUmFoKK6VtycFGbCMta7NJdpgyipmJ2/i//+H1O7x6vQrViKI/m0KhcIhA
+DY825gy+SR4N3GnoigQM8NJqN0KbUbAIWc6vJfhLU2/AVJtoD5bta47gt9bv
+I/sF2R3cMG+GoP+p8AFGqkfj0BMUvUDBvjsBi2d2k/Bp1fQHB3KZNBfhSqyW
+DplXGTY8fp3gQVW5tw5SMxFSC7u3EbJ+LkhHz0zdHkLGY18PdEzuqKBk8lYN
+pcKuISh2bI9DZUvBLCxVCueghZkxw8Iofx7SZb41yO302qAgXu8i92pXT+B6
+1aAbthcNk4byWwPQ2iEPw/Cn+QGykvoYtF9PvcGa5oY03Eqnss8Jq4SMHMgP
+vufB548mKrQpSjjwJn0ggQVZOik0V+rkMLGpjELxoZbUqM8sN9wT/09NFvgP
+dtccmg==
+  "]]
+},
+WindowSize->{707, 503},
+WindowMargins->{{Automatic, 317}, {Automatic, 30}},
+FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 2968, 82, 172, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
