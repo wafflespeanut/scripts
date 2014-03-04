@@ -1,0 +1,231 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      7868,        222]
+NotebookOptionsPosition[      7625,        209]
+NotebookOutlinePosition[      7968,        224]
+CellTagsIndexPosition[      7925,        221]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"r0", "=", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", 
+     RowBox[{"-", "1.2"}]}], "}"}]}], ";", 
+  RowBox[{"l0", "=", "2.2"}], ";", 
+  RowBox[{"r", "=", "0.6"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"c", "[", "\[Theta]_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"-", "r"}], " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Cos", "[", "\[Theta]", "]"}], ",", 
+     RowBox[{"Sin", "[", "\[Theta]", "]"}]}], "}"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"r1", "[", 
+   RowBox[{"\[Theta]_", ",", "l_"}], "]"}], ":=", 
+  RowBox[{"r0", "+", 
+   RowBox[{"l", " ", 
+    RowBox[{"Normalize", "[", 
+     RowBox[{
+      RowBox[{"c", "[", "\[Theta]", "]"}], "-", "r0"}], 
+     "]"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Theta]0", "=", 
+   RowBox[{"\[Theta]", "/.", 
+    RowBox[{
+     RowBox[{"NMinimize", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Normalize", "[", 
+           RowBox[{
+            RowBox[{"c", "[", "\[Theta]", "]"}], "-", "r0"}], "]"}], "[", 
+          RowBox[{"[", "1", "]"}], "]"}], ",", 
+         RowBox[{"\[Theta]", ">", "0"}]}], "}"}], ",", "\[Theta]"}], "]"}], 
+     "[", 
+     RowBox[{"[", "2", "]"}], "]"}]}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"l", "=", 
+   RowBox[{"Norm", "[", 
+    RowBox[{
+     RowBox[{"r1", "[", 
+      RowBox[{"\[Theta]0", ",", "l0"}], "]"}], "-", 
+     RowBox[{"{", 
+      RowBox[{"0.5", ",", "1.5"}], "}"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"sol", "[", "\[Theta]_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"x", "/.", 
+      RowBox[{"NSolve", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Norm", "[", 
+          RowBox[{
+           RowBox[{"r1", "[", 
+            RowBox[{"\[Theta]", ",", "l"}], "]"}], "+", 
+           RowBox[{"{", 
+            RowBox[{"x", ",", 
+             RowBox[{"-", "1.25"}]}], "}"}]}], "]"}], "\[Equal]", "l"}], ",", 
+        "x"}], "]"}]}], ")"}], "[", 
+    RowBox[{"[", "2", "]"}], "]"}], "//", "Quiet"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Graphics", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"Green", ",", "Thick", ",", "Dashed", ",", 
+         RowBox[{"Circle", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}], ",", "r"}], "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"Blue", ",", "Thick", ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{"r0", ",", 
+            RowBox[{"r1", "[", 
+             RowBox[{
+              RowBox[{"\[Theta]", "+", "Pi"}], ",", "l0"}], "]"}]}], "}"}], 
+          "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"EdgeForm", "[", 
+          RowBox[{"{", 
+           RowBox[{"Thick", ",", "Black"}], "}"}], "]"}], ",", "White", ",", 
+         RowBox[{"Rectangle", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"-", 
+               RowBox[{"sol", "[", 
+                RowBox[{"\[Theta]", "+", "Pi"}], "]"}]}], "-", "0.3"}], ",", 
+             "1.1"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"-", 
+               RowBox[{"sol", "[", 
+                RowBox[{"\[Theta]", "+", "Pi"}], "]"}]}], "+", "0.2"}], ",", 
+             "1.4"}], "}"}]}], "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Thickness", "[", "0.005", "]"}], ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"0", ",", "1.1"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "3"}], ",", "1.1"}], "}"}]}], "}"}], "]"}], ",", 
+         "Blue", ",", "Thick", ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"r0", "+", 
+             RowBox[{"l0", " ", 
+              RowBox[{"Normalize", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "1.2"}], "}"}], "+", 
+                RowBox[{"c", "[", 
+                 RowBox[{"\[Theta]", "+", "Pi"}], "]"}]}], "]"}]}]}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", 
+               RowBox[{"sol", "[", 
+                RowBox[{"\[Theta]", "+", "Pi"}], "]"}]}], ",", "1.25"}], 
+             "}"}]}], "}"}], "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"Red", ",", 
+         RowBox[{"Disk", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"-", 
+              RowBox[{"sol", "[", 
+               RowBox[{"\[Theta]", "+", "Pi"}], "]"}]}], ",", "1.25"}], "}"}],
+            ",", "0.04"}], "]"}], ",", 
+         RowBox[{"Disk", "[", 
+          RowBox[{"r0", ",", "0.04"}], "]"}], ",", 
+         RowBox[{"Disk", "[", 
+          RowBox[{
+           RowBox[{"c", "[", 
+            RowBox[{"\[Theta]", "+", "Pi"}], "]"}], ",", "0.04"}], "]"}]}], 
+        "}"}]}], "}"}], ",", 
+     RowBox[{"ImageSize", "\[Rule]", "700"}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "3.5"}], ",", "1.5"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "1.5"}], ",", "2"}], "}"}]}], "}"}]}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\[Theta]", ",", "0", ",", 
+     RowBox[{"4", " ", "Pi"}]}], "}"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.599671962167282*^9, 3.5996719682513433`*^9}, {
+   3.5996931328248787`*^9, 3.599693140521858*^9}, {3.5997429369416313`*^9, 
+   3.5997429388898697`*^9}, {3.599743073935034*^9, 3.599743277448899*^9}, {
+   3.599743311455224*^9, 3.599743397090105*^9}, {3.5997434343648424`*^9, 
+   3.599743502866548*^9}, {3.59974369595609*^9, 3.5997437217403665`*^9}, {
+   3.5997437541294813`*^9, 3.5997438432118063`*^9}, {3.599743874512782*^9, 
+   3.59974394278747*^9}, {3.5997440232966924`*^9, 3.599744121493184*^9}, {
+   3.599744167042964*^9, 3.5997441736778173`*^9}, {3.5997446783315053`*^9, 
+   3.599744816826106*^9}, {3.5997465830434256`*^9, 3.5997466071494865`*^9}, {
+   3.5997466412518206`*^9, 3.59974675177887*^9}, {3.5997467827358027`*^9, 
+   3.599746886367983*^9}, {3.5997469353461995`*^9, 3.5997469847845263`*^9}, {
+   3.599747744172969*^9, 3.5997478320019007`*^9}, {3.5997480523430786`*^9, 
+   3.599748066024415*^9}, {3.5997481190805826`*^9, 3.5997481863173113`*^9}, {
+   3.5997482199512663`*^9, 3.5997482210744753`*^9}, {3.599829273885301*^9, 
+   3.5998292861626325`*^9}, {3.5998293170353727`*^9, 3.599829497248495*^9}, {
+   3.599829574048125*^9, 3.599829644872882*^9}, {3.59982968165807*^9, 
+   3.5998297201436853`*^9}, {3.599829784638776*^9, 3.599829858099967*^9}, {
+   3.5998299717159767`*^9, 3.599829994149024*^9}, 3.5998616542686405`*^9, {
+   3.599861697493125*^9, 3.5998617017706747`*^9}, {3.5998617790425014`*^9, 
+   3.5998617957936263`*^9}, {3.5998618436627045`*^9, 3.5998618753477273`*^9}}]
+},
+WindowSize->{1350, 629},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 7064, 187, 252, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
