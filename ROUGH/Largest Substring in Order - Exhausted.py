@@ -1,3 +1,4 @@
+s="nkdvbcdepjweolypqrstuvwkzzy"
 out=''
 temp=''
 for char in s:
