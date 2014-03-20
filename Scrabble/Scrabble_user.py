@@ -9,7 +9,7 @@ SCRABBLE_LETTER_VALUES = {
     'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
 }
 
-WORDLIST_FILENAME = "Words.txt"
+WORDLIST_FILENAME = "words.txt"
 
 def loadWords():
     print "Loading word list from file..."
@@ -19,12 +19,6 @@ def loadWords():
         wordList.append(line.strip().lower())
     print "  ", len(wordList), "words loaded."
     return wordList
-
-def getFrequencyDict(sequence):
-    freq = {}
-    for x in sequence:
-        freq[x] = freq.get(x,0) + 1
-    return freq
 	
 def getWordScore(word, n):
     count=0
@@ -69,14 +63,6 @@ def isValidWord(word, hand, wordList):
             else:
                 continue
     return (p==len(wordcp) and (wordcp in wordList))
-    
-def calculateHandlen(hand):
-    handc=hand.copy()
-    con=0
-    for ch in handc.keys():
-        if handc[ch]>0:
-            con+=handc[ch]
-    return con
 
 def dispHand(hand):
     char=""
@@ -125,6 +111,5 @@ def playGame(wordList):
             r=1
         elif s!='e': print "Invalid command."
 
-if __name__ == '__main__':
-    wordList = loadWords()
-    playGame(wordList)
+wordList = loadWords()
+playGame(wordList)
