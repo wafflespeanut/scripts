@@ -1,4 +1,4 @@
-from scrabble_user import *
+from User import *
 
 def compChooseWord(hand, wordList, n):
     maxi=0
@@ -22,7 +22,7 @@ def compPlayHand(hand, wordList, n):
         else: break
     print "Total score: " +str(total) +" points"
     
-def bothPlayGame(wordList):
+def playGame(wordList):
     r=0
     s=''
     while s!='e':
@@ -58,4 +58,4 @@ def bothPlayGame(wordList):
         if (s!='e' and s!='n' and s!='r'): print "Invalid command.\n"
                 
 wordList = loadWords()
-bothPlayGame(wordList)
+playGame(wordList)
