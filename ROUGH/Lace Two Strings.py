@@ -1,4 +1,4 @@
-def laceStrings(s1, s2):
+def lace(s1, s2):
     m=""
     i=0
     j=min(len(s1),len(s2))
@@ -11,4 +11,13 @@ def laceStrings(s1, s2):
     else: m+=s2[i:k]
     return m
 
-print laceStrings("wxyzk","efghi")
+def laceRecur(s1, s2):
+    def helps(s1, s2, out):
+        if s1 == '':
+            return out+s2
+        if s2 == '':
+            return out+s1
+        else:
+            return helps(s1[1:],s2[1:],out+s1[0]+s2[0])
+    return helps(s1, s2, '')
+
