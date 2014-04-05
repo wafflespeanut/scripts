@@ -1,0 +1,245 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      8522,        236]
+NotebookOptionsPosition[      8257,        222]
+NotebookOutlinePosition[      8622,        238]
+CellTagsIndexPosition[      8579,        235]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Graphics", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"Blue", ",", "Thick", ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"10", 
+              RowBox[{"Cos", "[", 
+               RowBox[{
+                RowBox[{"3", 
+                 RowBox[{"\[Pi]", "/", "2"}]}], "+", "\[Theta]"}], "]"}]}], 
+             ",", 
+             RowBox[{"10", 
+              RowBox[{"Sin", "[", 
+               RowBox[{
+                RowBox[{"3", 
+                 RowBox[{"\[Pi]", "/", "2"}]}], "+", "\[Theta]"}], "]"}]}]}], 
+            "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"10", 
+              RowBox[{"Cos", "[", 
+               RowBox[{"\[Pi]", "+", "\[Theta]"}], "]"}]}], ",", 
+             RowBox[{"10", 
+              RowBox[{"Sin", "[", 
+               RowBox[{"\[Pi]", "+", "\[Theta]"}], "]"}]}]}], "}"}]}], "}"}], 
+         "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"Thick", ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"10", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", "10"}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"-", "10"}], ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", 
+             RowBox[{"-", "10"}]}], "}"}]}], "}"}], "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Thickness", "[", "0.0045", "]"}], ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"x", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"x", ",", "y"}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "y"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"x", ",", "y"}], "}"}]}], "}"}], "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"Blue", ",", "Thick", ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"10", 
+              RowBox[{"Cos", "[", "\[Theta]", "]"}]}], ",", 
+             RowBox[{"10", 
+              RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}], "}"}]}], "}"}], 
+         "]"}], ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"10", 
+              RowBox[{"Cos", "[", 
+               RowBox[{
+                RowBox[{"\[Pi]", "/", "2"}], "+", "\[Theta]"}], "]"}]}], ",", 
+             RowBox[{"10", 
+              RowBox[{"Sin", "[", 
+               RowBox[{
+                RowBox[{"\[Pi]", "/", "2"}], "+", "\[Theta]"}], "]"}]}]}], 
+            "}"}]}], "}"}], "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"Blue", ",", "Dashed", ",", 
+        RowBox[{"Thickness", "[", "0.0045", "]"}], ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"x", " ", 
+                 RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "+", 
+                RowBox[{"y", " ", 
+                 RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}], ")"}], 
+              RowBox[{"Cos", "[", "\[Theta]", "]"}]}], ",", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"x", " ", 
+                 RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "+", 
+                RowBox[{"y", " ", 
+                 RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}], ")"}], 
+              RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"x", ",", "y"}], "}"}]}], "}"}], "]"}], ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"y", " ", 
+                 RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "-", 
+                RowBox[{"x", " ", 
+                 RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}], ")"}], 
+              RowBox[{"Cos", "[", 
+               RowBox[{
+                RowBox[{"\[Pi]", "/", "2"}], "+", "\[Theta]"}], "]"}]}], ",", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"y", " ", 
+                 RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "-", 
+                RowBox[{"x", " ", 
+                 RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}], ")"}], 
+              RowBox[{"Sin", "[", 
+               RowBox[{
+                RowBox[{"\[Pi]", "/", "2"}], "+", "\[Theta]"}], "]"}]}]}], 
+            "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"x", ",", "y"}], "}"}]}], "}"}], "]"}]}], "}"}]}], "}"}], 
+    "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\[Theta]", ",", "0", ",", 
+     RowBox[{"\[Pi]", "/", "2"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"x", ",", "5", ",", "10"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"y", ",", "5", ",", "10"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.6055731448248463`*^9, 3.6055735826026983`*^9}, {
+   3.60557376412104*^9, 3.605573767896145*^9}, {3.605573802858163*^9, 
+   3.6055738420873137`*^9}, {3.605573876969338*^9, 3.6055738817944794`*^9}, {
+   3.6055739209896293`*^9, 3.6055741137582955`*^9}, {3.6055742039629374`*^9, 
+   3.60557423416582*^9}, {3.6055742982657127`*^9, 3.6055743314426737`*^9}, {
+   3.605574372235653*^9, 3.6055744092697334`*^9}, {3.6055744579271603`*^9, 
+   3.6055745392815495`*^9}, {3.605574603970458*^9, 3.6055746383004637`*^9}, {
+   3.605574691458025*^9, 3.60557469638017*^9}, {3.605574776509529*^9, 
+   3.605574780334642*^9}, {3.6055748970390587`*^9, 3.605575036218152*^9}, {
+   3.605575100232031*^9, 3.6055751376591187`*^9}, {3.605575227777772*^9, 
+   3.605575324030591*^9}, {3.6055754247075524`*^9, 3.6055754817322273`*^9}, {
+   3.60557551821729*^9, 3.605575520634359*^9}, {3.6055756039398036`*^9, 
+   3.6055756610674815`*^9}, {3.6055757207092304`*^9, 
+   3.6055757625914593`*^9}, {3.6055757992315445`*^9, 3.605575856413212*^9}, {
+   3.605575913490887*^9, 3.605576193937118*^9}, {3.605576241176504*^9, 
+   3.6055763343152366`*^9}, {3.6055763952600255`*^9, 
+   3.6055764056523314`*^9}, {3.6055765103264017`*^9, 
+   3.6055765106114125`*^9}, {3.6055765547737074`*^9, 3.6055765548137093`*^9}, 
+   3.6055767130933533`*^9}]
+},
+WindowSize->{878, 596},
+WindowMargins->{{Automatic, 166}, {Automatic, 5}},
+ShowSelection->True,
+FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 7696, 200, 232, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
