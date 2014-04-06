@@ -48,8 +48,8 @@ elif alt>0 and alt<=11000:
 
 elif alt>11000 and alt<=20000:
     te=t1
-    pr=const(p1,te,t1,11000,alt)
-    de=const(d1,te,t1,11000,alt)
+    pr=const(p1,te,11000,alt)
+    de=const(d1,te,11000,alt)
 
 elif alt>20000 and alt<=32000:
     te=temp(t2,a23,20000,alt)
@@ -63,4 +63,4 @@ elif alt>32000 and alt<=47000:
 
 print "Temperature: " +str(round(te,2)) +" K"
 print "Pressure: " +str(round(pr,4)) +" Pa"
-print "Density: " +str(round(de,4)) +" kg/cu.m"
+print "Density: " +str(round(de,10)) +" kg/cu.m"
