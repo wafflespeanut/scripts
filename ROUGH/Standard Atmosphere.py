@@ -63,4 +63,4 @@ elif alt>32000 and alt<=47000:
 
 print "Temperature: " +str(round(te,2)) +" K"
 print "Pressure: " +str(round(pr,4)) +" Pa"
-print "Density: " +str(round(de,10)) +" kg/cu.m"
+print "Density: " +str(round(de,4)) +" kg/cu.m"
