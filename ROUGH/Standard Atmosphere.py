@@ -61,6 +61,9 @@ elif alt>32000 and alt<=47000:
     pr=pres(p3,te,t3,a34)
     de=dens(d3,te,t3,a34)
 
+else:
+    print "INVALID INPUT: Altitude undefined over the given limits!"
+
 print "Temperature: " +str(round(te,2)) +" K"
 print "Pressure: " +str(round(pr,4)) +" Pa"
 print "Density: " +str(round(de,4)) +" kg/cu.m"

@@ -110,6 +110,3 @@ def playGame(wordList):
             playHand(hand,wordList,HAND_SIZE)
             r=1
         elif s!='e': print "Invalid command."
-
-wordList = loadWords()
-playGame(wordList)
