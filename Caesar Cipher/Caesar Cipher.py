@@ -65,6 +65,6 @@ def findBestShift(wordList, text):
     return best
 
 wordList = loadWords()
-s = applyShift('Hello, world!', 8)
-bestShift = findBestShift(wordList, s)
-assert applyShift(s, bestShift) == 'Hello, world!'
+s=applyShift('Hello, world!',8)
+bestShift=findBestShift(wordList,s)
+assert applyShift(s, bestShift)=='Hello, world!'
