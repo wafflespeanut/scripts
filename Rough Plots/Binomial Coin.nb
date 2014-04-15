@@ -10,44 +10,80 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      1863,         62]
-NotebookOptionsPosition[      1599,         48]
-NotebookOutlinePosition[      1965,         64]
-CellTagsIndexPosition[      1922,         61]
+NotebookDataLength[      3314,         98]
+NotebookOptionsPosition[      3049,         84]
+NotebookOutlinePosition[      3415,        100]
+CellTagsIndexPosition[      3372,         97]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
-Cell[BoxData[{
+Cell[BoxData[
  RowBox[{
-  RowBox[{"p", "=", "0.5"}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"Manipulate", "[", 
+  RowBox[{"games", "=", "100"}], ";", 
+  RowBox[{"p", "=", "0.5"}], ";", 
   RowBox[{
-   RowBox[{"DiscretePlot", "[", 
+   RowBox[{"toss", "[", "n_", "]"}], ":=", 
+   RowBox[{"(", 
     RowBox[{
+     RowBox[{"For", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"a", "=", "0"}], ";", 
+        RowBox[{"i", "=", "1"}]}], ",", 
+       RowBox[{"i", "\[LessEqual]", "n"}], ",", 
+       RowBox[{"i", "++"}], ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Random", "[", "Integer", "]"}], "\[Equal]", "1"}], ",", 
+         RowBox[{"a", "+=", "1"}]}], "]"}]}], "]"}], ";", "a"}], ")"}]}], ";", 
+  RowBox[{"Manipulate", "[", 
+   RowBox[{
+    RowBox[{"Show", "[", 
      RowBox[{
-      RowBox[{"Binomial", "[", 
-       RowBox[{"n", ",", "k"}], "]"}], " ", 
-      RowBox[{"p", "^", "k"}], " ", 
-      RowBox[{"p", "^", 
-       RowBox[{"(", 
-        RowBox[{"n", "-", "k"}], ")"}]}]}], ",", 
-     RowBox[{"{", 
-      RowBox[{"k", ",", "0", ",", "n"}], "}"}], ",", 
-     RowBox[{"ImageSize", "\[Rule]", "500"}]}], "]"}], ",", 
-   RowBox[{"{", 
-    RowBox[{
-     RowBox[{"{", 
-      RowBox[{"n", ",", "1", ",", "\"\<Number of tosses\>\""}], "}"}], ",", 
-     "1", ",", "80", ",", "1"}], "}"}]}], "]"}]}], "Input",
+      RowBox[{"ListPlot", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"games", "*", 
+           RowBox[{"Binomial", "[", 
+            RowBox[{"n", ",", "k"}], "]"}], " ", 
+           RowBox[{"p", "^", "k"}], " ", 
+           RowBox[{"p", "^", 
+            RowBox[{"(", 
+             RowBox[{"n", "-", "k"}], ")"}]}]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"k", ",", "0", ",", "n"}], "}"}]}], "]"}], ",", 
+        RowBox[{"Joined", "\[Rule]", "True"}], ",", 
+        RowBox[{"PlotStyle", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"Dashed", ",", "Thick"}], "}"}]}]}], "]"}], ",", 
+      RowBox[{"DiscretePlot", "[", 
+       RowBox[{
+        RowBox[{"game", "[", 
+         RowBox[{"games", ",", "n", ",", "k"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", "0", ",", "n"}], "}"}], ",", 
+        RowBox[{"PlotStyle", "\[Rule]", 
+         RowBox[{"{", "Thick", "}"}]}]}], "]"}], ",", 
+      RowBox[{"ImageSize", "\[Rule]", "500"}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"n", ",", "50", ",", "\"\<Number of heads\>\""}], "}"}], ",", 
+      "20", ",", "70", ",", "1"}], "}"}]}], "]"}]}]], "Input",
  CellChangeTimes->{{3.6026490581833973`*^9, 3.6026491996473756`*^9}, {
   3.6026493478232174`*^9, 3.6026493918198195`*^9}, {3.6026494387918043`*^9, 
   3.602649444612544*^9}, {3.602649488367112*^9, 3.602649588346487*^9}, {
   3.6026496207406063`*^9, 3.6026496583163805`*^9}, {3.602649746017527*^9, 
-  3.6026498205860043`*^9}}]
+  3.6026498205860043`*^9}, {3.606541780953559*^9, 3.606541890050429*^9}, {
+  3.60654258894625*^9, 3.606542589772348*^9}, {3.606543888668439*^9, 
+  3.606543893431045*^9}, {3.606544884676027*^9, 3.6065449204995728`*^9}, {
+  3.606544968462668*^9, 3.6065450029940615`*^9}}]
 },
-WindowSize->{707, 503},
-WindowMargins->{{249, Automatic}, {Automatic, 31}},
+WindowSize->{851, 562},
+WindowMargins->{{209, Automatic}, {Automatic, 22}},
 ShowSelection->True,
 FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
@@ -63,10 +99,9 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 1038, 26, 72, "Input"]
+Cell[557, 20, 2488, 62, 132, "Input"]
 }
 ]
 *)
 
 (* End of internal cache information *)
-
