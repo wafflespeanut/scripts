@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      3314,         98]
-NotebookOptionsPosition[      3049,         84]
-NotebookOutlinePosition[      3415,        100]
-CellTagsIndexPosition[      3372,         97]
+NotebookDataLength[      4438,        125]
+NotebookOptionsPosition[      4173,        111]
+NotebookOutlinePosition[      4539,        127]
+CellTagsIndexPosition[      4496,        124]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -38,6 +38,23 @@ Cell[BoxData[
          RowBox[{
           RowBox[{"Random", "[", "Integer", "]"}], "\[Equal]", "1"}], ",", 
          RowBox[{"a", "+=", "1"}]}], "]"}]}], "]"}], ";", "a"}], ")"}]}], ";", 
+  RowBox[{
+   RowBox[{"game", "[", 
+    RowBox[{"n_", ",", "k_", ",", "e_"}], "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"For", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"b", "=", "0"}], ";", 
+        RowBox[{"j", "=", "1"}]}], ",", 
+       RowBox[{"j", "\[LessEqual]", "n"}], ",", 
+       RowBox[{"j", "++"}], ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"toss", "[", "k", "]"}], "\[Equal]", "e"}], ",", 
+         RowBox[{"b", "+=", "1"}]}], "]"}]}], "]"}], ";", "b"}], ")"}]}], ";", 
   RowBox[{"Manipulate", "[", 
    RowBox[{
     RowBox[{"Show", "[", 
@@ -65,9 +82,14 @@ Cell[BoxData[
          RowBox[{"games", ",", "n", ",", "k"}], "]"}], ",", 
         RowBox[{"{", 
          RowBox[{"k", ",", "0", ",", "n"}], "}"}], ",", 
+        RowBox[{"PlotMarkers", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"Automatic", ",", "Small"}], "}"}]}], ",", 
         RowBox[{"PlotStyle", "\[Rule]", 
-         RowBox[{"{", "Thick", "}"}]}]}], "]"}], ",", 
-      RowBox[{"ImageSize", "\[Rule]", "500"}]}], "]"}], ",", 
+         RowBox[{"Directive", "[", 
+          RowBox[{"Red", ",", 
+           RowBox[{"Thickness", "[", "0.004", "]"}]}], "]"}]}]}], "]"}], ",", 
+      RowBox[{"ImageSize", "\[Rule]", "700"}]}], "]"}], ",", 
     RowBox[{"{", 
      RowBox[{
       RowBox[{"{", 
@@ -80,9 +102,14 @@ Cell[BoxData[
   3.6026498205860043`*^9}, {3.606541780953559*^9, 3.606541890050429*^9}, {
   3.60654258894625*^9, 3.606542589772348*^9}, {3.606543888668439*^9, 
   3.606543893431045*^9}, {3.606544884676027*^9, 3.6065449204995728`*^9}, {
-  3.606544968462668*^9, 3.6065450029940615`*^9}}]
+  3.606544968462668*^9, 3.6065450029940615`*^9}, {3.606556614425272*^9, 
+  3.6065566381272793`*^9}, {3.6065566682341166`*^9, 3.606556670577411*^9}, {
+  3.6065567321492395`*^9, 3.606556775837782*^9}, {3.6065568390328226`*^9, 
+  3.606556878819868*^9}, {3.6065569880437512`*^9, 3.606556988896859*^9}, {
+  3.6065570412875204`*^9, 3.6065570715513706`*^9}, {3.6065571774988375`*^9, 
+  3.606557209669919*^9}}]
 },
-WindowSize->{851, 562},
+WindowSize->{890, 562},
 WindowMargins->{{209, Automatic}, {Automatic, 22}},
 ShowSelection->True,
 FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
@@ -99,7 +126,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 2488, 62, 132, "Input"]
+Cell[557, 20, 3612, 89, 172, "Input"]
 }
 ]
 *)
