@@ -108,6 +108,7 @@ def filterStories(stories, triggerlist):
     return work
 
 def makeTrigger(triggerMap, triggerType, params, name):
+    #Have to make some modifications here
     pass
 
 def readTriggerConfig(filename):
@@ -169,14 +170,14 @@ def main_thread(master):
                 guidShown.append(newstory.getGuid())
 
         while True:
-            print "Polling . . .",
+            print "Pulling stuff...",
             stories = process("http://news.google.com/?output=rss")
             stories.extend(process("http://rss.news.yahoo.com/rss/topstories"))
             stories = filterStories(stories, triggerlist)
             map(get_cont, stories)
             scrollbar.config(command=cont.yview)
             
-            print "Sleeping..."
+            print "Now sleeping..."
             time.sleep(SLEEPTIME)
 
     except Exception as e:
