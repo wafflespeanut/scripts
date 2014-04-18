@@ -100,11 +100,12 @@ class PhraseTrigger(Trigger):
         else: return False
 
 def filterStories(stories, triggerlist):
-    for story in stories:
-        for trigger in triggerlist:
+    work=[]
+    for trigger in triggerlist:
+        for story in stories:
             if trigger.evaluate(story):
-                stories=[x for x in stories if x!=story]
-        return stories
+                work.append(story)
+    return work
 
 def makeTrigger(triggerMap, triggerType, params, name):
     pass
@@ -121,16 +122,12 @@ def readTriggerConfig(filename):
     triggers = []
     triggerMap = {}
     for line in lines:
-
         linesplit = line.split(" ")
-
         if linesplit[0] != "ADD":
-            trigger = makeTrigger(triggerMap, linesplit[1],
-                                  linesplit[2:], linesplit[0])
+            trigger = makeTrigger(triggerMap, linesplit[1], linesplit[2:], linesplit[0])
         else:
             for name in linesplit[1:]:
                 triggers.append(triggerMap[name])
-
     return triggers
     
 import thread
@@ -174,11 +171,8 @@ def main_thread(master):
         while True:
             print "Polling . . .",
             stories = process("http://news.google.com/?output=rss")
-
             stories.extend(process("http://rss.news.yahoo.com/rss/topstories"))
-
             stories = filterStories(stories, triggerlist)
-
             map(get_cont, stories)
             scrollbar.config(command=cont.yview)
             
@@ -188,10 +182,8 @@ def main_thread(master):
     except Exception as e:
         print e
 
-
 if __name__ == '__main__':
-
     root = Tk()
-    root.title("Some RSS parser")
+    root.title("RSS News Reader")
     thread.start_new_thread(main_thread, (root,))
     root.mainloop()

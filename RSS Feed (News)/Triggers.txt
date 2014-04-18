@@ -1,0 +1,9 @@
+t1 SUBJECT world
+
+t2 TITLE Intel
+
+t3 PHRASE New York City
+
+t4 AND t2 t3
+
+ADD t1 t4
