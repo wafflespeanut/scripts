@@ -1,0 +1,101 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      3024,         91]
+NotebookOptionsPosition[      2760,         77]
+NotebookOutlinePosition[      3125,         93]
+CellTagsIndexPosition[      3082,         90]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"F", "[", "x_", "]"}], ":=", 
+   RowBox[{"2", "/", 
+    RowBox[{"(", 
+     RowBox[{"1", "+", 
+      RowBox[{"x", "^", "2"}]}], ")"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"a", ",", "b"}], "}"}], "=", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "1"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"\[CapitalDelta]x", "=", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"b", "-", "a"}], ")"}], "/", "n"}]}], ";", 
+    RowBox[{"\[CapitalDelta]F", "=", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"F", "[", "a", "]"}], "+", 
+        RowBox[{"F", "[", "b", "]"}]}], ")"}], 
+      RowBox[{"\[CapitalDelta]x", "/", "2"}]}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"S", "=", 
+     RowBox[{
+      RowBox[{"Sum", "[", 
+       RowBox[{
+        RowBox[{"N", "[", 
+         RowBox[{"F", "[", "x", "]"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"x", ",", 
+          RowBox[{"a", "+", "\[CapitalDelta]x"}], ",", 
+          RowBox[{"b", "-", "\[CapitalDelta]x"}], ",", "\[CapitalDelta]x"}], 
+         "}"}]}], "]"}], 
+      RowBox[{"\[CapitalDelta]x", "/", "2"}]}]}], ";", 
+    RowBox[{"N", "[", 
+     RowBox[{"\[CapitalDelta]F", "+", "S"}], "]"}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"n", ",", "1", ",", "\"\<Number of Trapezoids\>\""}], "}"}], 
+     ",", "1", ",", "100", ",", "1"}], "}"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.607065456548703*^9, 3.6070654700364256`*^9}, {
+  3.6070655106615877`*^9, 3.607065634159284*^9}, {3.607065677375769*^9, 
+  3.6070657030810366`*^9}, {3.6070658236723614`*^9, 3.6070658264957204`*^9}, {
+  3.607065866271776*^9, 3.6070658723045444`*^9}, {3.607065951229575*^9, 
+  3.6070659956282268`*^9}, {3.6070661014806776`*^9, 3.6070661758511295`*^9}, {
+  3.6070662623201146`*^9, 3.6070662631742225`*^9}, {3.6070663202004776`*^9, 
+  3.6070664477886853`*^9}, {3.60706648190702*^9, 3.6070666572273026`*^9}, {
+  3.6070667210064087`*^9, 3.6070668156844435`*^9}, {3.607066949452444*^9, 
+  3.6070669535919695`*^9}, {3.6070669892124968`*^9, 3.607067070396824*^9}}]
+},
+WindowSize->{811, 562},
+WindowMargins->{{Automatic, 221}, {Automatic, 37}},
+Magnification->1.5,
+FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 2199, 55, 162, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
+
