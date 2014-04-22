@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      4197,        135]
-NotebookOptionsPosition[      3952,        122]
-NotebookOutlinePosition[      4297,        137]
-CellTagsIndexPosition[      4254,        134]
+NotebookDataLength[      4383,        135]
+NotebookOptionsPosition[      4139,        122]
+NotebookOutlinePosition[      4483,        137]
+CellTagsIndexPosition[      4440,        134]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -31,7 +31,11 @@ Cell[BoxData[
       RowBox[{"x", ",", "0", ",", "11.5"}], "}"}], ",", 
      RowBox[{"PlotStyle", "\[Rule]", 
       RowBox[{"{", 
-       RowBox[{"Blue", ",", "Red"}], "}"}]}], ",", 
+       RowBox[{
+        RowBox[{"Directive", "[", 
+         RowBox[{"Thick", ",", "Blue"}], "]"}], ",", 
+        RowBox[{"Directive", "[", 
+         RowBox[{"Thick", ",", "Red"}], "]"}]}], "}"}]}], ",", 
      RowBox[{"AxesStyle", "\[Rule]", 
       RowBox[{"Directive", "[", 
        RowBox[{"Black", ",", "15"}], "]"}]}], ",", 
@@ -41,87 +45,83 @@ Cell[BoxData[
         RowBox[{"{", "2", "}"}]}], "}"}]}], ",", " ", 
      RowBox[{"ImageSize", "\[Rule]", "600"}]}], "]"}], ",", 
    RowBox[{"Graphics", "[", 
-    RowBox[{"Line", "[", 
-     RowBox[{"{", 
-      RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Line", "[", 
        RowBox[{"{", 
-        RowBox[{"2", ",", "4"}], "}"}], ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"2", ",", "4"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", "8"}], "}"}]}], "}"}], "]"}], ",", 
+      RowBox[{"Line", "[", 
        RowBox[{"{", 
-        RowBox[{"2", ",", "8"}], "}"}]}], "}"}], "]"}], "]"}], ",", 
-   RowBox[{"Graphics", "[", 
-    RowBox[{"Line", "[", 
-     RowBox[{"{", 
-      RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"3", ",", "9"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"3", ",", "27"}], "}"}]}], "}"}], "]"}], ",", 
+      RowBox[{"Line", "[", 
        RowBox[{"{", 
-        RowBox[{"3", ",", "9"}], "}"}], ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"4", ",", "16"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"4", ",", "64"}], "}"}]}], "}"}], "]"}], ",", 
+      RowBox[{"Line", "[", 
        RowBox[{"{", 
-        RowBox[{"3", ",", "27"}], "}"}]}], "}"}], "]"}], "]"}], ",", 
-   RowBox[{"Graphics", "[", 
-    RowBox[{"Line", "[", 
-     RowBox[{"{", 
-      RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"5", ",", "25"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"5", ",", "125"}], "}"}]}], "}"}], "]"}], ",", 
+      RowBox[{"Line", "[", 
        RowBox[{"{", 
-        RowBox[{"4", ",", "16"}], "}"}], ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"6", ",", "36"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"6", ",", "216"}], "}"}]}], "}"}], "]"}], ",", 
+      RowBox[{"Line", "[", 
        RowBox[{"{", 
-        RowBox[{"4", ",", "64"}], "}"}]}], "}"}], "]"}], "]"}], ",", 
-   RowBox[{"Graphics", "[", 
-    RowBox[{"Line", "[", 
-     RowBox[{"{", 
-      RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"7", ",", "49"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"7", ",", "343"}], "}"}]}], "}"}], "]"}], ",", 
+      RowBox[{"Line", "[", 
        RowBox[{"{", 
-        RowBox[{"5", ",", "25"}], "}"}], ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"8", ",", "64"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"8", ",", "512"}], "}"}]}], "}"}], "]"}], ",", 
+      RowBox[{"Line", "[", 
        RowBox[{"{", 
-        RowBox[{"5", ",", "125"}], "}"}]}], "}"}], "]"}], "]"}], ",", 
-   RowBox[{"Graphics", "[", 
-    RowBox[{"Line", "[", 
-     RowBox[{"{", 
-      RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"9", ",", "81"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"9", ",", "729"}], "}"}]}], "}"}], "]"}], ",", 
+      RowBox[{"Line", "[", 
        RowBox[{"{", 
-        RowBox[{"6", ",", "36"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"6", ",", "216"}], "}"}]}], "}"}], "]"}], "]"}], ",", 
-   RowBox[{"Graphics", "[", 
-    RowBox[{"Line", "[", 
-     RowBox[{"{", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"7", ",", "49"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"7", ",", "343"}], "}"}]}], "}"}], "]"}], "]"}], ",", 
-   RowBox[{"Graphics", "[", 
-    RowBox[{"Line", "[", 
-     RowBox[{"{", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"8", ",", "64"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"8", ",", "512"}], "}"}]}], "}"}], "]"}], "]"}], ",", 
-   RowBox[{"Graphics", "[", 
-    RowBox[{"Line", "[", 
-     RowBox[{"{", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"9", ",", "81"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"9", ",", "729"}], "}"}]}], "}"}], "]"}], "]"}], ",", 
-   RowBox[{"Graphics", "[", 
-    RowBox[{"Line", "[", 
-     RowBox[{"{", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"10", ",", "100"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"10", ",", "1000"}], "}"}]}], "}"}], "]"}], "]"}]}], 
-  "]"}]], "Input",
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"10", ",", "100"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"10", ",", "1000"}], "}"}]}], "}"}], "]"}]}], "}"}], 
+    "]"}]}], "]"}]], "Input",
  CellChangeTimes->{{3.5942156836625986`*^9, 3.5942158099986553`*^9}, {
   3.5942159071870084`*^9, 3.5942159336823835`*^9}, {3.594215980543332*^9, 
   3.5942159901035523`*^9}, {3.5942160242908897`*^9, 3.5942160422171683`*^9}, {
   3.594216078607793*^9, 3.5942160841625*^9}, {3.594216201185381*^9, 
   3.594216216049263*^9}, {3.5942162467301707`*^9, 3.594216397076273*^9}, {
-  3.594216441653937*^9, 3.5942164490078807`*^9}}]
+  3.594216441653937*^9, 3.5942164490078807`*^9}, {3.6071662583627872`*^9, 
+  3.6071663825575705`*^9}, {3.6071664646029987`*^9, 3.6071664840264587`*^9}, {
+  3.607166809646842*^9, 3.6071668103519416`*^9}}]
 },
-WindowSize->{707, 503},
-WindowMargins->{{Automatic, 134}, {Automatic, 53}},
+WindowSize->{886, 584},
+WindowMargins->{{220, Automatic}, {Automatic, 7}},
 FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
 ]
@@ -136,10 +136,9 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 3391, 100, 152, "Input"]
+Cell[557, 20, 3578, 100, 112, "Input"]
 }
 ]
 *)
 
 (* End of internal cache information *)
-
