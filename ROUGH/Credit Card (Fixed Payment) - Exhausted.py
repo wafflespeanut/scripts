@@ -15,4 +15,4 @@ while round(bal,-1)>=0:
 
     mp+=10
 
-print "Lowest payment: " +str(mp-10)
+print "Lowest monthly payment: " +str(mp-10)

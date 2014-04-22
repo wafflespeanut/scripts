@@ -1,4 +1,4 @@
-s="nkdvbcdepjweolypqrstuvwkzzy"
+s="nkdvbcdepjweolypqrstuvkzzy"
 out=''
 temp=''
 for char in s:

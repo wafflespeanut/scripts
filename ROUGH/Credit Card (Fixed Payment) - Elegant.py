@@ -16,4 +16,4 @@ while abs(obal)>tiny:
     else:
         high=mp
 
-print "Lowest mp:", round(mp, 2)
+print "Lowest monthly payment:", round(mp, 2)
