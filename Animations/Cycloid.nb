@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      6516,        162]
-NotebookOptionsPosition[      6271,        149]
-NotebookOutlinePosition[      6616,        164]
-CellTagsIndexPosition[      6573,        161]
+NotebookDataLength[      6559,        161]
+NotebookOptionsPosition[      6314,        148]
+NotebookOutlinePosition[      6659,        163]
+CellTagsIndexPosition[      6616,        160]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -36,7 +36,7 @@ Cell[BoxData[
                RowBox[{"{", 
                 RowBox[{"0", ",", "0"}], "}"}], ",", 
                RowBox[{"{", 
-                RowBox[{"2", ",", "2"}], "}"}]}], "]"}], ",", "Thick", ",", 
+                RowBox[{"1", ",", "1"}], "}"}]}], "]"}], ",", "Thick", ",", 
              "Magenta", ",", 
              RowBox[{"Line", "[", 
               RowBox[{"{", 
@@ -45,13 +45,13 @@ Cell[BoxData[
                  RowBox[{"0", ",", "0"}], "}"}], ",", 
                 RowBox[{"{", 
                  RowBox[{"0", ",", 
-                  RowBox[{"-", "2"}]}], "}"}]}], "}"}], "]"}], ",", "Blue", 
+                  RowBox[{"-", "1"}]}], "}"}]}], "}"}], "]"}], ",", "Blue", 
              ",", 
              RowBox[{"PointSize", "[", ".012", "]"}], ",", 
              RowBox[{"Point", "[", 
               RowBox[{"{", 
                RowBox[{"0", ",", 
-                RowBox[{"-", "2"}]}], "}"}], "]"}]}], "}"}], ",", 
+                RowBox[{"-", "1"}]}], "}"}], "]"}]}], "}"}], ",", 
            RowBox[{"-", "t"}]}], "]"}], ",", 
          RowBox[{"{", 
           RowBox[{"t", ",", "0"}], "}"}]}], "]"}], ",", 
@@ -60,13 +60,13 @@ Cell[BoxData[
          RowBox[{
           RowBox[{"{", 
            RowBox[{"0", ",", 
-            RowBox[{"8", "Pi"}]}], "}"}], ",", 
+            RowBox[{"4", "Pi"}]}], "}"}], ",", 
           RowBox[{"{", 
            RowBox[{
-            RowBox[{"-", "2"}], ",", "2"}], "}"}]}], "}"}]}], ",", 
+            RowBox[{"-", "1"}], ",", "1"}], "}"}]}], "}"}]}], ",", 
        RowBox[{"ImageSize", "\[Rule]", 
         RowBox[{"{", 
-         RowBox[{"800", ",", "190"}], "}"}]}], ",", 
+         RowBox[{"800", ",", "200"}], "}"}]}], ",", 
        RowBox[{"Axes", "\[Rule]", 
         RowBox[{"{", 
          RowBox[{"True", ",", "False"}], "}"}]}], ",", 
@@ -79,7 +79,7 @@ Cell[BoxData[
        RowBox[{"AxesOrigin", "\[Rule]", 
         RowBox[{"{", 
          RowBox[{"0", ",", 
-          RowBox[{"-", "2"}]}], "}"}]}]}], "]"}], ",", 
+          RowBox[{"-", "1"}]}], "}"}]}]}], "]"}], ",", 
      RowBox[{"Graphics", "[", 
       RowBox[{"Line", "[", 
        RowBox[{"{", 
@@ -88,18 +88,16 @@ Cell[BoxData[
           RowBox[{"0", ",", "0"}], "}"}], ",", 
          RowBox[{"{", 
           RowBox[{
-           RowBox[{"8", "Pi"}], ",", "0"}], "}"}]}], "}"}], "]"}], "]"}], ",", 
+           RowBox[{"4", "Pi"}], ",", "0"}], "}"}]}], "}"}], "]"}], "]"}], ",", 
      RowBox[{"ParametricPlot", "[", 
       RowBox[{
        RowBox[{"{", 
         RowBox[{
          RowBox[{"(", 
           RowBox[{"a", "-", 
-           RowBox[{"2", 
-            RowBox[{"Sin", "[", "a", "]"}]}]}], ")"}], ",", 
+           RowBox[{"Sin", "[", "a", "]"}]}], ")"}], ",", 
          RowBox[{"(", 
-          RowBox[{
-           RowBox[{"-", "2"}], 
+          RowBox[{"-", 
            RowBox[{"Cos", "[", "a", "]"}]}], ")"}]}], "}"}], ",", 
        RowBox[{"{", 
         RowBox[{"a", ",", "0", ",", "t"}], "}"}], ",", 
@@ -108,7 +106,7 @@ Cell[BoxData[
          RowBox[{"Thick", ",", "Blue"}], "]"}]}]}], "]"}]}], "]"}], ",", 
    RowBox[{"{", 
     RowBox[{"t", ",", "0.001", ",", 
-     RowBox[{"8", "Pi"}]}], "}"}], ",", 
+     RowBox[{"4", "Pi"}]}], "}"}], ",", 
    RowBox[{"AutorunSequencing", "\[Rule]", 
     RowBox[{"{", 
      RowBox[{"{", 
@@ -145,9 +143,10 @@ Cell[BoxData[
    3.5933195039961157`*^9}, {3.593319935091905*^9, 3.5933199608981867`*^9}, {
    3.5933200243002434`*^9, 3.593320091237751*^9}, {3.593320223424552*^9, 
    3.5933202354700828`*^9}, {3.5933203673088393`*^9, 3.593320468934763*^9}, {
-   3.5933205571989727`*^9, 3.5933205627896833`*^9}}]
+   3.5933205571989727`*^9, 3.5933205627896833`*^9}, {3.607122385075079*^9, 
+   3.6071224318520145`*^9}, {3.607126416147084*^9, 3.607126501100878*^9}}]
 },
-WindowSize->{796, 510},
+WindowSize->{968, 510},
 WindowMargins->{{113, Automatic}, {Automatic, 59}},
 FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
@@ -163,7 +162,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 5710, 127, 212, "Input"]
+Cell[557, 20, 5753, 126, 192, "Input"]
 }
 ]
 *)

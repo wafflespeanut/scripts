@@ -1,0 +1,247 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      8442,        238]
+NotebookOptionsPosition[      8115,        222]
+NotebookOutlinePosition[      8460,        237]
+CellTagsIndexPosition[      8417,        234]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"r", "=", "1"}], ";", 
+  RowBox[{"rWall", "=", "1.2"}], ";", 
+  RowBox[{"v", "=", "1"}], ";", 
+  RowBox[{"\[Tau]", "=", 
+   RowBox[{"r", "/", "v"}]}], ";", 
+  RowBox[{"\[Omega]", "=", 
+   FractionBox["1", 
+    RowBox[{"10", "\[Tau]"}]]}], ";", 
+  RowBox[{"c", "=", "1.5"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"showRodAndWall", "[", 
+    RowBox[{"\[Theta]_", "?", "NumberQ"}], "]"}], ":=", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"pt", "=", 
+       RowBox[{"r", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Cos", "[", "\[Theta]", "]"}], ",", 
+          RowBox[{"Sin", "[", "\[Theta]", "]"}]}], "}"}]}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Graphics", "[", 
+      RowBox[{"{", 
+       RowBox[{"White", ",", 
+        RowBox[{"Disk", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0"}], "}"}], ",", "rWall"}], "]"}], ",", 
+        RowBox[{"Thickness", "[", ".02", "]"}], ",", "Gray", ",", 
+        RowBox[{"Arrowheads", "[", "Large", "]"}], ",", 
+        RowBox[{"Arrow", "[", 
+         RowBox[{"r", 
+          RowBox[{"{", 
+           RowBox[{"pt", ",", 
+            RowBox[{"-", "pt"}]}], "}"}]}], "]"}], ",", "Black", ",", 
+        RowBox[{"PointSize", "[", "Medium", "]"}], ",", 
+        RowBox[{"Point", "[", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0"}], "}"}], "]"}]}], "}"}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"particlePosition", "[", 
+    RowBox[{"\[Omega]_", ",", "t_", ",", "T_"}], "]"}], ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"\[Theta]", "=", 
+        RowBox[{"\[Omega]", " ", "T"}]}], ",", "vTotal", ",", "pInitial"}], 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"pInitial", "=", 
+       RowBox[{"r", " ", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Cos", "[", "\[Theta]", "]"}], ",", 
+          RowBox[{"Sin", "[", "\[Theta]", "]"}]}], "}"}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"vTotal", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", "v"}], " ", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"Cos", "[", "\[Theta]", "]"}], ",", 
+           RowBox[{"Sin", "[", "\[Theta]", "]"}]}], "}"}]}], "+", 
+        RowBox[{"\[Omega]", " ", "r", " ", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", 
+            RowBox[{"Sin", "[", "\[Theta]", "]"}]}], ",", 
+           RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "}"}]}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"pInitial", "+", 
+       RowBox[{"vTotal", 
+        RowBox[{"(", 
+         RowBox[{"t", "-", "T"}], ")"}]}]}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"particleStyle", "[", 
+    RowBox[{"t_", ",", "T_"}], "]"}], ":=", 
+   RowBox[{"Directive", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"ColorData", "[", "\"\<DeepSeaColors\>\"", "]"}], "[", 
+      RowBox[{"FractionalPart", "[", 
+       FractionBox["T", "\[Tau]"], "]"}], "]"}], ",", 
+     RowBox[{"PointSize", "[", 
+      FractionBox["0.07", 
+       RowBox[{"1", "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"t", "-", "T"}], ")"}], "/", "\[Tau]"}]}]], "]"}]}], 
+    "]"}]}], " ", ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"particleSet", "[", 
+    RowBox[{"\[Omega]_", ",", "t_", ",", "\[Delta]t_", ",", "transform_"}], 
+    "]"}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"creationTimes", "=", 
+        RowBox[{"Range", "[", 
+         RowBox[{"0", ",", "t", ",", "\[Delta]t"}], "]"}]}], ",", "p"}], 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"Graphics", "[", 
+      RowBox[{"{", 
+       RowBox[{"Select", "[", 
+        RowBox[{
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"p", "=", 
+             RowBox[{"transform", "[", 
+              RowBox[{"particlePosition", "[", 
+               RowBox[{"\[Omega]", ",", "t", ",", "T"}], "]"}], "]"}]}], ";", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"particleStyle", "[", 
+               RowBox[{"t", ",", "T"}], "]"}], ",", 
+              RowBox[{"Point", "[", "p", "]"}]}], "}"}]}], ",", 
+           RowBox[{"{", 
+            RowBox[{"T", ",", "creationTimes"}], "}"}]}], "]"}], ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Norm", "[", 
+            RowBox[{"#", "\[LeftDoubleBracket]", 
+             RowBox[{"2", ",", "1"}], "\[RightDoubleBracket]"}], "]"}], 
+           "\[LessEqual]", "rWall"}], "&"}]}], "]"}], "}"}], "]"}]}], "]"}]}],
+   ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"rot", ",", "\[Theta]"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"\[Theta]", "=", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"frame", "==", "\"\<Inertial\>\""}], ",", "0", ",", 
+         RowBox[{"\[Omega]", " ", "t"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"rot", "=", 
+       RowBox[{"RotationTransform", "[", 
+        RowBox[{"-", "\[Theta]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Show", "[", 
+       RowBox[{
+        RowBox[{"showRodAndWall", "[", 
+         RowBox[{
+          RowBox[{"\[Omega]", " ", "t"}], "-", "\[Theta]"}], "]"}], ",", 
+        RowBox[{"particleSet", "[", 
+         RowBox[{"\[Omega]", ",", "t", ",", 
+          RowBox[{"\[Tau]", "/", "c"}], ",", "rot"}], "]"}], ",", 
+        RowBox[{"Background", "\[Rule]", "Black"}], ",", 
+        RowBox[{"ImageSize", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"460", ",", "460"}], "}"}]}]}], "]"}]}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "frame", ",", "\"\<Inertial\>\"", ",", "\"\<Reference frame\>\""}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Inertial\>\"", ",", "\"\<Rotating\>\""}], "}"}]}], "}"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0", ",", "\"\<Time\>\""}], "}"}], ",", "0", ",", 
+     RowBox[{"62.5", "\[Tau]"}]}], "}"}], ",", 
+   RowBox[{"SaveDefinitions", "\[Rule]", "True"}]}], "]"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.35696210375764*^9, {3.419117253657029*^9, 3.4191173695036077`*^9}, {
+   3.419118046727408*^9, 3.419118066455776*^9}, {3.419120270505043*^9, 
+   3.419120298284989*^9}, {3.598335831952735*^9, 3.5983358417139764`*^9}, {
+   3.59833649514967*^9, 3.598336626814397*^9}, {3.598336708588791*^9, 
+   3.5983367154836674`*^9}, {3.5983367971450453`*^9, 3.598336798570238*^9}, {
+   3.598336832866597*^9, 3.5983369195146074`*^9}, {3.5983370183571615`*^9, 
+   3.598337037019532*^9}, 3.5986173973365083`*^9, 3.5986175644787493`*^9, {
+   3.598617610460594*^9, 3.5986176388442197`*^9}, {3.599129040257416*^9, 
+   3.599129041246541*^9}, {3.599129077337139*^9, 3.5991290863122683`*^9}, {
+   3.599129133244234*^9, 3.5991292223615685`*^9}, {3.599140923975346*^9, 
+   3.5991409248814507`*^9}, {3.5991410092151685`*^9, 3.599141010668361*^9}, {
+   3.5991410586004443`*^9, 3.5991412304662957`*^9}, {3.5991412724176235`*^9, 
+   3.599141274225849*^9}, {3.5991413226980104`*^9, 3.5991413450218563`*^9}},
+ CellID->8934277],
+
+Cell[BoxData["\[IndentingNewLine]"], "Input",
+ CellChangeTimes->{3.599141109029854*^9}]
+},
+WindowSize->{897, 513},
+WindowMargins->{{130, Automatic}, {Automatic, 23}},
+FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 7464, 197, 503, "Input",
+ InitializationCell->True,
+ CellID->8934277],
+Cell[8024, 219, 87, 1, 52, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
