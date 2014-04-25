@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      7868,        222]
-NotebookOptionsPosition[      7625,        209]
-NotebookOutlinePosition[      7968,        224]
-CellTagsIndexPosition[      7925,        221]
+NotebookDataLength[      7972,        224]
+NotebookOptionsPosition[      7727,        211]
+NotebookOutlinePosition[      8072,        226]
+CellTagsIndexPosition[      8029,        223]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -173,7 +173,7 @@ Cell[BoxData[{
            RowBox[{"c", "[", 
             RowBox[{"\[Theta]", "+", "Pi"}], "]"}], ",", "0.04"}], "]"}]}], 
         "}"}]}], "}"}], ",", 
-     RowBox[{"ImageSize", "\[Rule]", "700"}], ",", 
+     RowBox[{"ImageSize", "\[Rule]", "500"}], ",", 
      RowBox[{"PlotRange", "\[Rule]", 
       RowBox[{"{", 
        RowBox[{
@@ -205,10 +205,12 @@ Cell[BoxData[{
    3.5998297201436853`*^9}, {3.599829784638776*^9, 3.599829858099967*^9}, {
    3.5998299717159767`*^9, 3.599829994149024*^9}, 3.5998616542686405`*^9, {
    3.599861697493125*^9, 3.5998617017706747`*^9}, {3.5998617790425014`*^9, 
-   3.5998617957936263`*^9}, {3.5998618436627045`*^9, 3.5998618753477273`*^9}}]
+   3.5998617957936263`*^9}, {3.5998618436627045`*^9, 
+   3.5998618753477273`*^9}, {3.6074218376576405`*^9, 3.607421838203697*^9}, {
+   3.607421892665618*^9, 3.607421900074571*^9}}]
 },
-WindowSize->{1350, 629},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowSize->{773, 506},
+WindowMargins->{{Automatic, 208}, {Automatic, -3}},
 FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
 ]
@@ -223,7 +225,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 7064, 187, 252, "Input"]
+Cell[557, 20, 7166, 189, 312, "Input"]
 }
 ]
 *)
