@@ -10,14 +10,16 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     11455,        330]
-NotebookOptionsPosition[     11211,        317]
-NotebookOutlinePosition[     11554,        332]
-CellTagsIndexPosition[     11511,        329]
+NotebookDataLength[     15575,        429]
+NotebookOptionsPosition[     15253,        413]
+NotebookOutlinePosition[     15598,        428]
+CellTagsIndexPosition[     15555,        425]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
+
+Cell[CellGroupData[{
 Cell[BoxData[{
  RowBox[{
   RowBox[{"omega", "=", "1"}], ";", 
@@ -207,13 +209,13 @@ Cell[BoxData[{
             RowBox[{"Disk", "[", 
              RowBox[{
               RowBox[{"{", 
-               RowBox[{"0", ",", "0"}], "}"}], ",", "0.07"}], "]"}], ",", 
+               RowBox[{"0", ",", "0"}], "}"}], ",", "0.085"}], "]"}], ",", 
             RowBox[{"Disk", "[", 
              RowBox[{
               RowBox[{"{", 
                RowBox[{
                 RowBox[{"-", "1"}], ",", 
-                RowBox[{"-", "3"}]}], "}"}], ",", "0.07"}], "]"}]}], "}"}], 
+                RowBox[{"-", "3"}]}], "}"}], ",", "0.085"}], "]"}]}], "}"}], 
           ",", 
           RowBox[{"Disk", "[", 
            RowBox[{
@@ -223,7 +225,7 @@ Cell[BoxData[{
                RowBox[{
                 RowBox[{"a1", "[", "t", "]"}], ",", 
                 RowBox[{"a2", "[", "t", "]"}]}], "}"}], "/.", "sol"}], "/.", 
-             RowBox[{"t", "\[Rule]", "Motion"}]}], ",", "0.07"}], "]"}]}], 
+             RowBox[{"t", "\[Rule]", "Motion"}]}], ",", "0.085"}], "]"}]}], 
          "}"}], ",", 
         RowBox[{"{", 
          RowBox[{"Red", ",", 
@@ -235,11 +237,10 @@ Cell[BoxData[{
                RowBox[{
                 RowBox[{"b1", "[", "t", "]"}], ",", 
                 RowBox[{"b2", "[", "t", "]"}]}], "}"}], "/.", "sol"}], "/.", 
-             RowBox[{"t", "\[Rule]", "Motion"}]}], ",", "0.07"}], "]"}]}], 
+             RowBox[{"t", "\[Rule]", "Motion"}]}], ",", "0.085"}], "]"}]}], 
          "}"}], ",", 
         RowBox[{"{", 
-         RowBox[{
-          RowBox[{"Darker", "[", "Black", "]"}], ",", 
+         RowBox[{"Red", ",", 
           RowBox[{"Disk", "[", 
            RowBox[{
             RowBox[{
@@ -248,7 +249,7 @@ Cell[BoxData[{
                RowBox[{
                 RowBox[{"d1", "[", "t", "]"}], ",", "d2"}], "}"}], "/.", 
               "sol"}], "/.", 
-             RowBox[{"t", "\[Rule]", "Motion"}]}], ",", "0.07"}], "]"}]}], 
+             RowBox[{"t", "\[Rule]", "Motion"}]}], ",", "0.085"}], "]"}]}], 
          "}"}]}], "}"}], "]"}], ",", 
      RowBox[{"Graphics", "[", 
       RowBox[{"{", 
@@ -313,10 +314,105 @@ Cell[BoxData[{
    3.5992177117113686`*^9, 3.5992177137356267`*^9}, {3.5992779634908743`*^9, 
    3.5992779640919495`*^9}, {3.5992790880607867`*^9, 3.599279088703882*^9}, {
    3.5992791412055445`*^9, 3.599279238690934*^9}, {3.5992794540713186`*^9, 
-   3.5992794918871236`*^9}, 3.59969293586843*^9}]
+   3.5992794918871236`*^9}, 3.59969293586843*^9, {3.6074224069949875`*^9, 
+   3.6074224113515396`*^9}, {3.6074225208374567`*^9, 3.6074225876249437`*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`Motion$$ = 0, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`Motion$$], 0, 
+      Dynamic[
+       Part[$CellContext`sol, 1, 2, 0, 1, 1, 2]]}}, Typeset`size$$ = {
+    500., {173., 177.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`Motion$2131$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, "Variables" :> {$CellContext`Motion$$ = 0}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`Motion$$, $CellContext`Motion$2131$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Show[
+        Graphics[{{Thick, Green, Dashed, 
+           Circle[{0, 0}, $CellContext`r1]}, {Thick, Green, Dashed, 
+           Circle[{-1, -3}, $CellContext`r2, {(-Pi)/3, Pi/3}]}, {Red, 
+           EdgeForm[{Thick, Black}], White, 
+           Rectangle[
+            ReplaceAll[
+             
+             ReplaceAll[{$CellContext`d1[$CellContext`t] - 
+               0.3, $CellContext`d2 - 
+               0.3}, $CellContext`sol], $CellContext`t -> \
+$CellContext`Motion$$], 
+            ReplaceAll[
+             
+             ReplaceAll[{$CellContext`d1[$CellContext`t] + 
+               0.6, $CellContext`d2 + 
+               0.3}, $CellContext`sol], $CellContext`t -> \
+$CellContext`Motion$$]]}, {Red, {
+            Disk[{0, 0}, 0.085], 
+            Disk[{-1, -3}, 0.085]}, 
+           Disk[
+            ReplaceAll[
+             ReplaceAll[{
+               $CellContext`a1[$CellContext`t], 
+               $CellContext`a2[$CellContext`t]}, $CellContext`sol], \
+$CellContext`t -> $CellContext`Motion$$], 0.085]}, {Red, 
+           Disk[
+            ReplaceAll[
+             ReplaceAll[{
+               $CellContext`b1[$CellContext`t], 
+               $CellContext`b2[$CellContext`t]}, $CellContext`sol], \
+$CellContext`t -> $CellContext`Motion$$], 0.085]}, {Red, 
+           Disk[
+            ReplaceAll[
+             ReplaceAll[{
+               $CellContext`d1[$CellContext`t], $CellContext`d2}, \
+$CellContext`sol], $CellContext`t -> $CellContext`Motion$$], 0.085]}}], 
+        Graphics[{Thick, Blue, 
+          Line[
+           ReplaceAll[
+            ReplaceAll[{{0, 0}, {
+               $CellContext`a1[$CellContext`t], 
+               $CellContext`a2[$CellContext`t]}, {
+               $CellContext`b1[$CellContext`t], 
+               $CellContext`b2[$CellContext`t]}, {$CellContext`c1, \
+$CellContext`c2}}, $CellContext`sol], $CellContext`t -> \
+$CellContext`Motion$$]], 
+          Line[
+           ReplaceAll[
+            ReplaceAll[{{
+               $CellContext`b1[$CellContext`t], 
+               $CellContext`b2[$CellContext`t]}, {
+               $CellContext`d1[$CellContext`t], $CellContext`d2}}, \
+$CellContext`sol], $CellContext`t -> $CellContext`Motion$$]]}], 
+        PlotRange -> {{-3, 7}, {-5, 2}}, ImageSize -> 500], 
+      "Specifications" :> {{$CellContext`Motion$$, 0, 
+         Dynamic[
+          Part[$CellContext`sol, 1, 2, 0, 1, 1, 2]]}}, "Options" :> {}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{551., {219., 224.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{
+  3.6074223818327875`*^9, 3.607422412523695*^9, {3.60742252311075*^9, 
+   3.607422588203018*^9}}]
+}, Open  ]]
 },
-WindowSize->{1350, 629},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowSize->{867, 545},
+WindowMargins->{{182, Automatic}, {Automatic, 31}},
 FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
 ]
@@ -331,7 +427,10 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 10650, 295, 272, "Input"]
+Cell[CellGroupData[{
+Cell[579, 22, 10716, 295, 492, "Input"],
+Cell[11298, 319, 3939, 91, 492, "Output"]
+}, Open  ]]
 }
 ]
 *)
