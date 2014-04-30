@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      7626,        176]
-NotebookOptionsPosition[      7381,        163]
-NotebookOutlinePosition[      7726,        178]
-CellTagsIndexPosition[      7683,        175]
+NotebookDataLength[      8167,        184]
+NotebookOptionsPosition[      7922,        171]
+NotebookOutlinePosition[      8267,        186]
+CellTagsIndexPosition[      8224,        183]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -22,15 +22,15 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{
    RowBox[{"F", "[", "x_", "]"}], ":=", 
-   RowBox[{"1", "+", 
-    RowBox[{"2", "x"}], "+", 
-    SuperscriptBox["x", "2"]}]}], ";", 
+   RowBox[{
+    RowBox[{"Sin", "[", "x", "]"}], "+", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"2", "x"}], "]"}]}]}], ";", 
   RowBox[{
    RowBox[{"{", 
     RowBox[{"a", ",", "b"}], "}"}], "=", 
    RowBox[{"{", 
-    RowBox[{
-     RowBox[{"-", "2"}], ",", "5"}], "}"}]}], ";", 
+    RowBox[{"0", ",", "2"}], "}"}]}], ";", 
   RowBox[{"A", "=", 
    RowBox[{
     SubsuperscriptBox["\[Integral]", "a", "b"], 
@@ -71,7 +71,7 @@ Cell[BoxData[{
         RowBox[{"PlotStyle", "\[Rule]", 
          RowBox[{"Directive", "[", 
           RowBox[{
-           RowBox[{"Opacity", "[", "0.4", "]"}], ",", "Blue", ",", 
+           RowBox[{"Opacity", "[", "0.7", "]"}], ",", "Blue", ",", 
            RowBox[{"Thickness", "[", "0.003", "]"}]}], "]"}]}]}], "]"}], ",", 
       RowBox[{"DiscretePlot", "[", 
        RowBox[{
@@ -79,22 +79,26 @@ Cell[BoxData[{
         RowBox[{"{", 
          RowBox[{"x", ",", "a", ",", "b", ",", "\[CapitalDelta]x"}], "}"}], 
         ",", 
-        RowBox[{"PlotLabel", "\[Rule]", 
-         RowBox[{"Style", "[", 
-          RowBox[{
-           RowBox[{
-            RowBox[{"N", "[", 
-             RowBox[{
-              RowBox[{"\[CapitalDelta]F", "+", "S"}], ",", "10"}], "]"}], 
-            "\[Rule]", " ", 
-            RowBox[{"N", "[", 
-             RowBox[{"A", ",", "10"}], "]"}]}], ",", "18"}], "]"}]}], ",", 
+        RowBox[{"Joined", "\[Rule]", "True"}], ",", 
+        RowBox[{"PlotStyle", "\[Rule]", 
+         RowBox[{"Directive", "[", 
+          RowBox[{"Red", ",", 
+           RowBox[{"Opacity", "[", "0.7", "]"}], ",", 
+           RowBox[{"Thickness", "[", "0.004", "]"}]}], "]"}]}], ",", 
+        RowBox[{"PlotRange", "\[Rule]", "Automatic"}]}], "]"}], ",", 
+      RowBox[{"DiscretePlot", "[", 
+       RowBox[{
+        RowBox[{"F", "[", "x", "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"x", ",", "a", ",", "b", ",", "\[CapitalDelta]x"}], "}"}], 
+        ",", 
         RowBox[{"PlotStyle", "\[Rule]", 
          RowBox[{"Directive", "[", 
           RowBox[{
-           RowBox[{"PointSize", "[", "Medium", "]"}], ",", "Red", ",", 
-           RowBox[{"Opacity", "[", "0.8", "]"}], ",", 
-           RowBox[{"Thickness", "[", "0.003", "]"}]}], "]"}]}], ",", 
+           RowBox[{"PointSize", "[", "Medium", "]"}], ",", 
+           RowBox[{"Darker", "[", "Red", "]"}], ",", 
+           RowBox[{"Opacity", "[", "1", "]"}], ",", 
+           RowBox[{"Thickness", "[", "0.004", "]"}]}], "]"}]}], ",", 
         RowBox[{"PlotRange", "\[Rule]", "Automatic"}]}], "]"}], ",", 
       RowBox[{"ImageSize", "\[Rule]", "600"}], ",", 
       RowBox[{"PlotLabel", "\[Rule]", 
@@ -159,7 +163,11 @@ Cell[BoxData[{
    3.6078645815564175`*^9, 3.607864719416452*^9}, {3.607865037723051*^9, 
    3.6078650427001867`*^9}, {3.6078650855094433`*^9, 3.60786515359145*^9}, {
    3.607865237940916*^9, 3.607865306182952*^9}, {3.6078654403958826`*^9, 
-   3.6078655167031317`*^9}, {3.607865569194671*^9, 3.607865628191394*^9}}]
+   3.6078655167031317`*^9}, {3.607865569194671*^9, 3.607865628191394*^9}, {
+   3.6078664464509926`*^9, 3.607866623133012*^9}, {3.6078667260981164`*^9, 
+   3.607866748000741*^9}, {3.607866811680623*^9, 3.607866947729678*^9}, {
+   3.6078671438705792`*^9, 3.607867148675433*^9}, {3.6078671910318975`*^9, 
+   3.6078672511237383`*^9}, {3.607867284851301*^9, 3.6078672886109295`*^9}}]
 },
 WindowSize->{847, 552},
 WindowMargins->{{166, Automatic}, {Automatic, 25}},
@@ -177,7 +185,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 6820, 141, 213, "Input"]
+Cell[557, 20, 7361, 149, 253, "Input"]
 }
 ]
 *)
