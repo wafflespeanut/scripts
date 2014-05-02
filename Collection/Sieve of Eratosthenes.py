@@ -23,19 +23,19 @@ def arraylook(limit):
         if sidekick[n]:
             for i in range(n*n,limit+1,n):
                 sidekick[i] = False
-    return [i for i, prime in enumerate(sidekick) if prime]
+    return [i for i,prime in enumerate(sidekick) if prime]
 
 start=timeit.default_timer()
-arraylook(300)
+arraylook(1000)
 stop=timeit.default_timer()
 print "Array-looking took " +str(stop-start) +" seconds"
 
 start=timeit.default_timer()
-listlook(300)
+listlook(1000)
 stop=timeit.default_timer()
 print "List-looking took " +str(stop-start) +" seconds"
 
 start=timeit.default_timer()
-exhausted(300)
+exhausted(1000)
 stop=timeit.default_timer()
 print "Brute-force took " +str(stop-start)+ " seconds"
