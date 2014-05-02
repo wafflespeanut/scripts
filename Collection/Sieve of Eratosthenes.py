@@ -17,25 +17,25 @@ def listlook(n):
             primes.append(i)
             sidekick.extend(range(i*i,n+1,i))
 
-def arraylook(limit):
-    sidekick=[False]*2+[True]*(limit-1) 
-    for n in range(int(limit**0.5+1.5)):
-        if sidekick[n]:
-            for i in range(n*n,limit+1,n):
-                sidekick[i] = False
-    return [i for i,prime in enumerate(sidekick) if prime]
+def arraylook(n):
+    sidekick=[False]*2+[True]*(n-1)
+    for i in range(int(n**0.5)+1):
+        if sidekick[i]:
+            for j in range(i*i,n+1,i):
+                sidekick[j] = False
+    return [j for j,prime in enumerate(sidekick) if prime]
 
 start=timeit.default_timer()
-arraylook(1000)
+arraylook(1200)
 stop=timeit.default_timer()
 print "Array-looking took " +str(stop-start) +" seconds"
 
 start=timeit.default_timer()
-listlook(1000)
+listlook(1200)
 stop=timeit.default_timer()
 print "List-looking took " +str(stop-start) +" seconds"
 
 start=timeit.default_timer()
-exhausted(1000)
+exhausted(1200)
 stop=timeit.default_timer()
 print "Brute-force took " +str(stop-start)+ " seconds"
