@@ -17,6 +17,19 @@ def listlook(n):
             primes.append(i)
             sidekick.extend(range(i*i,n+1,i))
 
+def arraylook(limit):
+    sidekick=[False]*2+[True]*(limit-1) 
+    for n in range(int(limit**0.5+1.5)):
+        if sidekick[n]:
+            for i in range(n*n,limit+1,n):
+                sidekick[i] = False
+    return [i for i, prime in enumerate(sidekick) if prime]
+
+start=timeit.default_timer()
+arraylook(300)
+stop=timeit.default_timer()
+print "Array-looking took " +str(stop-start) +" seconds"
+
 start=timeit.default_timer()
 listlook(300)
 stop=timeit.default_timer()
