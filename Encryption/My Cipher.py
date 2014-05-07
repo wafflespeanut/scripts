@@ -22,10 +22,10 @@ def combine(text,key):
     print pas
     print primes
     for j in pas:
-        if i<ph and primes[i]<ph:
+        if i<=ph and primes[i]<ph:
             phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
             i+=1
-        elif i<=ph:
+        elif i<=len(phrase):
             phrase+=[None]*(len(phrase)-primes[i])
             phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
             i+=1
@@ -35,4 +35,4 @@ def combine(text,key):
     print "\n"
     print phrase
 
-combine("There ya go!","Encryptshafia")
+combine("There","encrypt123wfdsaf")
