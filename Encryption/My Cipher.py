@@ -17,18 +17,21 @@ def hexed(key):
 
 def combine(text,key):
     pas=hexed(key);phrase=hexed(text);primes=sieve(len(key)**2);
-    i=0;ph=len(phrase);p=len(key)
+    i=0;ph=len(phrase);p=len(key);hprime=hexed(str(primes))
     for j in pas:
         if i<=ph and primes[i]<ph:
-            phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
-            i+=1
-        elif i<=len(phrase):
-            phrase+=[None]*(len(phrase)-primes[i])
             phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
             i+=1
         else: break
     while phrase[-1]==None:
         phrase=phrase[:(len(phrase)-1)]
-    print phrase
+    return ''.join(phrase)
 
-combine("jgijjg0iw0iksdam","encrypt123wfdsaf")
+def bit(text,key,iteration):
+    i=1;combined=combine(text,key)
+    while i<=iteration:
+        combined=combine(combined,key)
+        i+=1
+    return combined
+
+print bit("abcd","encryp",5)
