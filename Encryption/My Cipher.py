@@ -15,8 +15,24 @@ def hexed(key):
         pas[i]=format(ord(pas[i]),'02x')
     return pas
 
-def encrypt(text,key):
-    pas=hexed(key)
-    phrase=hexed(text)
-    primes=sieve(len(text+key))
-    
+def combine(text,key):
+    pas=hexed(key);phrase=hexed(text);primes=sieve(len(key)**2);
+    i=0;ph=len(phrase);p=len(key)
+    print phrase
+    print pas
+    print primes
+    for j in pas:
+        if i<ph and primes[i]<ph:
+            phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
+            i+=1
+        elif i<=ph:
+            phrase+=[None]*(len(phrase)-primes[i])
+            phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
+            i+=1
+        else: break
+    while phrase[-1]==None:
+        phrase=phrase[:(len(phrase)-1)]
+    print "\n"
+    print phrase
+
+combine("There ya go!","Encryptshafia")
