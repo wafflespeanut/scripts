@@ -18,9 +18,6 @@ def hexed(key):
 def combine(text,key):
     pas=hexed(key);phrase=hexed(text);primes=sieve(len(key)**2);
     i=0;ph=len(phrase);p=len(key)
-    print phrase
-    print pas
-    print primes
     for j in pas:
         if i<=ph and primes[i]<ph:
             phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
@@ -32,7 +29,6 @@ def combine(text,key):
         else: break
     while phrase[-1]==None:
         phrase=phrase[:(len(phrase)-1)]
-    print "\n"
     print phrase
 
-combine("There","encrypt123wfdsaf")
+combine("jgijjg0iw0iksdam","encrypt123wfdsaf")
