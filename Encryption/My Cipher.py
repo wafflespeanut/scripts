@@ -23,7 +23,7 @@ def combine(text,key):
             phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
             i+=1
         else: break
-    return phrase
+    return ''.join(phrase)
 
 def char(key):
     pas=[key[i:i+2] for i in range(0,len(key),2)]
@@ -39,11 +39,23 @@ def extract(text,key):
             newph+=phrase[i]
     return newph
 
-def cbit(text,key,iteration):
+def ebit(text,key,iteration):
     i=1;combined=combine(text,key)
     while i<=iteration:
         combined=combine(combined,key)
         i+=1
-    return ''.join(combined)
+    return combined
 
-print cbit('Hi there user!',"rf432f",0)
+def dbit(text,key,iteration):
+    i=1;extracted=extract(text,key)
+    while i<=iteration:
+        extracted=extract(extracted,key)
+        i+=1
+    return ''.join(extracted)
+
+e=ebit('Hi there user!',"My Password 123",2)
+d=dbit(e,"My Password 123",2)
+
+print 'Message: Hi there user!\t Password: My Password 123\n'
+print "ENCRYPTED BITS: "+str(e)
+print "\nDECRYPTED TEXT: "+str(d)
