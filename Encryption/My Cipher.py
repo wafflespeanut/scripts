@@ -53,9 +53,15 @@ def dbit(text,key,iteration):
         i+=1
     return ''.join(extracted)
 
-e=ebit('Hi there user!',"My Password 123",2)
-d=dbit(e,"My Password 123",2)
+text=raw_input("Text to put in the cipher: ")
+key=raw_input("Password: ")
+level=raw_input("Security level (0-5): ")
 
-print 'Message: Hi there user!\t Password: My Password 123\n'
-print "ENCRYPTED BITS: "+str(e)
-print "\nDECRYPTED TEXT: "+str(d)
+what=raw_input("Encrypt (e) or Decrypt (d) ? ")
+if str(what)=='e':
+    e=ebit(str(text),str(key),int(level))
+    print "\nENCRYPTED BITS: "+str(e)
+elif str(what)=='d':
+    d=dbit(str(text),str(key),int(level))
+    print "\nDECRYPTED TEXT: "+str(d)
+else: print "\nINVALID INPUT!"
