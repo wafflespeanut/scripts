@@ -1,6 +1,3 @@
-import string
-from random import randrange
-
 def sieve(n):
     sidekick=[False]*2+[True]*(n-1)
     for i in range(int(n**0.5)+1):
