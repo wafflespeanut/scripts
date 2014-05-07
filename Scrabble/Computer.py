@@ -22,7 +22,7 @@ def compPlayHand(hand, wordList, n):
         else: break
     print "Total score: " +str(total) +" points"
     
-def playboth(wordList):
+def playBoth(wordList):
     r=0
     s=''
     while s!='e':
@@ -58,4 +58,4 @@ def playboth(wordList):
         if (s!='e' and s!='n' and s!='r'): print "Invalid command.\n"
                 
 wordList = loadWords()
-playboth(wordList)
+playBoth(wordList)
