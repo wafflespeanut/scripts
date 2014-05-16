@@ -52,13 +52,10 @@ def dbit(text,key,iteration):
 
 text=raw_input("Text to put in the cipher: ")
 key=raw_input("Password: ")
-level=raw_input("Security level (1-5): ")
+level=raw_input("Security level (1-5, even 10 if you insist!): ")
 
 what=raw_input("Encrypt (e) or Decrypt (d) ? ")
 if str(what)=='e':
-    e=ebit(str(text),str(key),int(level))
-    print "\nENCRYPTED BITS: "+str(e)
+    print "\n"+str(ebit(str(text),str(key),int(level)))
 elif str(what)=='d':
-    d=dbit(str(text),str(key),int(level))
-    print "\nDECRYPTED TEXT: "+str(d)
-else: print "\nINVALID INPUT!"
+    print "\n"+str(dbit(str(text),str(key),int(level)))
