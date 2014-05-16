@@ -12,6 +12,38 @@ def hexed(key):
         pas[i]=format(ord(pas[i]),'02x')
     return pas
 
+def char(key):
+    pas=[key[i:i+2] for i in range(0,len(key),2)]
+    for i,j in enumerate(pas):
+        pas[i]=pas[i].decode("hex")
+    return ''.join(pas)
+
+def add(text,key):
+    hand=list(''.join(text));give=list(key);num=list("0123456789");
+    i=0;j=len(key);
+    for a,b in enumerate(hand):
+        if i<j and b in num:
+            hand[a]=str(int(b)+ord(give[i]))[-1]
+            i+=1
+        elif i>=j and b in num:
+            i=0
+            hand[a]=str(int(b)+ord(give[i]))[-1]
+            i+=1
+    return ''.join(hand)
+
+def sub(text,key):
+    hand=list(''.join(text));give=list(key);num=list("0123456789");
+    i=0;j=len(key);
+    for a,b  in enumerate(hand):
+        if i<j and b in num:
+            hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
+            i+=1
+        elif i>=j and b in num:
+            i=0
+            hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
+            i+=1
+    return ''.join(hand)
+
 def combine(text,key):
     pas=hexed(key);phrase=hexed(text);primes=sieve(len(key)**2);
     i=0;ph=len(phrase);p=len(key)
@@ -20,35 +52,30 @@ def combine(text,key):
             phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
             i+=1
         else: break
-    return ''.join(phrase)
-
-def char(key):
-    pas=[key[i:i+2] for i in range(0,len(key),2)]
-    for i,j in enumerate(pas):
-        pas[i]=pas[i].decode("hex")
-    return ''.join(pas)
+    phr=add(phrase,key)
+    return ''.join(phr)
 
 def extract(text,key):
-    phrase=char(text);primes=sieve(len(key)**2);
+    phrase=char(sub(text,key));primes=sieve(len(key)**2);
     ph=len(phrase);newph=""
     for i in range(ph):
         if i not in primes[:len(key)]:
             newph+=phrase[i]
-    return newph
+    return ''.join(newph)
 
-def ebit(text,key,iteration):
+def eit(text,key,iteration):
     i=1;combined=combine(text,key)
     while i<=iteration:
         combined=combine(combined,key)
         i+=1
     return combined
 
-def dbit(text,key,iteration):
+def dit(text,key,iteration):
     i=1;extracted=extract(text,key)
     while i<=iteration:
         extracted=extract(extracted,key)
         i+=1
-    return ''.join(extracted)
+    return extracted
 
 text=raw_input("Text to put in the cipher: ")
 key=raw_input("Password: ")
@@ -56,6 +83,6 @@ level=raw_input("Security level (1-5, even 10 if you want!): ")
 
 what=raw_input("Encrypt (e) or Decrypt (d) ? ")
 if str(what)=='e':
-    print "\n"+str(ebit(str(text),str(key),int(level)))
+    print "\n"+str(eit(str(text),str(key),int(level)))
 elif str(what)=='d':
-    print "\n"+str(dbit(str(text),str(key),int(level)))
+    print "\n"+str(dit(str(text),str(key),int(level)))
