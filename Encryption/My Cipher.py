@@ -34,7 +34,7 @@ def add(text,key):
 def sub(text,key):
     hand=list(''.join(text));give=list(key);num=list("0123456789");
     i=0;j=len(key);
-    for a,b  in enumerate(hand):
+    for a,b in enumerate(hand):
         if i<j and b in num:
             hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
             i+=1
