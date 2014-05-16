@@ -52,7 +52,7 @@ def dbit(text,key,iteration):
 
 text=raw_input("Text to put in the cipher: ")
 key=raw_input("Password: ")
-level=raw_input("Security level (1-5): ")
+level=raw_input("Security level (1-5, even 10 if you want!): ")
 
 what=raw_input("Encrypt (e) or Decrypt (d) ? ")
 if str(what)=='e':
