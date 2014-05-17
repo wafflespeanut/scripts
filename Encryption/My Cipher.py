@@ -106,7 +106,7 @@ while choice=='y':
     elif str(what)=='d':
         out=dit(str(text),str(key),int(level))
         if out==None:
-            print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\tIncorrect key (Check your password!)\n\tCan also be due to varied iterations (Check your security level!)\n"
+            print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) Such an exotic ciphertext doesn't exist!!! (Testing me?)\n"
         else:
             print "\n"+str(out)+"\n"
     else: print "\n Illegal choice!!!\n"
