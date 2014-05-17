@@ -46,13 +46,16 @@ def sub(text,key):
     return ''.join(hand)
 
 def combine(text,key):
-    pas=hexed(key);phrase=hexed(text);primes=sieve(len(key)**2);
-    i=0;ph=len(phrase);p=len(key)
-    for j in pas:
-        if primes[i]<len(phrase):
-            phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
-            i+=1
-        else: break
+    try:
+        pas=hexed(key);phrase=hexed(text);primes=sieve(len(key)**2);
+        i=0;ph=len(phrase);p=len(key)
+        for j in pas:
+            if primes[i]<len(phrase):
+                phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
+                i+=1
+            else: break
+    except IndexError:
+        return None
     phr=add(phrase,key)
     return ''.join(phr)
 
@@ -72,6 +75,8 @@ def eit(text,key,iteration):
     while i<=iteration:
         combined=combine(combined,key)
         i+=1
+    if combined==None:
+        return None
     return ''.join(hexed(combined))
 
 def dit(text,key,iteration):
@@ -79,7 +84,7 @@ def dit(text,key,iteration):
     while i<=iteration:
         extracted=extract(extracted,key)
         i+=1
-    if extracted==None:    
+    if extracted==None:
         return None
     return extracted
 
@@ -87,13 +92,17 @@ choice='y'
 while choice=='y':
     text=raw_input("\nText to put in the cipher: ")
     key=raw_input("Password: ")
+    while len(str(key))==1:
+        print "\n No, Seriously? Password of unit length? Try something better...\n"
+        key=raw_input("Password: ")
     level=raw_input("Security level (1-5, for fast output): ")
     while str(level) not in "0123456789":
         print "\n Enter a number ranging from 0-9\n"
         level=raw_input("Security level (1-5, for fast output): ")
     what=raw_input("Encrypt (e) or Decrypt (d) ? ")
     if str(what)=='e':
-        print "\n"+str(eit(str(text),str(key),int(level)))+"\n"
+        out=eit(str(text),str(key),int(level))
+        print "\n"+str(out)+"\n"
     elif str(what)=='d':
         out=dit(str(text),str(key),int(level))
         if out==None:
