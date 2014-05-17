@@ -66,21 +66,23 @@ def eit(text,key,iteration):
     while i<=iteration:
         combined=combine(combined,key)
         i+=1
-    return combined
+    return ''.join(hexed(combined))
 
 def dit(text,key,iteration):
-    i=1;extracted=extract(text,key)
+    i=1;extracted=extract(char(text),key)
     while i<=iteration:
         extracted=extract(extracted,key)
         i+=1
     return extracted
 
-text=raw_input("Text to put in the cipher: ")
-key=raw_input("Password: ")
-level=raw_input("Security level (1-5, even 10 if you want!): ")
-
-what=raw_input("Encrypt (e) or Decrypt (d) ? ")
-if str(what)=='e':
-    print "\n"+str(eit(str(text),str(key),int(level)))
-elif str(what)=='d':
-    print "\n"+str(dit(str(text),str(key),int(level)))
+choice='y'
+while choice=='y':
+    text=raw_input("\nText to put in the cipher: ")
+    key=raw_input("Password: ")
+    level=raw_input("Security level (1-5, for fast output): ")
+    what=raw_input("Encrypt (e) or Decrypt (d) ? ")
+    if str(what)=='e':
+        print "\n"+str(eit(str(text),str(key),int(level)))+"\n"
+    elif str(what)=='d':
+        print "\n"+str(dit(str(text),str(key),int(level)))+"\n"
+    choice=raw_input("Do something again: (y/n)? ")
