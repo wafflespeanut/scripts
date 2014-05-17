@@ -1,3 +1,34 @@
+import string
+
+def buildcode(shift):
+    s=shift; letters={}; temp={}
+    if int(shift)>26:
+        s%=26
+    group1=string.ascii_uppercase; group2=string.ascii_lowercase
+    for i in range(26):
+        if i+s < 26:
+            letters[group1[i]]=group1[i+s]
+            temp[group2[i]]=group2[i+s]
+        else:
+            letters[group1[i]]=group1[i+s-26]
+            temp[group2[i]]=group2[i+s-26]
+    letters.update(temp)
+    return letters
+
+def applycode(text,key):
+    code=key.copy(); char=""
+    for cha in text:
+        for ch in code.keys():
+            if ch==cha:
+                char+=code[cha]
+            elif cha in string.punctuation or cha in string.digits or cha==" ":
+                char+=cha
+                break
+    return char
+
+def applyshift(text,shift):
+    return applycode(text,buildcode(shift))
+
 def sieve(n):
     sidekick=[False]*2+[True]*(n-1)
     for i in range(int(n**0.5)+1):
@@ -106,8 +137,8 @@ while choice=='y':
     elif str(what)=='d':
         out=dit(str(text),str(key),int(level))
         if out==None:
-            print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) Such an exotic ciphertext doesn't exist!!! (Testing me?)\n"
+            print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
         else:
-            print "\n"+str(out)+"\n"
+            print "\nMESSAGE: "+str(out)+"\n"
     else: print "\n Illegal choice!!!\n"
     choice=raw_input("Do something again: (y/n)? ")
