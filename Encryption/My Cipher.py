@@ -15,7 +15,10 @@ def hexed(key):
 def char(key):
     pas=[key[i:i+2] for i in range(0,len(key),2)]
     for i,j in enumerate(pas):
-        pas[i]=pas[i].decode("hex")
+        try:
+            pas[i]=pas[i].decode("hex")
+        except TypeError:
+            return None
     return ''.join(pas)
 
 def add(text,key):
@@ -54,11 +57,14 @@ def combine(text,key):
     return ''.join(phr)
 
 def extract(text,key):
-    phrase=char(sub(text,key));primes=sieve(len(key)**2);
-    ph=len(phrase);newph=""
-    for i in range(ph):
-        if i not in primes[:len(key)]:
-            newph+=phrase[i]
+    try:
+        phrase=char(sub(text,key));primes=sieve(len(key)**2);
+        ph=len(phrase);newph=""
+        for i in range(ph):
+            if i not in primes[:len(key)]:
+                newph+=phrase[i]
+    except TypeError:
+            return None
     return ''.join(newph)
 
 def eit(text,key,iteration):
@@ -73,6 +79,8 @@ def dit(text,key,iteration):
     while i<=iteration:
         extracted=extract(extracted,key)
         i+=1
+    if extracted==None:    
+        return None
     return extracted
 
 choice='y'
@@ -80,9 +88,17 @@ while choice=='y':
     text=raw_input("\nText to put in the cipher: ")
     key=raw_input("Password: ")
     level=raw_input("Security level (1-5, for fast output): ")
+    while str(level) not in "0123456789":
+        print "\n Enter a number ranging from 0-9\n"
+        level=raw_input("Security level (1-5, for fast output): ")
     what=raw_input("Encrypt (e) or Decrypt (d) ? ")
     if str(what)=='e':
         print "\n"+str(eit(str(text),str(key),int(level)))+"\n"
     elif str(what)=='d':
-        print "\n"+str(dit(str(text),str(key),int(level)))+"\n"
+        out=dit(str(text),str(key),int(level))
+        if out==None:
+            print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\tIncorrect key (Check your password!)\n\tCan also be due to varied iterations (Check your security level!)\n"
+        else:
+            print "\n"+str(out)+"\n"
+    else: print "\n Illegal choice!!!\n"
     choice=raw_input("Do something again: (y/n)? ")
