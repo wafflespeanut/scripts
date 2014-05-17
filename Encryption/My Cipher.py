@@ -19,29 +19,27 @@ def char(key):
     return ''.join(pas)
 
 def add(text,key):
-    hand=list(''.join(text));give=list(key);num=list("0123456789");
-    i=0;j=len(key);
+    hand=list(''.join(text));give=list(key);num=list("0123456789");i=len(key)-1;
     for a,b in enumerate(hand):
-        if i<j and b in num:
+        if i>0 and b in num:
             hand[a]=str(int(b)+ord(give[i]))[-1]
-            i+=1
-        elif i>=j and b in num:
-            i=0
+            i-=1
+        elif i==0 and b in num:
+            i=len(key)-1
             hand[a]=str(int(b)+ord(give[i]))[-1]
-            i+=1
+            i-=1
     return ''.join(hand)
 
 def sub(text,key):
-    hand=list(''.join(text));give=list(key);num=list("0123456789");
-    i=0;j=len(key);
+    hand=list(''.join(text));give=list(key);num=list("0123456789");i=len(key)-1;
     for a,b in enumerate(hand):
-        if i<j and b in num:
+        if i>0 and b in num:
             hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
-            i+=1
-        elif i>=j and b in num:
-            i=0
+            i-=1
+        elif i==0 and b in num:
+            i=len(key)-1
             hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
-            i+=1
+            i-=1
     return ''.join(hand)
 
 def combine(text,key):
