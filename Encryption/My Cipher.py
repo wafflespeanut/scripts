@@ -14,7 +14,7 @@ def sieve(n):
             for j in range(i*i,n+1,i):
                 sidekick[j] = False
     return [j for j,prime in enumerate(sidekick) if prime]
-    
+
 def hexed(key):
     pas=list(key)
     for i,j in enumerate(pas):
@@ -103,26 +103,26 @@ def dit(text,key,iteration):
         return None
     return extracted
 
-choice='y'
-while choice=='y':
-    text=raw_input("\nText to put in the cipher: ")
-    key=raw_input("Password: ")
-    while len(str(key))==1:
-        print "\n No, Seriously? Password of unit length? Try something better...\n"
+def zombify():
+    choice='y'
+    while choice=='y':
+        text=raw_input("\nText to put in the cipher: ")
         key=raw_input("Password: ")
-    level=raw_input("Security level (1-5, for fast output): ")
-    while str(level) not in "0123456789":
-        print "\n Enter a number ranging from 0-9\n"
+        while len(str(key))==1:
+            print "\n No, Seriously? Password of unit length? Try something better...\n"
+            key=raw_input("Password: ")
         level=raw_input("Security level (1-5, for fast output): ")
-    what=raw_input("Encrypt (e) or Decrypt (d) ? ")
-    if str(what)=='e':
-        out=eit(str(text),str(key),int(level))
-        print "\n"+str(out)+"\n"
-    elif str(what)=='d':
-        out=dit(str(text),str(key),int(level))
-        if out==None:
-            print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
-        else:
-            print "\nMESSAGE: "+str(out)+"\n"
-    else: print "\n Illegal choice!!!\n"
-    choice=raw_input("Do something again: (y/n)? ")
+        while str(level) not in "0123456789":
+            print "\n Enter a number ranging from 0-9\n"
+            level=raw_input("Security level (1-5, for fast output): ")
+        what=raw_input("Encrypt (e) or Decrypt (d) ? ")
+        if str(what)=='e':
+            out=eit(str(text),str(key),int(level))
+            print "\n"+str(out)+"\n"
+        elif str(what)=='d':
+            out=dit(str(text),str(key),int(level))
+            if out==None:
+                print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
+            else: print "\nMESSAGE: "+str(out)+"\n"
+        else: print "\n Illegal choice!!!\n"
+        choice=raw_input("Do something again: (y/n)? ")
