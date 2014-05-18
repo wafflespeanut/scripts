@@ -5,6 +5,8 @@ This is my encryption cipher, built completely for learning purposes (fired by t
 
 It's quite straight-forward. And, it's built by a lot of my own helper functions. Only the "Sieve of Eratosthenes" for generating primes is borrowed from rosettacode.org.
 
+CURRENT BUG: Problems with Unicode symbols! Unable to encrypt/decrypt when several punctuation sequences are present. Possibly due to the recently implemented shift().
+
 How it works?
 ======
 - The pursuit began with dissolving the key into the phrase with the help of prime numbers. The sieve() looked elegant for my purpose.
@@ -23,6 +25,4 @@ How it works?
 
 - I've also added a few 'tries' to print custom messages for possible causes of the errors instead of the errors themselves.
 
-The cipher caught me this way. If at least one iteration is allowed, the encrypted text has a lot of similar characters. A few dissimilarities here and there is what determines the output. As far as I can see, there's no resemblance of the real text, nor the key. If I find a hole in the algorithm, I'll patch it and update ASAP...
-
-(You can also help me find the bugs if you're interested!)
+The cipher caught me this way. If at least one iteration is allowed, the encrypted text has a lot of similar characters. A few dissimilarities here and there is what determines the output. As far as I can see, there's no resemblance of the real text, nor the key. Like I said, it isn't entirely bug-free. But, whenever I come across one, I'll patch it ASAP...
