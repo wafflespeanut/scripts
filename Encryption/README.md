@@ -11,9 +11,9 @@ How it works?
 
 - Firstly, the text and the key are turned to hexadecimal things using hexed()
 
-- Then, they're sorted using the primes. The hexed key is inserted into the nth prime number index, while the remaining chars in the phrase are shifted. If the key exceeds the length of the phrase, a few key chars are neglected (which is overcome by the next...)
+- Then, they're sorted using the primes. The hexed key is inserted into the nth prime number index, while the remaining chars in the phrase are shifted. If the key exceeds the length of the phrase, a few chars from the key are neglected (which is overcome by the next function)
 
-- Since the output array from combine() is mostly made of numbers, and it's independent of the key, add() was implemented to make a complication. It does this. Starting from the last character of the key (which is a number), it takes the numbers from the combined array, adds it to the ASCII value of the chosen char from the key, and finally overwrites the original value with the last digit of the answer. A few chars are neglected here (which could also be overcome...)
+- Since the output array from combine() is mostly made of numbers, and it's independent of the key, add() was implemented to make a complication. It does this. Starting from the last character of the key (which is a number), it takes the numbers from the combined array, adds it to the ASCII value of the chosen char from the key, and finally overwrites the original value with the last digit of the answer. A few chars are neglected here (which could also be overcome)
 
 - Now, the iteration part. "Security level" is just a fancy name given to this horror. As a few key chars are left during the first combine() step, iterating the encrypted phrase again and again makes this secure (I'm sure that even two iterations is secure enough!). More than 10 iterations could lead to a long output, which consumes too much time.
 
@@ -21,6 +21,8 @@ How it works?
 
 - The reverse processes are carried out by char(), extract(), sub(), dit() functions for decryption.
 
-- I've also added a few 'tries' to hide the errors generated during the process. Instead, custom messages for possible causes are shown.
+- I've also added a few 'tries' to print custom messages for possible causes of the errors instead of the errors themselves.
 
-The cipher caught me this way. If at least one iteration is allowed, the encrypted text has a lot of similar characters. A few dissimilarities here and there is what determines the output.
+The cipher caught me this way. If at least one iteration is allowed, the encrypted text has a lot of similar characters. A few dissimilarities here and there is what determines the output. As far as I can see, there's no resemblance of the real text, nor the key. If I find a hole in the algorithm, I'll patch it and update ASAP...
+
+(You can also help me find the bugs if you're interested!)
