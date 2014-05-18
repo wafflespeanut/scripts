@@ -1,33 +1,11 @@
-import string
-
-def buildcode(shift):
-    s=shift; letters={}; temp={}
-    if int(shift)>26:
-        s%=26
-    group1=string.ascii_uppercase; group2=string.ascii_lowercase
-    for i in range(26):
-        if i+s < 26:
-            letters[group1[i]]=group1[i+s]
-            temp[group2[i]]=group2[i+s]
-        else:
-            letters[group1[i]]=group1[i+s-26]
-            temp[group2[i]]=group2[i+s-26]
-    letters.update(temp)
-    return letters
-
-def applycode(text,key):
-    code=key.copy(); char=""
-    for cha in text:
-        for ch in code.keys():
-            if ch==cha:
-                char+=code[cha]
-            elif cha in string.punctuation or cha in string.digits or cha==" ":
-                char+=cha
-                break
-    return char
-
-def applyshift(text,shift):
-    return applycode(text,buildcode(shift))
+def shift(text,shift):
+    new=[]; s=int(shift)
+    for i,j in enumerate(text):
+        m=ord(j)+shift
+        while m>255:
+            m-=255
+        new+=chr(m)
+    return ''.join(new)
 
 def sieve(n):
     sidekick=[False]*2+[True]*(n-1)
@@ -53,7 +31,7 @@ def char(key):
     return ''.join(pas)
 
 def add(text,key):
-    hand=list(''.join(text));give=list(key);num=list("0123456789");i=len(key)-1;
+    hand=list(''.join(text));give=list(key); num=list("0123456789"); i=len(key)-1
     for a,b in enumerate(hand):
         if i>0 and b in num:
             hand[a]=str(int(b)+ord(give[i]))[-1]
@@ -65,7 +43,7 @@ def add(text,key):
     return ''.join(hand)
 
 def sub(text,key):
-    hand=list(''.join(text));give=list(key);num=list("0123456789");i=len(key)-1;
+    hand=list(''.join(text)); give=list(key); num=list("0123456789"); i=len(key)-1
     for a,b in enumerate(hand):
         if i>0 and b in num:
             hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
@@ -78,8 +56,8 @@ def sub(text,key):
 
 def combine(text,key):
     try:
-        pas=hexed(key);phrase=hexed(text);primes=sieve(len(key)**2);
-        i=0;ph=len(phrase);p=len(key)
+        pas=hexed(key); phrase=hexed(text); primes=sieve(len(key)**2)
+        i=0; ph=len(phrase); p=len(key)
         for j in pas:
             if primes[i]<len(phrase):
                 phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
@@ -92,8 +70,8 @@ def combine(text,key):
 
 def extract(text,key):
     try:
-        phrase=char(sub(text,key));primes=sieve(len(key)**2);
-        ph=len(phrase);newph=""
+        phrase=char(sub(text,key)); primes=sieve(len(key)**2)
+        ph=len(phrase); newph=""
         for i in range(ph):
             if i not in primes[:len(key)]:
                 newph+=phrase[i]
@@ -102,16 +80,22 @@ def extract(text,key):
     return ''.join(newph)
 
 def eit(text,key,iteration):
-    i=1;combined=combine(text,key)
+    i=1; combined=combine(text,key);
     while i<=iteration:
         combined=combine(combined,key)
         i+=1
     if combined==None:
         return None
-    return ''.join(hexed(combined))
+    zombie=combined
+    for i in key:
+        zombie=shift(zombie,ord(i))
+    return ''.join(zombie)
 
 def dit(text,key,iteration):
-    i=1;extracted=extract(char(text),key)
+    zombie=text
+    for i in key:
+        zombie=shift(zombie,255-ord(i))
+    i=1; extracted=extract(zombie,key)
     while i<=iteration:
         extracted=extract(extracted,key)
         i+=1
