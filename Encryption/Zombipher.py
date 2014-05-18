@@ -2,8 +2,7 @@ def shift(text,shift):
     new=[]; s=int(shift)
     for i,j in enumerate(text):
         m=ord(j)+shift
-        while m>255:
-            m-=255
+        while m>255: m-=255
         new+=chr(m)
     return ''.join(new)
 
