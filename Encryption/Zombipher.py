@@ -88,10 +88,10 @@ def eit(text,key,iteration):
     zombie=combined
     for i in key:
         zombie=shift(zombie,ord(i))
-    return ''.join(zombie)
+    return ''.join(hexed(zombie))
 
 def dit(text,key,iteration):
-    zombie=text
+    zombie=char(text)
     for i in key:
         zombie=shift(zombie,255-ord(i))
     i=1; extracted=extract(zombie,key)
