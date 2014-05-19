@@ -3,9 +3,9 @@ Zombipher (yeah, it's quite a mess!)
 
 This is my encryption cipher, built completely for learning purposes (fired by the elegance of encryption). Over the past few weeks, I've been learning new stuff in Python by finding different ways of getting into the cipher, and patching the algorithm so that it becomes stronger every time.
 
-It's quite straight-forward. And, it's built by a lot of my own helper functions. Only the "Sieve of Eratosthenes" for generating primes is borrowed from rosettacode.org.
+It's quite straight-forward. And, it's built by a lot of helper functions, for improving readability. The sieve() for generating primes is borrowed from rosettacode.org.
 
-CURRENT BUG: Problems with Unicode symbols! Unable to encrypt/decrypt when several punctuation sequences are present. Possibly due to the recently implemented shift().
+CURRENT BUG: Problems with Unicode symbols! Unable to encrypt/decrypt when several punctuation sequences are present. Possibly due to the recently implemented shift(). (Working on it...)
 
 How it works?
 ======
