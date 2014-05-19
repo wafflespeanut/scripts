@@ -5,7 +5,7 @@ This is my encryption cipher, built completely for learning purposes (fired by t
 
 It's quite straight-forward. And, it's built by a lot of helper functions, for improving readability. The sieve() for generating primes is borrowed from rosettacode.org.
 
-CURRENT BUG: Problems with Unicode symbols! Unable to encrypt/decrypt when several punctuation sequences are present. Possibly due to the recently implemented shift(). (Working on it...)
+CURRENT BUG: None...
 
 How it works?
 ======
@@ -20,6 +20,8 @@ How it works?
 - Now, the iteration part. "Security level" is just a fancy name given to this horror. As a few key chars are left during the first combine() step, iterating the encrypted phrase again and again makes this secure (I'm sure that even two iterations is secure enough!). More than 10 iterations could lead to a long output, which consumes too much time.
 
 - Once the iterations are complete, eit() puts the output into shift(). As we've got a 255 char-long ASCII table, the characters in the ciphertext are shifted by the ASCII value of each char in the key, so that we get a "zombified" ciphertext.
+
+- The shift() function can sometimes peek into foreign characters (for instance, using entirely symbols for both text and key gives unnecessary non-ASCII output, which can't be interpreted by the program later, during decryption). To prevent that, the zombified text is hexed, which does fixes the problem.
 
 - The reverse processes are carried out by char(), extract(), sub(), dit() functions for decryption.
 
