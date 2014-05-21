@@ -125,3 +125,5 @@ def zombify():
             else: print "\nMESSAGE: "+str(out)+"\n"
         else: print "\n Illegal choice!!!\n"
         choice=raw_input("Do something again: (y/n)? ")
+
+zombify()
