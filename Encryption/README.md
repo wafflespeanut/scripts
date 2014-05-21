@@ -5,6 +5,8 @@ This is my encryption cipher, built completely for learning purposes. Over the p
 
 It's quite straight-forward (easy to understand). And, it's built by a lot of helper functions, for improving readability. While it's me, who wrote all the helper functions, the sieve() for generating primes was borrowed from rosettacode.org (as I didn't find my sieve "elegant").
 
+CURRENT PURSUIT: Encryption starts with the same initial state. Trying to add a few random procedures, so as to give different outputs each time.
+
 How it works?
 ======
 - The pursuit began with dissolving the key into the phrase with the help of prime numbers. The sieve() of Eratosthenes looked elegant for my purpose.
