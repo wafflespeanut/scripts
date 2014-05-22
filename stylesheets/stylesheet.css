@@ -102,11 +102,6 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 24px;
 }
 
-header h2:before {
-  content="\\ ";
-  font-size: 24px;
-}
-
 #main_content h3 {
   font-size: 18px;
 }
@@ -219,8 +214,14 @@ hr {
 }
 
 .btn-github .icon {
-  opacity: 0.6;
-  background: url("../images/blacktocat.png") 0 0 no-repeat;
+  opacity: 0.8;
+  background: url("../images/gitcat.png") 0 0 no-repeat;
+}
+
+.btn-blog .icon {
+  width: 18px;
+  height: 18px;
+  background: url("../images/blog.png") 0 0 no-repeat;
 }
 
 a {
