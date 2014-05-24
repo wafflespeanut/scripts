@@ -1,3 +1,5 @@
+import random
+
 def shift(text,shift):
     new=[]; s=int(shift)
     for i,j in enumerate(text):
@@ -13,6 +15,8 @@ def sieve(n):
             for j in range(i*i,n+1,i):
                 sidekick[j] = False
     return [j for j,prime in enumerate(sidekick) if prime]
+
+primelist=sieve(512**2)
 
 def hexed(key):
     pas=list(key)
@@ -53,6 +57,23 @@ def sub(text,key):
             i-=1
     return ''.join(hand)
 
+def keypnum(key):
+    primes=[]
+    for i in key:
+        primes+=[str(primelist[ord(i)**2])]
+    return primes
+
+def pop(key):
+    return keypnum(''.join(keypnum(key)))
+
+def find(text,key):
+    listed=pop(key)
+    for i,j in enumerate(listed):
+        if extract(extract(text,j),key)!=None:
+            return extract(text,j)
+        else: continue
+    return None
+
 def combine(text,key):
     try:
         pas=hexed(key); phrase=hexed(text); primes=sieve(len(key)**2)
@@ -80,9 +101,11 @@ def extract(text,key):
 
 def eit(text,key,iteration):
     i=1; combined=combine(text,key);
-    while i<=iteration:
+    while i<iteration:
         combined=combine(combined,key)
         i+=1
+    if i==iteration:
+        combined=combine(combined,random.choice(pop(key)))
     if combined==None:
         return None
     zombie=combined
@@ -94,10 +117,12 @@ def dit(text,key,iteration):
     zombie=char(text)
     for i in key:
         zombie=shift(zombie,255-ord(i))
-    i=1; extracted=extract(zombie,key)
-    while i<=iteration:
+    i=1; extracted=find(zombie,key)
+    while i<iteration:
         extracted=extract(extracted,key)
         i+=1
+    if i==iteration:
+        extracted=extract(extracted,key)
     if extracted==None:
         return None
     return extracted
