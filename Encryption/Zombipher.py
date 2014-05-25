@@ -1,11 +1,14 @@
 import random
 
 def shift(text,shift):
-    new=[]; s=int(shift)
-    for i,j in enumerate(text):
-        m=ord(j)+shift
-        while m>255: m-=255
-        new+=chr(m)
+    try:
+        new=[]; s=int(shift)
+        for i,j in enumerate(text):
+            m=ord(j)+shift
+            while m>255: m-=255
+            new+=chr(m)
+    except TypeError:
+        return None
     return ''.join(new)
 
 def sieve(n):
