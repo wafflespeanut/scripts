@@ -64,7 +64,9 @@ def keypnum(key):
     return primes
 
 def pop(key):
-    return keypnum(''.join(keypnum(key)))
+    listed=keypnum(key)
+    listed.extend(keypnum(''.join(listed)))
+    return list(set(listed))
 
 def find(text,key):
     listed=pop(key)
@@ -100,12 +102,12 @@ def extract(text,key):
     return ''.join(newph)
 
 def eit(text,key,iteration):
-    i=1; combined=combine(text,key);
+    i=1; combined=combine(text,key); p=pop(key); random.shuffle(p)
     while i<iteration:
         combined=combine(combined,key)
         i+=1
     if i==iteration:
-        combined=combine(combined,random.choice(pop(key)))
+        combined=combine(combined,random.choice(p))
     if combined==None:
         return None
     zombie=combined
@@ -150,5 +152,3 @@ def zombify():
             else: print "\nMESSAGE: "+str(out)+"\n"
         else: print "\n Illegal choice!!!\n"
         choice=raw_input("Do something again: (y/n)? ")
-
-zombify()
