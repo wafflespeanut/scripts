@@ -106,7 +106,8 @@ def eit(text,key,iteration):
     while i<iteration:
         combined=combine(combined,key)
         i+=1
-    if i==iteration:
+    if i==iteration or iteration==0:
+        random.shuffle(p)
         combined=combine(combined,random.choice(p))
     if combined==None:
         return None
@@ -120,6 +121,8 @@ def dit(text,key,iteration):
     for i in key:
         zombie=shift(zombie,255-ord(i))
     i=1; extracted=find(zombie,key)
+    if iteration==0:
+        extracted=extract(extracted,key)
     while i<iteration:
         extracted=extract(extracted,key)
         i+=1
@@ -133,15 +136,27 @@ def zombify():
     choice='y'
     while choice=='y':
         text=raw_input("\nText to put in the cipher: ")
+        while str(text)=="":
+            print "\n Um, I don't see any text here... Gimme something to eat!!!"
+            text=raw_input("\nText to be encrypted: ")
         key=raw_input("Password: ")
+        while str(key)=="":
+            print "\n No password? You do want me to encrypt, right?\n"
+            key=raw_input("What's the password? : ")
         while len(str(key))==1:
             print "\n No, Seriously? Password of unit length? Try something better...\n"
-            key=raw_input("Password: ")
-        level=raw_input("Security level (1-5, for fast output): ")
-        while str(level) not in "0123456789":
-            print "\n Enter a number ranging from 0-9\n"
-            level=raw_input("Security level (1-5, for fast output): ")
+            key=raw_input("Choose a password: ")
+        level=raw_input("Security level (1-5, for fast output): ")        
+        while str(level) not in "012345":
+            print "\n Enter a number ranging from 0-5\n"
+            level=raw_input("Security level (0-5): ")
+        if str(level)=="":
+            print "\n No input given. Choosing level 0\n"
+            level=0
         what=raw_input("Encrypt (e) or Decrypt (d) ? ")
+        while str(what)!="e" and str(what)!="d" and str(what)=="":
+            print "\n (sigh) You can choose something...\n"
+            what=raw_input("Encrypt (e) or Decrypt (d) ? ")
         if str(what)=='e':
             out=eit(str(text),str(key),int(level))
             print "\n"+str(out)+"\n"
@@ -150,5 +165,6 @@ def zombify():
             if out==None:
                 print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
             else: print "\nMESSAGE: "+str(out)+"\n"
-        else: print "\n Illegal choice!!!\n"
         choice=raw_input("Do something again: (y/n)? ")
+
+zombify()
