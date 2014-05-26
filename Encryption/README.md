@@ -17,7 +17,7 @@ How it works?
 
 - Then, the iteration part. Iterating the encrypted text again and again makes it secure. But, longer iterations could lead to merciless outputs, which can kill your processor.
 
-- During the last iteration, a random prime number chosen depending on the key. For a change, the iteration is carried out once using this random prime (this ensures varied ciphertexts during every run of the program)
+- During the last iteration, a random 10-digit number is chosen (depending on the key) using pop(). For a change, the iteration is carried out once using this random number (this ensures varied ciphertexts during every run of the program)
 
 - Once the iterations are complete, the characters in the ciphertext are shifted by the ASCII value of each character in the key, so that we get a "zombified" ciphertext.
 
