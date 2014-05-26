@@ -67,10 +67,28 @@ def keypnum(key):
             primes+=[str(primelist[ord(i)]**(j+1))]
     return primes
 
+def slicing(key):
+    listed=[]; sliced=[]
+    for i in key:
+        listed+=[int(i)]
+    for i,j in enumerate(listed):
+        k=0
+        while len(str(listed[i]))<10:
+            listed[i]+=listed[k]
+            k+=1
+            if k==len(key): k=0
+        while len(str(listed[i]))>10:
+            listed[i]-=listed[k]
+            k+=1
+            if k==len(key): k=0
+    for p in listed:
+        sliced+=[str(p)]
+    return sliced
+
 def pop(key):
     listed=keypnum(key)
     listed.extend(keypnum(''.join(listed)))
-    return list(set(listed))
+    return slicing(list(set(listed)))
 
 def find(text,key):
     listed=pop(key)
