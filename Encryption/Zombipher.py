@@ -37,7 +37,8 @@ def char(key):
     return ''.join(pas)
 
 def add(text,key):
-    hand=list(''.join(text));give=list(key); num=list("0123456789"); i=len(key)-1
+    hand=list(''.join(text));give=list(key);
+    num=list("0123456789"); i=len(key)-1
     for a,b in enumerate(hand):
         if i>0 and b in num:
             hand[a]=str(int(b)+ord(give[i]))[-1]
@@ -49,7 +50,8 @@ def add(text,key):
     return ''.join(hand)
 
 def sub(text,key):
-    hand=list(''.join(text)); give=list(key); num=list("0123456789"); i=len(key)-1
+    hand=list(''.join(text)); give=list(key);
+    num=list("0123456789"); i=len(key)-1
     for a,b in enumerate(hand):
         if i>0 and b in num:
             hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
@@ -68,16 +70,16 @@ def keypnum(key):
     return primes
 
 def slicing(key):
-    listed=[]; sliced=[]
+    listed=[]; sliced=[]; l=10
     for i in key:
         listed+=[int(i)]
     for i,j in enumerate(listed):
         k=0
-        while len(str(listed[i]))<10:
+        while len(str(listed[i]))<l:
             listed[i]+=listed[k]
             k+=1
             if k==len(key): k=0
-        while len(str(listed[i]))>10:
+        while len(str(listed[i]))>l:
             listed[i]-=listed[k]
             k+=1
             if k==len(key): k=0
@@ -100,7 +102,8 @@ def find(text,key):
 
 def combine(text,key):
     try:
-        pas=hexed(key); phrase=hexed(text); primes=sieve(len(key)**2)
+        pas=hexed(key); phrase=hexed(text);
+        primes=sieve(len(key)**2)
         i=0; ph=len(phrase); p=len(key)
         for j in pas:
             if primes[i]<len(phrase):
@@ -114,7 +117,8 @@ def combine(text,key):
 
 def extract(text,key):
     try:
-        phrase=char(sub(text,key)); primes=sieve(len(key)**2)
+        phrase=char(sub(text,key));
+        primes=sieve(len(key)**2)
         ph=len(phrase); newph=""
         for i in range(ph):
             if i not in primes[:len(key)]:
@@ -124,13 +128,14 @@ def extract(text,key):
     return ''.join(newph)
 
 def eit(text,key,iteration):
-    i=1; combined=combine(text,key); p=pop(key); random.shuffle(p)
+    i=1; combined=combine(text,key);
+    p=pop(key); random.shuffle(p)
     while i<iteration:
         combined=combine(combined,key)
         i+=1
     if i==iteration or iteration==0:
         random.shuffle(p)
-        combined=combine(combined,random.choice(p))
+        combined=combine(combined, random.choice(p))
     if combined==None:
         return None
     zombie=combined
@@ -155,38 +160,41 @@ def dit(text,key,iteration):
     return extracted
 
 def zombify():
-    choice='y'
-    while choice=='y':
-        text=raw_input("\nText to put in the cipher: ")
-        while str(text)=="":
-            print "\n Um, I don't see any text here... Gimme something to eat!!!"
-            text=raw_input("\nText to be encrypted: ")
-        key=raw_input("Password: ")
-        while str(key)=="":
-            print "\n No password? You do want me to encrypt, right?\n"
-            key=raw_input("What's the password? : ")
-        while len(str(key))==1:
-            print "\n No, Seriously? Password of unit length? Try something better...\n"
-            key=raw_input("Choose a password: ")
-        level=raw_input("Security level (1-5, for fast output): ")        
-        while str(level) not in "012345":
-            print "\n Enter a number ranging from 0-5\n"
-            level=raw_input("Security level (0-5): ")
-        if str(level)=="":
-            print "\n No input given. Choosing level 0\n"
-            level=0
-        what=raw_input("Encrypt (e) or Decrypt (d) ? ")
-        while str(what)!="e" and str(what)!="d" and str(what)=="":
-            print "\n (sigh) You can choose something...\n"
+    try:
+        choice='y'
+        while choice=='y':
+            text=raw_input("\nText to put in the cipher: ")
+            while str(text)=="":
+                print "\n Um, I don't see any text here... Gimme something to eat!!!"
+                text=raw_input("\nText to be encrypted: ")
+            key=raw_input("Password: ")
+            while str(key)=="":
+                print "\n No password? You do want me to encrypt, right?\n"
+                key=raw_input("What's the password? : ")
+            while len(str(key))==1:
+                print "\n No, Seriously? Password of unit length? Try something better...\n"
+                key=raw_input("Choose a password: ")
+            level=raw_input("Security level (1-5, for fast output): ")        
+            while str(level) not in "012345":
+                print "\n Enter a number ranging from 0-5\n"
+                level=raw_input("Security level (0-5): ")
+            if str(level)=="":
+                print "\n No input given. Choosing level 0\n"
+                level=0
             what=raw_input("Encrypt (e) or Decrypt (d) ? ")
-        if str(what)=='e':
-            out=eit(str(text),str(key),int(level))
-            print "\n"+str(out)+"\n"
-        elif str(what)=='d':
-            out=dit(str(text),str(key),int(level))
-            if out==None:
-                print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
-            else: print "\nMESSAGE: "+str(out)+"\n"
-        choice=raw_input("Do something again: (y/n)? ")
+            while str(what)!="e" and str(what)!="d" and str(what)=="":
+                print "\n (sigh) You can choose something...\n"
+                what=raw_input("Encrypt (e) or Decrypt (d) ? ")
+            if str(what)=='e':
+                out=eit(str(text),str(key),int(level))
+                print "\n"+str(out)+"\n"
+            elif str(what)=='d':
+                out=dit(str(text),str(key),int(level))
+                if out==None:
+                    print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
+                else: print "\nMESSAGE: "+str(out)+"\n"
+            choice=raw_input("Do something again: (y/n)? ")
+    except KeyboardInterrupt:
+        return None
 
 zombify()
