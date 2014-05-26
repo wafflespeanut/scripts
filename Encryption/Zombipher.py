@@ -63,7 +63,8 @@ def sub(text,key):
 def keypnum(key):
     primes=[]
     for i in key:
-        primes+=[str(primelist[ord(i)**2])]
+        for j in range(1,3):
+            primes+=[str(primelist[ord(i)]**(j+1))]
     return primes
 
 def pop(key):
@@ -169,5 +170,3 @@ def zombify():
                 print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
             else: print "\nMESSAGE: "+str(out)+"\n"
         choice=raw_input("Do something again: (y/n)? ")
-
-zombify()
