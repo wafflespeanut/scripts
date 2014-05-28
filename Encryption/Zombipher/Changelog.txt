@@ -27,3 +27,9 @@ v1.4: Random keygen
 - 
 - 
 - 
+
+v2.0: A different base
+
+- 
+- 
+- 
