@@ -168,13 +168,14 @@ def zombify():
                 print "\n Um, I don't see any text here... Gimme something to eat!!!"
                 text=raw_input("\nText to be encrypted: ")
             key=raw_input("Password: ")
-            while str(key)=="":
-                print "\n No password? You do want me to encrypt, right?\n"
-                key=raw_input("What's the password? : ")
-            while len(str(key))==1:
-                print "\n No, Seriously? Password of unit length? Try something better...\n"
-                key=raw_input("Choose a password: ")
-            level=raw_input("Security level (1-5, for fast output): ")        
+            while len(str(key))==1 or str(key)=="":
+                if str(key)=="":
+                    print "\n No password? You do want me to encrypt, right?\n"
+                    key=raw_input("What's the password? : ")
+                elif len(str(key))==1:
+                    print "\n No, Seriously? Password of unit length? Try something better...\n"
+                    key=raw_input("Choose a password: ")
+            level=raw_input("Security level (1-5, for fast output): ")
             while str(level) not in "012345":
                 print "\n Enter a number ranging from 0-5\n"
                 level=raw_input("Security level (0-5): ")
