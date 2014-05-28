@@ -1,0 +1,30 @@
+v1.0: Iterative sorter [https://github.com/Wafflespeanut/Python/blob/00ea11b8068e874fb86c84bc1d466b25053194b9/Encryption/My Cipher.py]
+- Just hexing and shuffling (key-independent)
+- Iterated shuffled outputs
+- Functions: sieve(), hexed(), combine(), char(), extract()
+
+v1.1: Keydepher [https://github.com/Wafflespeanut/Python/blob/d45d3dd783389c11de5e66cbcacbee0724e643f0/Encryption/My Cipher.py]
+- Key is dissolved into the phrase (key-dependent cipher!)
+- Iterated ciphertext outputs
+- Functions: add(), sub(), eit(), dit()
+
+v1.2: Zombie cipher [https://github.com/Wafflespeanut/Python/blob/cef60840ba2273ca2a0c3fb6943f927fcc7af01f/Encryption/My Cipher.py]
+- Ciphertext is shifted based on key
+- Added user interface
+- Functions: shift(), zombify()
+
+v1.3: Zombipher []
+- Added "try-except" to print custom messages instead of disgusting errors
+- Enhanced user interface
+- Loops added to neglect wrong inputs
+- Hexed outputs to eliminate a bug!
+- Functions: zombify()
+
+v1.4: Ranger []
+- Variable  ciphertext outputs
+- An iteration is carried out using the random 10-digit number
+- Functions: keypnum(), pop(), find(), slicing()
+
+v2.0: Sentinel []
+- Base idea changed - shuffle is replaced by "addition"
+- Functions: combine(), extract()
