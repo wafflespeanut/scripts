@@ -176,11 +176,11 @@ def zombify():
                     print "\n No, Seriously? Password of unit length? Try something better...\n"
                     key=raw_input("Choose a password: ")
             level=raw_input("Security level (1-5, for fast output): ")
-            while str(level) not in "012345":
-                print "\n Enter a number ranging from 0-5\n"
-                level=raw_input("Security level (0-5): ")
+            while str(level) not in "12345":
+                print "\n Enter a number ranging from 1-5\n"
+                level=raw_input("Security level (1-5): ")
             if str(level)=="":
-                print "\n No input given. Choosing level 0\n"
+                print "\n No input given. Choosing level 1\n"
                 level=0
             what=raw_input("Encrypt (e) or Decrypt (d) ? ")
             while str(what)!="e" and str(what)!="d" and str(what)=="":
