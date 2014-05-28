@@ -1,4 +1,4 @@
-v1.0: A good-for-nothing iterative sorter
+v1.0: Iterative sorter
 
 - 
 - 
@@ -10,13 +10,13 @@ v1.1: Key-dependent cipher
 - 
 - 
 
-v1.2: Zombie arrives
+v1.2: Zombipher
 
 - 
 - 
 - 
 
-v1.3: User interaction
+v1.3: User interface
 
 - 
 - 
