@@ -13,7 +13,7 @@ v1.2: Zombie cipher [https://github.com/Wafflespeanut/Python/blob/cef60840ba2273
 - Added user interface
 - Functions: shift(), zombify()
 
-v1.3: Zombipher []
+v1.3: Zombipher [https://github.com/Wafflespeanut/Python/blob/3200ac598593c4abc7e9b3e899ad6889333c83ba/Encryption/Zombipher.py]
 - Added "try-except" to print custom messages instead of disgusting errors
 - Enhanced user interface
 - Loops added to neglect wrong inputs
@@ -21,7 +21,8 @@ v1.3: Zombipher []
 - Functions: zombify()
 
 v1.4: Ranger []
-- Variable  ciphertext outputs
+- Replaced all possible errors
+- Variable ciphertext outputs
 - An iteration is carried out using the random 10-digit number
 - Functions: keypnum(), pop(), find(), slicing()
 
