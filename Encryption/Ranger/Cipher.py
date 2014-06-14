@@ -197,3 +197,5 @@ def zombify():
             choice=raw_input("Do something again: (y/n)? ")
     except KeyboardInterrupt:
         return None
+
+zombify()
