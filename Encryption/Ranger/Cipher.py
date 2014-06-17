@@ -1,6 +1,6 @@
 import random
 
-def shift(text,shift):
+def shift(text,shift):      # Shifts the ASCII value of the chars
     try:
         new=[]; s=int(shift)
         for i,j in enumerate(text):
@@ -11,7 +11,7 @@ def shift(text,shift):
         return None
     return ''.join(new)
 
-def sieve(n):
+def sieve(n):       # Sieve of Eratosthenes to generate primes
     sidekick=[False]*2+[True]*(n-1)
     for i in range(int(n**0.5)+1):
         if sidekick[i]:
@@ -19,15 +19,15 @@ def sieve(n):
                 sidekick[j] = False
     return [j for j,prime in enumerate(sidekick) if prime]
 
-primelist=sieve(512**2)
+primelist=sieve(512**2)     # 512^2 seems to take less time
 
-def hexed(key):
+def hexed(key):     # Hexing function
     pas=list(key)
     for i,j in enumerate(pas):
         pas[i]=format(ord(pas[i]),'02x')
     return pas
 
-def char(key):
+def char(key):      # Hex-decoding function
     pas=[key[i:i+2] for i in range(0,len(key),2)]
     for i,j in enumerate(pas):
         try:
@@ -36,7 +36,7 @@ def char(key):
             return None
     return ''.join(pas)
 
-def add(text,key):
+def add(text,key):      # Adds the ASCII value of key and phrase chars
     hand=list(''.join(text));give=list(key);
     num=list("0123456789"); i=len(key)-1
     for a,b in enumerate(hand):
@@ -49,10 +49,10 @@ def add(text,key):
             i-=1
     return ''.join(hand)
 
-def sub(text,key):
+def sub(text,key):      # Gets the key and phrase chars back!
     hand=list(''.join(text)); give=list(key);
     num=list("0123456789"); i=len(key)-1
-    for a,b in enumerate(hand):
+    for a,b in enumerate(hand):     # Executes from the last char
         if i>0 and b in num:
             hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
             i-=1
@@ -62,14 +62,14 @@ def sub(text,key):
             i-=1
     return ''.join(hand)
 
-def keypnum(key):
+def keypnum(key):       # Generates a list of prime squares based on the key
     primes=[]
     for i in key:
         for j in range(1,3):
             primes+=[str(primelist[ord(i)]**(j+1))]
     return primes
 
-def slicing(key):
+def slicing(key):       # Intended to constrain the prime squares to 10-chars
     listed=[]; sliced=[]; l=10
     for i in key:
         listed+=[int(i)]
@@ -85,14 +85,20 @@ def slicing(key):
             if k==len(key): k=0
     for p in listed:
         sliced+=[str(p)]
+    for x,y in enumerate(sliced):
+        sliced[x]=str(int(y[1:]))
     return sliced
 
-def pop(key):
-    listed=keypnum(key)
+def pop(key):       # Constrains the sliced list to 10-chars
+    listed=keypnum(key); merged=[]
     listed.extend(keypnum(''.join(listed)))
-    return slicing(list(set(listed)))
+    p=''.join(slicing(list(set(listed))))
+    while len(p)>=10:
+        merged.append(p[0:10])
+        p=p[10:]
+    return merged
 
-def find(text,key):
+def find(text,key):     # Finds the random prime square used during encryption
     listed=pop(key)
     for i,j in enumerate(listed):
         if extract(extract(text,j),key)!=None:
@@ -100,7 +106,7 @@ def find(text,key):
         else: continue
     return None
 
-def combine(text,key):
+def combine(text,key):      # Inserts the key chars into the phrase chars
     try:
         pas=hexed(key); phrase=hexed(text);
         primes=sieve(len(key)**2)
@@ -115,7 +121,7 @@ def combine(text,key):
     phr=add(phrase,key)
     return ''.join(phr)
 
-def extract(text,key):
+def extract(text,key):      # Removes the key chars from the phrase chars
     try:
         phrase=char(sub(text,key));
         primes=sieve(len(key)**2)
@@ -127,14 +133,13 @@ def extract(text,key):
             return None
     return ''.join(newph)
 
-def eit(text,key,iteration):
+def eit(text,key,iteration):        # Iteration, Shifting, Random key usage, Encryption
     i=1; combined=combine(text,key);
     p=pop(key); random.shuffle(p)
     while i<iteration:
         combined=combine(combined,key)
         i+=1
     if i==iteration or iteration==0:
-        random.shuffle(p)
         combined=combine(combined, random.choice(p))
     if combined==None:
         return None
@@ -143,7 +148,7 @@ def eit(text,key,iteration):
         zombie=shift(zombie,ord(i))
     return ''.join(hexed(zombie))
 
-def dit(text,key,iteration):
+def dit(text,key,iteration):        # The whole thing in reverse...
     zombie=char(text)
     for i in key:
         zombie=shift(zombie,255-ord(i))
@@ -159,7 +164,7 @@ def dit(text,key,iteration):
         return None
     return extracted
 
-def zombify():
+def zombify():      # User interface
     try:
         choice='y'
         while choice=='y':
@@ -197,5 +202,3 @@ def zombify():
             choice=raw_input("Do something again: (y/n)? ")
     except KeyboardInterrupt:
         return None
-
-zombify()
