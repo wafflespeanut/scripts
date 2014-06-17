@@ -1,6 +1,6 @@
 import random
 
-def shift(text,shift):      # Shifts the ASCII value of the chars
+def shift(text,shift):      # shifts the ASCII value of the chars
     try:
         new=[]; s=int(shift)
         for i,j in enumerate(text):
@@ -11,7 +11,7 @@ def shift(text,shift):      # Shifts the ASCII value of the chars
         return None
     return ''.join(new)
 
-def sieve(n):       # Sieve of Eratosthenes to generate primes
+def sieve(n):       # sieve of Eratosthenes to generate primes
     sidekick=[False]*2+[True]*(n-1)
     for i in range(int(n**0.5)+1):
         if sidekick[i]:
@@ -19,15 +19,15 @@ def sieve(n):       # Sieve of Eratosthenes to generate primes
                 sidekick[j] = False
     return [j for j,prime in enumerate(sidekick) if prime]
 
-primelist=sieve(512**2)     # 512^2 seems to take less time
+primelist=sieve(512**2)     # 512^2 seems to be enough (it also take less time!)
 
-def hexed(key):     # Hexing function
+def hexed(key):     # hexing function
     pas=list(key)
     for i,j in enumerate(pas):
         pas[i]=format(ord(pas[i]),'02x')
     return pas
 
-def char(key):      # Hex-decoding function
+def char(key):      # hex-decoding function
     pas=[key[i:i+2] for i in range(0,len(key),2)]
     for i,j in enumerate(pas):
         try:
@@ -36,7 +36,7 @@ def char(key):      # Hex-decoding function
             return None
     return ''.join(pas)
 
-def add(text,key):      # Adds the ASCII value of key and phrase chars
+def add(text,key):      # adds the ASCII values of key and phrase chars
     hand=list(''.join(text));give=list(key);
     num=list("0123456789"); i=len(key)-1
     for a,b in enumerate(hand):
@@ -49,10 +49,10 @@ def add(text,key):      # Adds the ASCII value of key and phrase chars
             i-=1
     return ''.join(hand)
 
-def sub(text,key):      # Gets the key and phrase chars back!
+def sub(text,key):      # gets the key and phrase chars back!
     hand=list(''.join(text)); give=list(key);
     num=list("0123456789"); i=len(key)-1
-    for a,b in enumerate(hand):     # Executes from the last char
+    for a,b in enumerate(hand):     # executes from the last char
         if i>0 and b in num:
             hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
             i-=1
@@ -62,14 +62,14 @@ def sub(text,key):      # Gets the key and phrase chars back!
             i-=1
     return ''.join(hand)
 
-def keypnum(key):       # Generates a list of prime squares based on the key
+def keypnum(key):       # generates a list of prime squares based on the key
     primes=[]
     for i in key:
         for j in range(1,3):
             primes+=[str(primelist[ord(i)]**(j+1))]
     return primes
 
-def slicing(key):       # Intended to constrain the prime squares to 10-chars
+def slicing(key):       # intended to constrain the prime squares to 10-chars
     listed=[]; sliced=[]; l=10
     for i in key:
         listed+=[int(i)]
@@ -89,7 +89,7 @@ def slicing(key):       # Intended to constrain the prime squares to 10-chars
         sliced[x]=str(int(y[1:]))
     return sliced
 
-def pop(key):       # Constrains the sliced list to 10-chars
+def pop(key):       # confuses & constrains the sliced list to 10-chars
     listed=keypnum(key); merged=[]
     listed.extend(keypnum(''.join(listed)))
     p=''.join(slicing(list(set(listed))))
@@ -98,7 +98,7 @@ def pop(key):       # Constrains the sliced list to 10-chars
         p=p[10:]
     return merged
 
-def find(text,key):     # Finds the random prime square used during encryption
+def find(text,key):     # finds the random prime square used during encryption
     listed=pop(key)
     for i,j in enumerate(listed):
         if extract(extract(text,j),key)!=None:
@@ -106,7 +106,7 @@ def find(text,key):     # Finds the random prime square used during encryption
         else: continue
     return None
 
-def combine(text,key):      # Inserts the key chars into the phrase chars
+def combine(text,key):      # dissolves key chars into the phrase
     try:
         pas=hexed(key); phrase=hexed(text);
         primes=sieve(len(key)**2)
@@ -121,7 +121,7 @@ def combine(text,key):      # Inserts the key chars into the phrase chars
     phr=add(phrase,key)
     return ''.join(phr)
 
-def extract(text,key):      # Removes the key chars from the phrase chars
+def extract(text,key):      # removes the key chars from the phrase
     try:
         phrase=char(sub(text,key));
         primes=sieve(len(key)**2)
@@ -133,7 +133,7 @@ def extract(text,key):      # Removes the key chars from the phrase chars
             return None
     return ''.join(newph)
 
-def eit(text,key,iteration):        # Iteration, Shifting, Random key usage, Encryption
+def eit(text,key,iteration):        # iteration, shifting, random key usage, encryption
     i=1; combined=combine(text,key);
     p=pop(key); random.shuffle(p)
     while i<iteration:
@@ -148,7 +148,7 @@ def eit(text,key,iteration):        # Iteration, Shifting, Random key usage, Enc
         zombie=shift(zombie,ord(i))
     return ''.join(hexed(zombie))
 
-def dit(text,key,iteration):        # The whole thing in reverse...
+def dit(text,key,iteration):        # the whole eit() thing in reverse...
     zombie=char(text)
     for i in key:
         zombie=shift(zombie,255-ord(i))
@@ -164,7 +164,7 @@ def dit(text,key,iteration):        # The whole thing in reverse...
         return None
     return extracted
 
-def zombify():      # User interface
+def zombify():      # user interface
     try:
         choice='y'
         while choice=='y':
@@ -194,7 +194,7 @@ def zombify():      # User interface
             if str(what)=='e':
                 out=eit(str(text),str(key),int(level))
                 print "\n"+str(out)+"\n"
-            elif str(what)=='d':
+            elif str(what)=='d': # While decrypting, (given the correct key) a lower iteration level can decrypt the data, but it can't get back to the message!
                 out=dit(str(text),str(key),int(level))
                 if out==None:
                     print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
