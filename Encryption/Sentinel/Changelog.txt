@@ -20,7 +20,7 @@ v1.3: Zombipher [https://github.com/Wafflespeanut/Python/blob/3200ac598593c4abc7
 - Hexed outputs to eliminate a bug!
 - Functions: zombify()
 
-v1.4: Ranger [https://github.com/Wafflespeanut/Python/blob/444f8236eceff98b8a065a8937a9a36333e48a83/Encryption/Ranger/Cipher.py]
+v1.4: Ranger [https://github.com/Wafflespeanut/Python/blob/49bfe59bb4baa753678e6fbb4b29ad665459963c/Encryption/Ranger/Cipher.py]
 - Replaced all possible errors with custom messages
 - Variable ciphertext outputs
 - An iteration is carried out using a random 10-digit key

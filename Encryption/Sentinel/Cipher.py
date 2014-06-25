@@ -62,44 +62,28 @@ def sub(text,key):      # gets the key and phrase chars back!
             i-=1
     return ''.join(hand)
 
-def keypnum(key):       # generates a list of prime squares based on the key
+def keypnum(key,level):       # generates primes based on the key-chars' ASCII values
     primes=[]
     for i in key:
-        for j in range(1,3):
-            primes+=[str(primelist[ord(i)]**(j+1))]
-    return primes
+        primes+=[str(primelist[ord(i)])]
+    for n in range(level/2):
+        temp=[]; temp+=primes
+        for i,j in enumerate(temp):
+            primes+=[str(primelist[int(j)])]
+    return list(set(primes))
 
-def slicing(key):       # intended to constrain the prime squares to 10-chars
-    listed=[]; sliced=[]; l=10
-    for i in key:
-        listed+=[int(i)]
-    for i,j in enumerate(listed):
-        k=0
-        while len(str(listed[i]))<l:
-            listed[i]+=listed[k]
-            k+=1
-            if k==len(key): k=0
-        while len(str(listed[i]))>l:
-            listed[i]-=listed[k]
-            k+=1
-            if k==len(key): k=0
-    for p in listed:
-        sliced+=[str(p)]
-    for x,y in enumerate(sliced):
-        sliced[x]=str(int(y[1:]))
-    return sliced
-
-def pop(key):       # confuses & constrains the sliced list to 10-chars
-    listed=keypnum(key); merged=[]
-    listed.extend(keypnum(''.join(listed)))
-    p=''.join(slicing(list(set(listed))))
+def pop(key,level):       # confuses & constrains the sliced list to 10-chars
+    merged=[]; listed=keypnum(key,level)
+    for i in range(level):
+        listed.extend(keypnum(''.join(listed),level))
+    p=''.join(listed)
     while len(p)>=10:
         merged.append(p[0:10])
         p=p[10:]
-    return merged
+    return list(set(merged))
 
-def find(text,key):     # finds the random prime square used during encryption
-    listed=pop(key)
+def find(text,key,level):     # finds the random prime square used during encryption
+    listed=pop(key,level)
     for i,j in enumerate(listed):
         if extract(extract(text,j),key)!=None:
             return extract(text,j)
@@ -108,7 +92,7 @@ def find(text,key):     # finds the random prime square used during encryption
 
 def combine(text,key):      # dissolves key chars into the phrase
     try:
-        pas=hexed(key); phrase=hexed(text);
+        pas=hexed(key); phrase=hexed(text)
         primes=sieve(len(key)**2)
         i=0; ph=len(phrase); p=len(key)
         for j in pas:
@@ -135,7 +119,7 @@ def extract(text,key):      # removes the key chars from the phrase
 
 def eit(text,key,iteration):        # iteration, shifting, random key usage, encryption
     i=1; combined=combine(text,key);
-    p=pop(key); random.shuffle(p)
+    p=pop(key,iteration); random.shuffle(p)
     while i<iteration:
         combined=combine(combined,key)
         i+=1
@@ -152,7 +136,7 @@ def dit(text,key,iteration):        # the whole eit() thing in reverse...
     zombie=char(text)
     for i in key:
         zombie=shift(zombie,255-ord(i))
-    i=1; extracted=find(zombie,key)
+    i=1; extracted=find(zombie,key,iteration)
     if iteration==0:
         extracted=extract(extracted,key)
     while i<iteration:
@@ -181,11 +165,11 @@ def zombify():      # user interface
                     print "\n No, Seriously? Password of unit length? Try something better...\n"
                     key=raw_input("Choose a password: ")
             level=raw_input("Security level (1-5, for fast output): ")
-            while str(level) not in "12345":
+            while str(level) not in "012345":
                 print "\n Enter a number ranging from 1-5\n"
                 level=raw_input("Security level (1-5): ")
             if str(level)=="":
-                print "\n No input given. Choosing level 1\n"
+                print "\n No input given. Choosing level 0\n"
                 level=0
             what=raw_input("Encrypt (e) or Decrypt (d) ? ")
             while str(what)!="e" and str(what)!="d" and str(what)=="":
