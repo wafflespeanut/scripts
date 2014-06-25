@@ -25,3 +25,8 @@ v1.4: Ranger [https://github.com/Wafflespeanut/Python/blob/444f8236eceff98b8a065
 - Variable ciphertext outputs
 - An iteration is carried out using a random 10-digit key
 - Functions: keypnum(), pop(), find(), slicing()
+
+v2.0: Sentinel (On the way!)
+- Changed the basis of variable outputs
+- Available in Javascript
+- Functions: keypnum(), pop(), slicing()
