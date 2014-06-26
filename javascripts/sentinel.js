@@ -1,12 +1,9 @@
 function shift(hand,shift) {
-	try {
 		newt=[]; s=parseInt(shift)
 		for(i=0;i<hand.length;i++) {
 			m=hand[i].charCodeAt()+shift
 			while(m>255) { m-=255 }
-			newt.push(String.fromCharCode(m)) } }
-	catch(e) {
-		return null }
+			newt.push(String.fromCharCode(m)) }
 	return newt.join('') }
 
 function sieve(n) {
@@ -26,7 +23,9 @@ function sieve(n) {
 				primes.push(p); } }
 	return primes }
 
-primelist=sieve(512*512)
+function primelist(level) {
+	k=Math.pow(2,5+level)
+	return sieve(k*k) }
 
 function hexed(key)	{
 	pas=key.split('')
@@ -35,16 +34,20 @@ function hexed(key)	{
 	return pas }
 
 function chared(key) {
-	pas=[]
-	for(i=0;i<key.length;i++) {
-		try {
-			pas.push(String.fromCharCode(parseInt(key[i],16))) } }
-		catch(e) {
-			return null }
+	pas=[]; keyc=[]; m=0
+	while(m<key.length) {
+		keyc.push(subarr(key,m,m+1).join(''))
+		m+=2 }
+	for(i=0;i<keyc.length;i++) {
+			pas.push(String.fromCharCode(parseInt(keyc[i],16))) }
 	return pas.join('') }
-	
+
 String.prototype.replaceAt = function(i,ch) {
     return this.substr(0,i) + ch + this.substr(i+ch.length); }
+
+function dupe(arr) {
+	return arr.filter(function(elem, pos) {
+		return arr.indexOf(elem) == pos }) }
 
 function add(text,key) {
 	num="0123456789"; hand=text; i=key.length-1
@@ -77,24 +80,53 @@ function sub(text,key) {
 	return hand }
 
 function keypnum(key,level) {
-	primes=[]
+	primes = []; plist=primelist(3)
 	for(i=0;i<key.length;i++) {
-		primes.push(primelist[key[i].charCodeAt()]) }
-	for(n=1;n<=level;n++) {
-		temp=[]; temp+=primes
+		primes.push(plist[key[i].charCodeAt()]) }
+	for(n=1;n<=Math.round(level/2);n++) {
+			temp = []
+		for(i=0;i<primes.length;i++) {
+			temp.push(primes[i]) }
 		for(i=0;i<temp.length;i++) {
-			primes.push(primelist[temp[i]]) } }
+			primes.push(plist[temp[i]]) } }
 	return primes }
 	
 function pop(key,level) {
 	merged=[]; listed=keypnum(key,level)
 	for(i=1;i<=level;i++) {
 		listed.push(keypnum((listed).join(''),level)) }
-	p=listed.join('')
-	while(p.length>=10) {
-		merged.push(p.substr(0,10))
-		p=p.substr(10) }
-	return merged }
+	p=((listed.join('')).split(',')).join('')
+	while(p.length>=7) {
+		merged.push(p.substr(0,7))
+		p=p.substr(7) }
+	return dupe(merged) }
+
+function combine(text,key) {
+	phrase=text
+	primes=sieve(Math.pow(key.length,2))
+	i=0; ph=phrase.length;
+	for(j=0;j<key.length;j++) {
+		if(primes[i]<phrase.length) {
+			phrase=phrase.substr(0,primes[i])+key[j]+phrase.substr(primes[i])
+			i+=1 }
+	else { break } }
+	phr=add(hexed(phrase).join(''),key)
+	return phr }
+
+function subarr(arr,i1,i2) {
+	newarr=[]
+	for(i=i1;i<i2;i++) {
+		newarr.push(arr[i]) }
+	return newarr }
+	
+function extract(text,key) {
+	phrase=chared(sub(text,key));
+	primes=sieve(Math.pow(key.length,2))
+	ph=phrase.length; newp=[]
+	for(i=0;i<ph;i++) {
+		if(primes.indexOf(i)==-1) {
+			newp.push(phrase[i]) }}
+	return newp.join('') }
 
 function find(text,key,level) {
 	listed=pop(key,level)
@@ -102,34 +134,7 @@ function find(text,key,level) {
 		if extract(extract(text,listed[i]),key)!=null {
 			return extract(text,listed[i]) }
 		else { continue } }
-	return null }
-
-function combine(text,key) {
-	try {
-		pas=hexed(key); phrase=hexed(text)
-		primes=sieve(Math.pow(key.length,2))
-		i=0; ph=phrase.length; p=key.length
-		for(j=0;j<pas.length;j++) {
-			if(primes[i]<phrase.length) {
-				phrase=phrase.substr(0,primes[i])+j+phrase.substr(primes[i])
-				i+=1 }
-			else { break } } }
-	catch(e) {
-		return null }
-	phr=add(phrase,key)
-	return phr.join('')
-
-function extract(text,key) {
-	try {
-		phrase=chared(sub(text,key));
-		primes=sieve(Math.pow(key.length,2))
-		ph=phrase.length; newph=""
-		for(i=0;i<ph;i++) {
-			if((primes.substr(0,key.length)).indexOf(i)==-1) {
-				newph.push(phrase[i])
-	catch(e) {
-		return null }
-	return newph.join('')
+	return null }	
 
 function eit(text,key,level) {
 	i=1; combined=combine(text,key)
