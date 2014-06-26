@@ -72,21 +72,22 @@ def keypnum(key,level):       # generates primes based on the key-chars' ASCII v
             primes+=[str(primelist[int(j)])]
     return list(set(primes))
 
-def pop(key,level):       # confuses & constrains the sliced list to 10-chars
+def pop(key,level):       # confuses & constrains the sliced list to 8-chars
     merged=[]; listed=keypnum(key,level)
     for i in range(level):
         listed.extend(keypnum(''.join(listed),level))
     p=''.join(listed)
-    while len(p)>=10:
-        merged.append(p[0:10])
-        p=p[10:]
+    while len(p)>=8:
+        merged.append(p[0:8])
+        p=p[8:]
     return list(set(merged))
 
-def find(text,key,level):     # finds the random prime square used during encryption
+def find(text,key,level):     # finds the random key used during encryption
     listed=pop(key,level)
     for i,j in enumerate(listed):
-        if extract(extract(text,j),key)!=None:
-            return extract(text,j)
+        rkey=combine(j,key)
+        if extract(extract(text,rkey),key)!=None:
+            return extract(text,rkey)
         else: continue
     return None
 
@@ -94,7 +95,7 @@ def combine(text,key):      # dissolves key chars into the phrase
     try:
         pas=hexed(key); phrase=hexed(text)
         primes=sieve(len(key)**2)
-        i=0; ph=len(phrase); p=len(key)
+        i=0; ph=len(phrase);
         for j in pas:
             if primes[i]<len(phrase):
                 phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
@@ -117,14 +118,15 @@ def extract(text,key):      # removes the key chars from the phrase
             return None
     return ''.join(newph)
 
-def eit(text,key,iteration):        # iteration, shifting, random key usage, encryption
+def eit(text,key,iteration):        # iteration, shifting, random key, etc.
     i=1; combined=combine(text,key);
     p=pop(key,iteration); random.shuffle(p)
+    rkey=combine(random.choice(p),key)
     while i<iteration:
         combined=combine(combined,key)
         i+=1
     if i==iteration or iteration==0:
-        combined=combine(combined, random.choice(p))
+        combined=combine(combined,rkey)
     if combined==None:
         return None
     zombie=combined

@@ -26,7 +26,9 @@ v1.4: Ranger [https://github.com/Wafflespeanut/Python/blob/49bfe59bb4baa753678e6
 - An iteration is carried out using a random 10-digit key
 - Functions: keypnum(), pop(), find(), slicing()
 
-v2.0: Sentinel (On the way!)
+v2.0: Sentinel
 - Changed the basis of variable outputs
+- Corrected the functions with improved algorithm
+- Alpha-numeric random keys
 - Available in Javascript
-- Functions: keypnum(), pop(), slicing()
+- Functions: keypnum(), pop(), extract()
