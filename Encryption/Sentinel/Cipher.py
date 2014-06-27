@@ -62,21 +62,22 @@ def sub(text,key):      # gets the key and phrase chars back!
             i-=1
     return ''.join(hand)
 
+def primelist(level):       #throws the primes wanted for randomgen
+    k=2**(5+level)
+    return sieve(k*k)
+
 def keypnum(key,level):       # generates primes based on the key-chars' ASCII values
-    primes=[]
+    primes=[]; plist=primelist(level/2)
     for i in key:
-        primes+=[str(primelist[ord(i)])]
-    for n in range(level/2):
-        temp=[]; temp+=primes
+        primes+=[str(plist[ord(i)])]
+    for n in range(level):
+        temp=[]; temp+=''.join(primes)
         for i,j in enumerate(temp):
-            primes+=[str(primelist[int(j)])]
-    return list(set(primes))
+            primes+=[str(plist[int(j)])]
+    return ''.join(primes)
 
 def pop(key,level):       # confuses & constrains the sliced list to 8-chars
-    merged=[]; listed=keypnum(key,level)
-    for i in range(level):
-        listed.extend(keypnum(''.join(listed),level))
-    p=''.join(listed)
+    merged=[]; p=keypnum(key,level)
     while len(p)>=8:
         merged.append(p[0:8])
         p=p[8:]
@@ -125,8 +126,7 @@ def eit(text,key,iteration):        # iteration, shifting, random key, etc.
     while i<iteration:
         combined=combine(combined,key)
         i+=1
-    if i==iteration or iteration==0:
-        combined=combine(combined,rkey)
+    combined=combine(combined,rkey)
     if combined==None:
         return None
     zombie=combined
@@ -139,13 +139,9 @@ def dit(text,key,iteration):        # the whole eit() thing in reverse...
     for i in key:
         zombie=shift(zombie,255-ord(i))
     i=1; extracted=find(zombie,key,iteration)
-    if iteration==0:
-        extracted=extract(extracted,key)
-    while i<iteration:
+    while i<=iteration:
         extracted=extract(extracted,key)
         i+=1
-    if i==iteration:
-        extracted=extract(extracted,key)
     if extracted==None:
         return None
     return extracted
@@ -171,8 +167,8 @@ def zombify():      # user interface
                 print "\n Enter a number ranging from 1-5\n"
                 level=raw_input("Security level (1-5): ")
             if str(level)=="":
-                print "\n No input given. Choosing level 0\n"
-                level=0
+                print "\n No input given. Choosing level 1\n"
+                level=1
             what=raw_input("Encrypt (e) or Decrypt (d) ? ")
             while str(what)!="e" and str(what)!="d" and str(what)=="":
                 print "\n (sigh) You can choose something...\n"
