@@ -23,12 +23,13 @@ v1.3: Zombipher [https://github.com/Wafflespeanut/Python/blob/3200ac598593c4abc7
 v1.4: Ranger [https://github.com/Wafflespeanut/Python/blob/49bfe59bb4baa753678e6fbb4b29ad665459963c/Encryption/Ranger/Cipher.py]
 - Replaced all possible errors with custom messages
 - Variable ciphertext outputs
-- An iteration is carried out using a random 10-digit key
+- An iteration is carried out using a random key
 - Functions: keypnum(), pop(), find(), slicing()
 
 v2.0: Sentinel
-- Changed the basis of variable outputs
-- Corrected the functions with improved algorithm
+[https://github.com/Wafflespeanut/Python/blob/master/Encryption/Sentinel/Cipher.py]
+- Changed the basis of random keys
+- Corrected some functions with improved algorithm
 - Alpha-numeric random keys
 - Available in Javascript
 - Functions: keypnum(), pop(), extract()
