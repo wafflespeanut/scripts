@@ -1,3 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Sentinel | A messy cipher...</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Sentinel</h1>
+        <h2>A messy cipher...</h2>
+
+        <section id="downloads">
+          <a href="http://wafflespeanut.github.io" class="btn btn-blog"><span class="icon"></span>Home</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+
+<h3>Text input: (Gimme something to eat!) </h3>
+<center><p><textarea  style="width: 1000px; height: 100px;" id="cipherspace">Hello, world!</textarea></p></center>
+
+<p><h3>Password: (I need a wrapper!) </h3>
+<textarea style="width: 200px; height: 40px;" id="keyspace">Sentinel-101</textarea>
+
+<form action="form_action.asp">
+<input type="radio" name="cipher" value="encrypt"> <strong>Encrypt</strong><br>
+<input type="radio" name="cipher" value="decrypt"> <strong>Decrypt</strong>
+
+<button type="button" onclick="zombify()">Do it!</button></p>
+</form>
+<script>
+
 function shift(hand,shift) {
 		newt=[]; s=parseInt(shift)
 		for(i=0;i<hand.length;i++) {
@@ -80,7 +123,7 @@ function sub(text,key) {
 	return hand }
 
 function keypnum(key) {
-	primes = []; plist=primelist(3)
+	primes = []; plist=primelist(2)
 	for(i=0;i<key.length;i++) {
 		primes.push(plist[key[i].charCodeAt()]) }
 	for(n=1;n<=2;n++) {
@@ -143,3 +186,20 @@ function dit(text,key) {
 	rkey=combine(pop(key),key)
 	extracted=extract(extract(zombie,rkey),key)
 	return extract(extracted,key) }
+
+function zombify() {	
+	phrase = document.getElementById("cipherspace").value
+	key = document.getElementById("keyspace").value
+	cipher = document.forms[0].cipher
+	if(cipher[0].checked)
+		cipherout = eit(phrase,key)
+	else cipherout = dit(phrase,key)
+	document.getElementById("cipherspace").innerHTML = cipherout }
+</script>
+<hr> <br>
+<p><strong>NOTE:</strong> This runs entirely on your browser. If you were to run my original algorithm, higher order iterations, and gigantic random keys may crash your browser!</p>
+<p>So, I've <em>simplified</em> (reducing security to improve performance) the original version of <strong>Sentinel</strong> (<a href="https://github.com/Wafflespeanut/Python/blob/master/Encryption/Sentinel/Cipher.py">written in Python</a>). Random keygen, iterations, and interface have been "confiscated" <em>(for now)</em>...</p>
+      </section>
+    </div>
+  </body>
+</html>
