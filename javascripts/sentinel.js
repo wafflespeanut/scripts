@@ -24,7 +24,7 @@ function sieve(n) {
 	return primes }
 
 function primelist(level) {
-	k=Math.pow(2,5+level)
+	k=Math.pow(2,3+level)
 	return sieve(k*k) }
 
 function hexed(key)	{
@@ -79,27 +79,27 @@ function sub(text,key) {
 			i-=1 } }
 	return hand }
 
-function keypnum(key,level) {
+function keypnum(key) {
 	primes = []; plist=primelist(3)
 	for(i=0;i<key.length;i++) {
 		primes.push(plist[key[i].charCodeAt()]) }
-	for(n=1;n<=Math.round(level/2);n++) {
+	for(n=1;n<=2;n++) {
 			temp = []
-		for(i=0;i<primes.length;i++) {
-			temp.push(primes[i]) }
-		for(i=0;i<temp.length;i++) {
-			primes.push(plist[temp[i]]) } }
+		for(i=0;i<primes.length;i++)
+			temp.push(primes[i])
+		for(i=0;i<temp.length;i++)
+			primes.push(plist[temp[i]]) }
 	return primes }
 	
 function pop(key,level) {
-	merged=[]; listed=keypnum(key,level)
-	for(i=1;i<=level;i++) {
-		listed.push(keypnum((listed).join(''),level)) }
-	p=((listed.join('')).split(',')).join('')
-	while(p.length>=7) {
-		merged.push(p.substr(0,7))
-		p=p.substr(7) }
-	return dupe(merged) }
+	merged=[]; listed=keypnum(key,level); k=0
+	p=listed.join(''); n=8
+	while(p.length>=n) {
+		merged.push(p.substr(0,n))
+		p=p.substr(n) }
+	for(i=0;i<key.length;i++) {
+		k+=parseInt(dupe(merged)[key[i].charCodeAt()]) }
+	return k.toString() }
 
 function combine(text,key) {
 	phrase=text
@@ -120,47 +120,26 @@ function subarr(arr,index,length) {
 	return newarr }
 	
 function extract(text,key) {
-	phrase=chared(sub(text,key));
-	primes=sieve(Math.pow(key.length,2))
-	ph=phrase.length; newp=[]
-	for(i=0;i<ph;i++) {
-		if(primes.indexOf(i)==-1) {
-			newp.push(phrase[i]) }}
+		phrase=chared(sub(text,key));
+		primes=subarr(sieve(Math.pow(key.length,2)),0,key.length)
+		ph=phrase.length; newp=[]
+		for(i=0;i<ph;i++) {
+			if(primes.indexOf(i)==-1) {
+				newp.push(phrase[i]) }}
 	return newp.join('') }
 
-function find(text,key,level) {
-	listed=pop(key,level)
-	for(i=0;i<listed.length;i++) {
-		if extract(extract(text,listed[i]),key)!=null {
-			return extract(text,listed[i]) }
-		else { continue } }
-	return null }	
-
-function eit(text,key,level) {
-	i=1; combined=combine(text,key)
-	p=pop(key,level); /* RANDOM */
-	while(i<level) {
-		combined=combine(combined,key); i+=1 }
-	if(i==level || level==0) {
-		combined=combine(combined, /* RANDOM */) }
-	if(combined==null) {
-		return null }
-	zombie=combined
+function eit(text,key) {
+	combined=combine(text,key);
+	rkey=combine(pop(key),key)
+	zombie=combine(combine(combined,key),rkey)
 	for(i=0;i<key.length;i++)
 		zombie=shift(zombie,key[i].charCodeAt())
-	return hexed(zombie).join()
+	return hexed(zombie).join('') }
 
-function dit(text,key,level) {
+function dit(text,key) {
 	zombie=chared(text)
 	for(i=0; i<key.length; i++)
-		zombie=shift(zombie,255-key[i].charCodeAt())
-	i=1; extracted=find(zombie,key,level)
-	if(level==0)
-		extracted=extract(extracted,key)
-	while(i<level) {
-		extracted=extract(extracted,key); i+=1 }
-	if(i==level)
-		extracted=extract(extracted,key)
-	if(extracted==null)
-		return null
-	return extracted
+		zombie=shift(zombie,255-(key[i].charCodeAt()))
+	rkey=combine(pop(key),key)
+	extracted=extract(extract(zombie,rkey),key)
+	return extract(extracted,key) }
