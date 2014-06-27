@@ -36,10 +36,10 @@ function hexed(key)	{
 function chared(key) {
 	pas=[]; keyc=[]; m=0
 	while(m<key.length) {
-		keyc.push(subarr(key,m,m+1).join(''))
+		keyc.push(subarr(key,m,m+2).join(''))
 		m+=2 }
 	for(i=0;i<keyc.length;i++) {
-			pas.push(String.fromCharCode(parseInt(keyc[i],16))) }
+		pas.push(String.fromCharCode(parseInt(keyc[i],16))) }
 	return pas.join('') }
 
 String.prototype.replaceAt = function(i,ch) {
@@ -113,9 +113,9 @@ function combine(text,key) {
 	phr=add(hexed(phrase).join(''),key)
 	return phr }
 
-function subarr(arr,i1,i2) {
+function subarr(arr,index,length) {
 	newarr=[]
-	for(i=i1;i<i2;i++) {
+	for(i=index;i<length;i++) {
 		newarr.push(arr[i]) }
 	return newarr }
 	
