@@ -65,15 +65,12 @@ function zombify() {
 	document.getElementById("cipherspace").value = cipherout
 	return cipherout }
 
-function test(str) {
-	str1=hexed(chared(str)).join(''); newstr=0
-	if(str.length%2!=0)
-		str1=subarr(str1,0,str1.length-1)
-	for(i=0;i<str1.length/2;i++)
-		newstr+=str1[i]
-	if(newstr==0)
-		return false
-	else return true }
+function test(phr) {
+	str=hexed(chared(phr)).join('');
+	for(i=0;i<str.length;i++) {
+		if(parseInt(str[i])==0)
+			return false }
+	return true }
 
 function shift(hand,shift) {
 		newt=[]; s=parseInt(shift)
