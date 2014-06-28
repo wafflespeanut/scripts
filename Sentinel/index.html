@@ -39,8 +39,8 @@ textarea {border:1px solid green; padding: 7px 7px; background: black; color:whi
 <p><tr><td><h3>Password:</h3><textarea style="width: 200px; height: 40px;" id="keyspace" placeholder="I need a wrapper!">Sentinel-101</textarea></td>
 <td><br><input type="radio" name="cipher" value="encrypt" checked> <strong>Encrypt</strong><br>
 <input type="radio" name="cipher" value="decrypt"> <strong>Decrypt</strong></td>
-<td><br><br><button class="button-error pure-button" type="button" onclick="zombify()">BOOM!!!</button></p></td>
-<td><p><strong><font color="red">CAUTION: </font></strong><font color="#b5e853">Use at your own risk!<br>Encrypting more than twice,<br> may <em>"kill"</em> your browser!</font></p></td>
+<td><br><br><span onmouseover="this.className='hoverMouse'" onmouseout="this.className=''"><button class="button-error pure-button" type="button" onclick="zombify()">BOOM!!!</button></span></p></td>
+<td><p><h3>CAUTION: </h3><font color="#b5e853">Use at your own risk!<br>Encrypting more than twice,<br> may <em>"kill"</em> your browser!</font></p></td>
 </tr></table>
 </form>
 <script type="text/javascript">
