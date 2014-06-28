@@ -9,6 +9,11 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
     <title>Sentinel | A messy cipher...</title>
+	
+<style>
+textarea {border:1px solid green; padding: 7px 7px; background: black; color:white; font-family:Lucida console}
+</style>
+
   </head>
 
   <body>
@@ -27,19 +32,32 @@
     <div class="container">
       <section id="main_content">
 
-<h3>Text input: (Gimme something to eat!) </h3>
-<center><p><textarea  style="width: 1000px; height: 100px;" id="cipherspace">Hello, world!</textarea></p></center>
-
-<p><h3>Password: (I need a wrapper!) </h3>
-<textarea style="width: 200px; height: 40px;" id="keyspace">Sentinel-101</textarea>
-
 <form action="form_action.asp">
-<input type="radio" name="cipher" value="encrypt"> <strong>Encrypt</strong><br>
+<h3>Text input:</h3>
+<center><p><textarea  style="width: 1000px; height: 100px;" id="cipherspace" placeholder="Gimme something to eat!" required>Hello, world!</textarea></p></center>
+
+<p><h3>Password:</h3>
+<textarea style="width: 200px; height: 40px;" id="keyspace" placeholder="I need a wrapper!" required>Sentinel-101</textarea>
+<br>
+<input type="radio" name="cipher" value="encrypt" checked> <strong>Encrypt</strong><br>
 <input type="radio" name="cipher" value="decrypt"> <strong>Decrypt</strong>
 
 <button type="button" onclick="zombify()">Do it!</button></p>
 </form>
-<script>
+<script type="text/javascript">
+
+function zombify() {
+	phr = document.getElementById("cipherspace").value
+	k = document.getElementById("keyspace").value
+	if( phr==0 || k==0 )
+		alert("C'mon... Fill up the input")
+	cipher = document.forms[0].cipher
+	if(cipher[0].checked)
+		cipherout = eit(phr,k)
+	else if(cipher[1].checked)
+		cipherout = dit(phr,k)
+	document.getElementById("cipherspace").innerHTML = cipherout
+	return cipherout }
 
 function shift(hand,shift) {
 		newt=[]; s=parseInt(shift)
@@ -186,19 +204,10 @@ function dit(text,key) {
 	rkey=combine(pop(key),key)
 	extracted=extract(extract(zombie,rkey),key)
 	return extract(extracted,key) }
-
-function zombify() {	
-	phrase = document.getElementById("cipherspace").value
-	key = document.getElementById("keyspace").value
-	cipher = document.forms[0].cipher
-	if(cipher[0].checked)
-		cipherout = eit(phrase,key)
-	else cipherout = dit(phrase,key)
-	document.getElementById("cipherspace").innerHTML = cipherout }
 </script>
 <hr> <br>
 <p><strong>NOTE:</strong> This runs entirely on your browser. If you were to run my original algorithm, higher order iterations, and gigantic random keys may crash your browser!</p>
-<p>So, I've <em>simplified</em> (reducing security to improve performance) the original version of <strong>Sentinel</strong> (<a href="https://github.com/Wafflespeanut/Python/blob/master/Encryption/Sentinel/Cipher.py">written in Python</a>). Random keygen, iterations, and interface have been "confiscated" <em>(for now)</em>...</p>
+<p>So, I've <em>simplified</em> (reducing security to improve performance) the original version of <strong>Sentinel</strong> (<a href="https://github.com/Wafflespeanut/Python/blob/master/Encryption/Sentinel/Cipher.py">written in Python</a>). Random keygen, and iterations have been "confiscated" <em>(for now)</em>...</p>
       </section>
     </div>
   </body>
