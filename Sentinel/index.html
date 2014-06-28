@@ -33,15 +33,13 @@ textarea {border:1px solid green; padding: 7px 7px; background: black; color:whi
       <section id="main_content">
 
 <form action="form_action.asp">
-<h3>Text input:</h3>
-<center><p><textarea  style="width: 1000px; height: 100px;" id="cipherspace" placeholder="Gimme something to eat!">Hello, world!</textarea></p></center>
-
-<p><h3>Password:</h3>
 <table border="0" cellspacing="0"><tr>
-<td><textarea style="width: 200px; height: 40px;" id="keyspace" placeholder="I need a wrapper!">Sentinel-101</textarea></td>
-<td><input type="radio" name="cipher" value="encrypt" checked> <strong>Encrypt</strong><br>
+<h3>Text input:</h3>
+<center><p><textarea  style="width: 1000px; height: 100px;" id="cipherspace" placeholder="Gimme something to eat!">Hello, world!</textarea></p></center></tr>
+<p><tr><td><h3>Password:</h3><textarea style="width: 200px; height: 40px;" id="keyspace" placeholder="I need a wrapper!">Sentinel-101</textarea></td>
+<td><br><input type="radio" name="cipher" value="encrypt" checked> <strong>Encrypt</strong><br>
 <input type="radio" name="cipher" value="decrypt"> <strong>Decrypt</strong></td>
-<td><button type="button" onclick="zombify()">BOOM!</button></p></td>
+<td><br><br><button class="button-error pure-button" type="button" onclick="zombify()">BOOM!!!</button></p></td>
 <td><p><strong><font color="red">CAUTION: </font></strong><font color="#b5e853">Use at your own risk!<br>Encrypting more than twice,<br> may <em>"kill"</em> your browser!</font></p></td>
 </tr></table>
 </form>
