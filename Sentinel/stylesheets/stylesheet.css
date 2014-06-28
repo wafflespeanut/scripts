@@ -171,7 +171,7 @@ ul li:before {
 }
 
 .hoverMouse {
-  outline-style:dotted;
+  outline-style:solid;
   outline-width:3px;
   padding-top: 22px;
   padding-right: 4px;
