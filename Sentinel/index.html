@@ -56,7 +56,7 @@ function zombify() {
 		cipherout = eit(phr,k)
 	else if(cipher[1].checked)
 		cipherout = dit(phr,k)
-	document.getElementById("cipherspace").innerHTML = cipherout
+	document.getElementById("cipherspace").value = cipherout
 	return cipherout }
 
 function shift(hand,shift) {
