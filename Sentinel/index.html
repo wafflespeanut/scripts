@@ -41,8 +41,8 @@ textarea {border:1px solid green; padding: 7px 7px; background: black; color:whi
 <td><textarea style="width: 200px; height: 40px;" id="keyspace" placeholder="I need a wrapper!">Sentinel-101</textarea></td>
 <td><input type="radio" name="cipher" value="encrypt" checked> <strong>Encrypt</strong><br>
 <input type="radio" name="cipher" value="decrypt"> <strong>Decrypt</strong></td>
-
 <td><button type="button" onclick="zombify()">BOOM!</button></p></td>
+<td><p><strong><font color="red">CAUTION: </font></strong><font color="#b5e853">Use at your own risk!<br>Encrypting more than twice,<br> may <em>"kill"</em> your browser!</font></p></td>
 </tr></table>
 </form>
 <script type="text/javascript">
@@ -60,7 +60,7 @@ function zombify() {
 		if(test(phr))
 			cipherout = dit(phr,k)
 		else {
-			alert("Invalid ciphertext!")
+			alert("Invalid ciphertext! Is it encrypted?")
 			document.getElementById("cipherspace").value = ""
 			document.getElementById("keyspace").value = ""
 			return false } }
@@ -227,7 +227,7 @@ function dit(text,key) {
 <p><h2>NOTE:</h2>
 <ul>
 <li>To the newbies, this is an <a href="https://en.wikipedia.org/wiki/Encryption">encryption</a> cipher. If you've forgot your key (password), then there's no way you can recover your message from the ciphertext. Even a slight variation in the key will lead you to <em>stupid</em> characters... (<a href="http://wp.me/p3OCmi-qT">I've written more about that!</a>)</p>
-<p><li>This runs entirely on <em>your</em> browser. If you were to run my original algorithm, higher order iterations and gigantic random keys may crash your browser!</p>
+<p><li>And, this runs entirely on <em>your</em> browser. If you were to run my original algorithm, higher order iterations and gigantic random keys may crash your browser!</p>
 <p>So, I've <em>simplified</em> (reducing security to improve performance) the original version of <strong>Sentinel</strong> (<a href="https://github.com/Wafflespeanut/Python/blob/master/Encryption/Sentinel/Cipher.py">written in Python</a>). Random keygen, and iterations have been "confiscated" <em>(for now)</em>...</p></ul>
       </section>
     </div>
