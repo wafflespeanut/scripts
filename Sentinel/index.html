@@ -206,8 +206,11 @@ function dit(text,key) {
 	return extract(extracted,key) }
 </script>
 <hr> <br>
-<p><strong>NOTE:</strong> This runs entirely on your browser. If you were to run my original algorithm, higher order iterations, and gigantic random keys may crash your browser!</p>
-<p>So, I've <em>simplified</em> (reducing security to improve performance) the original version of <strong>Sentinel</strong> (<a href="https://github.com/Wafflespeanut/Python/blob/master/Encryption/Sentinel/Cipher.py">written in Python</a>). Random keygen, and iterations have been "confiscated" <em>(for now)</em>...</p>
+<p><strong>NOTE:</strong>
+<ul>
+<li>To the newbies, this is an <a href="https://en.wikipedia.org/wiki/Encryption">encryption</a> cipher. If you've forgot your key (password), then there's no way you can recover your message from the ciphertext. Even a slight variation in the key will lead you to <em>stupid</em> characters... (<a href="http://wp.me/p3OCmi-qT">I've written more about that!</a>)</p>
+<p><li>This runs entirely on your browser. If you were to run my original algorithm, higher order iterations, and gigantic random keys may crash your browser!</p>
+<p>So, I've <em>simplified</em> (reducing security to improve performance) the original version of <strong>Sentinel</strong> (<a href="https://github.com/Wafflespeanut/Python/blob/master/Encryption/Sentinel/Cipher.py">written in Python</a>). Random keygen, and iterations have been "confiscated" <em>(for now)</em>...</p></ul>
       </section>
     </div>
   </body>
