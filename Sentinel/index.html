@@ -34,30 +34,48 @@ textarea {border:1px solid green; padding: 7px 7px; background: black; color:whi
 
 <form action="form_action.asp">
 <h3>Text input:</h3>
-<center><p><textarea  style="width: 1000px; height: 100px;" id="cipherspace" placeholder="Gimme something to eat!" required>Hello, world!</textarea></p></center>
+<center><p><textarea  style="width: 1000px; height: 100px;" id="cipherspace" placeholder="Gimme something to eat!">Hello, world!</textarea></p></center>
 
 <p><h3>Password:</h3>
-<textarea style="width: 200px; height: 40px;" id="keyspace" placeholder="I need a wrapper!" required>Sentinel-101</textarea>
-<br>
-<input type="radio" name="cipher" value="encrypt" checked> <strong>Encrypt</strong><br>
-<input type="radio" name="cipher" value="decrypt"> <strong>Decrypt</strong>
+<table border="0" cellspacing="0"><tr>
+<td><textarea style="width: 200px; height: 40px;" id="keyspace" placeholder="I need a wrapper!">Sentinel-101</textarea></td>
+<td><input type="radio" name="cipher" value="encrypt" checked> <strong>Encrypt</strong><br>
+<input type="radio" name="cipher" value="decrypt"> <strong>Decrypt</strong></td>
 
-<button type="button" onclick="zombify()">Do it!</button></p>
+<td><button type="button" onclick="zombify()">BOOM!</button></p></td>
+</tr></table>
 </form>
 <script type="text/javascript">
 
 function zombify() {
 	phr = document.getElementById("cipherspace").value
 	k = document.getElementById("keyspace").value
-	if( phr==0 || k==0 )
-		alert("C'mon... Fill up the input")
+	if( phr==0 || k==0 ) {
+		alert("C'mon... Fill up the input");
+		return false }
 	cipher = document.forms[0].cipher
 	if(cipher[0].checked)
 		cipherout = eit(phr,k)
-	else if(cipher[1].checked)
-		cipherout = dit(phr,k)
+	else if(cipher[1].checked) {
+		if(test(phr))
+			cipherout = dit(phr,k)
+		else {
+			alert("Invalid ciphertext!")
+			document.getElementById("cipherspace").value = ""
+			document.getElementById("keyspace").value = ""
+			return false } }
 	document.getElementById("cipherspace").value = cipherout
 	return cipherout }
+
+function test(str) {
+	str1=hexed(chared(str)).join(''); newstr=0
+	if(str.length%2!=0)
+		str1=subarr(str1,0,str1.length-1)
+	for(i=0;i<str1.length;i++)
+		newstr+=str1[i]
+	if(newstr==0)
+		return false
+	else return true }
 
 function shift(hand,shift) {
 		newt=[]; s=parseInt(shift)
@@ -99,8 +117,8 @@ function chared(key) {
 	while(m<key.length) {
 		keyc.push(subarr(key,m,m+2).join(''))
 		m+=2 }
-	for(i=0;i<keyc.length;i++) {
-		pas.push(String.fromCharCode(parseInt(keyc[i],16))) }
+	for(i=0;i<keyc.length;i++)
+		pas.push(String.fromCharCode(parseInt(keyc[i],16)))
 	return pas.join('') }
 
 String.prototype.replaceAt = function(i,ch) {
@@ -206,10 +224,10 @@ function dit(text,key) {
 	return extract(extracted,key) }
 </script>
 <hr> <br>
-<p><strong>NOTE:</strong>
+<p><h2>NOTE:</h2>
 <ul>
 <li>To the newbies, this is an <a href="https://en.wikipedia.org/wiki/Encryption">encryption</a> cipher. If you've forgot your key (password), then there's no way you can recover your message from the ciphertext. Even a slight variation in the key will lead you to <em>stupid</em> characters... (<a href="http://wp.me/p3OCmi-qT">I've written more about that!</a>)</p>
-<p><li>This runs entirely on your browser. If you were to run my original algorithm, higher order iterations, and gigantic random keys may crash your browser!</p>
+<p><li>This runs entirely on <em>your</em> browser. If you were to run my original algorithm, higher order iterations and gigantic random keys may crash your browser!</p>
 <p>So, I've <em>simplified</em> (reducing security to improve performance) the original version of <strong>Sentinel</strong> (<a href="https://github.com/Wafflespeanut/Python/blob/master/Encryption/Sentinel/Cipher.py">written in Python</a>). Random keygen, and iterations have been "confiscated" <em>(for now)</em>...</p></ul>
       </section>
     </div>
