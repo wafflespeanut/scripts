@@ -67,8 +67,9 @@ function zombify() {
 
 function test(phr) {
 	str=hexed(chared(phr)).join('');
+	banlist="123456789abcdef"
 	for(i=0;i<str.length;i++) {
-		if(parseInt(str[i])==0)
+		if(parseInt(str[i])==0 && banlist.indexOf(str[i-1])==-1)
 			return false }
 	return true }
 
@@ -154,7 +155,7 @@ function sub(text,key) {
 	return hand }
 
 function keypnum(key) {
-	primes = []; plist=primelist(2)
+	primes = []; plist=primelist(3)
 	for(i=0;i<key.length;i++) {
 		primes.push(plist[key[i].charCodeAt()]) }
 	for(n=1;n<=2;n++) {
@@ -165,8 +166,8 @@ function keypnum(key) {
 			primes.push(plist[temp[i]]) }
 	return primes }
 	
-function pop(key,level) {
-	merged=[]; listed=keypnum(key,level); k=0
+function pop(key) {
+	merged=[]; listed=keypnum(key); k=0
 	p=listed.join(''); n=8
 	while(p.length>=n) {
 		merged.push(p.substr(0,n))
