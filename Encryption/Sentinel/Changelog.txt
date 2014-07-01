@@ -31,5 +31,10 @@ v2.0: Sentinel
 - Changed the basis of random keys
 - Corrected some functions with improved algorithm
 - Alpha-numeric random keys
-- Available in Javascript
+- Simplified version available in Javascript
 - Functions: keypnum(), pop(), extract()
+
+v3.0: Imploding Prime [Research!]
+- Compressed ciphertexts
+- Simplified version available in Javascript
+- Functions: comp(), extc()

@@ -19,8 +19,6 @@ def sieve(n):       # sieve of Eratosthenes to generate primes
                 sidekick[j] = False
     return [j for j,prime in enumerate(sidekick) if prime]
 
-primelist=sieve(512**2)     # 512^2 seems to be enough (it also take less time!)
-
 def hexed(key):     # hexing function
     pas=list(key)
     for i,j in enumerate(pas):
@@ -120,7 +118,7 @@ def extract(text,key):      # removes the key chars from the phrase
     return ''.join(newph)
 
 def eit(text,key,iteration):        # iteration, shifting, random key, etc.
-    i=1; combined=combine(text,key);
+    i=1; combined=combine(text,key)
     p=pop(key,iteration); random.shuffle(p)
     rkey=combine(random.choice(p),key)
     while i<iteration:
@@ -132,10 +130,10 @@ def eit(text,key,iteration):        # iteration, shifting, random key, etc.
     zombie=combined
     for i in key:
         zombie=shift(zombie,ord(i))
-    return ''.join(hexed(zombie))
+    return ''.join(hexed(add(zombie,key)))
 
 def dit(text,key,iteration):        # the whole eit() thing in reverse...
-    zombie=char(text)
+    zombie=sub(char(text),key)
     for i in key:
         zombie=shift(zombie,255-ord(i))
     i=1; extracted=find(zombie,key,iteration)
