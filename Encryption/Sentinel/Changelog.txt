@@ -34,7 +34,7 @@ v2.0: Sentinel
 - Simplified version available in Javascript
 - Functions: keypnum(), pop(), extract()
 
-v3.0: Imploding Prime [Research!]
-- Compressed ciphertexts
+v2.1: Automaton
+- Variable (somewhat expanded) ciphertexts
 - Simplified version available in Javascript
 - Functions: comp(), extc()

@@ -1,16 +1,5 @@
 import random
 
-def shift(text,shift):      # shifts the ASCII value of the chars
-    try:
-        new=[]; s=int(shift)
-        for i,j in enumerate(text):
-            m=ord(j)+shift
-            while m>255: m-=255
-            new+=chr(m)
-    except TypeError:
-        return None
-    return ''.join(new)
-
 def sieve(n):       # sieve of Eratosthenes to generate primes
     sidekick=[False]*2+[True]*(n-1)
     for i in range(int(n**0.5)+1):
@@ -19,20 +8,15 @@ def sieve(n):       # sieve of Eratosthenes to generate primes
                 sidekick[j] = False
     return [j for j,prime in enumerate(sidekick) if prime]
 
+def primelist(level):       #throws the primes wanted for randomgen
+    k=2**(5+level)
+    return sieve(k*k)
+
 def hexed(key):     # hexing function
     pas=list(key)
     for i,j in enumerate(pas):
         pas[i]=format(ord(pas[i]),'02x')
     return pas
-
-def char(key):      # hex-decoding function
-    pas=[key[i:i+2] for i in range(0,len(key),2)]
-    for i,j in enumerate(pas):
-        try:
-            pas[i]=pas[i].decode("hex")
-        except TypeError:
-            return None
-    return ''.join(pas)
 
 def add(text,key):      # adds the ASCII values of key and phrase chars
     hand=list(''.join(text));give=list(key);
@@ -46,23 +30,6 @@ def add(text,key):      # adds the ASCII values of key and phrase chars
             hand[a]=str(int(b)+ord(give[i]))[-1]
             i-=1
     return ''.join(hand)
-
-def sub(text,key):      # gets the key and phrase chars back!
-    hand=list(''.join(text)); give=list(key);
-    num=list("0123456789"); i=len(key)-1
-    for a,b in enumerate(hand):     # executes from the last char
-        if i>0 and b in num:
-            hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
-            i-=1
-        elif i==0 and b in num:
-            i=len(key)-1
-            hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
-            i-=1
-    return ''.join(hand)
-
-def primelist(level):       #throws the primes wanted for randomgen
-    k=2**(5+level)
-    return sieve(k*k)
 
 def keypnum(key,level):       # generates primes based on the key-chars' ASCII values
     primes=[]; plist=primelist(level/2)
@@ -81,15 +48,6 @@ def pop(key,level):       # confuses & constrains the sliced list to 8-chars
         p=p[8:]
     return list(set(merged))
 
-def find(text,key,level):     # finds the random key used during encryption
-    listed=pop(key,level)
-    for i,j in enumerate(listed):
-        rkey=combine(j,key)
-        if extract(extract(text,rkey),key)!=None:
-            return extract(text,rkey)
-        else: continue
-    return None
-
 def combine(text,key):      # dissolves key chars into the phrase
     try:
         pas=hexed(key); phrase=hexed(text)
@@ -105,6 +63,37 @@ def combine(text,key):      # dissolves key chars into the phrase
     phr=add(phrase,key)
     return ''.join(phr)
 
+def char(key):      # hex-decoding function
+    pas=[key[i:i+2] for i in range(0,len(key),2)]
+    for i,j in enumerate(pas):
+        try:
+            pas[i]=pas[i].decode("hex")
+        except TypeError:
+            return None
+    return ''.join(pas)
+
+def sub(text,key):      # gets the key and phrase chars back!
+    hand=list(''.join(text)); give=list(key);
+    num=list("0123456789"); i=len(key)-1
+    for a,b in enumerate(hand):     # executes from the last char
+        if i>0 and b in num:
+            hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
+            i-=1
+        elif i==0 and b in num:
+            i=len(key)-1
+            hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
+            i-=1
+    return ''.join(hand)
+
+def find(text,key,level):     # finds the random key used during encryption
+    listed=pop(key,level)
+    for i,j in enumerate(listed):
+        rkey=combine(j,key)
+        if extract(extract(text,rkey),key)!=None:
+            return extract(text,rkey)
+        else: continue
+    return None
+
 def extract(text,key):      # removes the key chars from the phrase
     try:
         phrase=char(sub(text,key));
@@ -116,6 +105,116 @@ def extract(text,key):      # removes the key chars from the phrase
     except TypeError:
             return None
     return ''.join(newph)
+
+def shift(text,shift):      # shifts the ASCII value of the chars
+    try:
+        new=[]; s=int(shift)
+        for i,j in enumerate(text):
+            m=ord(j)+shift
+            while m>255: m-=255
+            new+=chr(m)
+    except TypeError:
+        return None
+    return ''.join(new)
+
+def group(text):
+    dupe=''.join(set(ph)); availed=""
+    for i in dupe:
+        availed+=i
+        for j in ph:
+            if j==i: availed+='1'
+            else: availed+='0'
+        availed+='|'
+    return availed[:(len(availed)-1)]
+
+def zeros(text):
+    ph=group(text); l=len(text)+2; i=len(ph)-1; k=0
+    while i!=0:
+        if ph[i]=='|' and ph[i-1]=='1': i-=l
+        if ph[i]=='|' and ph[i-1]=='0':
+            while ph[i-1]=='0':
+                ph=ph[:(i-1)]+ph[i:]
+                i-=1
+        i-=1
+    return ph
+
+def binlayer(text):
+    ph=text; i=0; k=0; punc1='!"#$%&\'()*+,-./'; punc2=':;<=>?@[\\]^_`{}~'
+    while k<len(ph):
+        if ph[k]=='0':
+            c=0
+            while ph[k+c]=='0':
+                c+=1
+                if k+c >= len(ph): break
+            if(c>2): ph=ph[:k]+random.choice(punc1)+str(c)+random.choice(punc1)+ph[(c+k):]
+        k+=1
+    return ph
+
+def binshield(text):
+    ph=text; i=0; punc2=':;<=>?@[\\]^_`{}~'
+    while i<len(ph):
+        if ph[i]=='1':
+            c=0
+            while ph[i+c] in '01':
+                c+=1
+                if i+c >= len(ph): break
+            if c>1: ph=ph[:i]+random.choice(punc2)+str(int(ph[i:(i+c)],2))+random.choice(punc2)+ph[(c+i):]
+        i+=1
+    return ph
+
+def remshield(text):
+    punc1='!"#$%&\'()*+,-./'; punc2=':;<=>?@[\\]^_`{}~'
+    ph=""; i=0; num='0123456789'
+    while i<len(text):
+        if text[i] not in punc2:
+            ph+=text[i]
+        else:
+            c=i+1
+            while text[c] in num:
+                c+=1
+            if text[i+1] in num:
+                ph+=bin(int(text[(i+1):c]))[2:]
+                i+=(c-i)
+        i+=1
+    return ph
+
+def remlayer(text):
+    punc1='!"#$%&\'()*+,-./'
+    ph=""; i=0; num='0123456789'
+    while i<len(text):
+        if text[i] not in punc1:
+            ph+=text[i]
+        elif text[i]=='|':
+            ph+=text[i]
+            i+=2
+        else:
+            c=i+1
+            while text[c] in num:
+                c+=1
+            if text[i+1] in num:
+                ph+=int(text[(i+1):c])*'0'
+                i+=(c-i)
+        i+=1
+    return ph
+
+def chaos(text):
+    ph=""; i=0; t=0; c=0
+    while i<len(text):
+        while i<len(text) and text[i]!='|':
+           t+=1; i+=1
+        if t>=c:
+            c=t; t=0
+        else: t=0
+        i+=1
+    l=c; i=-1
+    ph=l*'0'
+    while i<len(text):
+        c=0; p=text[i]
+        while text[i]!='1':
+            c+=1; i+=1
+        if text[i]=='1':
+            ph=ph[:c]+p+ph[(c+1):]; i+=2
+    return ph
 
 def eit(text,key,iteration):        # iteration, shifting, random key, etc.
     i=1; combined=combine(text,key)
