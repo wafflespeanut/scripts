@@ -58,32 +58,32 @@ def combine(text,key):      # dissolves key chars into the phrase
                 phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
                 i+=1
             else: break
-    except IndexError:
-        return None
+    except IndexError: return None
     phr=add(phrase,key)
     return ''.join(phr)
 
 def char(key):      # hex-decoding function
     pas=[key[i:i+2] for i in range(0,len(key),2)]
     for i,j in enumerate(pas):
-        try:
-            pas[i]=pas[i].decode("hex")
-        except TypeError:
-            return None
+        try: pas[i]=pas[i].decode("hex")
+        except TypeError: return None
     return ''.join(pas)
 
 def sub(text,key):      # gets the key and phrase chars back!
-    hand=list(''.join(text)); give=list(key);
-    num=list("0123456789"); i=len(key)-1
-    for a,b in enumerate(hand):     # executes from the last char
-        if i>0 and b in num:
-            hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
-            i-=1
-        elif i==0 and b in num:
-            i=len(key)-1
-            hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
-            i-=1
-    return ''.join(hand)
+    try:
+        hand=list(''.join(text)); give=list(key);
+        num=list("0123456789"); i=len(key)-1
+        for a,b in enumerate(hand):     # executes from the last char
+            if i>0 and b in num:
+                hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
+                i-=1
+            elif i==0 and b in num:
+                i=len(key)-1
+                hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
+                i-=1
+        out=''.join(hand)
+    except TypeError: return None
+    return out
 
 def find(text,key,level):     # finds the random key used during encryption
     listed=pop(key,level)
@@ -102,22 +102,10 @@ def extract(text,key):      # removes the key chars from the phrase
         for i in range(ph):
             if i not in primes[:len(key)]:
                 newph+=phrase[i]
-    except TypeError:
-            return None
+    except TypeError: return None
     return ''.join(newph)
 
-def shift(text,shift):      # shifts the ASCII value of the chars
-    try:
-        new=[]; s=int(shift)
-        for i,j in enumerate(text):
-            m=ord(j)+shift
-            while m>255: m-=255
-            new+=chr(m)
-    except TypeError:
-        return None
-    return ''.join(new)
-
-def group(text): # records various positions of chars
+def group(text):
     dupe=''.join(set(text)); availed=""
     for i in dupe:
         availed+=i
@@ -126,15 +114,11 @@ def group(text): # records various positions of chars
             else: availed+='0'
         availed+='|'
     ph=availed[:(len(availed)-1)]
-    l=len(text)+2; i=len(ph)-1; k=0
-    while i!=0:
-        if ph[i]=='|' and ph[i-1]=='1': i-=l
-        if ph[i]=='|' and ph[i-1]=='0':
-            while ph[i-1]=='0':
-                ph=ph[:(i-1)]+ph[i:]
-                i-=1
-        i-=1
-    return ph
+    li=ph.split('|')
+    for i in range(len(li)):
+        while li[i][-1]!='1':
+            li[i]=li[i][:-1]
+    return '|'.join(li)
 
 def binshield(text): # adds punctuation to the text
     ph=group(text); i=0; k=0; punc='!"#$%&\'()*+,-./';
@@ -188,18 +172,33 @@ def remshield(text): # removes the random punctuations
         i+=1
     return ph
 
+def pick(text,char): # a function to make life easier!
+    pos=[]
+    for i in range(len(text)):
+        if text[i]==str(char): pos.append(str(i))
+    return pos
+
 def chaos(text): # returns back the original text from group()
     t=0; li=remshield(text).split('|')
     for i in li:
         c=len(i)
         if c>t: t=c
-    ph='0'*(t-1); i=0;
+    ph=[False]*t; i=0
     for i in li:
-        p=i[0]; j=0
-        while j<len(i):
-            if i[j]=='1': ph=ph[:(j-1)]+p+ph[j:]
-            j+=1
-    return ph
+        p=i[0]; pos=pick(i,'1')
+        for j in pos:
+            ph[int(j)]=p
+    return ''.join(ph[1:])
+
+def shift(text,shift):      # shifts the ASCII value of the chars
+    try:
+        new=[]; s=int(shift)
+        for i,j in enumerate(text):
+            m=ord(j)+shift
+            while m>255: m-=255
+            new+=chr(m)
+    except TypeError: return None
+    return ''.join(new)
 
 def eit(text,key,iteration):        # iteration, shifting, random key, etc.
     i=1; combined=combine(text,key)
@@ -221,11 +220,11 @@ def dit(text,key,iteration):        # the whole eit() thing in reverse...
     for i in key:
         zombie=shift(zombie,255-ord(i))
     i=1; extracted=find(zombie,key,iteration)
-    while i<=iteration:
+    while i<iteration:
         extracted=extract(extracted,key)
         i+=1
-    if extracted==None:
-        return None
+    extracted=extract(extracted,key)
+    if extracted==None: return None
     return extracted
 
 def zombify():      # user interface
