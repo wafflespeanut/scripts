@@ -35,6 +35,7 @@ v2.0: Sentinel
 - Functions: keypnum(), pop(), extract()
 
 v2.1: Automaton
+- Random punctuations are added
 - Variable (somewhat expanded) ciphertexts
 - Simplified version available in Javascript
-- Functions: comp(), extc()
+- Functions: binshield(), remshield(), group(), pick(), chaos()
