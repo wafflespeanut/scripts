@@ -137,7 +137,7 @@ def group(text): # records various positions of chars
     return ph
 
 def binshield(text): # adds punctuation to the text
-    ph=text; i=0; k=0; punc='!"#$%&\'()*+,-./';
+    ph=group(text); i=0; k=0; punc='!"#$%&\'()*+,-./';
     while k<len(ph):
         if ph[k]=='0':
             c=0
@@ -189,7 +189,7 @@ def remshield(text): # removes the random punctuations
     return ph
 
 def chaos(text): # returns back the original text from group()
-    t=0; li=text.split('|')
+    t=0; li=remshield(text).split('|')
     for i in li:
         c=len(i)
         if c>t: t=c
