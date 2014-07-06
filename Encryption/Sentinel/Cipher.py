@@ -1,7 +1,7 @@
 import random
 import timeit
 
-def sieve(n):       # sieve of Eratosthenes to generate primes
+def sieve(n): # sieve of Eratosthenes to generate primes
     sidekick=[False]*2+[True]*(n-1)
     for i in range(int(n**0.5)+1):
         if sidekick[i]:
@@ -9,17 +9,17 @@ def sieve(n):       # sieve of Eratosthenes to generate primes
                 sidekick[j] = False
     return [j for j,prime in enumerate(sidekick) if prime]
 
-def primelist(level):       #throws the primes wanted for randomgen
+def primelist(level): #throws the primes wanted for randomgen
     k=2**(5+level)
     return sieve(k*k)
 
-def hexed(key):     # hexing function
+def hexed(key): # hexing function
     pas=list(key)
     for i,j in enumerate(pas):
         pas[i]=format(ord(pas[i]),'02x')
     return pas
 
-def add(text,key):      # adds the ASCII values of key and phrase chars
+def add(text,key): # adds the ASCII values of key and phrase chars
     hand=list(''.join(text));give=list(key);
     num=list("0123456789"); i=len(key)-1
     for a,b in enumerate(hand):
@@ -32,7 +32,7 @@ def add(text,key):      # adds the ASCII values of key and phrase chars
             i-=1
     return ''.join(hand)
 
-def keypnum(key,level):       # generates primes based on the key-chars' ASCII values
+def keypnum(key,level): # generates primes based on the key-chars' ASCII values
     primes=[]; plist=primelist(level/2)
     for i in key:
         primes+=[str(plist[ord(i)])]
@@ -42,14 +42,14 @@ def keypnum(key,level):       # generates primes based on the key-chars' ASCII v
             primes+=[str(plist[int(j)])]
     return ''.join(primes)
 
-def pop(key,level):       # confuses & constrains the sliced list to 8-chars
+def pop(key,level): # confuses & constrains the sliced list to 8-chars
     merged=[]; p=keypnum(key,level)
     while len(p)>=8:
         merged.append(p[0:8])
         p=p[8:]
     return list(set(merged))
 
-def combine(text,key):      # dissolves key chars into the phrase
+def combine(text,key): # dissolves key chars into the phrase
     try:
         pas=hexed(key); phrase=hexed(text)
         primes=sieve(len(key)**2)
@@ -63,18 +63,18 @@ def combine(text,key):      # dissolves key chars into the phrase
     phr=add(phrase,key)
     return ''.join(phr)
 
-def char(key):      # hex-decoding function
+def char(key): # hex-decoding function
     pas=[key[i:i+2] for i in range(0,len(key),2)]
     for i,j in enumerate(pas):
         try: pas[i]=pas[i].decode("hex")
         except TypeError: return None
     return ''.join(pas)
 
-def sub(text,key):      # gets the key and phrase chars back!
+def sub(text,key): # gets the key and phrase chars back!
     try:
         hand=list(''.join(text)); give=list(key);
         num=list("0123456789"); i=len(key)-1
-        for a,b in enumerate(hand):     # executes from the last char
+        for a,b in enumerate(hand): # executes from the last char
             if i>0 and b in num:
                 hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
                 i-=1
@@ -86,7 +86,7 @@ def sub(text,key):      # gets the key and phrase chars back!
     except TypeError: return None
     return out
 
-def find(text,key,level):     # finds the random key used during encryption
+def find(text,key,level): # finds the random key used during encryption
     listed=pop(key,level)
     for i,j in enumerate(listed):
         rkey=combine(j,key)
@@ -95,7 +95,7 @@ def find(text,key,level):     # finds the random key used during encryption
         else: continue
     return None
 
-def extract(text,key):      # removes the key chars from the phrase
+def extract(text,key): # removes the key chars from the phrase
     try:
         phrase=char(sub(text,key));
         primes=sieve(len(key)**2)
@@ -106,99 +106,7 @@ def extract(text,key):      # removes the key chars from the phrase
     except TypeError: return None
     return ''.join(newph)
 
-def group(text):
-    dupe=''.join(set(text)); availed=""
-    for i in dupe:
-        availed+=i
-        for j in text:
-            if j==i: availed+='1'
-            else: availed+='0'
-        availed+='|'
-    ph=availed[:(len(availed)-1)]
-    li=ph.split('|')
-    for i in range(len(li)):
-        while li[i][-1]!='1':
-            li[i]=li[i][:-1]
-    return '|'.join(li)
-
-def binshield(text,key): # adds punctuation to the text
-    start=timeit.default_timer()
-    ph=group(combine(text,key))
-    stop=timeit.default_timer()
-    print "> Hexing & Adding... " +str(round(stop-start,5)) +" seconds"
-    i=0; k=0; punc='!"#$%&\'()*+,-./'
-    while k<len(ph):
-        if ph[k]=='0':
-            c=0
-            while ph[k+c]=='0':
-                c+=1
-                if k+c >= len(ph): break
-            if(c>2): ph=ph[:k]+random.choice(punc)+str(c)+random.choice(punc)+ph[(c+k):]
-        k+=1
-    i=0; punc=':;<=>?@[\\]^_`{}~'
-    while i<len(ph):
-        if ph[i]=='1':
-            c=0
-            while ph[i+c] in '01':
-                c+=1
-                if i+c >= len(ph): break
-            if c>1: ph=ph[:i]+random.choice(punc)+str(int(ph[i:(i+c)],2))+random.choice(punc)+ph[(c+i):]
-        i+=1
-    return ph
-
-def remshield(text): # removes the random punctuations
-    punc=':;<=>?@[\\]^_`{}~'
-    ph=""; i=0; num='0123456789'
-    while i<len(text):
-        if text[i] not in punc:
-            ph+=text[i]
-        else:
-            c=i+1
-            while text[c] in num:
-                c+=1
-            if text[i+1] in num:
-                ph+=bin(int(text[(i+1):c]))[2:]
-                i+=(c-i)
-        i+=1
-    text=ph; ph=""; punc='!"#$%&\'()*+,-./'; i=0
-    while i<len(text):
-        if text[i] not in punc:
-            ph+=text[i]
-        elif text[i]=='|':
-            ph+=text[i]
-            i+=2
-        else:
-            c=i+1
-            while text[c] in num:
-                c+=1
-            if text[i+1] in num:
-                ph+=int(text[(i+1):c])*'0'
-                i+=(c-i)
-        i+=1
-    return ph
-
-def pick(text,char): # a function to make life easier!
-    pos=[]
-    for i in range(len(text)):
-        if text[i]==char: pos.append(str(i))
-    return pos
-
-def chaos(text,key): # returns back the original text from group()
-    t=0; start=timeit.default_timer()
-    li=remshield(text).split('|')
-    stop=timeit.default_timer()
-    print "> Removing punctuations... " +str(round(stop-start,5)) +" seconds"
-    for i in li:
-        c=len(i)
-        if c>t: t=c
-    ph=[False]*t; i=0
-    for i in li:
-        p=i[0]; pos=pick(i,'1')
-        for j in pos:
-            ph[int(j)]=p
-    return extract(''.join(ph[1:]),key)
-
-def shift(text,shift):      # shifts the ASCII value of the chars
+def shift(text,shift): # shifts the ASCII value of the chars
     try:
         new=[]; s=int(shift)
         for i,j in enumerate(text):
@@ -208,27 +116,27 @@ def shift(text,shift):      # shifts the ASCII value of the chars
     except TypeError: return None
     return ''.join(new)
 
-def eit(text,key,iteration):        # iteration, shifting, random key, etc.
+def eit(text,key,iteration): # iteration, shifting, random key, etc.
     i=1; start=timeit.default_timer()
-    combined=binshield(text,key)
+    combined=combine(text,key)
     stop=timeit.default_timer()
-    print "> Random punctuations... " +str(round(stop-start,5)) +" seconds"
+    print "> Random punctuations... " +str(stop-start) +" seconds"
     start=timeit.default_timer()
     p=pop(key,iteration); random.shuffle(p)
     rkey=combine(random.choice(p),key)
     stop=timeit.default_timer()
-    print "> Generating random key... " +str(round(stop-start,5)) +" seconds"
+    print "> Generating random key... " +str(stop-start) +" seconds"
     if i<iteration:
         start=timeit.default_timer()
         while i<iteration:
             combined=combine(combined,key)
             i+=1
         stop=timeit.default_timer()
-        print "> Iterating... " +str(round(stop-start,5)) +" seconds"
+        print "> Iterating... " +str(stop-start) +" seconds"
     start=timeit.default_timer()
     combined=combine(combined,rkey)
     stop=timeit.default_timer()
-    print "> Using random key... " +str(round(stop-start,5)) +" seconds"
+    print "> Using random key... " +str(stop-start) +" seconds"
     if combined==None:
         return None
     start=timeit.default_timer()
@@ -237,34 +145,34 @@ def eit(text,key,iteration):        # iteration, shifting, random key, etc.
         zombie=shift(zombie,ord(i))
     out=''.join(hexed(add(zombie,key)))
     stop=timeit.default_timer()
-    print "> Shifting & Adding ASCII values... " +str(round(stop-start,5)) +" seconds"
+    print "> Shifting & Adding ASCII values... " +str(stop-start) +" seconds"
     return out
 
-def dit(text,key,iteration):        # the whole eit() thing in reverse...
+def dit(text,key,iteration): # the whole eit() thing in reverse...
     start=timeit.default_timer()
     zombie=sub(char(text),key)
     for i in key:
         zombie=shift(zombie,255-ord(i))
     stop=timeit.default_timer()
-    print "> Shifting back ASCII values... " +str(round(stop-start,5)) +" seconds"
+    print "> Shifting back ASCII values... " +str(stop-start) +" seconds"
     i=1; start=timeit.default_timer()
     extracted=find(zombie,key,iteration)
     stop=timeit.default_timer()
-    print "> Finding the random key... " +str(round(stop-start,5)) +" seconds"
+    print "> Finding the random key... " +str(stop-start) +" seconds"
     start=timeit.default_timer()
     while i<iteration:
         extracted=extract(extracted,key)
         i+=1
     stop=timeit.default_timer()
-    print "> Reverse iterating... " +str(round(stop-start,5)) +" seconds"
+    print "> Reverse iterating... " +str(stop-start) +" seconds"
     start=timeit.default_timer()
-    extracted=chaos(extracted,key)
+    extracted=extract(extracted,key)
     stop=timeit.default_timer()
-    print "> Decoding hex & Getting back ASCII values... " +str(round(stop-start,5)) +" seconds"
+    print "> Decoding hex & Getting back ASCII values... " +str(stop-start) +" seconds"
     if extracted==None: return None
     return extracted
 
-def zombify():      # user interface
+def zombify(): # user interface
     try:
         choice='y'
         while choice=='y':
@@ -296,14 +204,14 @@ def zombify():      # user interface
                 start=timeit.default_timer()
                 out=eit(str(text),str(key),int(level))
                 stop=timeit.default_timer()
-                print "\nTOTAL TIME: " +str(round(stop-start,5)) +" seconds"
+                print "\nTOTAL TIME: " +str(stop-start) +" seconds"
                 print "\n"+str(out)+"\n"
             elif str(what)=='d': # While decrypting, (given the correct key) a lower iteration level can decrypt the data, but it can't get back to the message!
                 print "\nDECRYPTING...\n"
                 start=timeit.default_timer()
-                out=dit(str(text),str(key),int(level))                
+                out=dit(str(text),str(key),int(level))
                 stop=timeit.default_timer()
-                print "\nTOTAL TIME: " +str(round(stop-start,5)) +" seconds"
+                print "\nTOTAL TIME: " +str(stop-start) +" seconds"
                 if out==None:
                     print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
                 else: print "\nMESSAGE: "+str(out)+"\n"

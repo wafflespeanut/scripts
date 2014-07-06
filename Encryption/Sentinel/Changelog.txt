@@ -34,9 +34,8 @@ v2.0: Sentinel
 - Simplified version available in Javascript
 - Functions: keypnum(), pop(), extract()
 
-v2.1: Automaton (It's buggy!)
-[https://github.com/Wafflespeanut/Python/blob/master/Encryption/Automaton/Cipher.py]
-- Random punctuations are added
-- Variable (somewhat expanded) ciphertexts
-- Simplified version available in Javascript
+v2.1: Automaton (Still working...)
+- Added timer
+- Random punctuations throw variable (gigantic!) ciphertexts
+- Suppressed iterations
 - Functions: binshield(), remshield(), group(), pick(), chaos()
