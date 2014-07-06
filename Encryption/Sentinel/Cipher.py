@@ -1,4 +1,5 @@
 import random
+import timeit
 
 def sieve(n):       # sieve of Eratosthenes to generate primes
     sidekick=[False]*2+[True]*(n-1)
@@ -120,8 +121,12 @@ def group(text):
             li[i]=li[i][:-1]
     return '|'.join(li)
 
-def binshield(text): # adds punctuation to the text
-    ph=group(text); i=0; k=0; punc='!"#$%&\'()*+,-./';
+def binshield(text,key): # adds punctuation to the text
+    start=timeit.default_timer()
+    ph=group(combine(text,key))
+    stop=timeit.default_timer()
+    print "> Hexing & Adding... " +str(stop-start) +" seconds"
+    i=0; k=0; punc='!"#$%&\'()*+,-./';
     while k<len(ph):
         if ph[k]=='0':
             c=0
@@ -178,8 +183,11 @@ def pick(text,char): # a function to make life easier!
         if text[i]==str(char): pos.append(str(i))
     return pos
 
-def chaos(text): # returns back the original text from group()
-    t=0; li=remshield(text).split('|')
+def chaos(text,key): # returns back the original text from group()
+    t=0; start=timeit.default_timer()
+    li=remshield(text).split('|')
+    stop=timeit.default_timer()
+    print "> Removing punctuations... " +str(stop-start) +" seconds"
     for i in li:
         c=len(i)
         if c>t: t=c
@@ -188,7 +196,7 @@ def chaos(text): # returns back the original text from group()
         p=i[0]; pos=pick(i,'1')
         for j in pos:
             ph[int(j)]=p
-    return ''.join(ph[1:])
+    return extract(''.join(ph[1:]),key)
 
 def shift(text,shift):      # shifts the ASCII value of the chars
     try:
@@ -201,29 +209,58 @@ def shift(text,shift):      # shifts the ASCII value of the chars
     return ''.join(new)
 
 def eit(text,key,iteration):        # iteration, shifting, random key, etc.
-    i=1; combined=combine(text,key)
+    i=1; start=timeit.default_timer()
+    combined=binshield(text,key)
+    stop=timeit.default_timer()
+    print "> Random punctuations... " +str(stop-start) +" seconds"
+    start=timeit.default_timer()
     p=pop(key,iteration); random.shuffle(p)
     rkey=combine(random.choice(p),key)
-    while i<iteration:
-        combined=combine(combined,key)
-        i+=1
+    stop=timeit.default_timer()
+    print "> Generating random key... " +str(stop-start) +" seconds"
+    if i<iteration:
+        start=timeit.default_timer()
+        while i<iteration:
+            combined=combine(combined,key)
+            i+=1
+        stop=timeit.default_timer()
+        print "> Iterating... " +str(stop-start) +" seconds"
+    start=timeit.default_timer()
     combined=combine(combined,rkey)
+    stop=timeit.default_timer()
+    print "> Using random key... " +str(stop-start) +" seconds"
     if combined==None:
         return None
+    start=timeit.default_timer()
     zombie=combined
     for i in key:
         zombie=shift(zombie,ord(i))
-    return ''.join(hexed(add(zombie,key)))
+    out=''.join(hexed(add(zombie,key)))
+    stop=timeit.default_timer()
+    print "> Shifting & Adding ASCII values... " +str(stop-start) +" seconds"
+    return out
 
 def dit(text,key,iteration):        # the whole eit() thing in reverse...
+    start=timeit.default_timer()
     zombie=sub(char(text),key)
     for i in key:
         zombie=shift(zombie,255-ord(i))
-    i=1; extracted=find(zombie,key,iteration)
+    stop=timeit.default_timer()
+    print "> Shifting back ASCII values... " +str(stop-start) +" seconds"
+    i=1; start=timeit.default_timer()
+    extracted=find(zombie,key,iteration)
+    stop=timeit.default_timer()
+    print "> Finding the random key... " +str(stop-start) +" seconds"
+    start=timeit.default_timer()
     while i<iteration:
         extracted=extract(extracted,key)
         i+=1
-    extracted=extract(extracted,key)
+    stop=timeit.default_timer()
+    print "> Reverse iterating... " +str(stop-start) +" seconds"
+    start=timeit.default_timer()
+    extracted=chaos(extracted,key)
+    stop=timeit.default_timer()
+    print "> Decoding hex & Getting back ASCII values... " +str(stop-start) +" seconds"
     if extracted==None: return None
     return extracted
 
@@ -255,10 +292,18 @@ def zombify():      # user interface
                 print "\n (sigh) You can choose something...\n"
                 what=raw_input("Encrypt (e) or Decrypt (d) ? ")
             if str(what)=='e':
+                print "\nENCRYPTING...\n"
+                start=timeit.default_timer()
                 out=eit(str(text),str(key),int(level))
+                stop=timeit.default_timer()
+                print "\nTOTAL TIME: " +str(stop-start) +" seconds"
                 print "\n"+str(out)+"\n"
             elif str(what)=='d': # While decrypting, (given the correct key) a lower iteration level can decrypt the data, but it can't get back to the message!
-                out=dit(str(text),str(key),int(level))
+                print "\nDECRYPTING...\n"
+                start=timeit.default_timer()
+                out=dit(str(text),str(key),int(level))                
+                stop=timeit.default_timer()
+                print "\nTOTAL TIME: " +str(stop-start) +" seconds"
                 if out==None:
                     print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
                 else: print "\nMESSAGE: "+str(out)+"\n"
