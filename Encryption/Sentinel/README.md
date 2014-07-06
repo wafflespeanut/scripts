@@ -11,6 +11,8 @@ How it works?
 
 - During encryption, hexing, sorting, addition, iteration (using given key and a random key), shifting, all kinds of things are done by the respective helper functions. During decryption, the reverse processes are carried out by char(), extract(), sub(), find(), dit() functions.
 
-- I've also added a few 'tries-catches' to print custom messages for possible causes of the errors, instead of the (ugly) errors themselves.
+- I've also added a few enhancements of my own, just to make it harder!
+
+- Some 'tries-catches' have been used to print custom messages for possible causes of the errors, instead of the (ugly) errors themselves.
 
 I know this isn't entirely intrusion-free. There could be a hole somewhere. But, whenever I come across one, I'll try to patch it ASAP...

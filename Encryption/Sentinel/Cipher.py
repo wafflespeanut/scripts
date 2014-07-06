@@ -117,18 +117,16 @@ def shift(text,shift):      # shifts the ASCII value of the chars
         return None
     return ''.join(new)
 
-def group(text):
-    dupe=''.join(set(ph)); availed=""
+def group(text): # records various positions of chars
+    dupe=''.join(set(text)); availed=""
     for i in dupe:
         availed+=i
-        for j in ph:
+        for j in text:
             if j==i: availed+='1'
             else: availed+='0'
         availed+='|'
-    return availed[:(len(availed)-1)]
-
-def zeros(text):
-    ph=group(text); l=len(text)+2; i=len(ph)-1; k=0
+    ph=availed[:(len(availed)-1)]
+    l=len(text)+2; i=len(ph)-1; k=0
     while i!=0:
         if ph[i]=='|' and ph[i-1]=='1': i-=l
         if ph[i]=='|' and ph[i-1]=='0':
@@ -138,35 +136,32 @@ def zeros(text):
         i-=1
     return ph
 
-def binlayer(text):
-    ph=text; i=0; k=0; punc1='!"#$%&\'()*+,-./'; punc2=':;<=>?@[\\]^_`{}~'
+def binshield(text): # adds punctuation to the text
+    ph=text; i=0; k=0; punc='!"#$%&\'()*+,-./';
     while k<len(ph):
         if ph[k]=='0':
             c=0
             while ph[k+c]=='0':
                 c+=1
                 if k+c >= len(ph): break
-            if(c>2): ph=ph[:k]+random.choice(punc1)+str(c)+random.choice(punc1)+ph[(c+k):]
+            if(c>2): ph=ph[:k]+random.choice(punc)+str(c)+random.choice(punc)+ph[(c+k):]
         k+=1
-    return ph
-
-def binshield(text):
-    ph=text; i=0; punc2=':;<=>?@[\\]^_`{}~'
+    i=0; punc=':;<=>?@[\\]^_`{}~'
     while i<len(ph):
         if ph[i]=='1':
             c=0
             while ph[i+c] in '01':
                 c+=1
                 if i+c >= len(ph): break
-            if c>1: ph=ph[:i]+random.choice(punc2)+str(int(ph[i:(i+c)],2))+random.choice(punc2)+ph[(c+i):]
+            if c>1: ph=ph[:i]+random.choice(punc)+str(int(ph[i:(i+c)],2))+random.choice(punc)+ph[(c+i):]
         i+=1
     return ph
 
-def remshield(text):
-    punc1='!"#$%&\'()*+,-./'; punc2=':;<=>?@[\\]^_`{}~'
+def remshield(text): # removes the random punctuations
+    punc=':;<=>?@[\\]^_`{}~'
     ph=""; i=0; num='0123456789'
     while i<len(text):
-        if text[i] not in punc2:
+        if text[i] not in punc:
             ph+=text[i]
         else:
             c=i+1
@@ -176,13 +171,9 @@ def remshield(text):
                 ph+=bin(int(text[(i+1):c]))[2:]
                 i+=(c-i)
         i+=1
-    return ph
-
-def remlayer(text):
-    punc1='!"#$%&\'()*+,-./'
-    ph=""; i=0; num='0123456789'
+    text=ph; ph=""; punc='!"#$%&\'()*+,-./'; i=0
     while i<len(text):
-        if text[i] not in punc1:
+        if text[i] not in punc:
             ph+=text[i]
         elif text[i]=='|':
             ph+=text[i]
@@ -197,23 +188,17 @@ def remlayer(text):
         i+=1
     return ph
 
-def chaos(text):
-    ph=""; i=0; t=0; c=0
-    while i<len(text):
-        while i<len(text) and text[i]!='|':
-           t+=1; i+=1
-        if t>=c:
-            c=t; t=0
-        else: t=0
-        i+=1
-    l=c; i=-1
-    ph=l*'0'
-    while i<len(text):
-        c=0; p=text[i]
-        while text[i]!='1':
-            c+=1; i+=1
-        if text[i]=='1':
-            ph=ph[:c]+p+ph[(c+1):]; i+=2
+def chaos(text): # returns back the original text from group()
+    t=0; li=text.split('|')
+    for i in li:
+        c=len(i)
+        if c>t: t=c
+    ph='0'*(t-1); i=0;
+    for i in li:
+        p=i[0]; j=0
+        while j<len(i):
+            if i[j]=='1': ph=ph[:(j-1)]+p+ph[j:]
+            j+=1
     return ph
 
 def eit(text,key,iteration):        # iteration, shifting, random key, etc.
