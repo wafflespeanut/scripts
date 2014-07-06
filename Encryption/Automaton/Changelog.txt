@@ -27,14 +27,15 @@ v1.4: Ranger [https://github.com/Wafflespeanut/Python/blob/49bfe59bb4baa753678e6
 - Functions: keypnum(), pop(), find(), slicing()
 
 v2.0: Sentinel
-[https://github.com/Wafflespeanut/Python/blob/master/Encryption/Sentinel/Cipher.py]
+[https://github.com/Wafflespeanut/Python/blob/581574ddd9c59cf0f45b933548aa2f2dc64203ae/Encryption/Sentinel/Cipher.py]
 - Changed the basis of random keys
 - Corrected some functions with improved algorithm
 - Alpha-numeric random keys
 - Simplified version available in Javascript
 - Functions: keypnum(), pop(), extract()
 
-v2.1: Automaton
+v2.1: Automaton (It's buggy!)
+[https://github.com/Wafflespeanut/Python/blob/master/Encryption/Automaton/Cipher.py]
 - Random punctuations are added
 - Variable (somewhat expanded) ciphertexts
 - Simplified version available in Javascript
