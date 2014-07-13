@@ -1,3 +1,5 @@
+import random
+
 def group(text):
     dupe=''.join(set(text)); availed=""
     for i in dupe:
@@ -13,7 +15,7 @@ def group(text):
             li[i]=li[i][:-1]
     return '|'.join(li)
 
-def binshield(text,key): # adds punctuation to the text
+def binshield(text): # adds punctuation to the text
     ph=group(text); i=0; k=0; punc='!"#$%&\'()*+,-./';
     while k<len(ph):
         if ph[k]=='0':
@@ -70,7 +72,7 @@ def pick(text,char): # a function to make life easier!
         if text[i]==char: pos.append(str(i))
     return pos
 
-def chaos(text,key): # returns back the original text from group()
+def chaos(text): # returns back the original text from group()
     t=0; li=remshield(text).split('|')
     for i in li:
         c=len(i)

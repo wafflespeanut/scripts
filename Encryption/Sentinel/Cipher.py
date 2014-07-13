@@ -120,23 +120,23 @@ def eit(text,key,iteration): # iteration, shifting, random key, etc.
     i=1; start=timeit.default_timer()
     combined=combine(text,key)
     stop=timeit.default_timer()
-    print "> Random punctuations... " +str(stop-start) +" seconds"
+    print "> Hexing & Adding ASCII values... " +str(round(stop-start,5)) +" seconds"
     start=timeit.default_timer()
     p=pop(key,iteration); random.shuffle(p)
     rkey=combine(random.choice(p),key)
     stop=timeit.default_timer()
-    print "> Generating random key... " +str(stop-start) +" seconds"
+    print "> Generating random key... " +str(round(stop-start,5)) +" seconds"
     if i<iteration:
         start=timeit.default_timer()
         while i<iteration:
             combined=combine(combined,key)
             i+=1
         stop=timeit.default_timer()
-        print "> Iterating... " +str(stop-start) +" seconds"
+        print "> Iterating... " +str(round(stop-start,5)) +" seconds"
     start=timeit.default_timer()
     combined=combine(combined,rkey)
     stop=timeit.default_timer()
-    print "> Using random key... " +str(stop-start) +" seconds"
+    print "> Using random key... " +str(round(stop-start,5)) +" seconds"
     if combined==None:
         return None
     start=timeit.default_timer()
@@ -145,7 +145,7 @@ def eit(text,key,iteration): # iteration, shifting, random key, etc.
         zombie=shift(zombie,ord(i))
     out=''.join(hexed(add(zombie,key)))
     stop=timeit.default_timer()
-    print "> Shifting & Adding ASCII values... " +str(stop-start) +" seconds"
+    print "> Shifting & Adding ASCII values... " +str(round(stop-start,5)) +" seconds"
     return out
 
 def dit(text,key,iteration): # the whole eit() thing in reverse...
@@ -154,21 +154,21 @@ def dit(text,key,iteration): # the whole eit() thing in reverse...
     for i in key:
         zombie=shift(zombie,255-ord(i))
     stop=timeit.default_timer()
-    print "> Shifting back ASCII values... " +str(stop-start) +" seconds"
+    print "> Shifting back ASCII values... " +str(round(stop-start,5)) +" seconds"
     i=1; start=timeit.default_timer()
     extracted=find(zombie,key,iteration)
     stop=timeit.default_timer()
-    print "> Finding the random key... " +str(stop-start) +" seconds"
+    print "> Finding the random key... " +str(round(stop-start,5)) +" seconds"
     start=timeit.default_timer()
     while i<iteration:
         extracted=extract(extracted,key)
         i+=1
     stop=timeit.default_timer()
-    print "> Reverse iterating... " +str(stop-start) +" seconds"
+    print "> Reverse iterating... " +str(round(stop-start,5)) +" seconds"
     start=timeit.default_timer()
     extracted=extract(extracted,key)
     stop=timeit.default_timer()
-    print "> Decoding hex & Getting back ASCII values... " +str(stop-start) +" seconds"
+    print "> Decoding hex & Getting back ASCII values... " +str(round(stop-start,5)) +" seconds"
     if extracted==None: return None
     return extracted
 
@@ -204,14 +204,14 @@ def zombify(): # user interface
                 start=timeit.default_timer()
                 out=eit(str(text),str(key),int(level))
                 stop=timeit.default_timer()
-                print "\nTOTAL TIME: " +str(stop-start) +" seconds"
+                print "\nTOTAL TIME: " +str(round(stop-start,5)) +" seconds"
                 print "\n"+str(out)+"\n"
             elif str(what)=='d': # While decrypting, (given the correct key) a lower iteration level can decrypt the data, but it can't get back to the message!
                 print "\nDECRYPTING...\n"
                 start=timeit.default_timer()
                 out=dit(str(text),str(key),int(level))
                 stop=timeit.default_timer()
-                print "\nTOTAL TIME: " +str(stop-start) +" seconds"
+                print "\nTOTAL TIME: " +str(round(stop-start,5)) +" seconds"
                 if out==None:
                     print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
                 else: print "\nMESSAGE: "+str(out)+"\n"
