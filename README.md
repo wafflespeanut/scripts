@@ -1,4 +1,4 @@
 Other
 =====
 
-Well, this is just a backup of my favorite PC tweaks...
+Well, these are my favorite PC tweaks... (which I often forget!)
