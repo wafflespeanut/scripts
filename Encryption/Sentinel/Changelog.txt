@@ -34,8 +34,8 @@ v2.0: Sentinel
 - Simplified version available in Javascript
 - Functions: keypnum(), pop(), extract()
 
-v2.1: Automaton (Still working...)
+v3.0: Automaton (Still working...)
 - Added timer
-- Random punctuations throw variable (gigantic!) ciphertexts
-- Suppressed iterations
-- Functions: binshield(), remshield(), group(), pick(), chaos()
+- Phrase and key is XORed - combine() is deprecated
+- Transposition of ciphertext (for confusion)
+- Functions: xor(), transpose()
