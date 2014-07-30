@@ -34,8 +34,8 @@ v2.0: Sentinel
 - Simplified version available in Javascript
 - Functions: keypnum(), pop(), extract()
 
-v3.0: Automaton (Still working...)
-- Added timer
-- Phrase and key is XORed - combine() is deprecated
-- Transposition of ciphertext (for confusion)
-- Functions: xor(), transpose()
+v2.1: Automaton
+- Added timer for each phase
+- Phrase and key is XORed (resulting in unknown characters)
+- Hexing during epilog is deprecated
+- Functions: binkill(), xor()

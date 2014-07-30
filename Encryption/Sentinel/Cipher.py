@@ -1,5 +1,4 @@
-import random
-import timeit
+import random, timeit, string
 
 def sieve(n): # sieve of Eratosthenes to generate primes
     sidekick=[False]*2+[True]*(n-1)
@@ -9,9 +8,35 @@ def sieve(n): # sieve of Eratosthenes to generate primes
                 sidekick[j] = False
     return [j for j,prime in enumerate(sidekick) if prime]
 
-def primelist(level): #throws the primes wanted for randomgen
+def primelist(level): # throws the primes wanted for randomgen
     k=2**(5+level)
     return sieve(k*k)
+
+def binkill(ch1,ch2): # returns binary for characters (reversible)
+    a=bin(ord(ch1))[2:]; b=bin(ord(ch2))[2:]; p=0; kill=""
+    if len(a)>len(b): b=(len(a)-len(b))*'0'+b
+    elif len(a)<len(b): a=(len(b)-len(a))*'0'+a
+    while p<len(a):
+        q=int(a[p])+int(b[p])
+        if q==2: kill+='0'
+        else: kill+=str(q)
+        p+=1
+    return chr(int(kill,2))
+
+def CXOR(phr,key): # quite useful for XOR'ing text & key (reversible)
+    i=0; j=0; make=""
+    while i<len(phr):
+        if i<len(key): make+=binkill(phr[i],key[j])
+        else:
+            j=0; make+=binkill(phr[i],key[j])
+        i+=1; j+=1
+    i=0; j=0
+    while i<len(key):
+        if i<len(phr): make=make[:j]+binkill(phr[j],key[i])+make[(j+1):]
+        else:
+            j=0; make=make[:j]+binkill(phr[j],key[i])+make[(j+1):]
+        i+=1; j+=1
+    return make
 
 def hexed(key): # hexing function
     pas=list(key)
@@ -106,7 +131,7 @@ def extract(text,key): # removes the key chars from the phrase
     except TypeError: return None
     return ''.join(newph)
 
-def shift(text,shift): # shifts the ASCII value of the chars
+def shift(text,shift): # shifts the ASCII value of the chars (reversible)
     try:
         new=[]; s=int(shift)
         for i,j in enumerate(text):
@@ -120,7 +145,7 @@ def eit(text,key,iteration): # iteration, shifting, random key, etc.
     i=1; start=timeit.default_timer()
     combined=combine(text,key)
     stop=timeit.default_timer()
-    print "> Hexing & Adding ASCII values... " +str(round(stop-start,5)) +" seconds"
+    print "> Adding Binary, ASCII, Hexing... " +str(round(stop-start,5)) +" seconds"
     start=timeit.default_timer()
     p=pop(key,iteration); random.shuffle(p)
     rkey=combine(random.choice(p),key)
@@ -140,21 +165,23 @@ def eit(text,key,iteration): # iteration, shifting, random key, etc.
     if combined==None:
         return None
     start=timeit.default_timer()
-    zombie=combined
+    zombie=combined; pas=''.join(hexed(key))
     for i in key:
         zombie=shift(zombie,ord(i))
-    out=''.join(hexed(add(zombie,key)))
+    out=add(zombie,key)
+    xor=CXOR(out,pas)
     stop=timeit.default_timer()
-    print "> Shifting & Adding ASCII values... " +str(round(stop-start,5)) +" seconds"
-    return out
+    print "> Shifting, Adding ASCII values, XOR'ing... " +str(round(stop-start,5)) +" seconds"
+    return ''.join(hexed(xor))
 
 def dit(text,key,iteration): # the whole eit() thing in reverse...
     start=timeit.default_timer()
-    zombie=sub(char(text),key)
+    pas=''.join(hexed(key)); xor=CXOR(char(text),pas)
+    zombie=sub(xor,key)
     for i in key:
         zombie=shift(zombie,255-ord(i))
     stop=timeit.default_timer()
-    print "> Shifting back ASCII values... " +str(round(stop-start,5)) +" seconds"
+    print "> XOR'ing, Shifting, Getting back ASCII values... " +str(round(stop-start,5)) +" seconds"
     i=1; start=timeit.default_timer()
     extracted=find(zombie,key,iteration)
     stop=timeit.default_timer()
@@ -189,7 +216,7 @@ def zombify(): # user interface
                     print "\n No, Seriously? Password of unit length? Try something better...\n"
                     key=raw_input("Choose a password: ")
             level=raw_input("Security level (1-5, for fast output): ")
-            while str(level) not in "012345":
+            while str(level) not in "12345":
                 print "\n Enter a number ranging from 1-5\n"
                 level=raw_input("Security level (1-5): ")
             if str(level)=="":
