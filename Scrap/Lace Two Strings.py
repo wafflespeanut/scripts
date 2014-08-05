@@ -1,6 +1,5 @@
 def lace(s1, s2):
-    m=""
-    i=0
+    m=""; i=0
     j=min(len(s1),len(s2))
     k=max(len(s1),len(s2))
     while i<j:

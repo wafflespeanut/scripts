@@ -1,10 +1,7 @@
 import math
 
-g=9.80665
-R=287
-a01=-0.0065
-a23=0.001
-a34=0.0028
+g=9.80665; R=287
+a01=-0.0065; a23=0.001; a34=0.0028
 
 def temp(t,a,hmin,hmax):
     return t+a*(hmax-hmin)
@@ -37,9 +34,7 @@ d3=dens(d2,t3,t2,a23)
 alt=float(raw_input("Altitude (meters): "))
 
 if alt==0:
-    te=t0
-    pr=p0
-    de=d0
+    te=t0; pr=p0; de=d0
     
 elif alt>0 and alt<=11000:
     te=temp(t0,a01,0,alt)

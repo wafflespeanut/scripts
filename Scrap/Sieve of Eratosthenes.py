@@ -1,8 +1,7 @@
 import timeit
 
 def exhausted(n):
-    sidekick=[]
-    primes=[]
+    sidekick=[]; primes=[]
     for i in range(2,n+1):
         for j in range(2,n+1):
             sidekick.append(i*j)
@@ -10,8 +9,7 @@ def exhausted(n):
             primes.append(i)
 
 def listlook(n):
-    sidekick=[]
-    primes=[]
+    sidekick=[]; primes=[]
     for i in range(2,n+1):
         if i not in sidekick:
             primes.append(i)
@@ -26,16 +24,16 @@ def arraylook(n):
     return [j for j,prime in enumerate(sidekick) if prime]
 
 start=timeit.default_timer()
-arraylook(1200)
+arraylook(1000)
 stop=timeit.default_timer()
 print "Array-looking took " +str(stop-start) +" seconds"
 
 start=timeit.default_timer()
-listlook(1200)
+listlook(1000)
 stop=timeit.default_timer()
 print "List-looking took " +str(stop-start) +" seconds"
 
 start=timeit.default_timer()
-exhausted(1200)
+exhausted(1000)
 stop=timeit.default_timer()
 print "Brute-force took " +str(stop-start)+ " seconds"
