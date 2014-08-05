@@ -7,6 +7,7 @@ def exhausted(n):
             sidekick.append(i*j)
         if i not in sidekick:
             primes.append(i)
+    return primes
 
 def listlook(n):
     sidekick=[]; primes=[]
@@ -14,6 +15,7 @@ def listlook(n):
         if i not in sidekick:
             primes.append(i)
             sidekick.extend(range(i*i,n+1,i))
+    return primes
 
 def arraylook(n):
     sidekick=[False]*2+[True]*(n-1)
