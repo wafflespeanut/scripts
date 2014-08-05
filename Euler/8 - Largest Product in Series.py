@@ -3,10 +3,10 @@ maxi=1; temp=1; final=""
 
 for i in range(len(num)):
     store=""; temp=1; j=i
-    while j<i+13 and (i+j)<=len(num):
+    while j<i+10 and (i+j)<=len(num):
         temp*=int(num[j])
         store+=num[j]; j+=1
     if temp>maxi:
         maxi=temp; final=store
 
-print "The largest product is " +str(maxi) +" obtained from the 13 consecutive integers " +final
+print "The largest product is " +str(maxi) +" obtained from the 10 consecutive integers " +final
