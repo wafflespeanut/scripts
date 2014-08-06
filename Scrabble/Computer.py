@@ -1,17 +1,14 @@
 from User import *
 
-def compChooseWord(hand, wordList, n):
-    maxi=0
-    best=""
+def compChooseWord(hand,wordList,n):
+    maxi=0; best=""
     for word in wordList:
         if isValidWord(word,hand,wordList) and getWordScore(word, n)>maxi:
-            best=word
-            maxi=getWordScore(word,n)
+            best=word; maxi=getWordScore(word,n)
     return best
 
 def compPlayHand(hand, wordList, n):
-    total=0
-    word=""
+    total=0; word=""
     while (len(str(dispHand(hand)))>1):
         print "Current hand: " +dispHand(hand)
         word=compChooseWord(hand,wordList,n)
@@ -23,8 +20,7 @@ def compPlayHand(hand, wordList, n):
     print "Total score: " +str(total) +" points"
     
 def playBoth(wordList):
-    r=0
-    s=''
+    r=0; s=''
     while s!='e':
         s=raw_input("Enter n to deal a new hand, r to replay the last hand, or e to end game: ")    
         if s=='r' and r==0:
@@ -46,16 +42,14 @@ def playBoth(wordList):
                 hand=dealHand(HAND_SIZE)
                 handcopy=hand.copy()
                 playHand(hand,wordList,HAND_SIZE)
-                r=1
-                break
+                r=1; break
             elif pmt=='c':
                 hand=dealHand(HAND_SIZE)
                 handcopy=hand.copy()
                 compPlayHand(hand, wordList, HAND_SIZE)
-                r=1
-                break
+                r=1; break
             elif (pmt!='c' and pmt!='u'): print "Invalid command.\n"
         if (s!='e' and s!='n' and s!='r'): print "Invalid command.\n"
                 
-wordList = loadWords()
+wordList=loadWords()
 playBoth(wordList)
