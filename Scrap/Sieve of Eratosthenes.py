@@ -22,20 +22,20 @@ def arraylook(n):
     for i in range(int(n**0.5)+1):
         if sidekick[i]:
             for j in range(i*i,n+1,i):
-                sidekick[j] = False
+                sidekick[j]=False
     return [j for j,prime in enumerate(sidekick) if prime]
 
 start=timeit.default_timer()
-arraylook(1000)
+arraylook(10000)
 stop=timeit.default_timer()
 print "Array-looking took " +str(stop-start) +" seconds"
 
 start=timeit.default_timer()
-listlook(1000)
+listlook(10000)
 stop=timeit.default_timer()
 print "List-looking took " +str(stop-start) +" seconds"
 
 start=timeit.default_timer()
-exhausted(1000)
+exhausted(10000)
 stop=timeit.default_timer()
 print "Brute-force took " +str(stop-start)+ " seconds"
