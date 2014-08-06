@@ -1,14 +1,9 @@
-a=[]; i=100; j=100; final=[]
+a=[]; i=999; j=100; final=[]
 
-while i<=999:
+while i>=100:
     while j<=999:
-        a.append(str(i*j)); j+=1
-    i+=1; j=100
+        t=str(i*j); j+=1
+        if t==t[::-1]: a.append(int(t))
+    i-=1; j=100
 
-for i in a:
-    s=""
-    for j in i:
-        s=j+s
-    if s==i: final.append(int(i))
-
-print "The largest palindrome of product of two 3-digit numbers:" +max(final)
+print "The largest palindrome of the product of two 3-digit numbers: " +str(max(a))

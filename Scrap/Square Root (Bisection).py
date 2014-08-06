@@ -7,7 +7,7 @@ while abs(ans**2-x)>=epsilon:
     guessed+=1
     if ans**2<x: low=round(ans,4)
     else: high=round(ans,4)
-    ans=(high + low)/2.0
+    ans=(high+low)/2.0
 
 print "\nGuessed " +str(guessed)+ " times"
 print str(round(ans,4))+ " is close to the square root of " +str(x)

@@ -16,4 +16,4 @@ while i>=0:
     t=int(str(c+t)[:-1])
     i-=1
 
-print "The first 10 digits of the crazy sum is " + s[:10]
+print "The first 10 digits of the crazy sum (hundred 50-digit numbers) is " + s[:10]

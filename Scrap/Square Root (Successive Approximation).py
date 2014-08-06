@@ -1,6 +1,11 @@
-def sqrt1(a):
+def tr(int):
+    def test(x):
+        return 0.5*((int/x)+x)
+    return test
+
+def sqrtm1(int):
     def tr(x):
-        return 0.5*((a/x)+x)
+        return 0.5*((int/x)+x)
     def fixedPoint(f,epsilon):
         guess=1.0
         for i in range(100):
@@ -9,16 +14,11 @@ def sqrt1(a):
         return guess
     return fixedPoint(tr, 0.0001)
 
-def tr(a):
-    def test(x):
-        return 0.5*((a/x)+x)
-    return test
-
-def sqrt2(a):
+def sqrtm2(int):
     def fixedPoint(f,epsilon):
         guess=1.0
         for i in range(100):
             if abs(f(guess)-guess)<epsilon: return guess
             else: guess=f(guess)
         return guess
-    return fixedPoint(tr(a),0.0001)
+    return fixedPoint(tr(int),0.0001)
