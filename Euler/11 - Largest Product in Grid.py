@@ -1,4 +1,4 @@
-# Grid used in the problem
+# 20x20 Grid used in the problem
 
 ##    08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
 ##    49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00
@@ -53,7 +53,7 @@ def gridTrans(grid):
         push.append(' '.join(s))
     return checkSide(push)
 
-def leftDiagonal(grid,k):
+def leftDiagonal(grid,k):   # Cheated a little bit here...
     i=0; s=0; t=0; get=[]
     while i<len(grid[0].split(' ')):
         get.append(grid[i].split(' ')); i+=1
