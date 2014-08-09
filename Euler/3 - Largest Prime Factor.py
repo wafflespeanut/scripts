@@ -1,12 +1,6 @@
-n=600851475143
+execfile("7 - 10001st Prime.py")
 
-def sieve(n):
-    sidekick=[0]*2+[1]*(n-1)
-    for i in range(int(n**0.5)+1):
-        if sidekick[i]:
-            for j in range(i*i,n+1,i):
-                sidekick[j]=0
-    return [j for j,p in enumerate(sidekick) if p]
+n=600851475143
 
 def evaluate(num):
     plist=sieve(100000); n=num; div=[] # just a stupid guess!
