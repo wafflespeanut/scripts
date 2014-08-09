@@ -1,5 +1,3 @@
-execfile("7 - 10001st Prime.py")
-
 def gcd(n1,n2): # Thanks to Euclid!
     t=0; a=n1; b=n2
     while b!=0:

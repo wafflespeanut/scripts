@@ -6,4 +6,4 @@ for i in range(334):
 for i in list(set(a)):
     s+=i
 
-# print '''The sum of multiples of 3 "or" 5 is ''' +str(s)
+# print '''The sum of multiples of 3 "or" 5 below 1000: ''' +str(s)
