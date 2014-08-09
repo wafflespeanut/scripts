@@ -6,4 +6,4 @@ while i>=100:
         if t==t[::-1]: a.append(int(t))
     i-=1; j=100
 
-print "The largest palindrome of the product of two 3-digit numbers: " +str(max(a))
+# print "The largest palindrome of the product of two 3-digit numbers: " +str(max(a))

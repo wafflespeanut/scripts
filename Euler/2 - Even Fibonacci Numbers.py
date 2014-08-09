@@ -5,4 +5,4 @@ while c<4000000:
     i=j; j=c
     if c%2==0: s+=c
 
-print "The sum of all even Fibonacci numbers upto 4 milion: " + str(s)
+# print "The sum of all even Fibonacci numbers upto 4 milion: " + str(s)

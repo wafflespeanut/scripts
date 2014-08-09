@@ -6,4 +6,4 @@ def sieve(n):
                 sidekick[j]=0
     return [j for j,p in enumerate(sidekick) if p]
 
-print "10001st prime: " +str(sieve(1000000)[10000])
+# print "10001st prime: " +str(sieve(1000000)[10000])

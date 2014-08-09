@@ -27,8 +27,6 @@ def getGrid():
     a.append(str(t))
     return ''.join(a).split('\n')
 
-grid=getGrid()
-
 def checkSide(grid):
     i=0; s=0; t=0
     while i<len(grid):
@@ -71,5 +69,6 @@ def leftDiagonal(grid,k):
         fin.append(' '.join(s))
     return checkSide(fin)
 
-final=max(checkSide(grid),gridTrans(grid),leftDiagonal(grid,4))
-print "The greatest product of four adjacent numbers in the same direction (vertical, horizontal & diagonal) is " +str(final)
+# grid=getGrid()
+# final=max(checkSide(grid),gridTrans(grid),leftDiagonal(grid,4))
+# print "The greatest product of four adjacent numbers in the same direction (vertical, horizontal & diagonal) is " +str(final)

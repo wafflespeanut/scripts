@@ -9,4 +9,4 @@ for i in range(len(num)):
     if temp>maxi:
         maxi=temp; final=store
 
-print "The largest product is " +str(maxi) +" obtained from 10 consecutive integers " +final
+# print "The largest product is " +str(maxi) +" obtained from 10 consecutive integers " +final
