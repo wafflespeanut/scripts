@@ -1,12 +1,12 @@
 import random, timeit, string
 
 def sieve(n): # sieve of Eratosthenes to generate primes
-    sidekick=[False]*2+[True]*(n-1)
+    sidekick=[0]*2+[1]*(n-1)
     for i in range(int(n**0.5)+1):
         if sidekick[i]:
             for j in range(i*i,n+1,i):
-                sidekick[j]=False
-    return [j for j,prime in enumerate(sidekick) if prime]
+                sidekick[j]=0
+    return [j for j,p in enumerate(sidekick) if p]
 
 def primelist(level): # throws the primes wanted for randomgen
     k=2**(5+level)
