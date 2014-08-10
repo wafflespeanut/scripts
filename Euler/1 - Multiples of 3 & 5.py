@@ -1,9 +1,9 @@
-a=[]; s=0
-for i in range(334):
-    if 3*i<1000: a+=[3*i]
-    if 5*i<1000: a+=[5*i]
+a=[]; s=0; n1=3; n2=5; r=1000
+for i in range(r/n1+1):
+    if n1*i<r: a+=[n1*i]
+    if n2*i<r: a+=[n2*i]
 
 for i in list(set(a)):
     s+=i
 
-# print '''The sum of multiples of 3 "or" 5 below 1000: ''' +str(s)
+# print 'The sum of multiples of ' +str(n1)+ ' "or" ' +str(n2)+ ' below ' +str(r)+ ': ' +str(s)
