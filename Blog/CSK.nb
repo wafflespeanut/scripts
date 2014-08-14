@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      2297,         77]
-NotebookOptionsPosition[      2033,         63]
-NotebookOutlinePosition[      2399,         79]
-CellTagsIndexPosition[      2356,         76]
+NotebookDataLength[      2736,         85]
+NotebookOptionsPosition[      2472,         71]
+NotebookOutlinePosition[      2838,         87]
+CellTagsIndexPosition[      2795,         84]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -50,19 +50,27 @@ Cell[BoxData[
    RowBox[{"FillingStyle", "\[Rule]", 
     RowBox[{"Directive", "[", 
      RowBox[{"Blue", ",", 
-      RowBox[{"Opacity", "[", "0.7", "]"}]}], "]"}]}], ",", 
+      RowBox[{"Opacity", "[", "0.8", "]"}]}], "]"}]}], ",", 
    RowBox[{"PlotStyle", "\[Rule]", 
     RowBox[{"Directive", "[", 
      RowBox[{
-      RowBox[{"PointSize", "[", "Medium", "]"}], ",", "Red"}], "]"}]}]}], 
-  "]"}]], "Input",
+      RowBox[{"PointSize", "[", "0.009", "]"}], ",", "Red"}], "]"}]}], ",", 
+   RowBox[{"ImageSize", "\[Rule]", "700"}], ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<Time (min)\>\"", ",", "\"\<N\>\""}], "}"}]}], ",", 
+   RowBox[{"AxesStyle", "\[Rule]", 
+    RowBox[{"Directive", "[", 
+     RowBox[{"Black", ",", "17"}], "]"}]}]}], "]"}]], "Input",
  CellChangeTimes->{{3.6169885623428974`*^9, 3.6169886754664755`*^9}, {
   3.61698870657885*^9, 3.616988714621565*^9}, {3.616988759039149*^9, 
   3.6169888425851545`*^9}, {3.6169890504279537`*^9, 3.6169890785978575`*^9}, {
-  3.6169892255429325`*^9, 3.6169892598504734`*^9}}]
+  3.6169892255429325`*^9, 3.6169892598504734`*^9}, {3.6169894457385707`*^9, 
+  3.6169894488758297`*^9}, {3.616989550889411*^9, 3.616989625147772*^9}, {
+  3.6169896616711493`*^9, 3.6169897190049453`*^9}}]
 },
-WindowSize->{665, 472},
-WindowMargins->{{304, Automatic}, {Automatic, 74}},
+WindowSize->{848, 548},
+WindowMargins->{{133, Automatic}, {37, Automatic}},
 ShowSelection->True,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
@@ -78,7 +86,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 1472, 41, 92, "Input"]
+Cell[557, 20, 1911, 49, 92, "Input"]
 }
 ]
 *)
