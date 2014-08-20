@@ -14,5 +14,5 @@ def longest(n):
         i+=1
     return t
 
-# n=1000000; l=longest(n)
-# print "The longest chain in Collatz sequence is produced by " +str(l[0])+ " - " +str(l[1])+ " chains!"
+n=1000000; l=longest(n)
+print "The longest chain in Collatz sequence is produced by " +str(l[0])+ " - " +str(l[1])+ " chains!"

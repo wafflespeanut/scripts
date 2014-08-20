@@ -10,4 +10,4 @@ def squareSum(n):
         temp+=i
     return temp**2
 
-# print "The difference between sum of squares and square of sums of first 100 natural numbers: " +str(squareSum(100)-sumSquare(100))
+print "The difference between sum of squares and square of sums of first 100 natural numbers: " +str(squareSum(100)-sumSquare(100))

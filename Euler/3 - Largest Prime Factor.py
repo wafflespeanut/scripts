@@ -9,4 +9,4 @@ def evaluate(num):
             div.append(i)
     return max(div)
 
-# print "The largest prime factor of " +str(n)+ " is: " +str(evaluate(n))
+print "The largest prime factor of " +str(n)+ " is: " +str(evaluate(n))

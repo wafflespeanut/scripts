@@ -12,5 +12,5 @@ def match(r,n):
         if i[0]+i[1]+i[2]==n:
             return i
 
-# exhaust=match(500,1000)
-# print "The special Pythagorean triplet is " +str(exhaust)+ " whose product is " +str(exhaust[0]*exhaust[1]*exhaust[2])
+exhaust=match(500,1000)
+print "The special Pythagorean triplet is " +str(exhaust)+ " whose product is " +str(exhaust[0]*exhaust[1]*exhaust[2])
