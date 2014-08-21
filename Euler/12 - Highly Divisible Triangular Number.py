@@ -14,6 +14,4 @@ def find(n):
         if f>=n: print("No: %i\tFactors: %s")%(t,f); break
         i+=1
 
-n=500
-print "The first triangle number to have over " +str(n)+ " divisors..."
-find(n)
+#n=500; print "The first triangle number to have over " +str(n)+ " divisors..."; find(n)

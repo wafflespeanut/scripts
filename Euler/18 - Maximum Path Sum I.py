@@ -4,8 +4,6 @@ def getTri():
     for i in t: new.append(i.split(' '))
     return new
 
-get=getTri()
-
 def compare(big,small):
     eff=[]; t=[]
     for i in range(len(small)):
@@ -23,10 +21,11 @@ def formInt(get):
     return new
 
 def find():
+    get=getTri()
     Tri=formInt(get); i=len(Tri)-1
     while i>0:
         temp=compare(Tri[i],Tri[i-1])
         Tri[i-1]=temp; i-=1; Tri=Tri[:-1]
     return Tri
 
-print "The maximum total from top to bottom of the triangle is " +str(find()[0][0])
+#print "The maximum total from top to bottom of the triangle is " +str(find()[0][0])

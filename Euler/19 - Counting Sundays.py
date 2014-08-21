@@ -17,5 +17,4 @@ def days(initial,lo,up):
     a+=[c,k]
     return a
 
-day=days(sunday,1901,2000)
-print "Number of Sundays on the first month of 20th century: " +str(day[0])+ " out of " +str(day[1])+ " Sundays"
+#day=days(sunday,1901,2000); print "Number of Sundays on the first month of 20th century: " +str(day[0])+ " out of " +str(day[1])+ " Sundays"

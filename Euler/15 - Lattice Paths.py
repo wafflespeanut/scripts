@@ -5,4 +5,4 @@ def fact(n):
 
 def bino(m,n): return fact(m)/(fact(m-n)*fact(n))
 
-n=20; print "There are " +str(bino(n*2,n))+ " routes through a " +str(n)+"x"+str(n)+ " grid!"
+#n=20; print "There are " +str(bino(n*2,n))+ " routes through a " +str(n)+"x"+str(n)+ " grid!"

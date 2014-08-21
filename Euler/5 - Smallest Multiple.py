@@ -13,5 +13,5 @@ def LCM(array):
         done=lcm(done,i)
     return done
 
-n=20; li=[i for i in range(1,n+1)]
-print "The smallest number that's evenly divisible by first " +str(n)+ " numbers is: " +str(LCM(li))
+#n=20; li=[i for i in range(1,n+1)]
+#print "The smallest number that's evenly divisible by first " +str(n)+ " numbers is: " +str(LCM(li))
