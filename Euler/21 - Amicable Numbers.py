@@ -10,7 +10,7 @@ def amicables(n):
     coll=[]; s=0
     for i in range(2,n):
         a=d(i)
-        if i==d(a): coll.append(a)
+        if i==d(a) and i!=a: coll.append(a)
     for i in coll: s+=i
     return s
 
