@@ -1,11 +1,11 @@
 import random
 import string
 
-WORDLIST_FILENAME="Words.txt"
+WORDLIST="Words.txt"
 
 def loadWords():
     print "Loading words from the list..."
-    inFile=open(WORDLIST_FILENAME,'r',0)
+    inFile=open(WORDLIST,'r',0)
     line=inFile.readline()
     wordlist=string.split(line)
     print len(wordlist),"words loaded."
