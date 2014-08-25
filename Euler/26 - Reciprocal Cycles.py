@@ -4,7 +4,8 @@ def primes(n): return [3]+sieve(n)[3:]
 
 def recur(i):
     for k in range(1,i):
-        if 1==10**k %i: return k
+        m=(10**k)%i         # Works only for primes
+        if m==1: return k
     return 0
 
 def maxreci(r):
