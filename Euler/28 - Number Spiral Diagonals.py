@@ -8,5 +8,4 @@ def spiral(n):
         c+=1
     return diag
 
-n=1001; s=spiral(n)            
-print "The sum of diagonal numbers in a " +str(n)+ " by " +str(n)+ " spiral is: " +str(s)
+#n=1001; s=spiral(n); print "The sum of diagonal numbers in a " +str(n)+ " by " +str(n)+ " spiral is: " +str(s)
