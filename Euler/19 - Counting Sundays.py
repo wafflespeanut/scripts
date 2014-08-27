@@ -1,5 +1,5 @@
 months={1:31,2:28,3:31,4:30,5:31,6:30,7:31,8:31,9:30,10:31,11:30,12:31}
-sunday=6 # First Sunday is on 6th January 1901
+sun=6 # First Sunday is on 6th January 1901
 
 def days(initial,lo,up):
     c=0; d=initial; k=0; a=[]
@@ -17,4 +17,4 @@ def days(initial,lo,up):
     a+=[c,k]
     return a
 
-#day=days(sunday,1901,2000); print "Number of Sundays on the first month of 20th century: " +str(day[0])+ " out of " +str(day[1])+ " Sundays"
+#day=days(sun,1901,2000); print "Number of Sundays on the first month of 20th century: " +str(day[0])+ " out of " +str(day[1])+ " Sundays"

@@ -1,15 +1,8 @@
-def find(r): # Exhausted way to solve the problem...
-    a=[]
-    for i in range(1,r+1):
-        for j in range(1,r+1):
-            for k in range(1,r+1):
-                if i**2+j**2==k**2: a.append([i,j,k])
-    return a
+def find(n):
+    a=0; p=set()
+    for b in range(1,n/2):
+        a=(n*n/2-n*b)/(n-b); c=n-a-b
+        if a**2+b**2==c**2: p.update([a,b,n-a-b])
+    return list(p)
 
-def match(r,n):
-    a=find(r)
-    for i in a:
-        if i[0]+i[1]+i[2]==n:
-            return i
-
-#exhaust=match(500,1000); print "The special Pythagorean triplet is " +str(exhaust)+ " whose product is: " +str(exhaust[0]*exhaust[1]*exhaust[2])
+#n=1000; p=find(n); print "The special Pythagorean triplet is " +str(p)+ " whose product is: " +str(p[0]*p[1]*p[2])

@@ -16,7 +16,7 @@ def absum(ablist,n):
     return False
 
 def nonabsum():
-    ablist=set(abuns()); s=0 # Try running without set()
+    ablist=set(abuns()); s=0    # set() has a nice structure compared to list
     nonab=[i for i in range(1,limit+1) if not absum(ablist,i)]
     for i in nonab: s+=i
     return s
