@@ -4,13 +4,11 @@ def sieve(n): # sieve of Eratosthenes to generate primes
     sidekick=[0]*2+[1]*(n-1)
     for i in range(int(n**0.5)+1):
         if sidekick[i]:
-            for j in range(i*i,n+1,i):
-                sidekick[j]=0
+            for j in range(i*i,n+1,i): sidekick[j]=0
     return [j for j,p in enumerate(sidekick) if p]
 
 def primelist(level): # throws the primes wanted for randomgen
-    k=2**(5+level)
-    return sieve(k*k)
+    k=2**(5+level); return sieve(k*k)
 
 def binkill(ch1,ch2): # returns binary for characters (reversible)
     a=bin(ord(ch1))[2:]; b=bin(ord(ch2))[2:]; p=0; kill=""
@@ -27,62 +25,47 @@ def CXOR(phr,key): # quite useful for XOR'ing text & key (reversible)
     i=0; j=0; make=""
     while i<len(phr):
         if i<len(key): make+=binkill(phr[i],key[j])
-        else:
-            j=0; make+=binkill(phr[i],key[j])
+        else: j=0; make+=binkill(phr[i],key[j])
         i+=1; j+=1
     i=0; j=0
     while i<len(key):
         if i<len(phr): make=make[:j]+binkill(phr[j],key[i])+make[(j+1):]
-        else:
-            j=0; make=make[:j]+binkill(phr[j],key[i])+make[(j+1):]
+        else: j=0; make=make[:j]+binkill(phr[j],key[i])+make[(j+1):]
         i+=1; j+=1
     return make
 
 def hexed(key): # hexing function
     pas=list(key)
-    for i,j in enumerate(pas):
-        pas[i]=format(ord(pas[i]),'02x')
+    for i,j in enumerate(pas): pas[i]=format(ord(pas[i]),'02x')
     return pas
 
 def add(text,key): # adds the ASCII values of key and phrase chars
     hand=list(''.join(text));give=list(key);
     num=list("0123456789"); i=len(key)-1
     for a,b in enumerate(hand):
-        if i>0 and b in num:
-            hand[a]=str(int(b)+ord(give[i]))[-1]
-            i-=1
-        elif i==0 and b in num:
-            i=len(key)-1
-            hand[a]=str(int(b)+ord(give[i]))[-1]
-            i-=1
+        if i>0 and b in num: hand[a]=str(int(b)+ord(give[i]))[-1]; i-=1
+        elif i==0 and b in num: i=len(key)-1; hand[a]=str(int(b)+ord(give[i]))[-1]; i-=1
     return ''.join(hand)
 
 def keypnum(key,level): # generates primes based on the key-chars' ASCII values
     primes=[]; plist=primelist(level/2)
-    for i in key:
-        primes+=[str(plist[ord(i)])]
+    for i in key: primes+=[str(plist[ord(i)])]
     for n in range(level):
         temp=[]; temp+=''.join(primes)
-        for i,j in enumerate(temp):
-            primes+=[str(plist[int(j)])]
+        for i,j in enumerate(temp): primes+=[str(plist[int(j)])]
     return ''.join(primes)
 
 def pop(key,level): # confuses & constrains the sliced list to 8-chars
     merged=[]; p=keypnum(key,level)
-    while len(p)>=8:
-        merged.append(p[0:8])
-        p=p[8:]
+    while len(p)>=8: merged.append(p[0:8]); p=p[8:]
     return list(set(merged))
 
 def combine(text,key): # dissolves key chars into the phrase
     try:
-        pas=hexed(key); phrase=hexed(text)
-        primes=sieve(len(key)**2)
-        i=0; ph=len(phrase);
+        pas=hexed(key); phrase=hexed(text); primes=sieve(len(key)**2); i=0; ph=len(phrase)
         for j in pas:
             if primes[i]<len(phrase):
-                phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]
-                i+=1
+                phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]; i+=1
             else: break
     except IndexError: return None
     phr=add(phrase,key)
@@ -97,16 +80,13 @@ def char(key): # hex-decoding function
 
 def sub(text,key): # gets the key and phrase chars back!
     try:
-        hand=list(''.join(text)); give=list(key);
-        num=list("0123456789"); i=len(key)-1
+        hand=list(''.join(text)); give=list(key); num=list("0123456789"); i=len(key)-1
         for a,b in enumerate(hand): # executes from the last char
             if i>0 and b in num:
-                hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
-                i-=1
+                hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]; i-=1
             elif i==0 and b in num:
                 i=len(key)-1
-                hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]
-                i-=1
+                hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]; i-=1
         out=''.join(hand)
     except TypeError: return None
     return out
@@ -115,19 +95,15 @@ def find(text,key,level): # finds the random key used during encryption
     listed=pop(key,level)
     for i,j in enumerate(listed):
         rkey=combine(j,key)
-        if extract(extract(text,rkey),key)!=None:
-            return extract(text,rkey)
+        if extract(extract(text,rkey),key)!=None: return extract(text,rkey)
         else: continue
     return None
 
 def extract(text,key): # removes the key chars from the phrase
     try:
-        phrase=char(sub(text,key));
-        primes=sieve(len(key)**2)
-        ph=len(phrase); newph=""
+        phrase=char(sub(text,key)); primes=sieve(len(key)**2); ph=len(phrase); newph=""
         for i in range(ph):
-            if i not in primes[:len(key)]:
-                newph+=phrase[i]
+            if i not in primes[:len(key)]: newph+=phrase[i]
     except TypeError: return None
     return ''.join(newph)
 
@@ -147,15 +123,12 @@ def eit(text,key,iteration): # iteration, shifting, random key, etc.
     stop=timeit.default_timer()
     print "> Adding Binary, ASCII, Hexing... " +str(round(stop-start,5)) +" seconds"
     start=timeit.default_timer()
-    p=pop(key,iteration); random.shuffle(p)
-    rkey=combine(random.choice(p),key)
+    p=pop(key,iteration); random.shuffle(p); rkey=combine(random.choice(p),key)
     stop=timeit.default_timer()
     print "> Generating random key... " +str(round(stop-start,5)) +" seconds"
     if i<iteration:
         start=timeit.default_timer()
-        while i<iteration:
-            combined=combine(combined,key)
-            i+=1
+        while i<iteration: combined=combine(combined,key); i+=1
         stop=timeit.default_timer()
         print "> Iterating... " +str(round(stop-start,5)) +" seconds"
     start=timeit.default_timer()
@@ -168,16 +141,14 @@ def eit(text,key,iteration): # iteration, shifting, random key, etc.
     zombie=combined; pas=''.join(hexed(key))
     for i in key:
         zombie=shift(zombie,ord(i))
-    out=add(zombie,key)
-    xor=CXOR(out,pas)
+    out=add(zombie,key); xor=CXOR(out,pas)
     stop=timeit.default_timer()
     print "> Shifting, Adding ASCII values, XOR'ing... " +str(round(stop-start,5)) +" seconds"
     return ''.join(hexed(xor))
 
 def dit(text,key,iteration): # the whole eit() thing in reverse...
     start=timeit.default_timer()
-    pas=''.join(hexed(key)); xor=CXOR(char(text),pas)
-    zombie=sub(xor,key)
+    pas=''.join(hexed(key)); xor=CXOR(char(text),pas); zombie=sub(xor,key)
     for i in key:
         zombie=shift(zombie,255-ord(i))
     stop=timeit.default_timer()
@@ -187,9 +158,7 @@ def dit(text,key,iteration): # the whole eit() thing in reverse...
     stop=timeit.default_timer()
     print "> Finding the random key... " +str(round(stop-start,5)) +" seconds"
     start=timeit.default_timer()
-    while i<iteration:
-        extracted=extract(extracted,key)
-        i+=1
+    while i<iteration: extracted=extract(extracted,key); i+=1
     stop=timeit.default_timer()
     print "> Reverse iterating... " +str(round(stop-start,5)) +" seconds"
     start=timeit.default_timer()

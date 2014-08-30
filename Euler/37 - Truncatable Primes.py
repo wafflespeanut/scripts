@@ -26,4 +26,4 @@ def tprimes(r):
             if check(m): f.update([i])
     return list(sorted(f))[4:]
 
-r=999999; s=sum(tprimes(r)); print "The sum of all 11 truncatable primes is: " +str(s)
+#r=999999; s=sum(tprimes(r)); print "The sum of all 11 truncatable primes is: " +str(s)
