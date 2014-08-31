@@ -1,11 +1,9 @@
-NAMES="NAMES.txt"
-
-def load():
+def load(stuff):
     print "Loading names from file..."
-    File=open(NAMES,'r',0); List=""
+    File=open(stuff,'r',0); List=""
     for i in File: List+=i
     List=(''.join(List.split('"'))).split(',')
-    print "  ",len(List),"names loaded.\n"
+    print "  ",len(List),"words loaded.\n"
     return sorted(List)
 
 def scores(names):
@@ -16,4 +14,4 @@ def scores(names):
         score+=wsc*(i+1); i+=1
     return score
 
-#names=load(); print "The total of all name scores in the file is: " +str(scores(names))
+#names=load("NAMES.txt"); print "The total of all name scores in the text file is: " +str(scores(names))
