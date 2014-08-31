@@ -1,6 +1,6 @@
-def checkpan(n,s):
-    l=''.join([str(i) for i in range(1,n+1)])
-    a=[0 for i in range(n+1)]; j=0
+def checkpan(r,n):
+    s=str(n); l=''.join([str(i) for i in range(1,r+1)])
+    a=[0 for i in range(r+1)]; j=0
     for i in range(len(s)):
         if s[i] in l: a[int(s[i])]+=1
     for i in l:
