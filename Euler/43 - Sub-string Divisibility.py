@@ -12,4 +12,4 @@ def find(r):
         if c==len(s): a.append(i)
     return a
 
-#n=10; print "The sum of all 0-9 pandigital numbers with the property is: " +str(find(n))
+#n=10; s=sum(find(n)); print "The sum of all 0-9 pandigital numbers with the property is: " +str(s)
