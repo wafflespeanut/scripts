@@ -11,7 +11,7 @@ def check(n):
     return True
 
 def genpan(r):
-    l='123456789'[:r]; t=list(permutations(l)); a=[]
+    l='1234567890'[:r]; t=list(permutations(l)); a=[]
     for i in t: a.append(int(''.join(i)))
     return a
 
