@@ -13,4 +13,4 @@ def goldbach(r):
             if j<com[i] and (com[i]-j)/2 in sq: s[i]=False
     return [com[i] for i,j in enumerate(s) if j][0]
 
-r=6000; g=goldbach(r); print str(g)+ " falsifies Goldbach's conjecture!"
+#r=6000; g=goldbach(r); print str(g)+ " falsifies Goldbach's conjecture!"
