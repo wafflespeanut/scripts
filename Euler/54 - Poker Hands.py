@@ -1,3 +1,4 @@
+# Firstly, we need something to sort things up!
 score={'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'T':10,'J':11,'Q':12,'K':13,'A':14}
 
 def hands(stuff):
@@ -75,17 +76,24 @@ def two(s):
             if 2 in k: return True
     return False
 
+def four(s):
+    if all([pair(s[0]),pair(s[1])]):
+        if 4 in pair(s[0]) and 4 in pair(s[1]): return checkhigh(s)
+        elif 4 in pair(s[0]): return 1
+        elif 4 in pair(s[1]): return 2
+    return None
+
 def house(s):
     if all([two(s),three(s)]): return True
     return False
 
-def life(f,s):
+def life(f,s):      # Reused a heck of times!
     if f(s[0]) and f(s[1]): return clife(f,s)
     elif f(s[0]): return 1
     elif f(s[1]): return 2
     return None
 
-def clife(f,s):
+def clife(f,s):     # Life's tough! Should check high cards inside pairs...
     if f(s[0]) and f(s[1]):
         k1=pair(s[0]); k2=pair(s[1])
         if f==house or f==three:
@@ -108,10 +116,7 @@ def find(s):
     if royal(s[0]): return 1
     elif royal(s[1]): return 2
     if checksf(s): return checksf(s)
-    if pair(s[0]) and pair(s[1]):
-        if 4 in pair(s[0]) and 4 in pair(s[1]): return checkhigh(s)
-        elif 4 in pair(s[0]): return 1
-        elif 4 in pair(s[1]): return 2
+    if four(s): return four(s)
     if life(house,s): return life(house,s)
     if life(suit,s): return life(suit,s)
     if life(consec,s): return life(consec,s)
