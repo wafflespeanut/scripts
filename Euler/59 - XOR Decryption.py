@@ -1,4 +1,3 @@
-import timeit
 from itertools import product
 
 def load(stuff):
@@ -34,9 +33,9 @@ def xorlist(p,k):
     return m
 
 def find():
-    l=keygen(3); k=[0,'']; p=a[:50]
+    l=keygen(3); k=[0,'']; p=a[:50]         # Took the first 50 chars to improve efficiency...
     for i in l:
-        c=xorlist(p,i); s=c.count(32)
+        c=xorlist(p,i); s=c.count(32)       # Counting spaces - A crude assumption!
         if s>k[0]: k[0]=s; k[1]=i
     return k[1]
 
