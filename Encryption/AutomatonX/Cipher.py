@@ -1,36 +1,25 @@
-import random, timeit, string
+import random, timeit
 
 def sieve(n): # sieve of Eratosthenes to generate primes
-    sidekick=[0]*2+[1]*(n-1)
+    sidekick=[False]*2+[True]*(n-1)
     for i in range(int(n**0.5)+1):
         if sidekick[i]:
-            for j in range(i*i,n+1,i): sidekick[j]=0
+            for j in range(i*i,n+1,i): sidekick[j]=False
     return [j for j,p in enumerate(sidekick) if p]
 
-def primelist(level): # throws the primes wanted for randomgen
-    k=2**(5+level); return sieve(k*k)
-
-def binkill(ch1,ch2): # returns binary for characters (reversible)
-    a=bin(ord(ch1))[2:]; b=bin(ord(ch2))[2:]; p=0; kill=""
-    if len(a)>len(b): b=(len(a)-len(b))*'0'+b
-    elif len(a)<len(b): a=(len(b)-len(a))*'0'+a
-    while p<len(a):
-        q=int(a[p])+int(b[p])
-        if q==2: kill+='0'
-        else: kill+=str(q)
-        p+=1
-    return chr(int(kill,2))
-
-def CXOR(phr,key): # quite useful for XOR'ing text & key (reversible)
+def CXOR(phr,key): # quite useful for XOR'ing bulk text & key (reversible)
+    def xor(ch1,ch2): # XOR's two chars
+        a=ord(ch1); b=ord(ch2)
+        return chr(a^b)
     i=0; j=0; make=""
     while i<len(phr):
-        if i<len(key): make+=binkill(phr[i],key[j])
-        else: j=0; make+=binkill(phr[i],key[j])
+        if i<len(key): make+=xor(phr[i],key[j])
+        else: j=0; make+=xor(phr[i],key[j])
         i+=1; j+=1
     i=0; j=0
     while i<len(key):
-        if i<len(phr): make=make[:j]+binkill(phr[j],key[i])+make[(j+1):]
-        else: j=0; make=make[:j]+binkill(phr[j],key[i])+make[(j+1):]
+        if i<len(phr): make=make[:j]+xor(phr[j],key[i])+make[(j+1):]
+        else: j=0; make=make[:j]+xor(phr[j],key[i])+make[(j+1):]
         i+=1; j+=1
     return make
 
@@ -48,6 +37,9 @@ def add(text,key): # adds the ASCII values of key and phrase chars
     return ''.join(hand)
 
 def keypnum(key,level): # generates primes based on the key-chars' ASCII values
+    def primelist(level): # throws the primes wanted for randomgen
+        k=2**(5+level)
+        return sieve(k*k)
     primes=[]; plist=primelist(level/2)
     for i in key: primes+=[str(plist[ord(i)])]
     for n in range(level):
@@ -62,13 +54,8 @@ def pop(key,level): # confuses & constrains the sliced list to 8-chars
 
 def combine(text,key): # dissolves key chars into the phrase
     try:
-        pas=hexed(key); phrase=hexed(text); primes=sieve(len(key)**2); i=0; ph=len(phrase)
-        for j in pas:
-            if primes[i]<len(phrase):
-                phrase=phrase[:primes[i]]+[j]+phrase[primes[i]:]; i+=1
-            else: break
+        phrase=hexed(text); phr=add(phrase,key)
     except IndexError: return None
-    phr=add(phrase,key)
     return ''.join(phr)
 
 def char(key): # hex-decoding function
@@ -101,11 +88,9 @@ def find(text,key,level): # finds the random key used during encryption
 
 def extract(text,key): # removes the key chars from the phrase
     try:
-        phrase=char(sub(text,key)); primes=sieve(len(key)**2); ph=len(phrase); newph=""
-        for i in range(ph):
-            if i not in primes[:len(key)]: newph+=phrase[i]
+        phrase=''.join(char(sub(text,key)))
     except TypeError: return None
-    return ''.join(newph)
+    return phrase
 
 def shift(text,shift): # shifts the ASCII value of the chars (reversible)
     try:

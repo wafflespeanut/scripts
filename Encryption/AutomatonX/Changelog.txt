@@ -34,8 +34,14 @@ v2.0: Sentinel
 - Simplified version available in Javascript
 - Functions: keypnum(), pop(), extract()
 
-v2.1: Automaton
+v2.1: Automaton [https://github.com/Wafflespeanut/Python/blob/9a583d54bd9f6dab2255e873f7c7bbc4fc943108/Encryption/Sentinel/Cipher.py]
 - Added timer for each phase
 - Phrase and key is XORed (resulting in unknown characters)
 - Hexing during epilog is deprecated
-- Functions: binkill(), xor()
+- Functions: binkill(), CXOR()
+
+v3.0: AutomatonX
+- Dumped useless functions
+- Made use of inbuilt XOR (reducing computing time)
+- Key insertion is deprecated (major flaw exterminated!)
+- Functions: CXOR(), combine(), extract()

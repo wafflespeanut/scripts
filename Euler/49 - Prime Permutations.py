@@ -1,4 +1,6 @@
+execfile("7 - 10001st Prime.py")
 from itertools import permutations
+z=sieve(999999)
 
 def ESieve(m,n):
     s=[False]*2+[True]*(n-1)
@@ -13,8 +15,10 @@ def perm(s):
     return a
 
 def isPrime(n):
-    for i in range(2,int(n**0.5+1)):
-        if n%2==0 or n%i==0: return False
+    for i in z:
+        if n==i: return True
+        if i>(n**0.5+1): break
+        if n%i==0: return False
     return True
 
 def gen(l,u):

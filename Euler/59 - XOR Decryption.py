@@ -8,17 +8,6 @@ def load(stuff):
     print "   ",len(a),"numbers loaded.\n"
     return a
 
-def xor(c1,c2):
-    a=bin(c1)[2:]; b=bin(c2)[2:]; p=0; kill=""
-    if len(a)>len(b): b=(len(a)-len(b))*'0'+b
-    elif len(a)<len(b): a=(len(b)-len(a))*'0'+a
-    while p<len(a):
-        q=int(a[p])+int(b[p])
-        if q==2: kill+='0'
-        else: kill+=str(q)
-        p+=1
-    return int(kill,2)
-
 def keygen(n):
     p=ord('a'); q=ord('z'); a=[]; l=[]
     for i in range(p,q+1): a.append(chr(i))
@@ -28,7 +17,7 @@ def keygen(n):
 def xorlist(p,k):
     l=[ord(i) for i in k]; m=[]; j=0
     for i in p:
-        m.append(xor(i,l[j])); j+=1
+        m.append(i^l[j]); j+=1
         if j==len(l): j=0
     return m
 
