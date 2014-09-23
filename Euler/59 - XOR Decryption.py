@@ -1,6 +1,7 @@
 from itertools import product
 
 def load(stuff):
+    '''Loads the comma-seperated integers from the file, and returns a list.'''
     print "Loading names from file..."
     File=open(stuff,'r',0); List=''; a=[]; l=[]
     for i in File: List+=i
@@ -9,12 +10,14 @@ def load(stuff):
     return a
 
 def keygen(n):
+    '''Generates a list of permutations of small alphabets of given length (n).'''
     p=ord('a'); q=ord('z'); a=[]; l=[]
     for i in range(p,q+1): a.append(chr(i))
-    for i in product(a,repeat=3): l.append(''.join(i))
+    for i in product(a,repeat=n): l.append(''.join(i))
     return l
 
 def xorlist(p,k):
+    '''XOR's a list of integers (p) with another list of "key" integers (k) cyclically.'''
     l=[ord(i) for i in k]; m=[]; j=0
     for i in p:
         m.append(i^l[j]); j+=1

@@ -1,4 +1,5 @@
 def sieve(n):
+    '''Returns a list of primes using the sieve of Eratosthenes.'''
     sidekick=[False]*2+[True]*(n-1)
     for i in range(int(n**0.5)+1):
         if sidekick[i]:
