@@ -1,6 +1,7 @@
 import random, timeit
 
-def sieve(n): # sieve of Eratosthenes to generate primes
+def sieve(n):
+    '''Generates a list of primes using the sieve of Eratosthenes'''
     sidekick=[False]*2+[True]*(n-1)
     for i in range(int(n**0.5)+1):
         if sidekick[i]:

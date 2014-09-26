@@ -1,6 +1,4 @@
-execfile("7 - 10001st Prime.py")
 from itertools import permutations
-z=sieve(999999)
 
 def ESieve(m,n):
     s=[False]*2+[True]*(n-1)
@@ -8,6 +6,8 @@ def ESieve(m,n):
         if s[i]:
             for j in range(i*i,n+1,i): s[j]=False
     return [j for j,p in enumerate(s) if p and j>=m]
+
+z=ESieve(1,999999)
 
 def perm(s):
     k=permutations(str(s)); a=[]
