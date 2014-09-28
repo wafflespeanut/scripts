@@ -24,7 +24,7 @@ def able(dad,son):
             if check(i,j) and j not in a: a.append(j)
     return a
 
-def bunch(n):
+def bunch(n):       # Generates lists of polygonal numbers
     def starts(f,r):
         i=1
         while True:
@@ -43,9 +43,9 @@ def bunch(n):
         a.append(b); j+=1
     return a
 
-def follow(p):
+def follow(p):      # Checks the properties for a given combination
     c=bunch(4); i=1; z=c[p[0]]; n=0
-    while n<3:
+    while n<3:      # Just a funny assumption that no other combinations can survive after 3 iterations
         i=0; a=[]
         while i<len(p) and z:
             z=able(z,c[p[i]]); i+=1
