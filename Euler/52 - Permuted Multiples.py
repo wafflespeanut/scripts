@@ -4,9 +4,7 @@ def isPerm(s1,s2):
     a=str(s1); b=str(s2)
     if len(a)==len(b):
         for i in a:
-            if i not in b: return False
-        for i in b:
-            if i not in a: return False
+            if a.count(i)!=b.count(i): return False
     else: return False
     return True
 
