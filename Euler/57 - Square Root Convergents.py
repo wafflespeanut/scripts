@@ -6,8 +6,7 @@ def frac(n1,d1,n2,d2):
 
 def expand(i):
     s=[2,1]
-    for i in range(i):
-        s=frac(2,1,s[1],s[0])
+    for i in range(i): s=frac(2,1,s[1],s[0])
     s=frac(1,1,s[1],s[0])
     return s
 
