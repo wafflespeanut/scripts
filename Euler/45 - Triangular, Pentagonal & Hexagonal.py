@@ -3,7 +3,6 @@ execfile("61 - Cyclical Figurate Numbers.py")
 
 def whichtri(t): return int(((1+8*t)**0.5-1)/2)
 def whichpen(p): return int(((1+24*p)**0.5+1)/6)
-def hexa(n): return n*(2*n-1)
 
 def find(start):
     i=start

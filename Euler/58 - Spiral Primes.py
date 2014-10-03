@@ -1,6 +1,6 @@
 execfile("49 - Prime Permutations.py")
 
-def pspiral(f):         # Grabbed from Problem-28
+def pspiral(f):         # Problem-28 re-engineered!
     c=1; s=0; i=1; d=1
     while True:
         r=1

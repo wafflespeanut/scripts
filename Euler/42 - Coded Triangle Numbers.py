@@ -9,5 +9,4 @@ def triscores(words):
         if score in triangles: s+=1
     return s
 
-#words=load("WORDS.txt"); s=triscores(words)
-#print "There are " +str(s)+ " triangle words in the text file!"
+#words=load("WORDS.txt"); s=triscores(words); print "There are " +str(s)+ " triangle words in the text file!"

@@ -7,8 +7,7 @@ def sumup(num,n):
         while j<i+n and (i+j)<=len(num):
             temp*=int(num[j])
             store+=num[j]; j+=1
-        if temp>maxi:
-            maxi=temp; final=store
+        if temp>maxi: maxi=temp; final=store
     a+=[maxi,final]
     return a
 

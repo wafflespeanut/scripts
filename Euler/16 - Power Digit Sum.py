@@ -1,6 +1,6 @@
-def power(num,n):
-    bi=str(num**n); s=0
-    for i in bi: s+=int(i)
+def sumup(n):
+    s=0
+    for i in str(n): s+=int(i)
     return s
 
-#num=2; n=1000; print "The sum of digits of " +str(num)+ "^" +str(n)+ ": " +str(power(num,n))
+#n=2**1000; print "The sum of digits of " +str(num)+ "^" +str(n)+ ": " +str(power(num,n))

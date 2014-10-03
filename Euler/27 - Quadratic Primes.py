@@ -1,5 +1,4 @@
 execfile("7 - 10001st Prime.py")
-plist=sieve(100000)
 
 def check(a,b):
     n=0; m=0
@@ -24,4 +23,4 @@ def gen(r):
                 if m[0]>t: t=m[0]; found=[a,b]
     return found
 
-#f=gen(1000); print "The coefficients " +str(f)+ " produce the maximum number of primes for consecutive 'n'\n\nProduct of the coefficients: " +str(f[0]*f[1])
+#plist=sieve(100000); f=gen(1000); print "The coefficients " +str(f)+ " produce the maximum number of primes for consecutive 'n'\n\nProduct of the coefficients: " +str(f[0]*f[1])

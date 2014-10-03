@@ -12,5 +12,5 @@ def sumdigits(r):
         if digitsFact(i) and i not in [1,2]: curious.update([i])
     return list(curious)
 
-r=50000; s=sum(sumdigits(r))    # Another stupid guess!
-print "The sum of all numbers which are equal to the sum of factorial of their digits is: " +str(s)
+#r=50000; s=sum(sumdigits(r))    # Another stupid guess!
+#print "The sum of all numbers which are equal to the sum of factorial of their digits is: " +str(s)

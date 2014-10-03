@@ -1,5 +1,4 @@
 execfile("12 - Highly Divisible Triangular Number.py")
-limit=28123
 
 def ab(n):
     f=factors(n); s=0
@@ -21,4 +20,4 @@ def nonabsum():
     for i in nonab: s+=i
     return s
 
-#print "The sum of all positive integers which cannot be written as the sum of two abundant numbers is: " +str(nonabsum())
+#limit=28123; print "The sum of all positive integers which cannot be written as the sum of two abundant numbers is: " +str(nonabsum())

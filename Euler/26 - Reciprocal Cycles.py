@@ -14,5 +14,4 @@ def maxreci(r):
         if recur(i)>t: t=recur(i); final=[i,t]
     return final
 
-#n=1; r=1000; t=maxreci(r)
-#print "The value which contains the longest recurring cycle in unit fractions is: " +str(t[0])+ " (" +str(t[1])+ " numbers recurred)"
+#n=1; r=1000; t=maxreci(r); print "The value which contains the longest recurring cycle in unit fractions is: " +str(t[0])+ " (" +str(t[1])+ " numbers recurred)"
