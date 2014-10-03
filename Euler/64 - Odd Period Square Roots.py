@@ -1,5 +1,3 @@
-execfile("57 - Square Root Convergents.py")
-
 def expand(n):
     t=0; d=1; a=int(n**0.5); s=[[a]]
     try:
