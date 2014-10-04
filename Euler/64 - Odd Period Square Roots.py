@@ -1,5 +1,5 @@
 def expand(n):
-    t=0; d=1; a=int(n**0.5); s=[[a]]
+    t,d,a = 0,1,int(2**0.5); s=[[a]]
     try:
         while a!=2*int(n**0.5):
             t=d*a-t
