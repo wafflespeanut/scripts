@@ -8,17 +8,26 @@ def isLeap(y):
     return False
 
 def sunday(year):        # To find the first Sunday of an year
-    day=str(raw_input("Enter a known Sunday (in the form YYYY-MM-DD): "))
-    y=int(day[:4]); m=int(day[5:7]); d=int(day[8:10])
-    while all([y>=year,m>=1,d>=1]):
-        if isLeap(y): months[2]=29
-        else: months[2]=28
-        while m>=1:
-            if d>7: d-=7
-            elif d<=7:
-                if m>1: m-=1; d+=months[m]
-                elif m==1: y-=1; m=12; d+=months[m]; break
-    d-=months[1]
+    day=str(raw_input("Enter a known Sunday (in the form DD-MM-YYYY): "))
+    s=day[::-1]; y=int(s[:4]); m=int(s[5:7]); d=int(s[8:10])
+    if year<=y:
+        while all([y>=year,m>=1,d>=1]):
+            if isLeap(y): months[2]=29
+            else: months[2]=28
+            while m>=1:
+                if d>7: d-=7
+                elif d<=7:
+                    if m>1: m-=1; d+=months[m]
+                    elif m==1: y-=1; m=12; d+=months[m]; break
+        d-=months[1]
+    else:
+        while all([y<=year,m<=12,d<=31]):
+            if isLeap(y): months[2]=29
+            else: months[2]=28
+            for m in range(1,13):
+                while d<months[m]: d+=7
+                d-=months[m]
+        d+=months[12]
     print "\nFirst Sunday is on 0"+str(d)+'-01-'+str(year)+'!'
     return d
 
