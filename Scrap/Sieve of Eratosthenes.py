@@ -1,15 +1,13 @@
 import timeit
 
-def exhausted(n):
+def exhaust(n):               # Brute-force method
     sidekick=[]; primes=[]
     for i in range(2,n+1):
-        for j in range(2,n+1):
-            sidekick.append(i*j)
-        if i not in sidekick:
-            primes.append(i)
+        for j in range(2,n+1): sidekick.append(i*j)
+        if i not in sidekick: primes.append(i)
     return primes
 
-def listlook(n):
+def lookup(n):                # Half-assed sieve of Eratosthenes
     sidekick=[]; primes=[]
     for i in range(2,n+1):
         if i not in sidekick:
@@ -17,25 +15,25 @@ def listlook(n):
             sidekick.extend(range(i*i,n+1,i))
     return primes
 
-def arraylook(n):
+def sieve(n):               # Direct implementation of the sieve!
     sidekick=[False]*2+[True]*(n-1)
     for i in range(int(n**0.5)+1):
         if sidekick[i]:
-            for j in range(i*i,n+1,i):
-                sidekick[j]=False
+            for j in range(i*i,n+1,i): sidekick[j]=False
     return [j for j,prime in enumerate(sidekick) if prime]
 
+r=1000; print "Generating primes up to",str(r)+'...'
 start=timeit.default_timer()
-arraylook(10000)
+sieve(r)
 stop=timeit.default_timer()
-print "Array-looking took " +str(stop-start) +" seconds"
+print "\tArray-looking took",round(stop-start,5),"seconds"
 
 start=timeit.default_timer()
-listlook(10000)
+lookup(r)
 stop=timeit.default_timer()
-print "List-looking took " +str(stop-start) +" seconds"
+print "\tList-looking took",round(stop-start,5),"seconds"
 
 start=timeit.default_timer()
-exhausted(10000)
+exhaust(r)
 stop=timeit.default_timer()
-print "Brute-force took " +str(stop-start)+ " seconds"
+print "\tBrute-force took",round(stop-start,5),"seconds"

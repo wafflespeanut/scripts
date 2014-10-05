@@ -9,7 +9,7 @@ def lace(s1,s2):
     else: m+=s2[i:k]
     return m
 
-def laceRecur(s1,s2):
+def lacer(s1,s2):
     def helps(s1,s2,out):
         if s1=='': return out+s2
         if s2=='': return out+s1

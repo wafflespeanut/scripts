@@ -1,10 +1,12 @@
 s="asbuddvbbsabdgkmpqcdeiewjgiwtuvwxyzxmn"
-temp=s[0]; longstr=s[0]
 
-for i in range(1,len(s)):
-    if s[i]>=temp[-1]:
-        temp+=s[i]
-        if len(temp)>len(longstr):
-            longstr=temp
-    else: temp=s[i]
-print "Longest substring in alphabetical order is:" +longstr
+def longalpha(s):
+    t=s[0]; l=s[0]
+    for i in range(1,len(s)):
+        if s[i]>=t[-1]:
+            t+=s[i]
+            if len(t)>len(l): l=t
+        else: t=s[i]
+    return l
+
+print "Longest substring in alphabetical order is:",longalpha(s)
