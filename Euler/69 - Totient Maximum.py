@@ -1,6 +1,5 @@
 execfile("5 - Smallest Multiple.py")
-execfile("7 - 10001st Prime.py")
-z=sieve(999999)
+execfile("49 - Prime Permutations.py")
 
 def totient(n):
     if n in z: return n-1
@@ -9,6 +8,6 @@ def totient(n):
 def maxi(r):        # The maximum occurs when multiplying primes!
     t=1; i=0; c=0
     while t<=r: c=t; t*=z[i]; i+=1
-    return (c,float(c)/totient(c))
+    return (c,totient(c),float(c)/totient(c))
 
-#r=1000000; s=maxi(r); print "The maximum occurred at n={}! ({})".format(s[0],s[1])
+#r=1000000; s=maxi(r); print "The maximum occurs at n={}! (Totient: {}, Ratio: {})".format(s[0],s[1],s[2])
