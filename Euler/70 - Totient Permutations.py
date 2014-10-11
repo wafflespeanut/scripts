@@ -10,4 +10,4 @@ def permaxi(r):
     if t[2]==10: return None
     return t
 
-#r=10000000; s=permaxi(r); print "The minimum occurs at n={}! (Totient: {}, Ratio: {})".format(s[0],s[1],s[2])
+#r=10000000; s=permaxi(r); print "The minimum occurs at n={}! (Totient: {}, Ratio: {})".format(*s)

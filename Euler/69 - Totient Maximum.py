@@ -10,4 +10,4 @@ def maxi(r):        # The maximum occurs when multiplying primes!
     while t<=r: c=t; t*=z[i]; i+=1
     return (c,totient(c),float(c)/totient(c))
 
-#r=1000000; s=maxi(r); print "The maximum occurs at n={}! (Totient: {}, Ratio: {})".format(s[0],s[1],s[2])
+#r=1000000; s=maxi(r); print "The maximum occurs at n={}! (Totient: {}, Ratio: {})".format(*s)
