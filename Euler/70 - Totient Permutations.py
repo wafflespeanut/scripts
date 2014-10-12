@@ -1,7 +1,7 @@
 execfile("52 - Permuted Multiples.py")
 
 def permaxi(r):
-    t=[0,0,10]; s=ESieve(1,int(1.3*(r**0.5))); s=s[int(0.3*len(s)):]      # 50% deviation
+    t=[0,0,10]; s=ESieve(1,int(1.3*(r**0.5))); s=s[int(0.3*len(s)):]      # 30% deviation
     for i in s:
         for j in s:
             n=i*j; p=(i-1)*(j-1)
