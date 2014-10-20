@@ -1,5 +1,3 @@
-execfile("49 - Prime Permutations.py")
-
 def isPerm(s1,s2):
     a=str(s1); b=str(s2)
     if len(a)==len(b):

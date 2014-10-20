@@ -15,4 +15,4 @@ def family():
                 s.count('1')==3 and e!= '1' and check(s,'1'),\
                 s.count('2')==3 and check(s,'2')]): return s
 
-#print "The eight prime family starts at " +family()
+#print "The eight prime family starts at " +family()+'!'
