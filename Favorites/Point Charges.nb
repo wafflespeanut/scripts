@@ -10,14 +10,16 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      9763,        288]
-NotebookOptionsPosition[      9518,        275]
-NotebookOutlinePosition[      9863,        290]
-CellTagsIndexPosition[      9820,        287]
+NotebookDataLength[     16320,        441]
+NotebookOptionsPosition[     15999,        425]
+NotebookOutlinePosition[     16344,        440]
+CellTagsIndexPosition[     16301,        437]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
+
+Cell[CellGroupData[{
 Cell[BoxData[
  RowBox[{"Manipulate", "[", 
   RowBox[{
@@ -116,7 +118,7 @@ Cell[BoxData[
     RowBox[{
      RowBox[{"{", 
       RowBox[{"q1", ",", "1", ",", 
-       RowBox[{"\"\<charge \>\"", " ", 
+       RowBox[{"\"\<Charge \>\"", " ", 
         RowBox[{"Subscript", "[", 
          RowBox[{"q", ",", "1"}], "]"}]}]}], "}"}], ",", 
      RowBox[{"-", "2"}], ",", "2", ",", ".1", ",", 
@@ -126,7 +128,7 @@ Cell[BoxData[
      RowBox[{"{", 
       RowBox[{"q2", ",", 
        RowBox[{"-", "1"}], ",", 
-       RowBox[{"\"\<charge \>\"", " ", 
+       RowBox[{"\"\<Charge \>\"", " ", 
         RowBox[{"Subscript", "[", 
          RowBox[{"q", ",", "2"}], "]"}]}]}], "}"}], ",", 
      RowBox[{"-", "2"}], ",", "2", ",", ".1", ",", 
@@ -271,11 +273,159 @@ Cell[BoxData[
               RowBox[{"(", 
                RowBox[{"y1", "-", "y2"}], ")"}], "2"]}]]}], "+", ".0001"}], 
          ")"}]}]}]}], ")"}]}]}], "]"}]], "Input",
- CellChangeTimes->{{3.606182943217825*^9, 3.606182971273376*^9}}]
+ CellChangeTimes->{{3.606182943217825*^9, 3.606182971273376*^9}, {
+  3.620713697587883*^9, 3.6207137013692055`*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`q1$$ = 
+    1, $CellContext`q2$$ = -1, $CellContext`r1$$ = {-1, 
+    0}, $CellContext`r2$$ = {1, 0}, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`q1$$], 1, "Charge " 
+       Subscript[$CellContext`q, 1]}, -2, 2, 0.1}, {{
+       Hold[$CellContext`q2$$], -1, "Charge " 
+       Subscript[$CellContext`q, 2]}, -2, 2, 0.1}, {{
+       Hold[$CellContext`r1$$], {-1, 0}}, {-2, -1.5}, {2, 1.5}}, {{
+       Hold[$CellContext`r2$$], {1, 0}}, {-2, -1.5}, {2, 1.5}}}, 
+    Typeset`size$$ = {575., {173., 177.}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = 
+    False, $CellContext`q1$3067$$ = 0, $CellContext`q2$3068$$ = 
+    0, $CellContext`r1$3069$$ = {0, 0}, $CellContext`r2$3070$$ = {0, 0}}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`q1$$ = 
+        1, $CellContext`q2$$ = -1, $CellContext`r1$$ = {-1, 
+         0}, $CellContext`r2$$ = {1, 0}}, "ControllerVariables" :> {
+        Hold[$CellContext`q1$$, $CellContext`q1$3067$$, 0], 
+        Hold[$CellContext`q2$$, $CellContext`q2$3068$$, 0], 
+        Hold[$CellContext`r1$$, $CellContext`r1$3069$$, {0, 0}], 
+        Hold[$CellContext`r2$$, $CellContext`r2$3070$$, {0, 0}]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Show[
+        ContourPlot[
+         $CellContext`\[Phi][$CellContext`q1$$, $CellContext`q2$$, 
+          Part[$CellContext`r1$$, 1], 
+          Part[$CellContext`r1$$, 2], 
+          Part[$CellContext`r2$$, 1], 
+          
+          Part[$CellContext`r2$$, 
+           2], $CellContext`x, $CellContext`y], {$CellContext`x, -2, 
+          2}, {$CellContext`y, -1.5, 1.5}, Contours -> 10, ContourShading -> 
+         False, Epilog -> {
+           Inset[
+            Graphics[
+             Text[
+              Style[
+               Subscript[
+                Style["q", Italic], 1], 24, Bold, Black]]], {
+             Part[$CellContext`r1$$, 1], Part[$CellContext`r1$$, 2] - 0.2}], 
+           Inset[
+            Graphics[
+             Text[
+              Style[
+               Subscript[
+                Style["q", Italic], 2], 24, Bold, Black]]], {
+             Part[$CellContext`r2$$, 1], Part[$CellContext`r2$$, 2] - 0.2}]}], 
+        ContourPlot[
+         $CellContext`\[Psi][$CellContext`q1$$, $CellContext`q2$$, 
+          Part[$CellContext`r1$$, 1], 
+          Part[$CellContext`r1$$, 2], 
+          Part[$CellContext`r2$$, 1], 
+          
+          Part[$CellContext`r2$$, 
+           2], $CellContext`x, $CellContext`y], {$CellContext`x, -2, 
+          2}, {$CellContext`y, -1.5, 1.5}, Contours -> 12, ContourStyle -> 
+         Red, ContourShading -> False], AspectRatio -> 2/3, 
+        ImageSize -> {575, 350}], 
+      "Specifications" :> {{{$CellContext`q1$$, 1, "Charge " 
+          Subscript[$CellContext`q, 1]}, -2, 2, 0.1, Appearance -> 
+         "Labeled"}, {{$CellContext`q2$$, -1, "Charge " 
+          Subscript[$CellContext`q, 2]}, -2, 2, 0.1, Appearance -> 
+         "Labeled"}, {{$CellContext`r1$$, {-1, 0}}, {-2, -1.5}, {2, 1.5}, 
+         ControlType -> Locator}, {{$CellContext`r2$$, {1, 0}}, {-2, -1.5}, {
+         2, 1.5}, ControlType -> Locator}}, 
+      "Options" :> {
+       TrackedSymbols :> {$CellContext`q1$$, $CellContext`q2$$, \
+$CellContext`r1$$, $CellContext`r2$$}}, "DefaultOptions" :> {}],
+     ImageSizeCache->{632., {236., 241.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    Initialization:>(($CellContext`\[Phi][
+         Pattern[$CellContext`q1, 
+          Blank[]], 
+         Pattern[$CellContext`q2, 
+          Blank[]], 
+         Pattern[$CellContext`x1, 
+          Blank[]], 
+         Pattern[$CellContext`y1, 
+          Blank[]], 
+         Pattern[$CellContext`x2, 
+          Blank[]], 
+         Pattern[$CellContext`y2, 
+          Blank[]], 
+         Pattern[$CellContext`x, 
+          Blank[]], 
+         Pattern[$CellContext`y, 
+          
+          Blank[]]] := $CellContext`q1/((($CellContext`x - $CellContext`x1)^2 + \
+($CellContext`y - $CellContext`y1)^2)^Rational[1, 2] + 
+         0.0001) + $CellContext`q2/((($CellContext`x - $CellContext`x2)^2 + \
+($CellContext`y - $CellContext`y2)^2)^Rational[1, 2] + 
+         0.0001); $CellContext`\[Psi][
+         Pattern[$CellContext`q1, 
+          Blank[]], 
+         Pattern[$CellContext`q2, 
+          Blank[]], 
+         Pattern[$CellContext`x1, 
+          Blank[]], 
+         Pattern[$CellContext`y1, 
+          Blank[]], 
+         Pattern[$CellContext`x2, 
+          Blank[]], 
+         Pattern[$CellContext`y2, 
+          Blank[]], 
+         Pattern[$CellContext`x, 
+          Blank[]], 
+         Pattern[$CellContext`y, 
+          
+          Blank[]]] := ($CellContext`q1 (($CellContext`x - $CellContext`x2)^2 + \
+($CellContext`y - $CellContext`y2)^2)^
+           Rational[
+            1, 2] ((-($CellContext`x - $CellContext`x1)) ($CellContext`x1 - \
+$CellContext`x2) - ($CellContext`y - $CellContext`y1) ($CellContext`y1 - \
+$CellContext`y2)) - $CellContext`q2 (($CellContext`x - $CellContext`x1)^2 + \
+($CellContext`y - $CellContext`y1)^2)^
+          Rational[
+           1, 2] (($CellContext`x - $CellContext`x2) ($CellContext`x1 - \
+$CellContext`x2) + ($CellContext`y - $CellContext`y2) ($CellContext`y1 - \
+$CellContext`y2)))/((($CellContext`x - $CellContext`x1)^2 + ($CellContext`y - \
+$CellContext`y1)^2)^
+          Rational[
+           1, 2] (($CellContext`x - $CellContext`x2)^2 + ($CellContext`y - \
+$CellContext`y2)^2)^
+          Rational[
+           1, 2] (($CellContext`x1 - $CellContext`x2)^2 + ($CellContext`y1 - \
+$CellContext`y2)^2)^Rational[1, 2] + 0.0001)); Typeset`initDone$$ = True),
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{3.620713586724513*^9, 3.6207137023223147`*^9}]
+}, Open  ]]
 },
 WindowSize->{995, 570},
 WindowMargins->{{Automatic, 174}, {Automatic, 26}},
-FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -289,7 +439,10 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 8957, 253, 501, "Input"]
+Cell[CellGroupData[{
+Cell[579, 22, 9008, 254, 501, "Input"],
+Cell[9590, 278, 6393, 144, 494, "Output"]
+}, Open  ]]
 }
 ]
 *)
