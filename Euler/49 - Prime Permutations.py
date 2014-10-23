@@ -11,6 +11,7 @@ def perm(s):
     return a
 
 def isPrime(n):
+    if n%2==0: return False
     for i in z:
         if n==i: return True
         if i>(n**0.5+1): break
