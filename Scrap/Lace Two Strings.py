@@ -10,9 +10,9 @@ def lace(s1,s2):
     return m
 
 def lacer(s1,s2):
-    def helps(s1,s2,out):
+    def rec(s1,s2,out):
         if s1=='': return out+s2
         if s2=='': return out+s1
-        else: return helps(s1[1:],s2[1:],out+s1[0]+s2[0])
-    return helps(s1,s2,'')
+        else: return rec(s1[1:],s2[1:],out+s1[0]+s2[0])
+    return rec(s1,s2,'')
 
