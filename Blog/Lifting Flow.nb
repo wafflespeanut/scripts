@@ -102,9 +102,9 @@ vufB548mKrQpSjjwJn0ggQVZOik0V+rkMLGpjELxoZbUqM8sN9wT/09NFvgP
 dtccmg==
   "]]
 },
-WindowSize->{707, 503},
-WindowMargins->{{Automatic, 317}, {Automatic, 30}},
-FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+WindowSize->{979, 551},
+WindowMargins->{{Automatic, 150}, {Automatic, 29}},
+FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -118,7 +118,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 2968, 82, 172, "Input"]
+Cell[557, 20, 2968, 82, 132, "Input"]
 }
 ]
 *)

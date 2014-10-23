@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      3944,        120]
-NotebookOptionsPosition[      3679,        106]
-NotebookOutlinePosition[      4045,        122]
-CellTagsIndexPosition[      4002,        119]
+NotebookDataLength[      3960,        120]
+NotebookOptionsPosition[      3695,        106]
+NotebookOutlinePosition[      4061,        122]
+CellTagsIndexPosition[      4018,        119]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -61,7 +61,7 @@ Cell[BoxData[
      RowBox[{
       RowBox[{"Plot", "[", 
        RowBox[{
-        RowBox[{"Games", " ", 
+        RowBox[{"Games", "*", 
          RowBox[{"Binomial", "[", 
           RowBox[{"n", ",", "k"}], "]"}], " ", 
          SuperscriptBox["P", "k"], " ", 
@@ -94,20 +94,20 @@ Cell[BoxData[
        RowBox[{"n", ",", "50", ",", "\"\<Number of heads\>\""}], "}"}], ",", 
       "20", ",", "70", ",", "1"}], "}"}]}], "]"}]}]], "Input",
  CellChangeTimes->CompressedData["
-1:eJxTTMoPSmViYGCQAmIQnXLP9U/j9VeOvtu/8DYB6TPhVQog+pv1L1UQXRZ2
+1:eJxTTMoPSmViYGCQBmIQnXLP9U/j9VeOvtu/8DYB6TPhVQog+pv1L1UQXRZ2
 UxvMnzlZB0Qn7ec2AtE5Yt12IJpn83QnEH1K3ssdRE/tdwgC0T0HJkWD6L7m
 ebve3XvlKDvX8QSIXuc+T/49kBbevgNM30oWPQSi5U+vBdPMi6bafQDSDX/4
 nUG07jk+TxAddT7eF0RfmX32x1cgvUboyG8Q/ai2/T+IVq+6BKYnHWth/wak
 Zc7/4gHRj3geioDoGJtbkiA6M61RHUQLbZ4DpuOMNfVA9JUlHw1BdNU3fXsQ
 /Svf1BlE88fKSJc9BLqH5aU2iJ6iyWsJolf58ziA6CRTU1cQXbY/zA1E35OZ
 4g2iHTyv+oForecXokB0Qm12Cohm1mAMOQOkVfKywkH0VhXrIhDNcN+xGESb
-pCrGngXSgYvzwTQAn9vtkQ==
+pCrGngXSgYvzwXTcgyTVzH+vHCvSW8A0AMIZ9gM=
   "]]
 },
 WindowSize->{889, 562},
 WindowMargins->{{Automatic, 185}, {Automatic, 11}},
 ShowSelection->True,
-FrontEndVersion->"9.0 for Microsoft Windows (32-bit) (January 25, 2013)",
+FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -121,7 +121,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 3118, 84, 162, "Input"]
+Cell[557, 20, 3134, 84, 162, "Input"]
 }
 ]
 *)
