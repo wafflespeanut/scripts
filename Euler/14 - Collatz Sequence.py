@@ -1,17 +1,13 @@
-def collatz(n):
-    i=n; a=1
-    while i!=1:
-        if i%2==0: i=i/2
-        else: i=3*i+1
-        a+=1
-    return a
+def collatz(r):
+    c={}; x=0; y=0
+    for n in range(2,r+1):
+        i=n; a=0
+        while True:
+            if i in c: c[n]=a+c[i]; break
+            elif i==1: c[n]=a; break
+            elif i%2==0: i=i/2; a+=1
+            else: i=3*i+1; a+=1
+        if c[n]>y: x=n; y=c[n]
+    return (x,y+1)
 
-def longest(n):
-    i=2; t=[0,0]
-    while i<=n:
-        c=collatz(i)
-        if c>t[1]: t[1]=c; t[0]=i
-        i+=1
-    return t
-
-#n=1000000; l=longest(n); print "The longest chain in Collatz sequence is produced by " +str(l[0])+ " - " +str(l[1])+ " chains!"
+#r=1000000; l=collatz(r); print "The longest chain in Collatz sequence is produced by",l[0],"-",l[1],"chains!"
