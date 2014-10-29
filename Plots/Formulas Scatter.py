@@ -4,6 +4,7 @@ from random import choice
 eqs=[]
 eqs.append((r"$\int_{-\infty}^\infty e^{-x^2}dx=\sqrt{\pi}$"))
 eqs.append((r"$\nabla \cdot \mathbf{E}=\frac{\rho}{\epsilon_0}$"))
+eqs.append((r"$E=h\nu$"))
 eqs.append((r"$\Delta x.\Delta p\geq\frac{\hbar}{2}$"))
 eqs.append((r"$\nabla \times \mathbf{E}=-\frac{\partial B}{\partial t}$"))
 eqs.append((r"$\langle E\rangle=\frac{3}{2} kT$"))
