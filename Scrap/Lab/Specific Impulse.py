@@ -6,6 +6,10 @@ from os import system
 p1='C:\cpropep\input.pro'
 p2='C:\cpropep\output.pro'
 
+#   AP  - 108       Al  - 34        CTPB - 265
+#   AN  - 114       Fe  - 375       DA   - 327
+#   Mg  - 558       LiF - 545       TDA  - 905
+
 prop=[265,327,905,34,108,375]   # Compound index as per listed in 'cpropep'
 w=[20,3.75,1.25,10,63,2]        # Weight in grams
 

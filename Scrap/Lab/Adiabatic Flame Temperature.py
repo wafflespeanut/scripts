@@ -5,6 +5,8 @@ h={'c':-396808,'w':-251594,'co':-118902}
 cp={'c':60.433,'w':51.143,'co':36.271,'o':37.788,'h':34.236,'n':35.988}
 r=8.314; t0=298.15
 
+s='CH4'; hf=-74293      # Input here!
+
 def count(s):
     k={'C':0,'O':0,'H':0,'N':0}; n='1234567890'
     for i,j in enumerate(s):
@@ -27,14 +29,14 @@ def lean(s,phi):
     d=round((2*a-2*b-c)/2,4)
     return (a,b,c,d)
 
-def rich(s,phi):
+def rich(s,phi):        # b & e are assumed to be half of number of carbon atoms
     p=sto(s); k1=count(s); b=e=k1['C']/2.0
     a=round((k['C']*k1['C']+k['H']*k1['H'])/(phi*(k['O']+3.76*k['N'])*2*p),4)
     c=round(2*a-e-2*b,4)
     d=round((k1['H']-2*c)/2,4)
     return (a,b,c,d,e)
 
-def cpres(s,hf):
+def cpres(s,hf):        # Adiabatic temperatures for constant pressure process
     k1=count(s); c1,c2,c3,c4,c5=(cp['c'],cp['w'],cp['o'],cp['n'],cp['co']); h1,h2,h3=(h['c'],h['w'],h['co']); arr=[]
     for i in range(1,6):
         phi=0.2*i
@@ -48,7 +50,7 @@ def cpres(s,hf):
         arr.append(m)
     return arr
 
-def cvol(s,hf):
+def cvol(s,hf):         # Adiabatic temperatures for constant volume process
     k1=count(s); h1,h2,h3=(h['c'],h['w'],h['co']); c1,c2,c3,c4,c5=(cp['c'],cp['w'],cp['o'],cp['n'],cp['co']); arr=[]
     for i in range(1,6):
         phi=0.2*i
@@ -64,9 +66,7 @@ def cvol(s,hf):
         arr.append(m)
     return arr
 
-def output():
-    s=str(raw_input('Molecule: '))
-    hf=float(raw_input('Enthalpy of formation: '))
+def output():           # Plots stuff for given molecule & enthalpy
     phi=[i*0.2 for i in range(1,6)]
     for i in range(1,6): phi.append((1+0.2*i))
     P1=cpres(s,hf); P2=cvol(s,hf)
