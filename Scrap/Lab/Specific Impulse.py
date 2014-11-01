@@ -7,7 +7,7 @@ p1='C:\cpropep\input.pro'
 p2='C:\cpropep\output.pro'
 
 #   AP  - 108       Al  - 34        CTPB - 265
-#   AN  - 114       Fe  - 375       DA   - 327
+#   AN  - 114       FeO - 375       DA   - 327
 #   Mg  - 558       LiF - 545       TDA  - 905
 
 prop=[265,327,905,34,108,375]   # Compound index as per listed in 'cpropep'
@@ -31,7 +31,7 @@ def f(s):
 
 def readval():              # Reads the output from 'cpropep' & computes ISP
     P=[float(i) for i in range(20,201,20)]; T=[]; M=[]; G=[]; V=[]; SP=[]; k=0
-    F=open(p2,'r',0); List=''
+    F=open(p2,'r'); List=''
     for i in F: List+=i
     l=List.split('\n')
     for i in l:

@@ -4,7 +4,7 @@ path='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Data\\'
 out='C:\\Users\\Waffles Crazy Peanut\\Desktop\\OUTPUT.txt'
 
 def load(stuff):            # For grabbing specific data from list of laboratory logs
-    File=open(stuff,'r',0); List=''
+    File=open(stuff,'r'); List=''
     for i in File: List+=i
     l=List.split('\n'); values=[]
     for i in l:
