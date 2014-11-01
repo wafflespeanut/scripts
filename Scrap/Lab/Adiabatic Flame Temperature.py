@@ -19,17 +19,17 @@ def count(s):
 
 def sto(s):
     k1=count(s); x=k1['C']; y=k1['H']/2.0; a=(2*x+y)/2
-    return (k['C']*k1['C']+k['H']*k1['H'])/(float(a)*k['O']*2)
+    return (k['C']*k1['C']+k['H']*k1['H'])/(float(a)*(k['O']+3.76*k['N'])*2)
 
 def lean(s,phi):
     p=sto(s); k1=count(s); b=k1['C']; c=k1['H']/2.0
-    a=round((k['C']*k1['C']+k['H']*k1['H'])/(phi*k['O']*2*p),4)
+    a=round((k['C']*k1['C']+k['H']*k1['H'])/(phi*(k['O']+3.76*k['N'])*2*p),4)
     d=round((2*a-2*b-c)/2,4)
     return (a,b,c,d)
 
 def rich(s,phi):
     p=sto(s); k1=count(s); b=e=k1['C']/2.0
-    a=round((k['C']*k1['C']+k['H']*k1['H'])/(phi*k['O']*2*p),4)
+    a=round((k['C']*k1['C']+k['H']*k1['H'])/(phi*(k['O']+3.76*k['N'])*2*p),4)
     c=round(2*a-e-2*b,4)
     d=round((k1['H']-2*c)/2,4)
     return (a,b,c,d,e)
@@ -72,6 +72,6 @@ def output():
     P1=cpres(s,hf); P2=cvol(s,hf)
     figure(figsize=(10,6),dpi=80)
     plot(phi,P1,color="blue",linewidth=2.5,linestyle="-",label="Constant Pressure")
-    plot(phi,P2,color="red",linewidth=2.5,linestyle="-",label="Constant Volume")
+    plot(phi,P2,color="red",linewidth=2.5,linestyle="--",label="Constant Volume")
     legend(loc='upper left')
     show()
