@@ -6,9 +6,9 @@ from os import system
 p1='C:\cpropep\input.pro'
 p2='C:\cpropep\output.pro'
 
-#   AP  - 108       Al  - 34        CTPB - 265
-#   AN  - 114       FeO - 375       DA   - 327
-#   Mg  - 558       LiF - 545       TDA  - 905
+#   AP  - 108       Al  - 34        CTPB - 265      482  -  HTPB
+#   AN  - 114       FeO - 375       DA   - 327      491  -  IPDI
+#   Mg  - 558       LiF - 545       TDA  - 905      
 
 prop=[265,327,905,34,108,375]   # Compound index as per listed in 'cpropep'
 w=[20,3.75,1.25,10,63,2]        # Weight in grams
@@ -42,8 +42,7 @@ def readval():              # Reads the output from 'cpropep' & computes ISP
         g=(G[k]-1)/G[k]
         m=(((2*8314*T[k])/(g*M[k]))*(1-(1/P[k])**g))**0.5
         V.append(m); SP.append(m/9.81); k+=1
-    F.close()
-    return SP
+    F.close(); return SP
 
 def values():               # Appends values into a file for using in Excel
     path='C:\cpropep\PYTHON.txt'
