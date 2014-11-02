@@ -65,9 +65,7 @@ def cvol(s,hf):         # Adiabatic temperatures for constant volume process
 def output():           # Plots stuff for given molecule & enthalpy
     phi=[i*0.2 for i in range(1,6)]
     for i in range(1,6): phi.append((1+0.2*i))
-    P1=cpres(s,hf); P2=cvol(s,hf)
-    figure(figsize=(10,6),dpi=80)
+    P1=cpres(s,hf); P2=cvol(s,hf); figure(figsize=(10,6),dpi=80)
     plot(phi,P1,color="blue",linewidth=2.5,linestyle="-",label="Constant Pressure")
     plot(phi,P2,color="red",linewidth=2.5,linestyle="--",label="Constant Volume")
-    legend(loc='upper left')
-    show()
+    legend(loc='upper left'); show()

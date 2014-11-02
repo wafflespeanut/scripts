@@ -50,7 +50,8 @@ def values():               # Appends values into a file for using in Excel
     f.write(''.join(a)+'\n'); f.close()
 
 def plotall():              # Plots ISP vs Chamber pressure
-    inwrite(prop,w); cprop(); SP=readval()
-    P=[i for i in range(20,201,20)]; figure(figsize=(10,6),dpi=80)
+    inwrite(prop,w); cprop(); SP=array(readval())
+    P=arange(20,201,20); figure(figsize=(10,6),dpi=80)
+    xlim(P.min(),P.max()); ylim(SP.min()-10,SP.max()*1.05)
     plot(P,SP,color="blue",linewidth=2.5,linestyle="-",label="ISP")
     legend(loc='upper left'); show()

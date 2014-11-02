@@ -17,12 +17,9 @@ eqs.append((r"$F_G=G\frac{m_1m_2}{r^2}$"))
 axes([0.025,0.025,0.95,0.95]); n=50
 
 for i in range(n):
-    eq=choice(eqs)
-    size=np.random.uniform(10,35)
-    x,y=np.random.uniform(0,1,2)
-    alpha=np.random.uniform(.1,.8)
+    eq=choice(eqs); size=np.random.uniform(10,35)
+    x,y=np.random.uniform(0,1,2); alpha=np.random.uniform(.1,.8)
     text(x,y,eq,ha='center',va='center',color="#000000",alpha=alpha,
          transform=gca().transAxes,fontsize=size,clip_on=True)
 
-xticks([]),yticks([])
-show()
+xticks([]),yticks([]); show()

@@ -6,9 +6,8 @@ C,S=np.cos(X),np.sin(X)
 figure(figsize=(10,6),dpi=80)
 plot(X,C,color="blue",linewidth=2.5,linestyle="-",label="cosine")
 plot(X,S,color="red", linewidth=2.5,linestyle="-",label="sine")
-legend(loc='upper left')
+legend(loc='upper left'); ax=gca()
 
-ax=gca()
 ax.spines['right'].set_color('none')
 ax.spines['top'].set_color('none')
 ax.xaxis.set_ticks_position('bottom')
@@ -18,7 +17,6 @@ ax.spines['left'].set_position(('data',0))
 
 xlim(X.min()*1.25,X.max()*1.25)
 ylim(C.min()*1.25,C.max()*1.25)
-
 xticks([-np.pi,-np.pi/2,0,np.pi/2,np.pi],[r'$-\pi$',r'$-\pi/2$',r'$0$',r'$+\pi/2$',r'$+\pi$'])
 yticks([-1,0,+1],[r'$-1$',r'$0$',r'$+1$'])
 
