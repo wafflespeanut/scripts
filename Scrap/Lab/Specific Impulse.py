@@ -1,4 +1,5 @@
-# If you wanna access cpropep using Python, add a string value "Autorun"="CD /d C:\\cpropep" to [HKEY_CURRENT_USER\Software\Microsoft\Command Processor]
+# If you wanna access cpropep using Python, add a string value "Autorun"="CD /d C:\\cpropep"
+# to [HKEY_CURRENT_USER\Software\Microsoft\Command Processor]
 
 from pylab import *
 from os import system
