@@ -18,10 +18,8 @@ def inwrite(prop,w):        # Writes the input for 'cpropep' command-line
     F='Propellant\n'; i=0
     while i<len(prop): F+='+'+str(prop[i])+'   '+str(w[i])+' g\n'; i+=1
     for i in range(20,201,20):
-        F+='\nHP\n'
-        F+='+chamber_pressure %d bar\n'%(i)
-    t=open(p1,'w')
-    t.write(F); t.close()
+        F+='\nHP\n'; F+='+chamber_pressure %d bar\n'%(i)
+    t=open(p1,'w'); t.write(F); t.close()
 
 def cprop(): p='C:\cpropep\cpropep -f '+p1+' -o '+p2; system(p)
 
@@ -47,15 +45,12 @@ def readval():              # Reads the output from 'cpropep' & computes ISP
 
 def values():               # Appends values into a file for using in Excel
     path='C:\cpropep\PYTHON.txt'
-    inwrite(prop,w); cprop()
-    f=open(path,'a')
+    inwrite(prop,w); cprop(); f=open(path,'a')
     a=[str(i)+'\n' for i in readval()]
     f.write(''.join(a)+'\n'); f.close()
 
 def plotall():              # Plots ISP vs Chamber pressure
     inwrite(prop,w); cprop(); SP=readval()
-    P=[i for i in range(20,201,20)]
-    figure(figsize=(10,6),dpi=80)
+    P=[i for i in range(20,201,20)]; figure(figsize=(10,6),dpi=80)
     plot(P,SP,color="blue",linewidth=2.5,linestyle="-",label="ISP")
-    legend(loc='upper left')
-    show()
+    legend(loc='upper left'); show()

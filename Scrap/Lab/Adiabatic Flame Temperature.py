@@ -37,33 +37,29 @@ def rich(s,phi):        # b & e are assumed to be half of number of carbon atoms
     return (a,b,c,d,e)
 
 def cpres(s,hf):        # Adiabatic temperatures for constant pressure process
-    k1=count(s); c1,c2,c3,c4,c5=(cp['c'],cp['w'],cp['o'],cp['n'],cp['co']); h1,h2,h3=(h['c'],h['w'],h['co']); arr=[]
+    k1=count(s); c1,c2,c3,c4,c5=(cp['c'],cp['w'],cp['o'],cp['n'],cp['co'])
+    h1,h2,h3=(h['c'],h['w'],h['co']); arr=[]
     for i in range(1,6):
-        phi=0.2*i
-        a,b,c,d=lean(s,phi)
-        m=round((hf-b*h1-c*h2+t0*(b*c1+c*c2+d*c3+3.76*a*c4))/(b*c1+c*c2+d*c3+3.76*a*c4),4)
-        arr.append(m)
+        phi=0.2*i; a,b,c,d=lean(s,phi)
+        p=b*c1+c*c2+d*c3+3.76*a*c4
+        m=round((hf-b*h1-c*h2+t0*p)/p,4); arr.append(m)
     for i in range(1,6):
-        phi=1+0.2*i
-        a,b,c,d,e=rich(s,phi)
-        m=round((hf-b*h1-c*h2-e*h3+t0*(b*c1+c*c2+d*c3+3.76*a*c4+e*c5))/(b*c1+c*c2+d*c3+3.76*a*c4+e*c5),4)
-        arr.append(m)
+        phi=1+0.2*i; a,b,c,d,e=rich(s,phi)
+        r=b*c1+c*c2+d*c3+3.76*a*c4+e*c5
+        m=round((hf-b*h1-c*h2-e*h3+t0*p)/p,4); arr.append(m)
     return arr
 
 def cvol(s,hf):         # Adiabatic temperatures for constant volume process
-    k1=count(s); h1,h2,h3=(h['c'],h['w'],h['co']); c1,c2,c3,c4,c5=(cp['c'],cp['w'],cp['o'],cp['n'],cp['co']); arr=[]
+    k1=count(s); h1,h2,h3=(h['c'],h['w'],h['co'])
+    c1,c2,c3,c4,c5=(cp['c'],cp['w'],cp['o'],cp['n'],cp['co']); arr=[]
     for i in range(1,6):
-        phi=0.2*i
-        a,b,c,d=lean(s,phi)
-        n=a+1
-        m=round((hf-b*h1-c*h2+t0*(b*c1+c*c2+d*c3+3.76*a*c4-n*r))/(b*c1+c*c2+d*c3+3.76*a*c4-n*r),4)
-        arr.append(m)
+        phi=0.2*i; a,b,c,d=lean(s,phi)
+        n=a+1; p=b*c1+c*c2+d*c3+3.76*a*c4-n*r
+        m=round((hf-b*h1-c*h2+t0*p)/p,4); arr.append(m)
     for i in range(1,6):
-        phi=1+0.2*i
-        a,b,c,d,e=rich(s,phi)
-        n=a+1
-        m=round((hf-b*h1-c*h2-e*h3+t0*(b*c1+c*c2+d*c3+3.76*a*c4+e*c5-n*r))/(b*c1+c*c2+d*c3+3.76*a*c4+e*c5-n*r),4)
-        arr.append(m)
+        phi=1+0.2*i; a,b,c,d,e=rich(s,phi)
+        n=a+1; p=b*c1+c*c2+d*c3+3.76*a*c4+e*c5-n*r
+        m=round((hf-b*h1-c*h2-e*h3+t0*p)/p,4); arr.append(m)
     return arr
 
 def output():           # Plots stuff for given molecule & enthalpy
