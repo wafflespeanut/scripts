@@ -1,5 +1,5 @@
 # If you wanna access cpropep using Python, add a string value "Autorun"="CD /d C:\\cpropep"
-# to [HKEY_CURRENT_USER\Software\Microsoft\Command Processor]
+# to [HKEY_CURRENT_USER\Software\Microsoft\Command Processor] in Registry Editor
 
 from pylab import *
 from os import system
@@ -7,9 +7,9 @@ from os import system
 p1='C:\cpropep\input.pro'
 p2='C:\cpropep\output.pro'
 
-#   AP  - 108       Al  - 34        CTPB - 265      482  -  HTPB
-#   AN  - 114       FeO - 375       DA   - 327      491  -  IPDI
-#   Mg  - 558       LiF - 545       TDA  - 905      
+#   AP  - 108       Al  - 34        CTPB - 265      HTPB - 482
+#   AN  - 105       FeO - 375       DOA  - 327      IPDI - 491
+#   Mg  - 558       LiF - 545       TDA  - 905
 
 prop=[265,327,905,34,108,375]   # Compound index as per listed in 'cpropep'
 w=[20,3.75,1.25,10,63,2]        # Weight in grams

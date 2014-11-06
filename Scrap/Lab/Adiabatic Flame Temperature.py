@@ -5,7 +5,7 @@ h={'c':-396808,'w':-251594,'co':-118902}
 cp={'c':60.433,'w':51.143,'co':36.271,'o':37.788,'h':34.236,'n':35.988}
 r=8.314; t0=298.15
 
-s='CH4'; hf=-74293      # Input here!
+s='CH4'; hf=-74831      # Input here!
 
 def count(s):
     k={'C':0,'O':0,'H':0,'N':0}; n='1234567890'
@@ -45,7 +45,7 @@ def cpres(s,hf):        # Adiabatic temperatures for constant pressure process
         m=round((hf-b*h1-c*h2+t0*p)/p,4); arr.append(m)
     for i in range(1,6):
         phi=1+0.2*i; a,b,c,d,e=rich(s,phi)
-        r=b*c1+c*c2+d*c3+3.76*a*c4+e*c5
+        p=b*c1+c*c2+d*c3+3.76*a*c4+e*c5
         m=round((hf-b*h1-c*h2-e*h3+t0*p)/p,4); arr.append(m)
     return arr
 
