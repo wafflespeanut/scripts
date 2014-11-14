@@ -29,8 +29,8 @@ def sunday(year):        # To find the first Sunday of an year
                 else:
                     if m<12: d-=months[m]; m+=1
                     elif m==12: d-=months[m]; y+=1; m=1; break
-    print "\nFirst Sunday is on 0"+str(d)+'-01-'+str(year)+'!'
-    return d
+    print "\nFirst Sunday is on 0"+str(d-1)+'-01-'+str(year)+'!'
+    return d-1
 
 def count(l,u):          # Requires first Sunday for calculation!
     c=0; d=sunday(l); k=0; a=[]
