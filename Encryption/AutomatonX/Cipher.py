@@ -1,5 +1,7 @@
 import random, timeit
 
+# Quite a long & dirty code!
+
 def sieve(n):
     '''Generates a list of primes using the sieve of Eratosthenes'''
     sidekick=[False]*2+[True]*(n-1)
@@ -163,7 +165,7 @@ def RUN():      # User Interface
             choice=str(raw_input("Do something again: (y/n)? "))
     except KeyboardInterrupt: return None
 
-def FILE():     # Encrypts/Decrypts files
+def FILE():     # Encrypts/Decrypts text files
     try:
         while True:
             path=str(raw_input("Enter File name (including path): "))
