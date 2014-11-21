@@ -187,13 +187,15 @@ def FILE():     # Encrypts/Decrypts files
             what=str(raw_input("Encrypt (e) or Decrypt (d) ? "))
         if what=='e': print "\nENCRYPTING...\n"
         elif what=='d': print "\nDECRYPTING...\n"
-        start=timeit.default_timer(); i=0
+        start=timeit.default_timer(); c=None
         with open(path,'r') as file: data=file.readlines()
         if len(data)==0: print "Nothing in file!"; return None
-        while i<len(data):
-            data[i]=zombify(what,str(data[i][:-1]),key,level)
+        for i in range(len(data)):
+            if data[i]=='\n': i+=1; continue
+            if data[i][-1]=='\n': data[i]=zombify(what,str(data[i][:-1]),key,level); c=True
+            else: data[i]=zombify(what,str(data[i]),key,level); c=False
             if data[i]==None: print "\tMismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"; return None
-            data[i]+='\n'; i+=1
+            if c: data[i]+='\n'
         with open(path,'w') as file: file.writelines(data)
         stop=timeit.default_timer()
         print "TOTAL TIME:",round(stop-start,5),"seconds"
