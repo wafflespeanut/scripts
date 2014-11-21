@@ -44,4 +44,7 @@ v3.0: AutomatonX
 - Dumped useless functions
 - Made use of inbuilt XOR (reducing computing time)
 - Key insertion is deprecated (major flaw exterminated!)
-- Functions: CXOR(), combine(), extract()
+- Timers are deprecated for improving efficiency
+- FILE() can be used to encrypt/decrypt files
+- RUN() can be used to play in the IDLE interface
+- Functions: CXOR(), combine(), extract(), zombify(), RUN(), FILE()

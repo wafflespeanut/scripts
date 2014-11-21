@@ -39,8 +39,7 @@ def add(text,key): # adds the ASCII values of key and phrase chars
 
 def keypnum(key,level): # generates primes based on the key-chars' ASCII values
     def primelist(level): # throws the primes wanted for randomgen
-        k=2**(5+level)
-        return sieve(k*k)
+        k=2**(5+level); return sieve(k*k)
     primes=[]; plist=primelist(level/2)
     for i in key: primes+=[str(plist[ord(i)])]
     for n in range(level):
@@ -121,12 +120,10 @@ def eit(text,key,iteration): # iteration, shifting, random key, etc.
     combined=combine(combined,rkey)
     stop=timeit.default_timer()
     print "> Using random key... " +str(round(stop-start,5)) +" seconds"
-    if combined==None:
-        return None
+    if combined==None: return None
     start=timeit.default_timer()
     zombie=combined; pas=''.join(hexed(key))
-    for i in key:
-        zombie=shift(zombie,ord(i))
+    for i in key: zombie=shift(zombie,ord(i))
     out=add(zombie,key); xor=CXOR(out,pas)
     stop=timeit.default_timer()
     print "> Shifting, Adding ASCII values, XOR'ing... " +str(round(stop-start,5)) +" seconds"
@@ -154,49 +151,78 @@ def dit(text,key,iteration): # the whole eit() thing in reverse...
     if extracted==None: return None
     return extracted
 
-def zombify(): # user interface
+def zombify(what,text,key,level):
+    if what=='e':
+        print "\nENCRYPTING...\n"
+        out=eit(text,key,int(level))
+        return str(out)
+    elif what=='d':
+        print "\nDECRYPTING...\n"
+        out=dit(text,key,int(level))
+        if out==None: return None
+        else: return str(out)
+
+def RUN():      # User Interface
     try:
         choice='y'
         while choice=='y':
-            text=raw_input("\nText to put in the cipher: ")
-            while str(text)=="":
+            text=str(raw_input("\nText to put in the cipher: "))
+            while text=="":
                 print "\n Um, I don't see any text here... Gimme something to eat!!!"
-                text=raw_input("\nText to be encrypted: ")
-            key=raw_input("Password: ")
-            while len(str(key))==1 or str(key)=="":
-                if str(key)=="":
+                text=str(raw_input("\nText to be encrypted: "))
+            key=str(raw_input("Password: "))
+            while len(key)==1 or str(key)=="":
+                if key=="":
                     print "\n No password? You do want me to encrypt, right?\n"
-                    key=raw_input("What's the password? : ")
-                elif len(str(key))==1:
-                    print "\n No, Seriously? Password of unit length? Try something better...\n"
-                    key=raw_input("Choose a password: ")
-            level=raw_input("Security level (1-5, for fast output): ")
-            while str(level) not in "12345":
-                print "\n Enter a number ranging from 1-5\n"
+                    key=str(raw_input("What's the password? "))
+                elif len(key)==1:
+                    print "\n No, Seriously? Password of unit length? Try something bigger...\n"
+                    key=str(raw_input("Choose a password: "))
+            level=str(raw_input("Security level (1-5, for fast output): "))
+            while level=='' or ord(level) not in range(49,54):
+                print "\n Enter a number ranging from 1-5!\n"
                 level=raw_input("Security level (1-5): ")
-            if str(level)=="":
-                print "\n No input given. Choosing level 1\n"
-                level=1
-            what=raw_input("Encrypt (e) or Decrypt (d) ? ")
-            while str(what)!="e" and str(what)!="d" and str(what)=="":
+            what=str(raw_input("Encrypt (e) or Decrypt (d) ? "))
+            while what!="e" and what!="d":
                 print "\n (sigh) You can choose something...\n"
-                what=raw_input("Encrypt (e) or Decrypt (d) ? ")
-            if str(what)=='e':
-                print "\nENCRYPTING...\n"
-                start=timeit.default_timer()
-                out=eit(str(text),str(key),int(level))
-                stop=timeit.default_timer()
-                print "\nTOTAL TIME: " +str(round(stop-start,5)) +" seconds"
-                print "\n"+str(out)+"\n"
-            elif str(what)=='d': # While decrypting, (given the correct key) a lower iteration level can decrypt the data, but it can't get back to the message!
-                print "\nDECRYPTING...\n"
-                start=timeit.default_timer()
-                out=dit(str(text),str(key),int(level))
-                stop=timeit.default_timer()
-                print "\nTOTAL TIME: " +str(round(stop-start,5)) +" seconds"
-                if out==None:
-                    print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
-                else: print "\nMESSAGE: "+str(out)+"\n"
-            choice=raw_input("Do something again: (y/n)? ")
-    except KeyboardInterrupt:
-        return None
+                what=str(raw_input("Encrypt (e) or Decrypt (d) ? "))
+            start=timeit.default_timer()
+            s=zombify(what,text,key,level)
+            stop=timeit.default_timer()
+            if s==None: print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
+            else: print "\nTOTAL TIME:",round(stop-start,5),"seconds"; print '\nMESSAGE: %s\n'%(s)
+            choice=str(raw_input("Do something again: (y/n)? "))
+    except KeyboardInterrupt: return None
+
+def FILE():     # Encrypts/Decrypts files
+    try:
+        i=0; key=str(raw_input("Password: "))
+        while len(key)==1 or str(key)=="":
+            if key=="":
+                print "\n No password? You do want me to encrypt, right?\n"
+                key=str(raw_input("What's the password? "))
+            elif len(key)==1:
+                print "\n No, Seriously? Password of unit length? Try something bigger...\n"
+                key=str(raw_input("Choose a password: "))
+        level=str(raw_input("Security level (1-5, for fast output): "))
+        while level=='' or ord(level) not in range(49,54):
+            print "\n Enter a number ranging from 1-5!\n"
+            level=raw_input("Security level (1-5): ")
+        what=str(raw_input("Encrypt (e) or Decrypt (d) ? "))
+        while what!="e" and what!="d":
+            print "\n (sigh) You can choose something...\n"
+            what=str(raw_input("Encrypt (e) or Decrypt (d) ? "))
+        while True:
+            path=str(raw_input("Enter File name (including path): "))
+            try: File=open(path,'r'); File.close(); break
+            except IOError: print "\n INVALID PATH!\n"
+        start=timeit.default_timer()
+        with open(path,'r') as file: data=file.readlines()
+        while i<len(data):
+            data[i]=zombify(what,str(data[i][:-1]),key,level)
+            if data[i]==None: print "\n Mismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"; break
+            data[i]+='\n'; i+=1
+        with open(path,'w') as file: file.writelines(data)
+        stop=timeit.default_timer()
+        print "\nTOTAL TIME:",round(stop-start,5),"seconds"
+    except KeyboardInterrupt: return None

@@ -1,6 +1,8 @@
 import os
 from time import strftime
 
+src="C:\\"; tar="C:\\Backup\\"
+
 def backup(src,tar):      # Making use of GnuWin32 Zip 3.0
     if not os.path.exists(tar): os.mkdir(tar)
     today=strftime('%Y%m%d')
