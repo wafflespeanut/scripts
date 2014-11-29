@@ -5,6 +5,8 @@ from random import choice
 
 o="C:\\Downloads\\"; link=""
 
+# I used to download comics with this...
+
 def name():     # Just to put random names to the files!
     s='c'
     for i in range(3): s+=str(choice(range(10)))
