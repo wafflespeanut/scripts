@@ -1,7 +1,7 @@
-AutomatonX (yeah, it's quite a mess!)
+AutomatonX (v3.0)
 ======
 
-Well, this is my cipher, built completely for (my own) learning purposes. Over the past few months, I've been learning Python by finding different ways of getting into the cipher, and patching the algorithm so that it gets stronger every time.
+Well, this is my cipher, built completely for (my own) learning purposes. For a few months, I've been learning Python by finding different ways of getting into the cipher, and patching the algorithm so that it gets stronger every time.
 
 It's quite straight-forward (easy to understand with my comments). And, it's built by a lot of helper functions, for improving readability.
 
