@@ -2,13 +2,12 @@ from urllib import *
 from os import *
 import lxml.html
 
-out="C:\\Users\\Waffles Crazy Peanut\\Desktop\\"; links=[]
+out="C:\\Music\\"; links=[]
 
 # I used to download embedded MP3 soundtracks with this...
 
 def urls(link):
-    a=set(); connection=urlopen(link)
-    dom=lxml.html.fromstring(connection.read())
+    a=set(); dom=lxml.html.fromstring(urlopen(link).read())
     for l in dom.xpath('//a/@href'):
         if '#' not in l and 'mp3' in l: a.update([l])
     return list(a)
