@@ -5,5 +5,12 @@ v1.0: Private Diary [https://github.com/Wafflespeanut/Python/tree/64a9c8dd2470ec
 
 v2.0: Memento
 - Added a simple encryption method which hexes and shifts the ASCII values (to make it really "private" - further protection is of your own)
-- A TEMP file is created for viewing/updating any story which gets deleted on exit, leaving the original files undisturbed
+- Now, you can view stories for a given day
+- A TEMP file is created for viewing/updating any story, leaving the original files undisturbed
 - Functions: hexed(), char(), zombify(), shift(), protect(), write()
+
+v2.1: Souvenir
+- View random stories
+- TEMP is deleted after a timeout (to keep things safe)
+- One-time password for updating stories
+- Functions: random(), temp(), key(), protect()
