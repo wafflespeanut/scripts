@@ -96,13 +96,13 @@ def extract(text,key):      # Removes the key chars from the phrase
 
 def shift(text,shift):      # Shifts the ASCII value of the chars (reversible)
     try:
-        new=[]; s=int(shift)
+        new=''
         for i,j in enumerate(text):
             m=ord(j)+shift
             while m>255: m-=255
             new+=chr(m)
     except TypeError: return None
-    return ''.join(new)
+    return new
 
 def eit(text,key,iteration):    # Iteration, shifting, random key, etc.
     i=1; combined=combine(text,key)
