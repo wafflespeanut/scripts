@@ -1,8 +1,9 @@
 import os,subprocess
 from time import strftime as time
+from time import sleep
 from random import choice
 
-loc='D:\\Diary\\'    # Storage location
+loc='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\Diary\\'    # Storage location
 months={'11':'November','10':'October','12':'December','1':'January','3':'March','2':'February','5':'May','4':'April','7':'July','6':'June','9':'September','8':'August'}
 
 def hexed(key):             # Hexing function
@@ -37,7 +38,7 @@ def zombify(ch,data,key):           # Linking helper function
 
 def temp(File,key=None):
     if protect(File,'d',key): subprocess.Popen(["notepad.exe",loc+'TEMP.tmp'])
-    #os.remove(loc+'TEMP.tmp')
+    sleep(3); os.remove(loc+'TEMP.tmp')
 
 def protect(path,ch,key=None):          # A simple encryption which shifts and turns it to hex!
     try:
@@ -59,26 +60,30 @@ def protect(path,ch,key=None):          # A simple encryption which shifts and t
 
 def write():        # Does all the dirty job
     if not os.path.exists(loc+time('%Y')): os.mkdir(loc+time('%Y'))
-    f=loc+time('%Y')+os.sep+months[time('%m')]+' ('+time('%Y')+')'
+    key=None; f=loc+time('%Y')+os.sep+months[time('%m')]+' ('+time('%Y')+')'
     if not os.path.exists(f): os.mkdir(f)
     File=f+os.sep+'Day '+time('%d')+' ('+months[time('%m')]+' '+time('%Y')+')'
     if os.path.exists(File):
-        print '\nFile already exists! Password required!'; key=''
+        print '\nFile already exists! Password required!'
         while not key:
             key=protect(File,'d')
             if not key: print 'A password is required to append to an existing file. Running sequence again...'
         with open(loc+'TEMP.tmp','r') as file: data=file.readlines()
         with open(File,'w') as file: file.writelines(data)
-    os.remove(loc+'TEMP.tmp'); f=open(File,'a')
+        os.remove(loc+'TEMP.tmp')
+    f=open(File,'a')
     a=['['+time('%Y')+'-'+time('%m')+'-'+time('%d')+']'+' '+time('%H')+':'+time('%M')+':'+time('%S')+'\n']
     try: s=raw_input('''\nStart writing... (Press Ctrl+C when you're done!)\n\n\t'''); a.append('\t'+s)
     except KeyboardInterrupt: print 'Nothing written! Quitting...'; return None
     while True:
         try: s=raw_input(); a.append(s)
         except KeyboardInterrupt: break
-    f.write('\n'.join(a)+'\n\n'); f.close()
-    while not protect(File,'e',key):
-        print "\nPlease don't interrupt! Your story is insecure! Running sequence again..."
+    f.write('\n'.join(a)+'\n\n'); f.close(); k=None
+    if key: k=key; key=None
+    while not key:
+        if k: key=k
+        key=protect(File,'e',key)
+        if not key: print "\nPlease don't interrupt! Your story is insecure! Running sequence again..."
     s=raw_input('\nSuccessfully written to file! Do you wanna see it (y/n)? ')
     if s=='y': temp(File,key)
 
@@ -99,7 +104,7 @@ def random():       # Useful only when you have a lot of stories
         d=choice(os.listdir(loc+y+os.sep+m)); f=loc+os.sep+y+os.sep+m+os.sep+d
     print 'Choosing your story from '+d+'...'; temp(f)
 
-def diary():
+if __name__=='__main__':
     while True:
         if os.path.exists(loc+'TEMP.tmp'): os.remove(loc+'TEMP.tmp')
         try:
