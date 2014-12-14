@@ -2,7 +2,7 @@ import os,subprocess
 from time import strftime as time
 from random import choice
 
-loc='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\Diary\\'        # Storage location
+loc='D:\\Diary\\'    # Storage location
 months={'11':'November','10':'October','12':'December','1':'January','3':'March','2':'February','5':'May','4':'April','7':'July','6':'June','9':'September','8':'August'}
 
 def hexed(key):             # Hexing function
@@ -27,7 +27,7 @@ def shift(text,shift):      # Shifts the ASCII value of the chars (reversible)
     except TypeError: return None
     return new
 
-def zombify(ch,data,key):
+def zombify(ch,data,key):           # Linking helper function
     k=''.join(hexed(key)); p=data
     if ch=='e':
         p=''.join(hexed(data))
@@ -39,7 +39,7 @@ def temp(File,key=None):
     if protect(File,'d',key): subprocess.Popen(["notepad.exe",loc+'TEMP.tmp'])
     #os.remove(loc+'TEMP.tmp')
 
-def protect(path,ch,key=None):              # A simple encryption which shifts and turns it to hex!
+def protect(path,ch,key=None):          # A simple encryption which shifts and turns it to hex!
     try:
         if key==None: key=raw_input('\nEnter password for your story: ')
         while len(key)<4: key=raw_input('\nEnter password of at least 4 chars: ')
@@ -57,7 +57,7 @@ def protect(path,ch,key=None):              # A simple encryption which shifts a
         with open(loc+'TEMP.tmp','w') as file: file.writelines(data)
     return key
 
-def write():
+def write():        # Does all the dirty job
     if not os.path.exists(loc+time('%Y')): os.mkdir(loc+time('%Y'))
     f=loc+time('%Y')+os.sep+months[time('%m')]+' ('+time('%Y')+')'
     if not os.path.exists(f): os.mkdir(f)
@@ -66,7 +66,7 @@ def write():
         print '\nFile already exists! Password required!'; key=''
         while not key:
             key=protect(File,'d')
-            print 'A password is required to append to an existing file. Running sequence again...'
+            if not key: print 'A password is required to append to an existing file. Running sequence again...'
         with open(loc+'TEMP.tmp','r') as file: data=file.readlines()
         with open(File,'w') as file: file.writelines(data)
     os.remove(loc+'TEMP.tmp'); f=open(File,'a')
@@ -82,7 +82,7 @@ def write():
     s=raw_input('\nSuccessfully written to file! Do you wanna see it (y/n)? ')
     if s=='y': temp(File,key)
 
-def view():
+def view():         # To browse the directory, decrypt and view the stories
     y=raw_input('\nYear: ')
     if not os.path.exists(loc+y): print '\nNo stories on this year...'; return None
     while True:
