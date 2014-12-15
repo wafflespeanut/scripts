@@ -32,9 +32,11 @@ def zombify(ch,data,key):           # Linking helper function
     k=''.join(hexed(key)); p=data
     if ch=='e':
         p=''.join(hexed(data))
-        for i in k: p=shift(p,ord(i)); return p
+        for i in k: p=shift(p,ord(i))
+        return p
     elif ch=='d':
-        for i in k: p=shift(p,255-ord(i)); return char(p)
+        for i in k: p=shift(p,255-ord(i))
+        return char(p)
 
 def temp(File,key=None):
     if protect(File,'d',key): subprocess.Popen(["notepad.exe",loc+'TEMP.tmp'])
