@@ -13,4 +13,5 @@ v2.1: Souvenir
 - View random stories
 - TEMP is deleted after a timeout (to keep things safe)
 - One-time password for updating stories
+- Can detect incorrect passwords
 - Functions: random(), temp(), protect()

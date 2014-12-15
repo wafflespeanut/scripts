@@ -39,8 +39,9 @@ def zombify(ch,data,key):           # Linking helper function
         return char(p)
 
 def temp(File,key=None):
-    if protect(File,'d',key): subprocess.Popen(["notepad.exe",loc+'TEMP.tmp'])
-    sleep(3); os.remove(loc+'TEMP.tmp')
+    if protect(File,'d',key):
+        subprocess.Popen(["notepad.exe",loc+'TEMP.tmp'])
+        sleep(2); os.remove(loc+'TEMP.tmp')
 
 def protect(path,ch,key=None):          # A simple method which shifts and turns it to hex!
     try:
@@ -49,11 +50,13 @@ def protect(path,ch,key=None):          # A simple method which shifts and turns
     except KeyboardInterrupt: return False
     with open(path,'r') as file: data=file.readlines()
     if len(data)==0: print 'Nothing in file!'; return None
-    for i in range(len(data)):
-        if data[i]=='\n': i+=1; continue
-        if data[i][-1]=='\n': data[i]=zombify(ch,str(data[i][:-1]),key); c=True
-        else: data[i]=zombify(ch,str(data[i]),key); c=False
-        if c: data[i]+='\n'
+    try:
+        for i in range(len(data)):
+            if data[i]=='\n': i+=1; continue
+            if data[i][-1]=='\n': data[i]=zombify(ch,str(data[i][:-1]),key); c=True
+            else: data[i]=zombify(ch,str(data[i]),key); c=False
+            if c: data[i]+='\n'
+    except TypeError: print '\n\tWrong password!'; return None
     if ch=='e':
         with open(path,'w') as file: file.writelines(data)
     elif ch=='d':
