@@ -79,7 +79,7 @@ def write():        # Does all the dirty job
     f=open(File,'a')
     a=['['+time('%Y')+'-'+time('%m')+'-'+time('%d')+']'+' '+time('%H')+':'+time('%M')+':'+time('%S')+'\n']
     try: s=raw_input('''\nStart writing... (Press Ctrl+C when you're done!)\n\n\t'''); a.append('\t'+s)
-    except KeyboardInterrupt: print 'Nothing written! Quitting...'; return None
+    except KeyboardInterrupt: print 'Nothing written! Quitting...'; protect(File,'e',key); return None
     while True:
         try: s=raw_input(); a.append(s)
         except KeyboardInterrupt: break
