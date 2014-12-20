@@ -94,6 +94,8 @@ def write():        # Does all the dirty job
 
 def view():         # To browse the directory, decrypt and view the stories
     y=raw_input('\nYear: ')
+    while len(y)!=4:
+        y=raw_input('\nEnter a valid year: ')
     if not os.path.exists(loc+y): print '\nNo stories on this year...'; return None
     while True:
         try: m=months[raw_input('\nMonth: ')]; break
