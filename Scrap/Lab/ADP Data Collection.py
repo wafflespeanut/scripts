@@ -25,7 +25,7 @@ def write(s):
 def dplot(s=None):
     dx=0.08; dy=0.2; ddx=0; ddy=0.02
     with open(path+'Data.txt','r') as file: f=file.readlines()
-    n=f[0].split('\t')[:-1]; r=[float(i) for i in f[12].split('\t')[:-1]]
+    names=f[0].split('\t')[:-1]; r=[float(i) for i in f[12].split('\t')[:-1]]
     if not s:
         for i in range(len(data)): print '\t'+str(i+1)+':',data[i]
         s=int(raw_input('\nEnter your choice: '))
@@ -34,10 +34,11 @@ def dplot(s=None):
             d=[float(i) for i in f[s].split('\t')[:-1]]
             if len(r)!=len(d): print '\nValues are missing!'; return None
             plot(r,d,'ro'); axis([min(r)*(1-dx),max(r)*(1+dx),min(d)*(1-dy),max(d)*(1+dy)])
-            xlabel(data[11],fontsize=18); ylabel(data[s]+r' $\mathregular{['+units[s]+r']}$',fontsize=18)
+            xlabel(r'Range $\mathregular{[km]}$',fontsize=18); ylabel(data[s-1]+r' $\mathregular{['+units[s-1]+r']}$',fontsize=18)
             for i in range(len(r)):
                 (x,y)=(r[i]+r[i]*ddx,d[i]+d[i]*ddy)
-                text(x,y,r'$\mathbf{'+str(i+1)+r'}$',fontsize=15,bbox=dict(facecolor='blue',alpha=0.15))
+                text(x,y,r'$\mathbf{'+str(i+1)+r'}$',fontsize=16,bbox=dict(facecolor='blue',alpha=0.15))
             grid(True); show()
         except ValueError: print '\nValues are missing!'
     else: return None
+    return names
