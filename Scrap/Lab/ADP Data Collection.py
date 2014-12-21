@@ -1,5 +1,6 @@
 from pylab import *
 from random import choice
+from time import sleep
 
 path='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\ADP\\'
 data=['Aspect Ratio','Cruise Velocity','Empty Weight','Fineness Ratio','Height','Landing Speed','Length of Aircraft','Maximum Landing Weight','Maximum Rate of Climb','Maximum Service Ceiling','Maximum Speed','Range','Runway Length','Seating Capacity','Service Ceiling','Thrust Loading','Wing Area','Wing Loading','Wing Span']
@@ -20,18 +21,21 @@ def write(s):
         f.write('\n'); j+=1
     f.close()
 
-def dplot():
+def dplot(s=None):
+    dx=0.08; dy=0.2; ddx=0; ddy=0.02
     with open(path+'Data.txt','r') as file: f=file.readlines()
-    n=f[0].split('\t')[:-1]; r=[float(i) for i in f[11].split('\t')[:-1]]
-    for i in range(len(data)): print '\t'+str(i+1)+':',data[i]
-    s=int(raw_input('\nEnter your choice: '))
+    n=f[0].split('\t')[:-1]; r=[float(i) for i in f[12].split('\t')[:-1]]
+    if not s:
+        for i in range(len(data)): print '\t'+str(i+1)+':',data[i]
+        s=int(raw_input('\nEnter your choice: '))
     if s<=len(data):
         try:
             d=[float(i) for i in f[int(s)].split('\t')[:-1]]
-            plot(r,d,'ro'); axis([0,max(r)*1.2,0,max(d)*1.2])
-            for i in range(100): x=choice([1,-1]); y=choice([1,-1])
+            if len(r)!=len(d): print '\nValues are missing!'; return None
+            plot(r,d,'ro'); axis([min(r)*(1-dx),max(r)*(1+dx),min(d)*(1-dy),max(d)*(1+dy)])
+            for i in range(len(r)):
+                (x,y)=(r[i]+r[i]*ddx,d[i]+d[i]*ddy)
+                text(x,y,r'$\mathbf{'+str(i+1)+r'}$',fontsize=15,bbox=dict(facecolor='blue',alpha=0.15))
             grid(True); show()
         except ValueError: print '\nValues are missing!'
     else: return None
-
-##text(1.1,1.1,r'$\mathbf{1}$',fontsize=15,bbox=dict(facecolor='blue',alpha=0.2))
