@@ -4,6 +4,7 @@ from time import sleep
 
 path='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\ADP\\'
 data=['Aspect Ratio','Cruise Velocity','Empty Weight','Fineness Ratio','Height','Landing Speed','Length of Aircraft','Maximum Landing Weight','Maximum Rate of Climb','Maximum Service Ceiling','Maximum Speed','Range','Runway Length','Seating Capacity','Service Ceiling','Thrust Loading','Wing Area','Wing Loading','Wing Span']
+units=['no\ unit','no\ unit','N','no\ unit','m','no\ unit','m','N','ms^{-1}','m','no\ unit','km','m','seats','m','N','m^2','Nm^{-2}','m']
 
 def get():
     f=[]; n=int(raw_input('Number of aircrafts: '))
@@ -30,9 +31,10 @@ def dplot(s=None):
         s=int(raw_input('\nEnter your choice: '))
     if s<=len(data):
         try:
-            d=[float(i) for i in f[int(s)].split('\t')[:-1]]
+            d=[float(i) for i in f[s].split('\t')[:-1]]
             if len(r)!=len(d): print '\nValues are missing!'; return None
             plot(r,d,'ro'); axis([min(r)*(1-dx),max(r)*(1+dx),min(d)*(1-dy),max(d)*(1+dy)])
+            xlabel(data[11],fontsize=18); ylabel(data[s]+r' $\mathregular{['+units[s]+r']}$',fontsize=18)
             for i in range(len(r)):
                 (x,y)=(r[i]+r[i]*ddx,d[i]+d[i]*ddy)
                 text(x,y,r'$\mathbf{'+str(i+1)+r'}$',fontsize=15,bbox=dict(facecolor='blue',alpha=0.15))
