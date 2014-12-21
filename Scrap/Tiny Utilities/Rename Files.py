@@ -1,4 +1,4 @@
-import os,subprocess,eyed3
+import os,subprocess,eyed3,shutil
 
 path="C:\\TEMP\\"
 
@@ -24,3 +24,11 @@ def renmp3():           # To rename MP3s based on their metadata
     for i in os.listdir(path):
         f=eyed3.load(path+i)
         os.rename(path+i,path+f.tag.title+'.mp3')
+
+src="D:\\parts\\"
+dest="J:\\Other\\TEMP\\parts\\"
+
+def move(s):             # To move files!
+    for i in os.listdir(src):
+        if not os.path.exists(dest): os.mkdir(dest)
+        if s in i: shutil.move(src+i,dest+i)        # os.rename() can be used only for moving within the same drives
