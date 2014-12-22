@@ -3,8 +3,8 @@ from random import choice
 from time import sleep
 
 path='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\ADP\\'
-data=['Aspect Ratio','Cruise Velocity','Empty Weight','Fineness Ratio','Height','Landing Speed','Length of Aircraft','Maximum Landing Weight','Maximum Rate of Climb','Maximum Service Ceiling','Maximum Speed','Range','Runway Length','Seating Capacity','Service Ceiling','Thrust Loading','Wing Area','Wing Loading','Wing Span']
-units=['no\ unit','no\ unit','N','no\ unit','m','no\ unit','m','N','ms^{-1}','m','no\ unit','km','m','seats','m','N','m^2','Nm^{-2}','m']
+data=['Aspect Ratio', 'Cruise Velocity', 'Empty Weight', 'Fineness ratio', 'Fuselage Width', 'Height', 'Landing Speed', 'Length of Aircraft', 'Maximum Landing Weight', 'Maximum Rate of Climb', 'Maximum Service Ceiling', 'Maximum Speed', 'Maximum Takeoff Weight', 'Range', 'Runway Length', 'Seating Capacity', 'Service Ceiling', 'Thrust Loading', 'Thrust per Engine', 'Wing Area', 'Wing Loading', 'Wing Span']
+units=['no\ unit','no\ unit','kg','no\ unit','m','m','knots','m','kg','ms^{-1}','m','no\ unit','kg','km','m','seats','m','no\ unit','N','m^2','kgm^{-2}','m']
 
 def get():
     f=[]; n=int(raw_input('Number of aircrafts: '))
@@ -23,24 +23,23 @@ def write(s):
     f.close()
 
 def dplot(s=None):
-    dx=0.08; dy=0.2; ddx=0; ddy=0.02; c=12000; dr=0.2
+    dx=0.08; dy=0.2; ddx=0; ddy=0.02; c=12000; dr=0.2; d=[]; a=[]; p=[]
     with open(path+'Data.txt','r') as file: f=file.readlines()
-    names=f[0].split('\t')[:-1]; r=[float(i) for i in f[12].split('\t')[:-1]]
+    names=f[0].split('\t')[:-1]; r=[float(i) for i in f[14].split('\t')[:-1]]
     if not s:
         for i in range(len(data)): print '\t'+str(i+1)+':',data[i]
         s=int(raw_input('\nEnter your choice: '))
     if s<=len(data):
-        try:
-            d=[float(i) for i in f[s].split('\t')[:-1]]
-            if len(r)!=len(d): print '\nValues are missing!'; return None
-            plot(r,d,'ro'); axis([min(r)*(1-dx),max(r)*(1+dx),min(d)*(1-dy),max(d)*(1+dy)])
-            xlabel(r'Range $\mathregular{[km]}$',fontsize=18); ylabel(data[s-1]+r' $\mathregular{['+units[s-1]+r']}$',fontsize=18)
-            circle=Circle((c,(max(d)+min(d))/2.0),max(d)*dr,color='b',fill=False)
-            fig=gcf(); fig.gca().add_artist(circle)
-            for i in range(len(r)):
-                (x,y)=(r[i]+r[i]*ddx,d[i]+d[i]*ddy)
-                text(x,y,r'$\mathbf{'+str(i+1)+r'}$',fontsize=16,bbox=dict(facecolor='blue',alpha=0.15))
-            grid(True); show()
-        except ValueError: print '\nValues are missing!'
+        m=f[s].split('\t')[:-1]
+        for i in range(len(r)):
+            if m[i]!='': a.append(r[i]); d.append(float(m[i])); p.append(i+1)
+        r=a; plot(r,d,'ro'); axis([min(r)*(1-dx),max(r)*(1+dx),min(d)*(1-dy),max(d)*(1+dy)])
+        xlabel(r'Range $\mathregular{[km]}$',fontsize=18); ylabel(data[s-1]+r' $\mathregular{['+units[s-1]+r']}$',fontsize=18)
+##            circle=Circle((c,(max(d)+min(d))/2.0),max(d)*dr,color='b',fill=False)
+##            fig=gcf(); fig.gca().add_artist(circle)
+        for i in range(len(r)):
+            (x,y)=(r[i]+r[i]*ddx,d[i]+d[i]*ddy)
+            text(x,y,r'$\mathbf{'+str(p[i])+r'}$',fontsize=16,bbox=dict(facecolor='blue',alpha=0.15))
+        grid(True); show()
     else: return None
-    return names
+    return None
