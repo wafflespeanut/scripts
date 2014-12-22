@@ -23,7 +23,7 @@ def write(s):
     f.close()
 
 def dplot(s=None):
-    dx=0.08; dy=0.2; ddx=0; ddy=0.02
+    dx=0.08; dy=0.2; ddx=0; ddy=0.02; c=12000; dr=0.2
     with open(path+'Data.txt','r') as file: f=file.readlines()
     names=f[0].split('\t')[:-1]; r=[float(i) for i in f[12].split('\t')[:-1]]
     if not s:
@@ -35,6 +35,8 @@ def dplot(s=None):
             if len(r)!=len(d): print '\nValues are missing!'; return None
             plot(r,d,'ro'); axis([min(r)*(1-dx),max(r)*(1+dx),min(d)*(1-dy),max(d)*(1+dy)])
             xlabel(r'Range $\mathregular{[km]}$',fontsize=18); ylabel(data[s-1]+r' $\mathregular{['+units[s-1]+r']}$',fontsize=18)
+            circle=Circle((c,(max(d)+min(d))/2.0),max(d)*dr,color='b',fill=False)
+            fig=gcf(); fig.gca().add_artist(circle)
             for i in range(len(r)):
                 (x,y)=(r[i]+r[i]*ddx,d[i]+d[i]*ddy)
                 text(x,y,r'$\mathbf{'+str(i+1)+r'}$',fontsize=16,bbox=dict(facecolor='blue',alpha=0.15))
