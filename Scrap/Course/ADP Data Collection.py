@@ -1,6 +1,4 @@
 from pylab import *
-from random import choice
-from time import sleep
 
 path='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\ADP\\'
 data=['Aspect Ratio', 'Cruise Velocity', 'Empty Weight', 'Fineness ratio', 'Fuselage Width', 'Height', 'Landing Speed', 'Length of Aircraft', 'Maximum Landing Weight', 'Maximum Rate of Climb', 'Maximum Service Ceiling', 'Maximum Speed', 'Maximum Takeoff Weight', 'Range', 'Runway Length', 'Seating Capacity', 'Service Ceiling', 'Thrust Loading', 'Thrust per Engine', 'Wing Area', 'Wing Loading', 'Wing Span']

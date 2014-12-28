@@ -45,7 +45,7 @@ def temp(File,key=None):
 
 def protect(path,ch,key=None):          # A simple method which shifts and turns it to hex!
     try:
-        if key==None: key=raw_input('\nEnter password for your story: ')
+        if not key: key=raw_input('\nEnter password for your story: ')
         while len(key)<8: key=raw_input('\nEnter password of at least 8 chars: ')
     except KeyboardInterrupt: return False
     with open(path,'r') as file: data=file.readlines()
