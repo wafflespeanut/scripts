@@ -12,8 +12,7 @@ def backup(src,tar):      # Making use of GnuWin32 Zip 3.0
     if not path.exists(today): mkdir(today); print "First Backup today!"
     else: print "You already have a backup!"
     cmd="zip -q -r {0} {1}".format(zipped,''.join(src))
-    print "Zip command:",cmd
-    print "\nRunning..."
+    print "Zip command:",cmd; print "\nRunning..."
     if not system(cmd): print '\nSuccessfully backed up to',zipped
     else: print '\nBackup FAILED!'
     print "Press <Enter> to quit..."

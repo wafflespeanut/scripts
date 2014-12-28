@@ -1,4 +1,11 @@
-import os,subprocess,eyed3,shutil
+import os,subprocess,eyed3,shutil,random
+
+def rfile(drive='H:\\'):            # Random walk files to open something! (Got bored)
+    k=[i for i in os.listdir(drive) if i not in ('$RECYCLE.BIN','System Volume Information','RECYCLER')]; s=drive
+    while True:
+        c=random.choice(k); s+=c
+        if os.path.isfile(s): os.startfile(s); break
+        else: s+='\\'; k=os.listdir(s)
 
 path="C:\\TEMP\\"
 
