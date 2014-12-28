@@ -1,5 +1,4 @@
-Souvenir (v2.1)
-======
+## Souvenir (v2.1)
 
 This is a little project of mine. An utility to remember everyday memories. For now, it puts your stories in branched directories for later viewing. And, it supports encryption. I've used a simple algorithm (which is less secure, but enough for our purpose) to hex and shift the ASCII values in the files. It can also detect incorrect passwords.
 
