@@ -4,7 +4,7 @@ from time import sleep
 from random import choice
 
 loc='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\Diary\\'    # Storage location
-months={'11':'November','10':'October','12':'December','1':'January','3':'March','2':'February','5':'May','4':'April','7':'July','6':'June','9':'September','8':'August'}
+months={'11':'November','10':'October','12':'December','01':'January','03':'March','02':'February','05':'May','04':'April','07':'July','06':'June','09':'September','08':'August'}
 
 def hexed(key):             # Hexing function
     pas=list(key)
