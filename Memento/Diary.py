@@ -3,6 +3,7 @@ from time import strftime as time
 from time import sleep
 from random import choice
 
+ploc='C:\\Users\\Waffles Crazy Peanut\\AppData\\Local\\'            # Password location
 loc='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\Diary\\'    # Storage location
 months={'11':'November','10':'October','12':'December','01':'January','03':'March','02':'February','05':'May','04':'April','07':'July','06':'June','09':'September','08':'August'}
 
@@ -98,10 +99,15 @@ def view():         # To browse the directory, decrypt and view the stories
         y=raw_input('\nEnter a valid year: ')
     if not os.path.exists(loc+y): print '\nNo stories on this year...'; return None
     while True:
-        try: m=months[raw_input('\nMonth: ')]; break
+        try:
+            s=raw_input('\nMonth: ')
+            if s in months: m=months[s]; break
+            elif '0'+s in months: m=months['0'+s]; break
         except KeyError: print 'Enter a valid month!'
     if not os.path.exists(loc+y+os.sep+m+' ('+y+')'): print '\nNo stories on this month...'; return None
-    d='Day '+raw_input('\nDay: ')+' ('+m+' '+y+')'; f=loc+y+os.sep+m+' ('+y+')'+os.sep+d
+    s=raw_input('\nDay: ')
+    if len(s)==1: s='0'+s
+    d='Day '+s+' ('+m+' '+y+')'; f=loc+y+os.sep+m+' ('+y+')'+os.sep+d
     if not os.path.exists(f): print '\nNo stories on this day...'; return None
     else: temp(f)
 
