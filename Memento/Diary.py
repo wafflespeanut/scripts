@@ -3,8 +3,8 @@ from time import strftime as time
 from time import sleep
 from random import choice
 
-ploc='C:\\Users\\Waffles Crazy Peanut\\AppData\\Local\\'            # Password location
-loc='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\Diary\\'    # Storage location
+ploc=os.path.expanduser('~')+'\\AppData\\Local\\SYSTEM.DAT'            # Password location
+loc=os.path.expanduser('~')+'\\Desktop\\Dropbox\\Diary\\'    # Storage location
 months={'11':'November','10':'October','12':'December','01':'January','03':'March','02':'February','05':'May','04':'April','07':'July','06':'June','09':'September','08':'August'}
 
 def hexed(key):             # Hexing function
@@ -39,12 +39,34 @@ def zombify(ch,data,key):           # Linking helper function
         for i in k: p=shift(p,255-ord(i))
         return char(p)
 
-def temp(File,key=None):
+def temp(File,key=None):            # Uses default notepad to view stuff
     if protect(File,'d',key):
         subprocess.Popen(["notepad.exe",loc+'TEMP.tmp'])
         sleep(2); os.remove(loc+'TEMP.tmp')
 
+def check():                        # Allows password to be stored locally (Nothing too serious, it just hexes the thing 10 times!)
+    if not os.path.exists(ploc):
+        try:
+            k1=True; k2=False
+            while True:
+                k1=raw_input('\nEnter password: ')
+                while len(k1)<8: k1=raw_input('\nEnter password of at least 8 chars: ')
+                k2=raw_input('Re-enter password: ')
+                if k1==k2: break
+                else: print "\nPasswords don't match!\n"
+            key=k1=k2
+            for i in range(10): key=''.join(hexed(key))
+            with open(ploc,'w') as file: file.writelines(key)
+        except KeyboardInterrupt: print 'Login credentials failed!'; return None
+    else:
+        with open(ploc,'r') as file: key=file.readlines()
+        if key: key=key[0]
+        else: return None
+        for i in range(10): key=char(key)
+    return key
+
 def protect(path,ch,key=None):          # A simple method which shifts and turns it to hex!
+    if os.path.exists(ploc): key=check()
     try:
         if not key: key=raw_input('\nEnter password for your story: ')
         while len(key)<8: key=raw_input('\nEnter password of at least 8 chars: ')
@@ -70,7 +92,7 @@ def write():        # Does all the dirty job
     if not os.path.exists(f): os.mkdir(f)
     File=f+os.sep+'Day '+time('%d')+' ('+months[time('%m')]+' '+time('%Y')+')'
     if os.path.exists(File):
-        print '\nFile already exists! Password required!'
+        print '\nFile already exists! Appending to current file...'
         while not key:
             key=protect(File,'d')
             if not key: print 'A password is required to append to an existing file. Running sequence again...'
@@ -121,10 +143,16 @@ if __name__=='__main__':
     while True:
         if os.path.exists(loc+'TEMP.tmp'): os.remove(loc+'TEMP.tmp')
         try:
-            s=raw_input("\n\tWhat do you wanna do?\n\n\t\t1. Write today's story\n\t\t2. Random story\n\t\t3. View the story of someday\n\nChoice: ")
+            print '\n\tWhat do you wanna do?',"\n\t\t1: Write today's story","\n\t\t2: Random story","\n\t\t3: View the story of someday"
+            if os.path.exists(ploc): print '\t\t0: Sign out'
+            else: print '\t\t0: Sign in'
+            s=raw_input('\n\nChoice: ')
             if s=='1': write()
             elif s=='2': random()
             elif s=='3': view()
+            elif s=='0':
+                if os.path.exists(ploc): os.remove(ploc); print 'Login credentials removed!'
+                else: check()
             else: print '\nIllegal choice!'
             s=raw_input('\nDo something again (y/n)? ')
             if s!='y': break

@@ -135,26 +135,26 @@ def RUN():      # User Interface
     try:
         choice='y'
         while choice=='y':
-            text=str(raw_input("\nText to put in the cipher: "))
+            text=raw_input("\nText to put in the cipher: ")
             while text=="":
                 print "\n Um, I don't see any text here... Gimme something to eat!!!"
-                text=str(raw_input("\nText to be encrypted: "))
-            key=str(raw_input("Password: "))
-            while len(key)==1 or str(key)=="":
-                if key=="":
+                text=raw_input("\nText to be encrypted: ")
+            key=raw_input("Password: ")
+            while len(key)==1 or key=="":
+                if not key:
                     print "\n No password? You do want me to encrypt, right?\n"
                     key=str(raw_input("What's the password? "))
                 elif len(key)==1:
                     print "\n No, Seriously? Password of unit length? Try something bigger...\n"
                     key=str(raw_input("Choose a password: "))
-            level=str(raw_input("Security level (1-5, for fast output): "))
+            level=raw_input("Security level (1-5, for fast output): ")
             while level=='' or ord(level) not in range(49,54):
                 print "\n Enter a number ranging from 1-5!\n"
                 level=raw_input("Security level (1-5): ")
-            what=str(raw_input("Encrypt (e) or Decrypt (d) ? "))
+            what=raw_input("Encrypt (e) or Decrypt (d) ? ")
             while what!="e" and what!="d":
                 print "\n (sigh) You can choose something...\n"
-                what=str(raw_input("Encrypt (e) or Decrypt (d) ? "))
+                what=raw_input("Encrypt (e) or Decrypt (d) ? ")
             if what=='e': print "\nENCRYPTING...\n"
             elif what=='d': print "\nDECRYPTING...\n"
             start=timeit.default_timer()
@@ -162,31 +162,31 @@ def RUN():      # User Interface
             stop=timeit.default_timer()
             if s==None: print "\tMismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"
             else: print "TOTAL TIME:",round(stop-start,5),"seconds"; print '\nMESSAGE: %s\n'%(s)
-            choice=str(raw_input("Do something again: (y/n)? "))
+            choice=raw_input("Do something again: (y/n)? ")
     except KeyboardInterrupt: return None
 
 def FILE():     # Encrypts/Decrypts text files
     try:
         while True:
-            path=str(raw_input("Enter File name (including path): "))
+            path=raw_input("Enter File name (including path): ")
             try: File=open(path,'r'); File.close(); break
             except IOError: print "\n INVALID PATH!\n"
-        key=str(raw_input("Password: "))
-        while len(key)==1 or str(key)=="":
-            if key=="":
+        key=raw_input("Password: ")
+        while len(key)==1 or key=="":
+            if not key:
                 print "\n No password? You do want me to encrypt, right?\n"
-                key=str(raw_input("What's the password? "))
+                key=raw_input("What's the password? ")
             elif len(key)==1:
                 print "\n No, Seriously? Password of unit length? Try something bigger...\n"
-                key=str(raw_input("Choose a password: "))
-        level=str(raw_input("Security level (1-5, for fast output): "))
+                key=raw_input("Choose a password: ")
+        level=raw_input("Security level (1-5, for fast output): ")
         while level=='' or ord(level) not in range(49,54):
             print "\n Enter a number ranging from 1-5!\n"
             level=raw_input("Security level (1-5): ")
-        what=str(raw_input("Encrypt (e) or Decrypt (d) ? "))
+        what=raw_input("Encrypt (e) or Decrypt (d) ? ")
         while what!="e" and what!="d":
             print "\n (sigh) You can choose something...\n"
-            what=str(raw_input("Encrypt (e) or Decrypt (d) ? "))
+            what=raw_input("Encrypt (e) or Decrypt (d) ? ")
         if what=='e': print "\nENCRYPTING...\n"
         elif what=='d': print "\nDECRYPTING...\n"
         start=timeit.default_timer(); c=None
