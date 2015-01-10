@@ -21,9 +21,9 @@ v2.1: [Souvenir](https://github.com/Wafflespeanut/Python/tree/937d48dc3bc8608530
 - Can detect incorrect passwords
 - Functions: random(), temp(), protect()
 
-v2.0: [Memento](https://github.com/Wafflespeanut/Python/tree/7f2572857bbe86b2598d27ab7872017a580351ff/Memento)
+v2.0: [Memento](https://github.com/Wafflespeanut/Python/tree/7f2572857bbe86b2598d27ab7872017a580351ff/Memento) *(has some bugs)*
 - Added a simple encryption method which hexes and shifts the ASCII values (to make it really "private" - further protection is of your own)
-- Now, you can view stories for a given day
+- Added a function for viewing stories on a given day
 - A TEMP file is created for viewing/updating any story, leaving the original files undisturbed
 - Functions: hexed(), char(), zombify(), shift(), protect(), write()
 

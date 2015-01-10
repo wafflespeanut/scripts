@@ -2,7 +2,7 @@
 
 Well, this is my cipher, built completely for (my own) learning purposes. For a few months, I've been learning Python by finding different ways of getting into the cipher, and patching the algorithm so that it gets stronger every time.
 
-It's quite straight-forward (easy to understand with my comments). And, it's built by a lot of helper functions, for improving readability.
+It's quite straight-forward (should be easy to understand with my comments). And, it's built by a lot of helper functions, for improving readability.
 
 ### How it works?
 
@@ -33,11 +33,11 @@ v2.1: [Automaton](https://github.com/Wafflespeanut/Python/blob/9a583d54bd9f6dab2
 - Hexing during epilog is deprecated
 - Functions: binkill(), CXOR()
 
-v2.0: [Sentinel](https://github.com/Wafflespeanut/Python/blob/581574ddd9c59cf0f45b933548aa2f2dc64203ae/Encryption/Sentinel)
+v2.0: [Sentinel](https://github.com/Wafflespeanut/Python/blob/581574ddd9c59cf0f45b933548aa2f2dc64203ae/Encryption/Sentinel) *(Till now, some garbage functions were used)*
 - Changed the basis of random keys
 - Corrected some functions with improved algorithm
 - Alpha-numeric random keys
-- Simplified version available in Javascript
+- Simplified version [available in Javascript](https://wafflespeanut.github.io/Sentinel)
 - Functions: keypnum(), pop(), extract()
 
 v1.4: [Ranger](https://github.com/Wafflespeanut/Python/blob/49bfe59bb4baa753678e6fbb4b29ad665459963c/Encryption/Ranger)
@@ -63,7 +63,7 @@ v1.1: [Keydepher](https://github.com/Wafflespeanut/Python/blob/d45d3dd783389c11d
 - Iterated ciphertext outputs
 - Functions: add(), sub(), eit(), dit()
 
-v1.0: [Sorter](https://github.com/Wafflespeanut/Python/blob/00ea11b8068e874fb86c84bc1d466b25053194b9/Encryption)
+v1.0: [Sorter](https://github.com/Wafflespeanut/Python/blob/00ea11b8068e874fb86c84bc1d466b25053194b9/Encryption) *(Encryption not yet implemented!)*
 - Just hexing and shuffling (key-independent)
 - Iterated shuffled outputs
 - Functions: sieve(), hexed(), combine(), char(), extract()
