@@ -3,8 +3,8 @@ from time import strftime as time
 from time import sleep
 from random import choice
 
-ploc=os.path.expanduser('~')+'\\AppData\\Local\\SYSTEM.DAT'            # Password location
-loc=os.path.expanduser('~')+'\\Desktop\\Dropbox\\Diary\\'    # Storage location
+ploc=os.path.expanduser('~')+'\\AppData\\Local\\SYSTEM.DAT'         # Password location
+loc=os.path.expanduser('~')+'\\Desktop\\Dropbox\\Diary\\'           # Storage location
 months={'11':'November','10':'October','12':'December','01':'January','03':'March','02':'February','05':'May','04':'April','07':'July','06':'June','09':'September','08':'August'}
 
 def hexed(key):             # Hexing function
@@ -139,14 +139,14 @@ def random():       # Useful only when you have a lot of stories
         d=choice(os.listdir(loc+y+os.sep+m)); f=loc+os.sep+y+os.sep+m+os.sep+d
     print 'Choosing your story from '+d+'...'; temp(f)
 
-if __name__=='__main__':
+def diary():
     while True:
         if os.path.exists(loc+'TEMP.tmp'): os.remove(loc+'TEMP.tmp')
         try:
             print '\n\tWhat do you wanna do?',"\n\t\t1: Write today's story","\n\t\t2: Random story","\n\t\t3: View the story of someday"
             if os.path.exists(ploc): print '\t\t0: Sign out'
             else: print '\t\t0: Sign in'
-            s=raw_input('\n\nChoice: ')
+            s=raw_input('\nChoice: ')
             if s=='1': write()
             elif s=='2': random()
             elif s=='3': view()
