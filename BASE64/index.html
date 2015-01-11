@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen" />
+    <title>BASE-64 Encoder | Convert everything to texts!</title>
+	<style>#dropspace {
+  border: 2px dashed #fff; border-radius: 7px; padding: 20px; text-align: center; }</style>
+  </head>
+
+  <body>
+    <header>
+      <div class="container">
+        <h1>BASE-64 Encoder</h1>
+        <h2>Convert everything to texts!</h2>
+        <section id="downloads">
+          <a href="../index.html" class="btn btn-blog"><span class="icon"></span>Home</a>
+		  <a href="https://github.com/Wafflespeanut" class="btn btn-github"><span class="icon"></span>My GitHub profile</a>
+          <a href="https://wafflescrazypeanut.wordpress.com" class="btn btn-blog"><span class="icon"></span>Arrow of Time (My blog)</a>
+        </section>
+      </div>
+    </header>
+    <div class="container">
+      <section id="main_content">
+		<div id="dropspace"><h3>Drag & Drop files into this box...</h3></div><br>
+		<output id="list"></output>
+		<script type="text/javascript">
+		if (window.File && window.FileReader && window.FileList && window.Blob) {
+			// All the File APIs are supported!
+		} else { alert('File APIs are not fully supported in this browser!'); }
+		
+		function handleFileSelect(evt) {
+			evt.stopPropagation();
+			evt.preventDefault();
+			var files = evt.dataTransfer.files; var output = [];
+			for (var i = 0, f; f = files[i]; i++) {
+			  output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',f.size, ' bytes, Last modified: ',f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a','</li>');
+			} document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>'; }
+
+		  function handleDragOver(evt) {
+			evt.stopPropagation();
+			evt.preventDefault();
+			evt.dataTransfer.dropEffect = 'copy'; }
+		
+		  var dropZone = document.getElementById('dropspace');
+		  dropZone.addEventListener('dragover', handleDragOver, false);
+		  dropZone.addEventListener('drop', handleFileSelect, false);
+		</script>
+      </section>
+    </div>
+  </body>
+</html>
