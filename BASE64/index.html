@@ -7,7 +7,8 @@
     <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen" />
     <title>BASE-64 Encoder | Convert everything to texts!</title>
 	<style>#dropspace {
-  border: 2px dashed #fff; border-radius: 7px; padding: 20px; text-align: center; }</style>
+  border: 2px dashed #fff; border-radius: 7px; width:970px; height:50px; padding: 20px; text-align: center; }
+  textarea {border:1px solid green; border-radius: 7px; padding: 5px; background: black; color:white; font-family:Lucida console}</style>
   </head>
 
   <body>
@@ -25,28 +26,31 @@
     <div class="container">
       <section id="main_content">
 		<div id="dropspace"><h3>Drag & Drop files into this box...</h3></div><br>
+		<center><h3><< Data-URI code below >></h3>
+		<textarea  style="width:1000px; height:100px;" id="out"></textarea></center>
 		<output id="list"></output>
-		<script type="text/javascript">
-		if (window.File && window.FileReader && window.FileList && window.Blob) {
-			// All the File APIs are supported!
-		} else { alert('File APIs are not fully supported in this browser!'); }
+		<script type="text/javascript">			
 		
-		function handleFileSelect(evt) {
-			evt.stopPropagation();
-			evt.preventDefault();
-			var files = evt.dataTransfer.files; var output = [];
-			for (var i = 0, f; f = files[i]; i++) {
-			  output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',f.size, ' bytes, Last modified: ',f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a','</li>');
-			} document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>'; }
+			if (window.FileReader) {
+				// All the File APIs are supported!
+			} else { alert('File APIs are not fully supported in this browser!'); }
+			
+			function read(e) {
+				e.preventDefault(); var files=e.dataTransfer.files, output=[];
+				for (var i=0,f;i==0;i++) {
+				  f=files[i]; output.push('<li><strong>',escape(f.name),'</strong> - (Type: ', f.type || 'N/A', '), Size: ',f.size,' bytes, Last modified: ',f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString():'N/A','</li>');
+				} document.getElementById('list').innerHTML = '<ul>'+output.join('')+'</ul>'; 
+				var file=files[0], reader=new FileReader();
+				reader.onload = function(e) { 
+					document.getElementById("out").value=e.target.result; };
+				reader.readAsDataURL(file);	}
+			
+			function drag(e) { e.preventDefault(); e.dataTransfer.dropEffect='copy'; }
 
-		  function handleDragOver(evt) {
-			evt.stopPropagation();
-			evt.preventDefault();
-			evt.dataTransfer.dropEffect = 'copy'; }
-		
-		  var dropZone = document.getElementById('dropspace');
-		  dropZone.addEventListener('dragover', handleDragOver, false);
-		  dropZone.addEventListener('drop', handleFileSelect, false);
+			var d=document.getElementById('dropspace'), out=document.getElementById("out");
+			out.value=''; out.onclick=function() { out.select(); };
+			d.addEventListener('dragover',drag,false); d.addEventListener('drop',read,false);
+			
 		</script>
       </section>
     </div>
