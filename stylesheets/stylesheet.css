@@ -142,6 +142,44 @@ ul li:before {
   line-height: 16px;
 }
 
+.button-success,
+.button-error,
+.button-warning,
+.button-secondary {
+	font-family: "Comic Sans MS";
+	font-size: 25px;
+	color: white;
+	border-radius: 5px;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button-success {
+	background: rgb(28, 184, 65);
+	font-size: 165%;
+}
+
+.button-error {
+	background: red;
+}
+
+.button-warning {
+	background: rgb(223, 117, 20);
+}
+
+.button-secondary {
+	background: rgb(66, 184, 221);
+}
+
+.hoverMouse {
+  outline-style:solid;
+  outline-width:3px;
+  padding-top: 22px;
+  padding-right: 4px;
+  padding-left: 4px;
+  padding-bottom: 12px;
+  outline-color:red;
+}
+
 blockquote {
   color: #aaa;
   padding-left: 10px;

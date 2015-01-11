@@ -4,10 +4,9 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-
+    <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/print.css" media="print" />
     <title>Sentinel | A messy cipher...</title>
 	
 <style>
@@ -17,23 +16,24 @@ textarea {border:1px solid green; padding: 7px 7px; background: black; color:whi
   </head>
 
   <body>
-
     <header>
       <div class="container">
         <h1>Sentinel</h1>
         <h2>A messy cipher...</h2>
-
         <section id="downloads">
-          <a href="http://wafflespeanut.github.io" class="btn btn-blog"><span class="icon"></span>Home</a>
+          <a href="../index.html" class="btn btn-blog"><span class="icon"></span>Home</a>
         </section>
       </div>
     </header>
-
     <div class="container">
       <section id="main_content">
 
 <form action="form_action.asp">
 <table border="0" cellspacing="0"><tr>
+<p>I once <a href="https://github.com/Wafflespeanut/Python/blob/581574ddd9c59cf0f45b933548aa2f2dc64203ae/Encryption/Sentinel/Cipher.py">wrote a cipher</a>, when I first got into cryptography. For now, I've written this rather <em>simplified</em> javascript version of it, with which you can play around (killing your own browser!)</p>
+
+<p>You can also check out <a href="http://wp.me/p3OCmi-qT">how its <em>"ancestor"</em> works</a>, or have a look at <a href="https://github.com/Wafflespeanut/Python/blob/master/AutomatonX/Cipher.py">my latest patch</a>...</p>
+<br>
 <h3>Text input:</h3>
 <center><p><textarea  style="width: 1000px; height: 130px;" id="cipherspace" placeholder="Gimme something to eat!">Hello, world!</textarea></p></center></tr>
 <p><tr><td><h3>Password:</h3><textarea style="width: 200px; height: 40px;" id="keyspace" placeholder="I need a wrapper!">Sentinel-101</textarea></td>
@@ -219,7 +219,8 @@ function dit(text,key) {
 	extracted=extract(extract(zombie,rkey),key)
 	return extract(extracted,key) }
 </script>
-<hr> <br>
+<hr><br>
+
 <p><h2>NOTE:</h2>
 <ul>
 <li>To the newbies, this is an <a href="https://en.wikipedia.org/wiki/Encryption">encryption</a> cipher. If you've forgot your key (password), then there's no "straight-forward" way you can recover your message from the ciphertext (but, you're always welcome to workaround). Even a slight variation in the key will lead you to <em>stupid</em> characters... <br>(<a href="http://wp.me/p3OCmi-qT">I've written more about that!</a>)</p>
