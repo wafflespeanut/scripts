@@ -143,7 +143,7 @@ def diary():
     while True:
         if os.path.exists(loc+'TEMP.tmp'): os.remove(loc+'TEMP.tmp')
         try:
-            print '\n\tWhat do you wanna do?',"\n\t\t1: Write today's story","\n\t\t2: Random story","\n\t\t3: View the story of someday"
+            print '\n\tWhat do you wanna do?',"\n\n\t\t1: Write today's story","\n\t\t2: Random story","\n\t\t3: View the story of someday"
             if os.path.exists(ploc): print '\t\t0: Sign out'
             else: print '\t\t0: Sign in'
             s=raw_input('\nChoice: ')
