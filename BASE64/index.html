@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen" />
-    <title>BASE-64 Encoder | Convert everything to texts!</title>
+    <title>Base-64 Encoder | Convert everything to texts!</title>
 	<style>#dropspace {
   border: 2px dashed #fff; border-radius: 7px; width:970px; height:50px; padding: 20px; text-align: center; }
   textarea {border:1px solid green; border-radius: 7px; padding: 5px; background: black; color:white; font-family:Lucida console}</style>
@@ -14,7 +14,7 @@
   <body>
     <header>
       <div class="container">
-        <h1>BASE-64 Encoder</h1>
+        <h1>Base-64 Encoder</h1>
         <h2>Convert everything to texts!</h2>
         <section id="downloads">
           <a href="../index.html" class="btn btn-blog"><span class="icon"></span>Home</a>
@@ -30,18 +30,18 @@
 		<textarea  style="width:1000px; height:100px;" id="out"></textarea></center>
 		<output id="info"></output>
 		<script type="text/javascript">
-			if (window.FileReader) {
+			if (window.File && window.FileReader && window.FileList && window.Blob) {
 				// All the File APIs are supported!
 			} else { alert('File APIs are not fully supported in this browser!'); }
 			
 			function read(e) {
 				e.preventDefault(); var files=e.dataTransfer.files, output=[]
 				for (var i=0,f;i==0;i++) {
-				  f=files[i]; output.push('<li><strong>',escape(f.name),'</strong> - (Type: ', f.type || 'N/A', '), Last modified: ',f.lastModifiedDate? f.lastModifiedDate.toLocaleDateString():'N/A','<br>Size: ',f.size,' bytes'); } 
+				  f=files[i]; output.push('<li><strong>',escape(f.name),'</strong> - (Type: ', f.type || 'N/A', '), Last modified: ',f.lastModifiedDate? f.lastModifiedDate.toLocaleDateString():'N/A',', Size: ',f.size,' bytes'); } 
 				var file=files[0], reader=new FileReader();
 				reader.onload = function(e) { out.value=e.target.result; };
-				reader.readAsDataURL(file); var c=document.getElementById("out").value;
-				document.getElementById('info').innerHTML = '<ul>'+output.join('')+', Encoded size: '+c.toString().length+' bytes</li></ul>'; }
+				reader.readAsDataURL(file)
+				document.getElementById('info').innerHTML = '<ul>'+output.join('')+'</li></ul>'; }
 			
 			function drag(e) { e.preventDefault(); e.dataTransfer.dropEffect='copy'; }
 
