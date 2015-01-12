@@ -28,7 +28,7 @@
 		<div id="dropspace"><h3>Drag & Drop files into this box...</h3></div><br>
 		<center><h3><< Data-URI code below >></h3>
 		<textarea  style="width:1000px; height:100px;" id="out"></textarea></center>
-		<output id="list"></output>
+		<output id="info"></output>
 		<script type="text/javascript">			
 		
 			if (window.FileReader) {
@@ -36,14 +36,13 @@
 			} else { alert('File APIs are not fully supported in this browser!'); }
 			
 			function read(e) {
-				e.preventDefault(); var files=e.dataTransfer.files, output=[];
+				e.preventDefault(); var files=e.dataTransfer.files, output=[]
 				for (var i=0,f;i==0;i++) {
-				  f=files[i]; output.push('<li><strong>',escape(f.name),'</strong> - (Type: ', f.type || 'N/A', '), Size: ',f.size,' bytes, Last modified: ',f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString():'N/A','</li>');
-				} document.getElementById('list').innerHTML = '<ul>'+output.join('')+'</ul>'; 
+				  f=files[i]; output.push('<li><strong>',escape(f.name),'</strong> - (Type: ', f.type || 'N/A', '), Last modified: ',f.lastModifiedDate? f.lastModifiedDate.toLocaleDateString():'N/A','<br>Size: ',f.size,' bytes'); } 
 				var file=files[0], reader=new FileReader();
-				reader.onload = function(e) { 
-					document.getElementById("out").value=e.target.result; };
-				reader.readAsDataURL(file);	}
+				reader.onload = function(e) { out.value=e.target.result; };
+				reader.readAsDataURL(file);
+				document.getElementById('info').innerHTML = '<ul>'+output.join('')+', Encoded size: '+' bytes</li></ul>'; }
 			
 			function drag(e) { e.preventDefault(); e.dataTransfer.dropEffect='copy'; }
 
