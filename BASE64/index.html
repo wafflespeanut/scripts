@@ -37,11 +37,11 @@
 			function read(e) {
 				e.preventDefault(); var files=e.dataTransfer.files, output=[]
 				for (var i=0,f;i==0;i++) {
-				  f=files[i]; output.push('<li><strong>',escape(f.name),'</strong> - (Type: ', f.type || 'N/A', '), Last modified: ',f.lastModifiedDate? f.lastModifiedDate.toLocaleDateString():'N/A',', Size: ',f.size,' bytes'); } 
+				  f=files[i]; output.push('<li><strong>',escape(f.name),'</strong> - (Type: ', f.type || 'N/A', '), Last modified: ',f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'N/A',', Size: ',f.size,' bytes'); } 
 				var file=files[0], reader=new FileReader();
 				reader.onload = function(e) { out.value=e.target.result; };
 				reader.readAsDataURL(file)
-				document.getElementById('info').innerHTML = '<ul>'+output.join('')+'</li></ul>'; }
+				document.getElementById('info').innerHTML = '<ul>'+output.join('')+'<br>Encoded size is (always) increased by 33%!'+'</li></ul>'; }
 			
 			function drag(e) { e.preventDefault(); e.dataTransfer.dropEffect='copy'; }
 
