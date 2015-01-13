@@ -34,9 +34,6 @@ def atmos(alt):
         pr=pres(p3,te,t3,a34)
         de=dens(d3,te,t3,a34)
     else: print "INVALID INPUT: Altitude undefined over the given limits!"
-    print "Temperature: " +str(round(te,2)) +" K"
-    print "Pressure: " +str(round(pr,4)) +" Pa"
-    print "Density: " +str(round(de,4)) +" kg/cu.m"
-    return None
+    return [round(te,2),round(pr,4),round(de,4)]
 
-#alt=float(raw_input("Altitude (meters): ")); atmos(alt)
+#alt=float(raw_input("Altitude (meters): ")); print atmos(alt)
