@@ -2,30 +2,18 @@ months={1:31,2:28,3:31,4:30,5:31,6:30,7:31,8:31,9:30,10:31,11:30,12:31}
 
 def isLeap(y): return (y%100==0 and y%400==0) or (y%100!=0 and y%4==0)
 
-# Flaw in calculating first sunday, but the result isn't disturbed by that!
-
 def sunday(year):        # To find the first Sunday of an year
     day=str(raw_input("Enter a known Sunday (in the form DD-MM-YYYY): "))
-    s=day[::-1]; y=int(s[:4]); m=int(s[5:7]); d=int(s[8:10])
-    if year<=y:
-        while y>=year:
-            if isLeap(y): months[2]=29
-            else: months[2]=28
-            while m>=1:
-                if d>7: d-=7
-                else:
-                    if m>1: m-=1; d+=months[m]
-                    elif m==1: y-=1; m=12; d+=months[m]; break
-        d-=months[1]
-    else:
-        while y<=year:
-            if isLeap(y): months[2]=29
-            else: months[2]=28
-            while m<=12:
-                if d<=months[m]: d+=7
-                else:
-                    if m<12: d-=months[m]; m+=1
-                    elif m==12: d-=months[m]; y+=1; m=1; break
+    s=day.split('-'); d=int(s[0]); m=int(s[1]); y=int(s[2])
+    while y>=year:
+        if isLeap(y): months[2]=29
+        else: months[2]=28
+        while m>=1:
+            if d>7: d-=7
+            else:
+                if m>1: m-=1; d+=months[m]
+                elif m==1: y-=1; m=12; d+=months[m]; break
+    d-=months[1]
     return d
 
 def count(l,u):          # Requires first Sunday for calculation!
