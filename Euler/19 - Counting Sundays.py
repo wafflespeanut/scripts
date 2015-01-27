@@ -6,7 +6,7 @@ days={'Sunday':0,'Monday':1,'Tuesday':2,'Wednesday':3,'Thursday':4,'Friday':5,'S
 def isLeap(y): return (y%100==0 and y%400==0) or (y%100!=0 and y%4==0)
 
 def sunday(year):        # To find the first Sunday of an year
-    s=datetime.now(); m=int(s.strftime('%M')); y=int(s.strftime('%Y'))
+    s=datetime.now(); m=int(s.strftime('%m')); y=int(s.strftime('%Y'))
     n=days[s.strftime('%A')]; d=int(s.strftime('%d'))-n
     while y>=year:
         if isLeap(y): months[2]=29
