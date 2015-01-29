@@ -1,5 +1,0 @@
-netsh wlan show drivers			(check whether your driver supports hosted network)
-netsh wlan set hostednetwork mode=allow ssid=<ID> key=<KEY>
-netsh wlan start hostednetwork
-
-(To share the internet, trigger the sharing options in your adapter's properties)
