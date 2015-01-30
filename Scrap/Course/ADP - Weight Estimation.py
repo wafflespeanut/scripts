@@ -14,6 +14,6 @@ def find(w0=275300,we=130199,tl=0.2659,ca=10448,cv=0.83505,wp=51720,wc=2240,r=70
         print 'Thrust at Cruise (per engine): %s N'%(tc/n)
         sfc=float(raw_input('SFC (lb/lbf-hr): '))
         wf=(sfc*tc*r*1.2)/(cv*9.81); rf=0; re=re0-wpp/w0
-        print 'Fuel Weight ratio: %s kg'%(wf/w0)
-        print 'Empty Weight ratio: %s kg'%(re)
+        print 'Fuel Weight ratio: %s'%(wf/w0)
+        print 'Empty Weight ratio: %s'%(re)
         raw_input('\nPress [Enter] to continue...'); i+=1
