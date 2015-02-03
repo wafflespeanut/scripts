@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen" />
     <title>ADP Weight Iterator | Iterate to find the gross & empty weights for your aircraft...</title>
 	<style>
-	textarea { border:1px solid green; padding: 4px 4px; background: black; color:white; font-family:Lucida console; resize: none }
+	textarea { width: 100px; height: 15px; border:1px solid green; padding: 4px 4px; background: black; color:white; font-family:Lucida console; resize: none }
 	
 	#atm {
   border: 2px dashed #fff; width:400px; height:165px; padding: 10px; text-align: center; }
@@ -34,25 +34,26 @@
 <form class="demo" action="form_action.asp">
 <table border="0" cellspacing="0">
 <td><table border="0" cellspacing="0">
-<tr><td><strong>Net weight, W<sub>0</sub></strong> = <textarea  style="width: 100px; height: 15px;" id="W0">275000</textarea> kg
-<tr><td><strong>Empty Weight, W<sub>E</sub></strong> = <textarea style="width: 100px; height: 15px;" id="WE">130199</textarea> kg
-<tr><td><strong>Thrust Loading</strong> = <textarea style="width: 100px; height: 15px;" id="TL">0.2659</textarea>
-<tr><td><strong>Payload Weight, W<sub>P</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="WP">52260</textarea> kg
-<tr><td><strong>Crew Weight, W<sub>C</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="WC">1700</textarea> kg
-<tr><td><strong>Range, R</strong> = <textarea  style="width: 90px; height: 15px;" id="R">7000</textarea> km
+<tr><td><strong>Net weight, W<sub>0</sub></strong> = <textarea id="W0">275000</textarea> kg
+<tr><td><strong>Empty Weight, W<sub>E</sub></strong> = <textarea id="WE">130199</textarea> kg
+<tr><td><strong>Thrust Loading</strong> = <textarea id="TL">0.2659</textarea>
+<tr><td><strong>Payload Weight, W<sub>P</sub></strong> = <textarea id="WP">52260</textarea> kg
+<tr><td><strong>Crew Weight, W<sub>C</sub></strong> = <textarea id="WC">1700</textarea> kg
+<tr><td><strong>Range, R</strong> = <textarea id="R">7000</textarea> km
 <tr><td><strong>Number of Engines: </strong><textarea style="width: 20px; height: 15px;" maxlength="1" id="n">4</textarea></table>
 <td><table border="0" cellspacing="0">
 <tr><td><strong>Flight Length: </strong><select><option value="long">Long haul</option>
 <option value="short">Short haul</option></select>
-<tr><td><strong>Cruise Altitude, H<sub>cr</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="alt">10448</textarea> m
-<tr><td><strong>Cruise Velocity, v<sub>cr</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="VCR">894.26467</textarea> km/hr
-<tr><td><strong>Cruise Mach Number, M<sub>cr</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="MCR">0.83505</textarea><br><br>
+<tr><td><strong>Cruise Altitude, H<sub>cr</sub></strong> = <textarea id="alt">10448</textarea> m
+<tr><td><strong>Cruise Velocity, v<sub>cr</sub></strong> = <textarea id="VCR">894.26467</textarea> km/hr
+<tr><td><strong>Cruise Mach Number, M<sub>cr</sub></strong> = <textarea id="MCR">0.83505</textarea><br><br>
 <div id="atm"><h3>Standard Atmosphere data</h3><table border="0" cellspacing="0">
-<tr><td><strong>Pressure, P<sub>0</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="P0">101325</textarea> Pa
-<tr><td><strong>Temperature, T<sub>0</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="T0">288.15</textarea> K
-<tr><td><strong>Density, ρ<sub>0</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="d0">1.2252</textarea> kg/m<sup>3</sup>
+<tr><td><strong>Pressure, P<sub>0</sub></strong> = <textarea id="P0">101325</textarea> Pa
+<tr><td><strong>Temperature, T<sub>0</sub></strong> = <textarea id="T0">288.15</textarea> K
+<tr><td><strong>Density, ρ<sub>0</sub></strong> = <textarea id="d0">1.2252</textarea> kg/m<sup>3</sup>
 </div>
 </table></table></table>
+<hr>
 </form>
 <script type="text/javascript">
 
