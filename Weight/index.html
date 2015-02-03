@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen" />
+    <title>ADP Weight Iterator | Iterate to find the gross & empty weights for your aircraft...</title>
+	<style>
+	textarea { border:1px solid green; padding: 4px 4px; background: black; color:white; font-family:Lucida console; resize: none }
+	
+	#atm {
+  border: 2px dashed #fff; width:400px; height:165px; padding: 10px; text-align: center; }
+	
+	.demo select {	border:1px solid green; -webkit-appearance:none; -moz-appearance:none; width: 100px; text-indent: 0.02px; color: #FFF; padding:5px; box-shadow: inset 0 0 5px rgba(000,000,000,0.5); background-color: #000; }
+	</style>
+  </head>
+
+  <body>
+    <header>
+      <div class="container">
+        <h1>ADP - Weight Iterator</h1>
+        <h2>Iterate to find the gross & empty weights for your aircraft...</h2>
+        <section id="downloads">
+          <a href="../index.html" class="btn btn-blog"><span class="icon"></span>Home</a>
+		  <a href="https://github.com/Wafflespeanut" class="btn btn-github"><span class="icon"></span>My GitHub profile</a>
+          <a href="https://wafflescrazypeanut.wordpress.com" class="btn btn-blog"><span class="icon"></span>Arrow of Time (My blog)</a>
+        </section>
+      </div>
+    </header>
+    <div class="container">
+      <section id="main_content">
+
+<form class="demo" action="form_action.asp">
+<table border="0" cellspacing="0">
+<td><table border="0" cellspacing="0">
+<tr><td><strong>Net weight, W<sub>0</sub></strong> = <textarea  style="width: 100px; height: 15px;" id="W0">275000</textarea> kg
+<tr><td><strong>Empty Weight, W<sub>E</sub></strong> = <textarea style="width: 100px; height: 15px;" id="WE">130199</textarea> kg
+<tr><td><strong>Thrust Loading</strong> = <textarea style="width: 100px; height: 15px;" id="TL">0.2659</textarea>
+<tr><td><strong>Payload Weight, W<sub>P</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="WP">52260</textarea> kg
+<tr><td><strong>Crew Weight, W<sub>C</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="WC">1700</textarea> kg
+<tr><td><strong>Range, R</strong> = <textarea  style="width: 90px; height: 15px;" id="R">7000</textarea> km
+<tr><td><strong>Number of Engines: </strong><textarea style="width: 20px; height: 15px;" maxlength="1" id="n">4</textarea></table>
+<td><table border="0" cellspacing="0">
+<tr><td><strong>Flight Length: </strong><select><option value="long">Long haul</option>
+<option value="short">Short haul</option></select>
+<tr><td><strong>Cruise Altitude, H<sub>cr</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="alt">10448</textarea> m
+<tr><td><strong>Cruise Velocity, v<sub>cr</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="VCR">894.26467</textarea> km/hr
+<tr><td><strong>Cruise Mach Number, M<sub>cr</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="MCR">0.83505</textarea><br><br>
+<div id="atm"><h3>Standard Atmosphere data</h3><table border="0" cellspacing="0">
+<tr><td><strong>Pressure, P<sub>0</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="P0">101325</textarea> Pa
+<tr><td><strong>Temperature, T<sub>0</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="T0">288.15</textarea> K
+<tr><td><strong>Density, ρ<sub>0</sub></strong> = <textarea  style="width: 90px; height: 15px;" id="d0">1.2252</textarea> kg/m<sup>3</sup>
+</div>
+</table></table></table>
+</form>
+<script type="text/javascript">
+
+var vcr = document.getElementById("VCR")
+var mcr = document.getElementById("MCR")
+var h = document.getElementById("alt")
+k = atmos(parseInt(h.value))
+s = Math.sqrt(k[1]*1.4*287)*18/5
+
+mcr.onkeyup = function() {
+	document.getElementById('VCR').value = MCR.value*s }
+vcr.onkeyup = function() {
+	document.getElementById('MCR').value = vcr.value/s }
+h.onkeyup = function() {
+	document.getElementById('P0').value=atmos(parseInt(h.value))[0];
+	document.getElementById('T0').value=atmos(parseInt(h.value))[1];
+	document.getElementById('d0').value=atmos(parseInt(h.value))[2]; }
+
+function atmos(alt) {
+	function temp(t,a,hmin,hmax) { return t+a*(hmax-hmin)}
+	function pres(p,t,t0,a) { return p*(Math.pow((t/t0),(-g/(a*R)))) }
+	function cons(f,t,hmin,hmax) { return f*(Math.exp(-g/(R*t)*(hmax-hmin))) }
+	function dens(d,t,t0,a) { return d*(Math.pow((t/t0),(-g/(a*R)-1))) }
+	g=9.80665; R=287; a01=-0.0065; a23=0.001; a34=0.0028; 
+	t0=288.15; t1=temp(t0,a01,0,11000); t2=t1;
+	t3=temp(t2,a23,20000,32000); t4=temp(t3,a34,32000,47000);
+	p0=101325; p1=pres(p0,t1,t0,a01); p2=cons(p1,t2,11000,20000);
+	p3=pres(p2,t3,t2,a23); d0=p0/(R*t0); d1=dens(d0,t1,t0,a01);
+	d2=cons(d1,t2,11000,20000); d3=dens(d2,t3,t2,a23);
+	if(alt==0) { te=t0; pr=p0; de=d0; }
+	else if(alt>0 && alt<=11000) {
+		te=temp(t0,a01,0,alt); pr=pres(p0,te,t0,a01); de=dens(d0,te,t0,a01) }
+	else if(alt>11000 && alt<=20000) {
+		te=t1; pr=cons(p1,te,11000,alt); de=cons(d1,te,11000,alt) }
+	else if(alt>20000 && alt<=32000) {
+		te=temp(t2,a23,20000,alt); pr=pres(p2,te,t2,a23); de=dens(d2,te,t2,a23) }
+	else if(alt>32000 && alt<=47000) {
+		te=temp(t3,a34,32000,alt); pr=pres(p3,te,t3,a34); de=dens(d3,te,t3,a34); }
+	else { return ["undefined","undefined","undefined"] }
+	return [Math.round(pr*10000)/10000,Math.round(te*10000)/10000,Math.round(de*10000)/10000] }
+
+</script>
+      </section>
+    </div>
+  </body>
+</html>
