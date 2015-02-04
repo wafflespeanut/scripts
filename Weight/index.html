@@ -34,33 +34,46 @@
 <form class="demo" action="form_action.asp">
 <table border="0" cellspacing="0">
 <td><table border="0" cellspacing="0">
-<tr><td><strong>Net weight, W<sub>0</sub></strong> = <textarea id="W0">275000</textarea> kg
+<tr><td><strong>Net weight, W<sub>0</sub></strong> = <textarea id="W0">275300</textarea> kg
 <tr><td><strong>Empty Weight, W<sub>E</sub></strong> = <textarea id="WE">130199</textarea> kg
 <tr><td><strong>Thrust Loading</strong> = <textarea id="TL">0.2659</textarea>
 <tr><td><strong>Payload Weight, W<sub>P</sub></strong> = <textarea id="WP">52260</textarea> kg
 <tr><td><strong>Crew Weight, W<sub>C</sub></strong> = <textarea id="WC">1700</textarea> kg
-<tr><td><strong>Range, R</strong> = <textarea id="R">7000</textarea> km
-<tr><td><strong>Number of Engines: </strong><textarea style="width: 20px; height: 15px;" maxlength="1" id="n">4</textarea></table>
+<tr><td><strong>Range, R</strong> = <textarea maxlength="5" id="R">7000</textarea> km
+<tr><td><strong>Number of Engines: </strong><select id="N"style="width: 40px"><option value="4">4</option><option value="2">2</option><option value="3">3</option><option value="5">5</option><option value="6">6</option></select></table>
 <td><table border="0" cellspacing="0">
-<tr><td><strong>Flight Length: </strong><select><option value="long">Long haul</option>
-<option value="short">Short haul</option></select>
+<tr><td><strong>Flight Length: </strong><select id='flight'><option value="l">Long haul</option>
+<option value="s">Short haul</option></select>
 <tr><td><strong>Cruise Altitude, H<sub>cr</sub></strong> = <textarea id="alt">10448</textarea> m
 <tr><td><strong>Cruise Velocity, v<sub>cr</sub></strong> = <textarea id="VCR">894.26467</textarea> km/hr
 <tr><td><strong>Cruise Mach Number, M<sub>cr</sub></strong> = <textarea id="MCR">0.83505</textarea><br><br>
 <div id="atm"><h3>Standard Atmosphere data</h3><table border="0" cellspacing="0">
-<tr><td><strong>Pressure, P<sub>0</sub></strong> = <textarea id="P0">101325</textarea> Pa
-<tr><td><strong>Temperature, T<sub>0</sub></strong> = <textarea id="T0">288.15</textarea> K
-<tr><td><strong>Density, ρ<sub>0</sub></strong> = <textarea id="d0">1.2252</textarea> kg/m<sup>3</sup>
+<tr><td><strong>Pressure, P<sub>0</sub></strong> = <textarea readonly id="P0">101325</textarea> Pa
+<tr><td><strong>Temperature, T<sub>0</sub></strong> = <textarea readonly id="T0">288.15</textarea> K
+<tr><td><strong>Density, ρ<sub>0</sub></strong> = <textarea readonly id="d0">1.2252</textarea> kg/m<sup>3</sup>
 </div>
 </table></table></table>
-<hr>
+<hr><br>
+<table border="0" cellspacing="0">
+<td><table border="0" cellspacing="0">
+<tr><td><strong>Iteration: </strong><textarea style="width: 50px" id='iter'>0</textarea>
+<tr><td><strong>Net weight, W<sub>0</sub></strong> = <textarea id="W01">0</textarea> kg
+<tr><td><strong>Thrust required (per engine), T</strong> = <textarea id="T1">0</textarea> lbf
+<tr><td><strong>Thrust at Cruise (per engine), T<sub>cr</sub></strong> = <textarea id="TCR1">0</textarea> N
+<tr><td><strong>Fuel Weight ratio, W<sub>F</sub>/W<sub>0</sub></strong> = <textarea id="RF1">0</textarea>
+<tr><td><strong>Empty Weight ratio, W<sub>E</sub>/W<sub>0</sub></strong> = <textarea id="RE1">0</textarea>
+</table><td><table border="0" cellspacing="0">
+<tr><td><strong>Engine Thrust, T<sub>E</sub></strong> = <textarea id="TE1">0</textarea> lbf
+<tr><td><strong>Engine Weight, W<sub>PP</sub></strong> = <textarea id="WPP1">0</textarea> lb
+<tr><td><strong>SFC = <textarea id="SFC">0</textarea> lb/lbf-hr<br><br>
+<span><button class="button-error pure-button" type="button" onclick="fan()">Iterate</button></span>
+</table></table>
 </form>
 <script src="../javascripts/statm.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-var vcr = document.getElementById("VCR")
-var mcr = document.getElementById("MCR")
-var h = document.getElementById("alt")
+vcr = document.getElementById("VCR"); mcr = document.getElementById("MCR")
+h = document.getElementById("alt")
 
 mcr.onkeyup = function() {
 	document.getElementById('VCR').value = MCR.value*Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5 }
@@ -71,6 +84,32 @@ h.onkeyup = function() {
 	document.getElementById('T0').value=atmos(parseInt(h.value))[1];
 	document.getElementById('d0').value=atmos(parseInt(h.value))[2]; 
 	if(vcr.value) { document.getElementById('MCR').value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) } }
+
+function fan() {
+	i=document.getElementById('iter')
+	w0=parseFloat(document.getElementById('W0').value); we=parseFloat(document.getElementById('WE').value)
+	tl=parseFloat(document.getElementById('TL').value); ca=parseFloat(h.value)
+	cv=parseFloat(document.getElementById('VCR').value); wp=parseFloat(document.getElementById('WP').value)
+	wc=parseFloat(document.getElementById('WC').value); r=parseFloat(document.getElementById('R').value)
+	n=parseFloat(document.getElementById('N').value); wpp=0; wf=0
+	
+	if(i.value>0) { w0=parseFloat(document.getElementById('W01').value); we=parseFloat(document.getElementById('WE1').value) }
+	
+	if(document.getElementById('flight').value=='l') { rf=0.3 }
+	else { rf=0.15 }
+	d0=1.225; re=re0=we/w0; w0=(wc+wp+wpp+wf)/(1-re-rf)
+	document.getElementById('W01').value=w0
+	t=w0*tl*9.81*1.2; document.getElementById('T1').value=t/(4.448*n)
+	te=document.getElementById('TE1').value*4.448*n
+	wpp=document.getElementById('WPP1').value*0.4535924*n
+	tc=te*Math.pow((atmos(ca)[2]/d0),1.2)
+	document.getElementById('TCR1').value=tc/n
+	sfc=document.getElementById('SFC').value
+	wf=(sfc*tc*r*1.2)/(cv*9.81); rf=0; re=re0-wpp/w0
+	document.getElementById('RF1').value=wf/w0
+	document.getElementById('RE1').value=re
+	if(document.getElementById('RF1').value!=0) { i.value=parseFloat(i.value)+1 } }
+			
 
 </script>
       </section>
