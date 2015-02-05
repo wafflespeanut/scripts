@@ -91,7 +91,7 @@ def write():        # Does all the dirty job
     key=None; f=loc+time('%Y')+os.sep+months[time('%m')]+' ('+time('%Y')+')'
     if not os.path.exists(f): os.mkdir(f)
     File=f+os.sep+'Day '+time('%d')+' ('+months[time('%m')]+' '+time('%Y')+')'
-    if os.path.exists(File):
+    if os.path.exists(File) and os.path.getsize(File)!=0:
         print '\nFile already exists! Appending to current file...'
         while not key:
             key=protect(File,'d')
@@ -99,6 +99,7 @@ def write():        # Does all the dirty job
         with open(loc+'TEMP.tmp','r') as file: data=file.readlines()
         with open(File,'w') as file: file.writelines(data)
         os.remove(loc+'TEMP.tmp')
+    elif os.path.exists(File): os.remove(File)
     f=open(File,'a')
     a=['['+time('%Y')+'-'+time('%m')+'-'+time('%d')+']'+' '+time('%H')+':'+time('%M')+':'+time('%S')+'\n']
     try: s=raw_input('''\nStart writing... (Press Ctrl+C when you're done!)\n\n\t'''); a.append('\t'+s)

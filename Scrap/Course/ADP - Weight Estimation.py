@@ -1,6 +1,6 @@
 execfile("Standard Atmosphere.py")
 
-def fan(w0=275300,we=130199,tl=0.2659,ca=10448,cv=0.83505,wp=51720,wc=2240,r=7000,n=4):
+def fan(w0=275300,we=130199,tl=0.2659,ca=10448,cv=0.83505,wp=52260,wc=1700,r=7000,n=4):
     a=[]; cv*=((1.4*287*atmos(ca)[0])**0.5)*(18.0/5); wf=0; rf=0.3; wpp=0; d0=1.225; i=0; re=re0=float(we)/w0
     while True:
         try:
