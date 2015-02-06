@@ -8,10 +8,8 @@
     <title>ADP Weight Iterator | Iterate to find the gross & empty weights for your aircraft...</title>
 	<style>
 	textarea { width: 100px; height: 15px; border:1px solid green; padding: 4px 4px; background: black; color:white; font-family:Lucida console; resize: none }
-	
 	#atm {
   border: 2px dashed #fff; width:400px; height:165px; padding: 10px; text-align: center; }
-	
 	.demo select {	border:1px solid green; -webkit-appearance:none; -moz-appearance:none; width: 100px; text-indent: 0.02px; color: #FFF; padding:5px; box-shadow: inset 0 0 5px rgba(000,000,000,0.5); background-color: #000; }
 	</style>
   </head>
@@ -85,15 +83,16 @@ h.onkeyup = function() {
 	document.getElementById('d0').value=atmos(parseInt(h.value))[2]; 
 	if(vcr.value) { document.getElementById('MCR').value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) } }
 
+document.getElementById('W01').value=document.getElementById('W0').value
+document.getElementById('RE1').value=document.getElementById('WE').value/document.getElementById('W0').value
+
 function fan() {
 	i=document.getElementById('iter')
-	w0=parseFloat(document.getElementById('W0').value); we=parseFloat(document.getElementById('WE').value)
+	w0=parseFloat(document.getElementById('W01').value); we=parseFloat(document.getElementById('RE1').value)*parseFloat(document.getElementById('W01').value)
 	tl=parseFloat(document.getElementById('TL').value); ca=parseFloat(h.value)
 	cv=parseFloat(document.getElementById('VCR').value); wp=parseFloat(document.getElementById('WP').value)
 	wc=parseFloat(document.getElementById('WC').value); r=parseFloat(document.getElementById('R').value)
-	n=parseFloat(document.getElementById('N').value); wpp=0; wf=0
-	
-	if(i.value>0) { w0=parseFloat(document.getElementById('W01').value); we=parseFloat(document.getElementById('WE1').value) }
+	n=parseFloat(document.getElementById('N').value); wpp=parseFloat(document.getElementById('WPP1').value); wf=parseFloat(document.getElementById('RF1').value)*parseFloat(document.getElementById('W01').value)
 	
 	if(document.getElementById('flight').value=='l') { rf=0.3 }
 	else { rf=0.15 }
@@ -109,7 +108,6 @@ function fan() {
 	document.getElementById('RF1').value=wf/w0
 	document.getElementById('RE1').value=re
 	if(document.getElementById('RF1').value!=0) { i.value=parseFloat(i.value)+1 } }
-			
 
 </script>
       </section>
