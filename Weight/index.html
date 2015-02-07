@@ -125,8 +125,8 @@ function fan() {
 		wf=(sfc.value*tc*r*1.2)/(cv*9.81)
 		document.getElementById('RF1').value=wf/w0 }
 	WPP.onkeyup = function() {
-		document.getElementById('RE1').value=re0-WPP.value*0.4535924*n/w0 }
-	wpp=WPP.value*0.4535924*n
+		wpp=WPP.value*0.4535924*n
+		document.getElementById('RE1').value=re0-wpp/w0 }
 	i.value=parseFloat(i.value)+1 }
 
 </script>
