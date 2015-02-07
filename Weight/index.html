@@ -38,17 +38,16 @@
 <tr><td><strong>Payload Weight, W<sub>P</sub></strong> = <textarea id="WP">52260</textarea> kg
 <tr><td><strong>Crew Weight, W<sub>C</sub></strong> = <textarea id="WC">1700</textarea> kg
 <tr><td><strong>Range, R</strong> = <textarea maxlength="5" id="R">7000</textarea> km
-<tr><td><strong>Number of Engines: </strong><select id="N"style="width: 40px"><option value="4">4</option><option value="2">2</option><option value="3">3</option><option value="5">5</option><option value="6">6</option></select></table>
+<tr><td><strong>Number of Engines: </strong><select id="N" style="width: 40px"><option value="4">4</option><option value="2">2</option><option value="3">3</option><option value="5">5</option><option value="6">6</option></select></table>
 <td><table border="0" cellspacing="0">
-<tr><td><strong>Flight Length: </strong><select id='flight'><option value="l">Long haul</option>
-<option value="s">Short haul</option></select>
+<tr><td><strong>Fuel Weight ratio, W<sub>F</sub>/W<sub>0</sub></strong> = <select id='flight' style="width: 130px"><option value="0.3">0.3 (Long haul)</option><option value="0.4">0.4 (Long haul)</option><option value="0.15">0.15 (Short haul)</option></select>
 <tr><td><strong>Cruise Altitude, H<sub>cr</sub></strong> = <textarea id="alt">10448</textarea> m
 <tr><td><strong>Cruise Velocity, v<sub>cr</sub></strong> = <textarea id="VCR">894.26467</textarea> km/hr
 <tr><td><strong>Cruise Mach Number, M<sub>cr</sub></strong> = <textarea id="MCR">0.83505</textarea><br><br>
 <div id="atm"><h3>Standard Atmosphere data</h3><table border="0" cellspacing="0">
-<tr><td><strong>Pressure, P<sub>0</sub></strong> = <textarea readonly id="P0">101325</textarea> Pa
-<tr><td><strong>Temperature, T<sub>0</sub></strong> = <textarea readonly id="T0">288.15</textarea> K
-<tr><td><strong>Density, ρ<sub>0</sub></strong> = <textarea readonly id="d0">1.2252</textarea> kg/m<sup>3</sup>
+<tr><td><strong>Pressure, P<sub>0</sub></strong> = <textarea readonly id="P0">24666.2897</textarea> Pa
+<tr><td><strong>Temperature, T<sub>0</sub></strong> = <textarea readonly id="T0">220.238</textarea> K
+<tr><td><strong>Density, ρ<sub>0</sub></strong> = <textarea readonly id="d0">0.3902</textarea> kg/m<sup>3</sup>
 </div>
 </table></table></table>
 <hr><br>
@@ -70,21 +69,30 @@
 <script src="../javascripts/statm.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-vcr = document.getElementById("VCR"); mcr = document.getElementById("MCR")
-h = document.getElementById("alt"); wpp=0
+vcr=document.getElementById("VCR"); mcr=document.getElementById("MCR")
+h=document.getElementById("alt"); wpp=0; W=document.getElementById('W0')
+document.getElementById('W01').value=W.value; WE=document.getElementById('WE')
+document.getElementById('RE1').value=document.getElementById('WE').value/W.value
 
 mcr.onkeyup = function() {
 	vcr.value = mcr.value*Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5 }
+
 vcr.onkeyup = function() {
 	mcr.value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) }
+
 h.onkeyup = function() {
 	document.getElementById('P0').value=atmos(parseInt(h.value))[0];
 	document.getElementById('T0').value=atmos(parseInt(h.value))[1];
 	document.getElementById('d0').value=atmos(parseInt(h.value))[2]; 
 	if(vcr.value) { document.getElementById('MCR').value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) } }
 
-document.getElementById('W01').value=document.getElementById('W0').value
-document.getElementById('RE1').value=document.getElementById('WE').value/document.getElementById('W0').value
+W.onkeyup = function() {
+	document.getElementById('W01').value=W.value
+	document.getElementById('RE1').value=WE.value/W.value }
+
+WE.onkeyup = function() {
+	document.getElementById('RE1').value=WE.value/W.value }
+
 re0=document.getElementById('RE1').value; n=parseFloat(document.getElementById('N').value)
 tl=parseFloat(document.getElementById('TL').value); ca=parseFloat(h.value); d0=1.225
 cv=parseFloat(document.getElementById('VCR').value); wp=parseFloat(document.getElementById('WP').value)
@@ -96,7 +104,7 @@ function restart() {
 	document.getElementById('iter').value=0; document.getElementById('SFC').value=0
 	document.getElementById('WPP1').value=0; document.getElementById('TE1').value=0
 	document.getElementById('T1').value=0; document.getElementById('TCR1').value=0
-	document.getElementById('RF1').value=0 }
+	document.getElementById('RF1').value=0; wpp=0 }
 
 function fan() {
 	i=document.getElementById('iter')
@@ -105,8 +113,7 @@ function fan() {
 	WPP=document.getElementById('WPP1'); sfc=document.getElementById('SFC')
 	re=parseFloat(document.getElementById('RE1').value)
 	if(i.value==0) {
-		if(document.getElementById('flight').value=='l') { rf=0.3 }
-		else { rf=0.15 } }
+		rf=parseFloat(document.getElementById('flight').value) }
 	else { rf=0 }
 	re=document.getElementById('RE1').value; w0=(wc+wp+wpp+wf)/(1-re-rf)
 	document.getElementById('W01').value=w0
