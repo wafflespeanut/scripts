@@ -31,24 +31,26 @@
 		<textarea  style="width:1000px; height:100px;" id="out"></textarea></center>
 		<output id="info"></output>
 		<script type="text/javascript">
+		
 			if (window.File && window.FileReader && window.FileList && window.Blob) {
 				// All the File APIs are supported!
-			} else { alert('File APIs are not fully supported in this browser!'); }
+			} else { alert('File APIs are not fully supported in this browser!') }
 			
 			function read(e) {
-				e.preventDefault(); var files=e.dataTransfer.files, output=[]
-				for (var i=0,f;i==0;i++) {
-				  f=files[i]; output.push('<li><strong>',escape(f.name),'</strong> - (Type: ', f.type || 'N/A', '), Last modified: ',f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'N/A',', Size: ',f.size,' bytes'); } 
-				var file=files[0], reader=new FileReader();
-				reader.onload = function(e) { out.value=e.target.result; };
-				reader.readAsDataURL(file)
-				document.getElementById('info').innerHTML = '<ul>'+output.join('')+'<br>Encoded size is (always) increased by 33%!'+'</li></ul>'; }
+			e.preventDefault(); var files=e.dataTransfer.files, output=[]
+			for (var i=0,f;i==0;i++) {
+				 f=files[i]; output.push('<li><strong>',escape(f.name),'</strong> - (Type: ', f.type || 'N/A', '), Last modified: ',f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'N/A',', Size: ',f.size,' bytes') }
+			var file=files[0], reader=new FileReader()
+			reader.onload = function(e) { out.value=e.target.result }
+			reader.readAsDataURL(file)
+			document.getElementById('info').innerHTML = '<ul>'+output.join('')+'<br>Encoded size is (always) increased by 33%!'+'</li></ul>' }
 			
-			function drag(e) { e.preventDefault(); e.dataTransfer.dropEffect='copy'; }
+			function drag(e) { e.preventDefault(); e.dataTransfer.dropEffect='copy' }
 
-			var d=document.getElementById('dropspace'), out=document.getElementById("out");
-			out.value=''; out.onclick=function() { out.select(); };
-			d.addEventListener('dragover',drag,false); d.addEventListener('drop',read,false);
+			var d=document.getElementById('dropspace'), out=document.getElementById("out")
+			out.value=''; out.onclick=function() { out.select() }
+			d.addEventListener('dragover',drag,false); d.addEventListener('drop',read,false)
+		
 		</script>
       </section>
     </div>
