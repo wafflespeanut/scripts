@@ -62,8 +62,8 @@
 <tr><td><strong>Empty Weight ratio, W<sub>E</sub>/W<sub>0</sub></strong> = <textarea id="RE1">0</textarea>
 </table><td><table border="0" cellspacing="0">
 <tr><td><strong>Engine Thrust, T<sub>E</sub></strong> = <textarea id="TE1">0</textarea> lbf
-<tr><td><strong>Engine Weight, W<sub>PP</sub></strong> = <textarea id="WPP1">0</textarea> lb
-<tr><td><strong>SFC = <textarea id="SFC">0</textarea> lb/lbf-hr<br><br>
+<tr><td><strong>SFC = <textarea id="SFC">0</textarea> lb/lbf-hr
+<tr><td><strong>Engine Weight, W<sub>PP</sub></strong> = <textarea id="WPP1">0</textarea> lb<br><br>
 <span><button class="button-error pure-button" type="button" onclick="fan()">Iterate</button></span>
 </table></table>
 </form>
@@ -71,12 +71,12 @@
 <script type="text/javascript">
 
 vcr = document.getElementById("VCR"); mcr = document.getElementById("MCR")
-h = document.getElementById("alt")
+h = document.getElementById("alt"); wpp=0
 
 mcr.onkeyup = function() {
-	document.getElementById('VCR').value = MCR.value*Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5 }
+	vcr.value = mcr.value*Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5 }
 vcr.onkeyup = function() {
-	document.getElementById('MCR').value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) }
+	mcr.value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) }
 h.onkeyup = function() {
 	document.getElementById('P0').value=atmos(parseInt(h.value))[0];
 	document.getElementById('T0').value=atmos(parseInt(h.value))[1];
@@ -85,29 +85,34 @@ h.onkeyup = function() {
 
 document.getElementById('W01').value=document.getElementById('W0').value
 document.getElementById('RE1').value=document.getElementById('WE').value/document.getElementById('W0').value
+re0=document.getElementById('RE1').value; n=parseFloat(document.getElementById('N').value)
+tl=parseFloat(document.getElementById('TL').value); ca=parseFloat(h.value); d0=1.225
+cv=parseFloat(document.getElementById('VCR').value); wp=parseFloat(document.getElementById('WP').value)
+wc=parseFloat(document.getElementById('WC').value); r=parseFloat(document.getElementById('R').value)
 
 function fan() {
 	i=document.getElementById('iter')
-	w0=parseFloat(document.getElementById('W01').value); we=parseFloat(document.getElementById('RE1').value)*parseFloat(document.getElementById('W01').value)
-	tl=parseFloat(document.getElementById('TL').value); ca=parseFloat(h.value)
-	cv=parseFloat(document.getElementById('VCR').value); wp=parseFloat(document.getElementById('WP').value)
-	wc=parseFloat(document.getElementById('WC').value); r=parseFloat(document.getElementById('R').value)
-	n=parseFloat(document.getElementById('N').value); wpp=parseFloat(document.getElementById('WPP1').value); wf=parseFloat(document.getElementById('RF1').value)*parseFloat(document.getElementById('W01').value)
-	
-	if(document.getElementById('flight').value=='l') { rf=0.3 }
-	else { rf=0.15 }
-	d0=1.225; re=re0=we/w0; w0=(wc+wp+wpp+wf)/(1-re-rf)
+	w0=parseFloat(document.getElementById('W01').value); TE=document.getElementById('TE1')
+	wf=parseFloat(document.getElementById('RF1').value)*parseFloat(document.getElementById('W01').value)
+	WPP=document.getElementById('WPP1'); sfc=document.getElementById('SFC')
+	re=parseFloat(document.getElementById('RE1').value)
+	if(i.value==0) {
+		if(document.getElementById('flight').value=='l') { rf=0.3 }
+		else { rf=0.15 } }
+	else { rf=0 }
+	re=document.getElementById('RE1').value; w0=(wc+wp+wpp+wf)/(1-re-rf)
 	document.getElementById('W01').value=w0
 	t=w0*tl*9.81*1.2; document.getElementById('T1').value=t/(4.448*n)
-	te=document.getElementById('TE1').value*4.448*n
-	wpp=document.getElementById('WPP1').value*0.4535924*n
-	tc=te*Math.pow((atmos(ca)[2]/d0),1.2)
-	document.getElementById('TCR1').value=tc/n
-	sfc=document.getElementById('SFC').value
-	wf=(sfc*tc*r*1.2)/(cv*9.81); rf=0; re=re0-wpp/w0
-	document.getElementById('RF1').value=wf/w0
-	document.getElementById('RE1').value=re
-	if(document.getElementById('RF1').value!=0) { i.value=parseFloat(i.value)+1 } }
+	TE.onkeyup = function() {
+		tc=TE.value*4.448*n*Math.pow((atmos(ca)[2]/d0),1.2)
+		document.getElementById('TCR1').value=tc/n }
+	sfc.onkeyup = function() {
+		wf=(sfc.value*tc*r*1.2)/(cv*9.81)
+		document.getElementById('RF1').value=wf/w0 }
+	WPP.onkeyup = function() {
+		document.getElementById('RE1').value=re0-WPP.value*0.4535924*n/w0 }
+	wpp=WPP.value*0.4535924*n
+	i.value=parseFloat(i.value)+1 }
 
 </script>
       </section>
