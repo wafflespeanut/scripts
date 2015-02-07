@@ -10,7 +10,7 @@
 	textarea { width: 100px; height: 17px; border:1px solid green; padding: 4px 4px; background: black; color:white; font-family:Lucida console; resize: none }
 	#atm {
   border: 2px dashed #fff; width:400px; height:165px; padding: 10px; text-align: center; }
-	.demo select {	border:1px solid green; -webkit-appearance:none; -moz-appearance:none; width: 100px; text-indent: 0.02px; color: #FFF; padding:5px; box-shadow: inset 0 0 5px rgba(000,000,000,0.5); background-color: #000; }
+	.demo select {	border:1px solid green; font-size: 15px; -webkit-appearance:none; -moz-appearance:none; width: 100px; text-indent: 0.02px; color: #FFF; padding:5px; box-shadow: inset 0 0 5px rgba(000,000,000,0.5); background-color: #000; }
 	</style>
   </head>
 
@@ -28,13 +28,16 @@
     </header>
     <div class="container">
       <section id="main_content">
+<script src="../javascripts/statm.js" type="text/javascript"></script>
 
 <form class="demo" action="form_action.asp">
+<center><strong><p style="font-size: 20px; font-family: 'Courier New'""">Type of Engine: <select id='engine' style="font-size: 17px; width: 250px; font-family: 'Courier New'"><option value="1">Turbofan / Turbojet</option><option value="0">Turboprop / Turboshaft</option></select></p></center>
+<br><hr>
 <table border="0" cellspacing="0">
 <td><table border="0" cellspacing="0">
 <tr><td><strong>Net weight, W<sub>0</sub></strong> = <textarea id="W0">275300</textarea> kg
 <tr><td><strong>Empty Weight, W<sub>E</sub></strong> = <textarea id="WE">130199</textarea> kg
-<tr><td><strong>Thrust Loading</strong> = <textarea id="TL">0.2659</textarea>
+<tr><td><strong><output id='load'>Thrust Loading</output></strong> = <textarea id="TL">0.2659</textarea> <output id='pl'>(no unit)</output>
 <tr><td><strong>Payload Weight, W<sub>P</sub></strong> = <textarea id="WP">52260</textarea> kg
 <tr><td><strong>Crew Weight, W<sub>C</sub></strong> = <textarea id="WC">1700</textarea> kg
 <tr><td><strong>Range, R</strong> = <textarea maxlength="5" id="R">7000</textarea> km
@@ -55,30 +58,43 @@
 <td><table border="0" cellspacing="0">
 <tr><td><strong>Iteration: </strong><textarea style="width: 50px" id='iter'>0</textarea>
 <tr><td><strong>Net weight, W<sub>0</sub></strong> = <textarea id="W01">0</textarea> kg
-<tr><td><strong>Thrust required (per engine), T</strong> = <textarea id="T1">0</textarea> lbf
-<tr><td><strong>Thrust at Cruise (per engine), T<sub>cr</sub></strong> = <textarea id="TCR1">0</textarea> N
+<tr><td><strong><output id='req'>Thrust  required (per engine), T</output></strong> = <textarea id="T1">0</textarea> <output id='thu'>lbf</output>
+<tr><td><strong><output id='cr'>Cruise Thrust (per engine), T</output><sub>cr</sub></strong> = <textarea id="TCR1">0</textarea> <output id='cru'>N</output>
 <tr><td><strong>Fuel Weight ratio, W<sub>F</sub>/W<sub>0</sub></strong> = <textarea id="RF1">0</textarea>
 <tr><td><strong>Empty Weight ratio, W<sub>E</sub>/W<sub>0</sub></strong> = <textarea id="RE1">0</textarea>
 </table><td><table border="0" cellspacing="0">
-<tr><td><strong>Engine Thrust, T<sub>E</sub></strong> = <textarea id="TE1">0</textarea> lbf
-<tr><td><strong>SFC = <textarea id="SFC">0</textarea> lb/lbf-hr
+<tr><td><strong><output id='et'>Engine Thrust, T</output><sub>E</sub></strong> = <textarea id="TE1">0</textarea> <output id='etu'>lbf</output>
+<tr><td><strong>SFC = <textarea id="SFC">0</textarea> <output id='sfcu'>lb/lbf-hr</output>
 <tr><td><strong>Engine Weight, W<sub>PP</sub></strong> = <textarea id="WPP1">0</textarea> lb<br><br>
 <span><button class="button-warning pure-button" style="font-size: 23px; font-family: 'Courier New'" type="button" onclick="fan()">Iterate</button> <button class="button-error pure-button" style="font-size: 23px; font-family: 'Courier New'" type="button" onclick="restart()">Reset</button></span>
 </table></table>
 </form>
-<script src="../javascripts/statm.js" type="text/javascript"></script>
 <script type="text/javascript">
+
+eng=document.getElementById('engine')
+eng.onclick = function() {
+	if(eng.value==1) { document.getElementById('load').value='Thrust Loading'
+		document.getElementById('flight').value=0.3; document.getElementById('pl').value=' (no unit)'
+		document.getElementById('req').value='Thrust required (per engine), T'
+		document.getElementById('thu').value='lbf'; document.getElementById('cru').value='N'
+		document.getElementById('cr').value='Cruise Thrust (per engine), T'
+		document.getElementById('et').value='Engine Thrust, T'; document.getElementById('etu').value='lbf'
+		document.getElementById('sfcu').value='lb/lbf-hr' }
+	else { document.getElementById('load').value='Power Loading' 
+		document.getElementById('flight').value=0.15; document.getElementById('pl').value=' SHP/kg'
+		document.getElementById('req').value='Power required (per engine), P'
+		document.getElementById('thu').value='SHP'; document.getElementById('cru').value='SHP'
+		document.getElementById('cr').value='Cruise Power (per engine), P'
+		document.getElementById('et').value='Engine Power, P'; document.getElementById('etu').value='SHP'
+		document.getElementById('sfcu').value='lb/SHP-hr' } }
 
 vcr=document.getElementById("VCR"); mcr=document.getElementById("MCR")
 h=document.getElementById("alt"); wpp=0; W=document.getElementById('W0')
 document.getElementById('W01').value=W.value; WE=document.getElementById('WE')
 document.getElementById('RE1').value=document.getElementById('WE').value/W.value
 
-mcr.onkeyup = function() {
-	vcr.value = mcr.value*Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5 }
-
-vcr.onkeyup = function() {
-	mcr.value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) }
+mcr.onkeyup = function() { vcr.value = mcr.value*Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5 }
+vcr.onkeyup = function() { mcr.value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) }
 
 h.onkeyup = function() {
 	document.getElementById('P0').value=atmos(parseInt(h.value))[0];
@@ -89,9 +105,7 @@ h.onkeyup = function() {
 W.onkeyup = function() {
 	document.getElementById('W01').value=W.value
 	document.getElementById('RE1').value=WE.value/W.value }
-
-WE.onkeyup = function() {
-	document.getElementById('RE1').value=WE.value/W.value }
+WE.onkeyup = function() { document.getElementById('RE1').value=WE.value/W.value }
 
 re0=document.getElementById('RE1').value; n=parseFloat(document.getElementById('N').value)
 tl=parseFloat(document.getElementById('TL').value); ca=parseFloat(h.value); d0=1.225
@@ -117,12 +131,16 @@ function fan() {
 	else { rf=0 }
 	re=document.getElementById('RE1').value; w0=(wc+wp+wpp+wf)/(1-re-rf)
 	document.getElementById('W01').value=w0
-	t=w0*tl*9.81*1.2; document.getElementById('T1').value=t/(4.448*n)
+	if(eng.value==1) { t=w0*tl*9.81*1.2; document.getElementById('T1').value=t/(4.448*n) }
+	else { t=w0*tl*1.2; document.getElementById('T1').value=t/n }
+	
 	TE.onkeyup = function() {
-		tc=TE.value*4.448*n*Math.pow((atmos(ca)[2]/d0),1.2)
+		if(eng.value==1) { tc=TE.value*4.448*n*Math.pow((atmos(ca)[2]/d0),1.2) }
+		else { tc=TE.value*n*Math.pow((atmos(ca)[2]/d0),1.2) }
 		document.getElementById('TCR1').value=tc/n }
 	sfc.onkeyup = function() {
-		wf=(sfc.value*tc*r*1.2)/(cv*9.81)
+		if(eng.value==1) { wf=(sfc.value*tc*r*1.2)/(cv*9.81) }
+		else { wf=(sfc.value*tc*r*1.2*0.4535924)/(cv) }
 		document.getElementById('RF1').value=wf/w0 }
 	WPP.onkeyup = function() {
 		wpp=WPP.value*0.4535924*n
