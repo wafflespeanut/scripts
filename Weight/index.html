@@ -7,9 +7,8 @@
     <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen" />
     <title>ADP Weight Iterator | Iterate to find the gross & empty weights for your aircraft...</title>
 	<style>
-	textarea { width: 100px; height: 17px; border:1px solid green; padding: 4px 4px; background: black; color:white; font-family:Lucida console; resize: none }
-	#atm {
-  border: 2px dashed #fff; width:400px; height:165px; padding: 10px; text-align: center; }
+	textarea { width: 100px; height: 17px; font-size: 17px; border:1px solid green; padding: 4px 4px; background: black; color:white; font-family:Lucida console; resize: none; overflow: hidden; white-space: nowrap }
+	#atm { border: 2px dashed #fff; width:400px; height:175px; padding: 15px; text-align: center; }
 	.demo select {	border:1px solid green; font-size: 15px; -webkit-appearance:none; -moz-appearance:none; width: 100px; text-indent: 0.02px; color: #FFF; padding:5px; box-shadow: inset 0 0 5px rgba(000,000,000,0.5); background-color: #000; }
 	</style>
   </head>
@@ -29,11 +28,19 @@
     <div class="container">
       <section id="main_content">
 <script src="../javascripts/statm.js" type="text/javascript"></script>
-
+<ul><p><li>This program is used for iterating the "weights" of a selected aircraft so that the sum of payload, crew, engine, fuel & empty weights match the net weight of the aircraft. Since both empty & net weights are unknowns, iteration is the only approach to the solution.
+<p><li>The script just displays the iteration results. If you wanna print them out, use the <a href="https://github.com/Wafflespeanut/Python/blob/master/Scrap/Course/ADP - Weight Estimation.py">Python script</a> instead. Choose your engine<a href='#choose'><sup>[1]</sup></a>, fill up the boxes with your <s>assumption</s> data<a href='#data'><sup>[2]</sup></a> and <strong>ITERATE!</strong><a href='#iters'><sup>[3]</sup></a> (make sure you check the units). Units are based on the data <a href="http://www.jet-engine.net">available here</a>.
+<p><li>Most of the boxes are dynamic. So, they change as and whenever you update the related boxes. So, I suggest you go by order, to prevent errors. So, while calculating, make sure you follow the order:
+<ol><p>1) <span><button class="button-warning pure-button" style="font-size: 15px; font-family: 'Courier New'" type="button">Iterate</button></span> to find the thrust.
+<p>2) Never press the button until you've entered your engine's thrust, followed by SFC and finally its weight (which dynamically updates the respective parameters).
+<p>3) <span><button class="button-warning pure-button" style="font-size: 15px; font-family: 'Courier New'" type="button">Iterate</button></span> to find the resulting net weight.
+</ol></ul><br>
 <form class="demo" action="form_action.asp">
+<a id="choose"></a>
 <center><strong><p style="font-size: 20px; font-family: 'Courier New'""">Type of Engine: <select id='engine' style="font-size: 17px; width: 250px; font-family: 'Courier New'"><option value="1">Turbofan / Turbojet</option><option value="0">Turboprop / Turboshaft</option></select></p></center>
-<br><hr>
+<br><hr><br>
 <table border="0" cellspacing="0">
+<a id="data"></a><h2>Data input:</h2>
 <td><table border="0" cellspacing="0">
 <tr><td><strong>Net weight, W<sub>0</sub></strong> = <textarea id="W0">275300</textarea> kg
 <tr><td><strong>Empty Weight, W<sub>E</sub></strong> = <textarea id="WE">130199</textarea> kg
@@ -54,6 +61,7 @@
 </div>
 </table></table></table>
 <hr><br>
+<a id="iters"></a><h2>Iteration:</h2>
 <table border="0" cellspacing="0">
 <td><table border="0" cellspacing="0">
 <tr><td><strong>Iteration: </strong><textarea style="width: 50px" id='iter'>0</textarea>
@@ -79,14 +87,14 @@ eng.onclick = function() {
 		document.getElementById('thu').value='lbf'; document.getElementById('cru').value='N'
 		document.getElementById('cr').value='Cruise Thrust (per engine), T'
 		document.getElementById('et').value='Engine Thrust, T'; document.getElementById('etu').value='lbf'
-		document.getElementById('sfcu').value='lb/lbf-hr' }
-	else { document.getElementById('load').value='Power Loading' 
+		document.getElementById('sfcu').value='lb/lbf-hr'; document.getElementById('N').value=4 }
+	else { document.getElementById('load').value='Power Loading'
 		document.getElementById('flight').value=0.15; document.getElementById('pl').value=' SHP/kg'
 		document.getElementById('req').value='Power required (per engine), P'
 		document.getElementById('thu').value='SHP'; document.getElementById('cru').value='SHP'
 		document.getElementById('cr').value='Cruise Power (per engine), P'
 		document.getElementById('et').value='Engine Power, P'; document.getElementById('etu').value='SHP'
-		document.getElementById('sfcu').value='lb/SHP-hr' } }
+		document.getElementById('sfcu').value='lb/SHP-hr'; document.getElementById('N').value=2 } }
 
 vcr=document.getElementById("VCR"); mcr=document.getElementById("MCR")
 h=document.getElementById("alt"); wpp=0; W=document.getElementById('W0')
@@ -99,7 +107,7 @@ vcr.onkeyup = function() { mcr.value = vcr.value/(Math.sqrt(atmos(parseInt(h.val
 h.onkeyup = function() {
 	document.getElementById('P0').value=atmos(parseInt(h.value))[0];
 	document.getElementById('T0').value=atmos(parseInt(h.value))[1];
-	document.getElementById('d0').value=atmos(parseInt(h.value))[2]; 
+	document.getElementById('d0').value=atmos(parseInt(h.value))[2];
 	if(vcr.value) { document.getElementById('MCR').value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) } }
 
 W.onkeyup = function() {
@@ -142,9 +150,7 @@ function fan() {
 		if(eng.value==1) { wf=(sfc.value*tc*r*1.2)/(cv*9.81) }
 		else { wf=(sfc.value*tc*r*1.2*0.4535924)/(cv) }
 		document.getElementById('RF1').value=wf/w0 }
-	WPP.onkeyup = function() {
-		wpp=WPP.value*0.4535924*n
-		document.getElementById('RE1').value=re0-wpp/w0 }
+	WPP.onkeyup = function() { wpp=WPP.value*0.4535924*n; document.getElementById('RE1').value=re0-wpp/w0 }
 	i.value=parseFloat(i.value)+1 }
 
 </script>
