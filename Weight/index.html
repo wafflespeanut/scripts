@@ -33,10 +33,10 @@
 <p><li>The script just displays the iteration results. If you wanna print them out, use the <a href="https://github.com/Wafflespeanut/Python/blob/master/Scrap/Course/ADP - Weight Estimation.py">Python script</a> instead. Begin by choosing your engine type, fill up the boxes with your <s>assumption</s> data and <strong>ITERATE!</strong> (make sure you check the units). Units are based on the data <a href="http://www.jet-engine.net">available here</a>.</ul><br>
 
 <form class="demo" action="form_action.asp">
-<center><strong><p style="font-size: 20px; font-family: 'Courier New'""">Type of Engine: <select id='engine' style="font-size: 17px; width: 250px; font-family: 'Courier New'"><option value="0">Choose your engine...</option><option value="1">Turbofan / Turbojet</option><option value="2">Turboprop / Turboshaft</option></select></p></center></form><a id="data"></a>
-<br><hr><br><br>
+<center><strong><p style="font-size: 20px; font-family: 'Courier New'""">Type of Engine: <select id='engine' style="font-size: 17px; width: 250px; font-family: 'Courier New'"><option value="0">Choose your engine...</option><option value="1">Turbofan / Turbojet</option><option value="2">Turboprop / Turboshaft</option></select></p></center></form><a id="data"></a><br>
 
-<div id='hide' style="display:none"><form class="demo" action="form_action.asp">
+<div id='dhide' style="display:none">
+<hr><br><br><form class="demo" action="form_action.asp"><br>
 <table border="0" cellspacing="0">
 <h2>Fill up the boxes!</h2>
 <td><table border="0" cellspacing="0">
@@ -46,7 +46,7 @@
 <tr><td><strong>Payload Weight, W<sub>P</sub></strong> = <textarea id="WP">52260</textarea> kg
 <tr><td><strong>Crew Weight, W<sub>C</sub></strong> = <textarea id="WC">1700</textarea> kg
 <tr><td><strong>Range, R</strong> = <textarea maxlength="5" id="R">7000</textarea> km
-<tr><td><strong>Number of Engines: </strong><select id="N" style="width: 40px"><option value="4">4</option><option value="2">2</option><option value="3">3</option><option value="5">5</option><option value="6">6</option></select><br><br><br><p style="font-size:23px"><a href='#iters'>[PROCEED]</a></p></table>
+<tr><td><strong>Number of Engines: </strong><select id="N" style="width: 40px"><option value="4">4</option><option value="2">2</option><option value="3">3</option><option value="5">5</option><option value="6">6</option></select><br><br><br><p id='proc' align=center style="font-size:23px"><a href='#iters'>[PROCEED]</a></p></table>
 <td><table border="0" cellspacing="0">
 <tr><td><strong>Fuel Weight ratio, W<sub>F</sub>/W<sub>0</sub></strong> = <select id='flight' style="width: 130px"><option value="0.3">0.3 (Long haul)</option><option value="0.4">0.4 (Long haul)</option><option value="0.15">0.15 (Short haul)</option></select>
 <tr><td><strong>Cruise Altitude, H<sub>cr</sub></strong> = <textarea onclick="this.select()" id="alt">10448</textarea> m
@@ -57,14 +57,15 @@
 <tr><td><strong>Pressure, P<sub>0</sub></strong> = <textarea readonly onclick="this.select()" id="P0">24666.2897</textarea> Pa
 <tr><td><strong>Temperature, T<sub>0</sub></strong> = <textarea readonly onclick="this.select()" id="T0">220.238</textarea> K
 <tr><td><strong>Density, ρ<sub>0</sub></strong> = <textarea readonly onclick="this.select()" id="d0">0.3902</textarea> kg/m<sup>3</sup>
-</div>
-</table></table></table>
-<hr><br><a id="iters"></a>
-<ul><p><li>Most of the boxes are dynamic - they change as and whenever you update the related boxes. So, I suggest you go by this order, to prevent errors during calculation...
+</div></table></table></table></div>
+
+<div id='ihide' style="display:none"><a id="iters"></a>
+<hr><br><ul><p><li>Most of the boxes are dynamic - they change as and whenever you update the related boxes. So, I suggest you go by this order, to prevent errors during calculation...
 <ol><p>1) <span><button class="button-warning pure-button" style="font-size: 15px; font-family: 'Courier New'" type="button">Iterate</button></span> to find the thrust.
 <p>2) Never press the button until you've entered your engine's thrust, followed by SFC and finally its weight (which dynamically updates the respective parameters).
 <p>3) <span><button class="button-warning pure-button" style="font-size: 15px; font-family: 'Courier New'" type="button">Iterate</button></span> to find the resulting net weight.
 </ol></ul><br>
+
 <h2>Iteration!</h2>
 <table border="0" cellspacing="0">
 <td><table border="0" cellspacing="0">
@@ -80,15 +81,19 @@
 <tr><td><strong>Engine Weight, W<sub>PP</sub></strong> = <textarea onclick="this.select()" id="WPP1">0</textarea> lb<br><br>
 <span><button class="button-warning pure-button" style="font-size: 23px; font-family: 'Courier New'" type="button" onclick="fan()">Iterate</button> <button class="button-error pure-button" style="font-size: 23px; font-family: 'Courier New'" type="button" onclick="restart()">Reset</button></span>
 </table>
-<p align=center style="font-size:23px"><a href='#data'>[CHANGE VALUES]</a></p>
+<p id='change' align=center style="font-size:23px"><a href='#data'>[CHANGE VALUES]</a></p>
 </table></form></div>
 
 <script type="text/javascript">
 
-eng=document.getElementById('engine')
+eng=document.getElementById('engine'); con=document.getElementById('proc'); it=document.getElementById('change'); eng.value=0
+
+con.onclick = function() { document.getElementById('dhide').style.display='none'; document.getElementById('ihide').style.display='block' }
+it.onclick = function() { document.getElementById('ihide').style.display='none'; document.getElementById('dhide').style.display='block'; restart() }
+
 eng.onclick = function() {
-	if(eng.value==0) { document.getElementById('hide').style.display='none' }
-	else { document.getElementById('hide').style.display='block' }
+	if(eng.value==0) { document.getElementById('dhide').style.display='none' }
+	else { document.getElementById('dhide').style.display='block' }
 	if(eng.value==1) { location.href='#data'
 		document.getElementById('load').value='Thrust Loading'
 		document.getElementById('flight').value=0.3; document.getElementById('pl').value=' (no unit)'
