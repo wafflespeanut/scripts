@@ -40,23 +40,23 @@
 <table border="0" cellspacing="0">
 <h2>Fill up the boxes!</h2>
 <td><table border="0" cellspacing="0">
-<tr><td><strong>Net weight, W<sub>0</sub></strong> = <textarea id="W0">275300</textarea> kg
-<tr><td><strong>Empty Weight, W<sub>E</sub></strong> = <textarea id="WE">130199</textarea> kg
-<tr><td><strong><output id='load'>Thrust Loading</output></strong> = <textarea id="TL">0.2659</textarea> <output id='pl'>(no unit)</output>
-<tr><td><strong>Payload Weight, W<sub>P</sub></strong> = <textarea id="WP">52260</textarea> kg
-<tr><td><strong>Crew Weight, W<sub>C</sub></strong> = <textarea id="WC">1700</textarea> kg
-<tr><td><strong>Range, R</strong> = <textarea maxlength="5" id="R">7000</textarea> km
+<tr><td><strong>Net weight, W<sub>0</sub></strong> = <textarea id="W0">393085</textarea> kg
+<tr><td><strong>Empty Weight, W<sub>E</sub></strong> = <textarea id="WE">177945</textarea> kg
+<tr><td><strong><output id='load'>Thrust Loading</output></strong> = <textarea id="TL">0.27665</textarea> <output id='pl'>(no unit)</output>
+<tr><td><strong>Payload Weight, W<sub>P</sub></strong> = <textarea id="WP">52960</textarea> kg
+<tr><td><strong>Crew Weight, W<sub>C</sub></strong> = <textarea id="WC">2000</textarea> kg
+<tr><td><strong>Range, R</strong> = <textarea maxlength="5" id="R">14000</textarea> km
 <tr><td><strong>Number of Engines: </strong><select id="N" style="width: 40px"><option value="4">4</option><option value="2">2</option><option value="3">3</option><option value="5">5</option><option value="6">6</option></select><br><br><br><p id='proc' align=center style="font-size:23px"><a href='#iters'>[PROCEED]</a></p></table>
 <td><table border="0" cellspacing="0">
 <tr><td><strong>Fuel Weight ratio, W<sub>F</sub>/W<sub>0</sub></strong> = <select id='flight' style="width: 130px"><option value="0.3">0.3 (Long haul)</option><option value="0.4">0.4 (Long haul)</option><option value="0.15">0.15 (Short haul)</option></select>
-<tr><td><strong>Cruise Altitude, H<sub>cr</sub></strong> = <textarea onclick="this.select()" id="alt">10448</textarea> m
-<tr><td><strong>Cruise Velocity, v<sub>cr</sub></strong> = <textarea onclick="this.select()" id="VCR">894.26467</textarea> km/hr
-<tr><td><strong>Cruise Mach Number, M<sub>cr</sub></strong> = <textarea onclick="this.select()" id="MCR">0.83505</textarea><br><br>
+<tr><td><strong>Cruise Altitude, H<sub>cr</sub></strong> = <textarea onclick="this.select()" id="alt">10752</textarea> m
+<tr><td><strong>Cruise Velocity, v<sub>cr</sub></strong> = <textarea onclick="this.select()" id="VCR">910.2748</textarea> km/hr
+<tr><td><strong>Cruise Mach Number, M<sub>cr</sub></strong> = <textarea onclick="this.select()" id="MCR">0.85</textarea><br><br>
 
 <div id="atm"><h3>Standard Atmosphere data</h3><table border="0" cellspacing="0">
-<tr><td><strong>Pressure, P<sub>0</sub></strong> = <textarea readonly onclick="this.select()" id="P0">24666.2897</textarea> Pa
-<tr><td><strong>Temperature, T<sub>0</sub></strong> = <textarea readonly onclick="this.select()" id="T0">220.238</textarea> K
-<tr><td><strong>Density, ρ<sub>0</sub></strong> = <textarea readonly onclick="this.select()" id="d0">0.3902</textarea> kg/m<sup>3</sup>
+<tr><td><strong>Pressure, P<sub>0</sub></strong> = <textarea readonly onclick="this.select()" id="P0">23524.9047</textarea> Pa
+<tr><td><strong>Temperature, T<sub>0</sub></strong> = <textarea readonly onclick="this.select()" id="T0">218.262</textarea> K
+<tr><td><strong>Density, ρ<sub>0</sub></strong> = <textarea readonly onclick="this.select()" id="d0">0.3756</textarea> kg/m<sup>3</sup>
 </div></table></table></table></div>
 
 <div id='ihide' style="display:none"><a id="iters"></a>
@@ -88,7 +88,7 @@
 
 eng=document.getElementById('engine'); con=document.getElementById('proc'); it=document.getElementById('change'); eng.value=0
 
-con.onclick = function() { document.getElementById('dhide').style.display='none'; document.getElementById('ihide').style.display='block' }
+con.onclick = function() { document.getElementById('dhide').style.display='none'; document.getElementById('ihide').style.display='block'; restart() }
 it.onclick = function() { document.getElementById('ihide').style.display='none'; document.getElementById('dhide').style.display='block'; restart() }
 
 eng.onclick = function() {
@@ -96,7 +96,7 @@ eng.onclick = function() {
 	else { document.getElementById('dhide').style.display='block' }
 	if(eng.value==1) { location.href='#data'
 		document.getElementById('load').value='Thrust Loading'
-		document.getElementById('flight').value=0.3; document.getElementById('pl').value=' (no unit)'
+		document.getElementById('flight').value=0.4; document.getElementById('pl').value=' (no unit)'
 		document.getElementById('req').value='Thrust required (per engine), T'
 		document.getElementById('thu').value='lbf'; document.getElementById('cru').value='N'
 		document.getElementById('cr').value='Cruise Thrust (per engine), T'
@@ -115,6 +115,7 @@ vcr=document.getElementById("VCR"); mcr=document.getElementById("MCR")
 h=document.getElementById("alt"); wpp=0; W=document.getElementById('W0')
 document.getElementById('W01').value=W.value; WE=document.getElementById('WE')
 document.getElementById('RE1').value=document.getElementById('WE').value/W.value
+re0=document.getElementById('RE1').value
 
 mcr.onkeyup = function() { vcr.value = mcr.value*Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5 }
 vcr.onkeyup = function() { mcr.value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) }
@@ -130,11 +131,6 @@ W.onkeyup = function() {
 	document.getElementById('RE1').value=WE.value/W.value }
 WE.onkeyup = function() { document.getElementById('RE1').value=WE.value/W.value }
 
-re0=document.getElementById('RE1').value; n=parseFloat(document.getElementById('N').value)
-tl=parseFloat(document.getElementById('TL').value); ca=parseFloat(h.value); d0=1.225
-cv=parseFloat(document.getElementById('VCR').value); wp=parseFloat(document.getElementById('WP').value)
-wc=parseFloat(document.getElementById('WC').value); r=parseFloat(document.getElementById('R').value)
-
 function restart() {
 	document.getElementById('W01').value=document.getElementById('W0').value
 	document.getElementById('RE1').value=document.getElementById('WE').value/document.getElementById('W0').value
@@ -144,7 +140,10 @@ function restart() {
 	document.getElementById('RF1').value=0; wpp=0 }
 
 function fan() {
-	i=document.getElementById('iter')
+	i=document.getElementById('iter'); n=parseFloat(document.getElementById('N').value)
+	tl=parseFloat(document.getElementById('TL').value); ca=parseFloat(h.value); d0=1.225
+	cv=parseFloat(document.getElementById('VCR').value); wp=parseFloat(document.getElementById('WP').value)
+	wc=parseFloat(document.getElementById('WC').value); r=parseFloat(document.getElementById('R').value)
 	w0=parseFloat(document.getElementById('W01').value); TE=document.getElementById('TE1')
 	wf=parseFloat(document.getElementById('RF1').value)*parseFloat(document.getElementById('W01').value)
 	WPP=document.getElementById('WPP1'); sfc=document.getElementById('SFC')
@@ -156,7 +155,14 @@ function fan() {
 	document.getElementById('W01').value=w0
 	if(eng.value==1) { t=w0*tl*9.81*1.2; document.getElementById('T1').value=t/(4.448*n) }
 	else { t=w0*tl*1.2; document.getElementById('T1').value=t/n }
-	
+	if(i.value>0) {
+		if(eng.value==1) { tc=TE.value*4.448*n*Math.pow((atmos(ca)[2]/d0),1.2) }
+		else { tc=TE.value*n*Math.pow((atmos(ca)[2]/d0),1.2) }
+		document.getElementById('TCR1').value=tc/n
+		if(eng.value==1) { wf=(sfc.value*tc*r*1.2)/(cv*9.81) }
+		else { wf=(sfc.value*tc*r*1.2*0.4535924)/(cv) }
+		document.getElementById('RF1').value=wf/w0
+		wpp=WPP.value*0.4535924*n; document.getElementById('RE1').value=re0-wpp/w0 }
 	TE.onkeyup = function() {
 		if(eng.value==1) { tc=TE.value*4.448*n*Math.pow((atmos(ca)[2]/d0),1.2) }
 		else { tc=TE.value*n*Math.pow((atmos(ca)[2]/d0),1.2) }
