@@ -3,7 +3,7 @@ import os
 path='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Data\\'
 out='C:\\Users\\Waffles Crazy Peanut\\Desktop\\OUTPUT.txt'
 
-def load(stuff):            # For grabbing specific data from list of laboratory logs
+def load(stuff):            # For grabbing specific data from a list of laboratory logs
     File=open(stuff,'r'); List=''
     for i in File: List+=i
     l=List.split('\n'); values=[]
@@ -11,7 +11,7 @@ def load(stuff):            # For grabbing specific data from list of laboratory
         c=0
         for j,k in enumerate(i):
             if k==' ' or k=='-': c+=1
-            if c==7:
+            if c==7:        # Values are at this position in the log file
                 m=j; t=''
                 while i[m]!=' ': t+=i[m]; m+=1
                 if t!='': values.append(t); break

@@ -1,10 +1,10 @@
 from pylab import *
 
-path='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\ADP\\Week 3\\'
-data=['Aspect Ratio', 'Cruise Altitude', 'Cruise Velocity', 'Empty Weight', 'Fuselage Width', 'Height', 'Landing Speed', 'Length of Aircraft', 'Maximum Landing Weight', 'Maximum Rate of Climb', 'Maximum Service Ceiling', 'Maximum Speed', 'Maximum Takeoff Weight', 'Payload', 'Range', 'Runway Length', 'Seating Capacity', 'Service Ceiling', 'Taper Ratio', 'Thrust Loading', 'Thrust per Engine', 'Wing Area', 'Wing Loading', 'Wing Span']
-units=['no\ unit','m','no\ unit','N','m','m','knots','m','N','ft\ s^{-1}','m','no\ unit','N','N','km','m','seats','m','no\ unit','no\ unit','N','m^2','Nm^{-2}','m']
+path='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\ADP\\Week 5 (Reset)\\'
+data=['Aspect Ratio', 'Cruise Altitude', 'Cruise Velocity', 'Empty Weight', 'Fineness Ratio', 'Fuselage Width', 'Height', 'Landing Speed', 'Length of Aircraft', 'Maximum Fuel Capacity', 'Maximum Landing Weight', 'Maximum Speed', 'Maximum Takeoff Weight', 'Payload', 'Range', 'Runway Length', 'Service Ceiling', 'Taper Ratio', 'Thrust Loading', 'Wing Area', 'Wing Loading', 'Wing Span']
+units=['no\ unit','m','no\ unit','N','no\ unit','m','m','knots','m','l','N','no\ unit','N','N','km','m','m','no\ unit','no\ unit','m^2','Nm^{-2}','m']
 
-def get():
+def get():          # For getting the input
     f=[]; n=int(raw_input('Number of aircrafts: '))
     for i in range(n):
         i=0; a=raw_input('\nAircraft name: '); s=[a]
@@ -12,7 +12,7 @@ def get():
         f.append(s)
     return f
 
-def write(s):
+def write(s):       # For appending the given input
     f=open(path+'Data.txt','a'); i=0; j=0
     while j<len(max(s)):
         while i<len(s): f.write(s[i][j]+'\t'); i+=1
@@ -20,7 +20,7 @@ def write(s):
         f.write('\n'); j+=1
     f.close()
 
-def dplot(s=None):
+def dplot(s=None):      # If you have already have the input, copy-paste from Excel to notepad with a 'tab' at the end of each line
     dx=0.2; dy=0.3; ddx=0; ddy=0.02; c=12000; dr=0.2; d=[]; a=[]; p=[]
     with open(path+'Data.txt','r') as file: f=file.readlines()
     names=f[0].split('\t')[:-1]; r=[float(i) for i in f[15].split('\t')[:-1]]
@@ -31,7 +31,7 @@ def dplot(s=None):
         m=f[s].split('\t')[:-1]
         for i in range(len(r)):
             if m[i]!='': a.append(r[i]); d.append(float(m[i])); p.append(i+1)
-        r=a; z=rmin(s); r.append(z[0]); d.append(z[1]); plot(r,d,'ro')
+        r=a; z=rmin(s); r.append(z[0]); d.append(z[1]); plot(r,d,'ro')          # Plots the list with indices at some tolerance
         axis([min(r)*(1-dx),max(r)*(1+dx),min(d)*(1-dy),max(d)*(1+dy)])
         xlabel(r'Range $\mathregular{[km]}$',fontsize=18); ylabel(data[s-1]+r' $\mathregular{['+units[s-1]+r']}$',fontsize=18)
 ##            circle=Circle((c,(max(d)+min(d))/2.0),max(d)*dr,color='b',fill=False)
@@ -44,7 +44,7 @@ def dplot(s=None):
     else: return None
     return None
 
-def rmin(s,ran=14000):        # To find the minimum point!
+def rmin(s,ran=14000):        # To find the minimum point for a given range (using Euclidean distance)!
     with open(path+'Data.txt','r') as file: f=file.readlines()
     ranges=[float(i) for i in f[15].split('\t')[:-1]]
     data=[float(i) for i in f[s].split('\t')[:-1] if len(i)]

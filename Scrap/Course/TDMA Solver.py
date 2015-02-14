@@ -1,5 +1,4 @@
-
-def calc():
+def calc():         # For solving heat-transfer problems using the tri-diagonal matrix method
     n=int(raw_input('Size of Matrix: '))
     a=[0]*n; b=[0]*n; c=[0]*n; p=[0]*(n+1); q=[0]*(n+1); d=[0]*n; t=[0]*(n+1)
     for i in range(n):

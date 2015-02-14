@@ -1,8 +1,8 @@
 execfile("Standard Atmosphere.py")
 
-def fan(w0=275300,we=130199,tl=0.2659,ca=10448,cv=0.83505,wp=52260,wc=1700,r=7000,n=4):
-    a=[]; cv*=((1.4*287*atmos(ca)[0])**0.5)*(18.0/5); wf=0; rf=0.3; wpp=0; d0=1.225; i=0; re=re0=float(we)/w0
-    while True:
+def fan(w0=393085,we=177945,tl=0.27665,ca=10752,cv=0.85,wp=52960,wc=2000,r=14000,n=4):
+    a=[]; cv*=((1.4*287*atmos(ca)[0])**0.5)*(18.0/5); wf=0; rf=0.4; wpp=0; d0=1.225; i=0; re=re0=float(we)/w0
+    while True:                             # For Turbojet/Turbofan engines
         try:
             a.append([w0,we,wpp,wf,re,rf])
             print '\nIteration %s'%(i)
@@ -19,20 +19,20 @@ def fan(w0=275300,we=130199,tl=0.2659,ca=10448,cv=0.83505,wp=52260,wc=1700,r=700
             print 'Fuel Weight ratio: %s'%(wf/w0)
             print 'Empty Weight ratio: %s'%(re)
             raw_input('\nPress [Enter] to continue...'); i+=1
-        except KeyboardInterrupt:
+        except KeyboardInterrupt:       # Ctrl-C resets the values for current iteration
             if i==0:
                 print '\n\tThis is the first iteration!'
                 w0,we,wpp,wf,re,rf = (z for z in a[i]); del a[-1]; continue
             try:
                 w0,we,wpp,wf,re,rf = (z for z in a[i]); del a[-1]
                 raw_input('\n\t(Resetting values!) Press [Enter] to continue...')
-            except KeyboardInterrupt:
+            except KeyboardInterrupt:       # Pressing Ctrl-C again takes back to previous iteration
                 i-=1; w0,we,wpp,wf,re,rf = (z for z in a[i]); del a[-1]
                 print '\n\t(Getting back to previous iteration...)\n'
 
 def prop(w0=14333,we=7400,pl=0.294906,ca=8000,cv=500,wp=3600,wc=400,r=1800,n=2):
     wf=0; rf=0.15; wpp=0; d0=1.225; i=0; re=re0=float(we)/w0
-    while True:
+    while True:                             # For Turboshaft/Turboprop engines
         print '\nIteration %s'%(i)
         w0=(wc+wp+wpp+wf)/(1-re-rf)
         print '\nNet weight: %s kg'%(w0)

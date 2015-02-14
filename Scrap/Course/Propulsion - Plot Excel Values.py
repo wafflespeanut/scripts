@@ -10,7 +10,7 @@ def get(s):
         except ValueError: return None
     return a
 
-def output():
+def output():       # For plotting two things with respect to something
     X=get('X'); Y1=get('Y1'); Y2=get('Y2')
     l1=str(raw_input('Label 1:')); l2=str(raw_input('Label 2:'))
     figure(figsize=(10,6),dpi=80)

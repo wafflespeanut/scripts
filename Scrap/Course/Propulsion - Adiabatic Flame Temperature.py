@@ -7,7 +7,7 @@ r=8.314; t0=298.15
 
 s='CH4'; hf=-74831      # Input here!
 
-def count(s):
+def count(s):           # Finds the coefficients for future progress
     k={'C':0,'O':0,'H':0,'N':0}; n='1234567890'
     for i,j in enumerate(s):
         if j in k:
@@ -19,24 +19,24 @@ def count(s):
             else: k[j]+=1
     return k
 
-def sto(s):
+def sto(s):             # Stoichiometric mixture
     k1=count(s); x=k1['C']; y=k1['H']/2.0; a=(2*x+y)/2
     return (k['C']*k1['C']+k['H']*k1['H'])/(float(a)*(k['O']+3.76*k['N'])*2)
 
-def lean(s,phi):
+def lean(s,phi):        # Lean mixture
     p=sto(s); k1=count(s); b=k1['C']; c=k1['H']/2.0
     a=round((k['C']*k1['C']+k['H']*k1['H'])/(phi*(k['O']+3.76*k['N'])*2*p),4)
     d=round((2*a-2*b-c)/2,4)
     return (a,b,c,d)
 
-def rich(s,phi):        # b & e are assumed to be half of number of carbon atoms
+def rich(s,phi):        # Rich mixture with b & e assumed to be half of number of carbon atoms (which doesn't matter anyway)
     p=sto(s); k1=count(s); b=e=k1['C']/2.0
     a=round((k['C']*k1['C']+k['H']*k1['H'])/(phi*(k['O']+3.76*k['N'])*2*p),4)
     c=round(2*a-e-2*b,4)
     d=round((k1['H']-2*c)/2,4)
     return (a,b,c,d,e)
 
-def cpres(s,hf):        # Adiabatic temperatures for constant pressure process
+def cpres(s,hf):        # For constant pressure process
     k1=count(s); c1,c2,c3,c4,c5=(cp['c'],cp['w'],cp['o'],cp['n'],cp['co'])
     h1,h2,h3=(h['c'],h['w'],h['co']); arr=[]
     for i in range(1,6):
@@ -49,7 +49,7 @@ def cpres(s,hf):        # Adiabatic temperatures for constant pressure process
         m=round((hf-b*h1-c*h2-e*h3+t0*p)/p,4); arr.append(m)
     return arr
 
-def cvol(s,hf):         # Adiabatic temperatures for constant volume process
+def cvol(s,hf):         # For constant volume process
     k1=count(s); h1,h2,h3=(h['c'],h['w'],h['co'])
     c1,c2,c3,c4,c5=(cp['c'],cp['w'],cp['o'],cp['n'],cp['co']); arr=[]
     for i in range(1,6):
