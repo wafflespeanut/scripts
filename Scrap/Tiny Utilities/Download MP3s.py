@@ -2,7 +2,8 @@ from urllib import *
 from os import *
 import lxml.html
 
-out="C:\\Music\\"; links=[]
+out="C:\\Users\\Waffles Crazy Peanut\\Desktop\\TEMP\\"; links=[]
+links.append('http://downloads.khinsider.com/game-soundtracks/album/call-of-duty-black-ops')
 
 # I used to download embedded MP3 soundtracks with this...
 
@@ -18,12 +19,15 @@ def get():
         try: mkdir(out+k)
         except WindowsError: print "\n[FOLDER] %s already exists!\n"%k
         for i in urls(link):
-            l=urls(i)[0]; m=l.split('/')[-1]
-            if m in listdir(out+k):
-                print "[File] %s already exists!"%m      # path.getsize() can also be used
-                if stat(out+k+'\\'+m).st_size==int(urlopen(l).info()['Content-Length']): continue
-                else:
-                    s=str(raw_input("\tFile has different size! Overwrite (y/n)? "))
-                    if s=='y': print "Downloading",l,"..."; urlretrieve(l,out+k+'\\'+m); continue
-                    else: print "File skipped!"; continue
-            print "Downloading",l,"..."; urlretrieve(l,out+k+'\\'+m)
+            try:
+                l=urls(i)[0]; m=l.split('/')[-1]
+                if m in listdir(out+k):
+                    print "[File] %s already exists!"%m      # path.getsize() can also be used
+                    if stat(out+k+'\\'+m).st_size==int(urlopen(l).info()['Content-Length']): continue
+                    else:
+                        s=str(raw_input("\tFile has different size! Overwrite (y/n)? "))
+                        if s=='y': print "Downloading",l,"..."; urlretrieve(l,out+k+'\\'+m); continue
+                        else: print "\t[File] %s skipped!"%m; continue
+                print "Downloading",l,"..."
+                urlretrieve(l,out+k+'\\'+m)
+            except (IOError,KeyboardInterrupt) as e: print '\t[File] %s skipped!'%m; continue
