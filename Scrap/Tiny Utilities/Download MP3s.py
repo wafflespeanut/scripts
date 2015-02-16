@@ -3,7 +3,7 @@ from os import *
 import lxml.html
 
 out="C:\\Users\\Waffles Crazy Peanut\\Desktop\\TEMP\\"; links=[]
-links.append('http://downloads.khinsider.com/game-soundtracks/album/call-of-duty-black-ops')
+links.append('http://downloads.khinsider.com/game-soundtracks/album/assassin-s-creed-revelations')
 
 # I used to download embedded MP3 soundtracks with this...
 
@@ -30,4 +30,7 @@ def get():
                         else: print "\t[File] %s skipped!"%m; continue
                 print "Downloading",l,"..."
                 urlretrieve(l,out+k+'\\'+m)
-            except (IOError,KeyboardInterrupt) as e: print '\t[File] %s skipped!'%m; continue
+            except (IOError,KeyboardInterrupt):
+                print '\t[File] %s skipped!'%m
+                if path.exists(out+k+'\\'+m): remove(out+k+'\\'+m)
+                continue
