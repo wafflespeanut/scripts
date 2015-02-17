@@ -3,7 +3,8 @@ from os import *
 import lxml.html
 
 out="C:\\Users\\Waffles Crazy Peanut\\Desktop\\TEMP\\"; links=[]
-links.append('http://downloads.khinsider.com/game-soundtracks/album/assassin-s-creed-revelations')
+links.append('http://downloads.khinsider.com/game-soundtracks/album/assassin-s-creed-3-liberation')
+#links.append('http://downloads.khinsider.com/game-soundtracks/album/assassin-s-creed-revelations')
 
 # I used to download embedded MP3 soundtracks with this...
 
