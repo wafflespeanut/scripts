@@ -153,7 +153,7 @@ def diary():
             elif s=='3': view()
             elif s=='0':
                 if os.path.exists(ploc): os.remove(ploc); print 'Login credentials removed!'
-                else: check()
+                else: check(); print 'Login credentials have been saved locally!'
             else: print '\nIllegal choice!'
             s=raw_input('\nDo something again (y/n)? ')
             if s!='y': break
