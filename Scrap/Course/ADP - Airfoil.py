@@ -13,9 +13,9 @@ def airfoil(w0=460719.335414,wf=197197.059532,ca=10752,cv=0.85):
     cr=2*cavg/(tr+1); print 'Root chord: %s (no unit)'%cr
     ct=tr*cr; print 'Tip chord: %s (no unit)'%ct
     vf=wf/rho; print 'Volume of fuel: %s m^3'%vf
-    a0=float(raw_input('Fuel to be stored in fuselage (in percent): '))
-    a1=float(raw_input('Allowance given to spars (in percent): '))
-    a2=float(raw_input('Allowance given to ribs (in percent): '))
+    a0=float(raw_input('Fuel to be stored in fuselage (in percent): '))/100
+    a1=float(raw_input('Allowance given to spars (in percent): '))/100
+    a2=float(raw_input('Allowance given to ribs (in percent): '))/100
     tc=(vf-a0*vf)/((0.5+a1)*cavg*cavg*(b/2)*(0.5+a2)*0.75*2)
     print 'Thickness-to-chord ratio: %s (no unit)'%tc
     wl=w0-0.8*wf; 'Landing Weight: %s N'%(wl*g)
