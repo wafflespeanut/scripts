@@ -9,8 +9,8 @@ def airfoil(w0=408649.513852,wf=168698.6397887,ca=10752,cv=0.85):
     ar=rmin(1)[1]; print 'Aspect Ratio: %s (no unit)'%ar
     b=(ar*s)**0.5; print 'Wing span: %s m'%b
     cavg=s/b; print 'Average chord: %s (no unit)'%cavg
-    tr=rmin(18)[1]; print 'Taper Ratio: %s (no unit)'%tr
-    cr=2*cavg/(tr+1); print 'Root chord: %s (no unit)'%cr
+    tr=rmin(18)[1]; print 'Taper Ratio: %s m'%tr
+    cr=2*cavg/(tr+1); print 'Root chord: %s m'%cr
     ct=tr*cr; print 'Tip chord: %s (no unit)'%ct
     vf=wf/rho; print 'Volume of fuel: %s m^3'%vf
     a0=float(raw_input('Fuel to be stored in fuselage (in percent): '))/100
