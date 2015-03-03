@@ -1,4 +1,7 @@
+from pylab import *
 execfile("Standard Atmosphere.py")
+
+path='C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\ADP\\Week 6 (Reset)\\Iter.txt'
 
 def fan(w0=393085,we=177945,tl=0.27665,ca=10752,cv=0.85,wp=52960,wc=2000,r=14000,n=4):
     a=[]; cv*=((1.4*287*atmos(ca)[0])**0.5)*(18.0/5); wf=0; rf=0.4; wpp=0; d0=1.225; i=0; re=re0=float(we)/w0
@@ -47,3 +50,13 @@ def prop(w0=14333,we=7400,pl=0.294906,ca=8000,cv=500,wp=3600,wc=400,r=1800,n=2):
         print 'Fuel Weight ratio: %s'%(wf/w0)
         print 'Empty Weight ratio: %s'%(re)
         raw_input('\nPress [Enter] to continue...'); i+=1
+
+def iterplot():
+    i=2; d=[]
+    with open(path,'r') as file: data=file.readlines()
+    while i<len(data):
+        if 'Iteration' in data[i]: i+=2; d.append(float(data[i].split(' ')[2]))
+        i+=1
+    x=range(1,len(d)+1); plot(x,d,'ro'); plot(x,d); axis([0,len(x)+1,min(d)*0.95,max(d)*1.1])
+    xlabel(r'Iteration $\mathregular{[no\ unit]}$',fontsize=18); ylabel(r'Net Weight $\mathregular{[kg-f]}$',fontsize=18)
+    grid(True); show()

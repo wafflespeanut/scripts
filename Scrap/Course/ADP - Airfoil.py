@@ -9,14 +9,15 @@ def airfoil(w0=408649.513852,wf=168698.6397887,ca=10752,cv=0.85):
     ar=rmin(1)[1]; print 'Aspect Ratio: %s (no unit)'%ar
     b=(ar*s)**0.5; print 'Wing span: %s m'%b
     cavg=s/b; print 'Average chord: %s (no unit)'%cavg
-    tr=rmin(18)[1]; print 'Taper Ratio: %s (no unit)'%tr
-    cr=2*cavg/(tr+1); print 'Root chord: %s (no unit)'%cr
+    tr=rmin(18)[1]; print 'Taper Ratio: %s m'%tr
+    cr=2*cavg/(tr+1); print 'Root chord: %s m'%cr
     ct=tr*cr; print 'Tip chord: %s (no unit)'%ct
     vf=wf/rho; print 'Volume of fuel: %s m^3'%vf
     a0=float(raw_input('Fuel to be stored in fuselage (in percent): '))/100
     a1=float(raw_input('Allowance given to spars (in percent): '))/100
     a2=float(raw_input('Allowance given to ribs (in percent): '))/100
-    tc=(vf-a0*vf)/((0.5+a1)*cavg*cavg*(b/2)*(0.5+a2)*0.75*2)
+    cmac=float(raw_input('Mean aerodynamic chord (no unit): '))
+    tc=(vf-a0*vf)/((0.5+a1)*cmac*cmac*(b/2)*(0.5+a2)*0.75*2)
     print 'Thickness-to-chord ratio: %s (no unit)'%tc
     wl=w0-0.8*wf; 'Landing Weight: %s N'%(wl*g)
     wc=(w0+wl)/2; 'Cruise Weight: %s N'%(wc*g)

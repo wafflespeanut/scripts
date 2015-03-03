@@ -3,8 +3,15 @@ from time import strftime as time
 from time import sleep
 from random import choice
 
-ploc=os.path.expanduser('~')+'\\AppData\\Local\\SYSTEM.DAT'         # Password location
-loc=os.path.expanduser('~')+'\\Desktop\\Dropbox\\Diary\\'           # Storage location
+# Modified for my Ubuntu/Windows-8 dual-boot...
+
+if '/bin' in os.path.defpath:
+    ploc='/media/'+os.path.expanduser('~').split('/')[-1]+'/Local Disk/Users/Waffles Crazy Peanut/AppData/Local/SYSTEM.DAT'
+    loc='/media/'+os.path.expanduser('~').split('/')[-1]+'/Local Disk/Users/Waffles Crazy Peanut/Desktop/Dropbox/Diary/'
+else:
+    ploc=os.path.expanduser('~')+'\\AppData\\Local\\SYSTEM.DAT'         # Password location
+    loc=os.path.expanduser('~')+'\\Desktop\\Dropbox\\Diary\\'           # Storage location
+
 months={'11':'November','10':'October','12':'December','01':'January','03':'March','02':'February','05':'May','04':'April','07':'July','06':'June','09':'September','08':'August'}
 
 def hexed(key):             # Hexing function
@@ -41,7 +48,7 @@ def zombify(ch,data,key):           # Linking helper function
 
 def temp(File,key=None):            # Uses default notepad to view stuff
     if protect(File,'d',key):
-        subprocess.Popen(["notepad.exe",loc+'TEMP.tmp'])
+        subprocess.Popen(["notepad",loc+'TEMP.tmp'])
         sleep(2); os.remove(loc+'TEMP.tmp')
 
 def check():                        # Allows password to be stored locally (Nothing too serious, it just hexes the thing 10 times!)
@@ -74,11 +81,13 @@ def protect(path,ch,key=None):          # A simple method which shifts and turns
     with open(path,'r') as file: data=file.readlines()
     if len(data)==0: print 'Nothing in file!'; return None
     try:
-        for i in range(len(data)):
-            if data[i]=='\n': i+=1; continue
-            if data[i][-1]=='\n': data[i]=zombify(ch,str(data[i][:-1]),key); c=True
+        for i in range(len(data)):          # The '\r\n' thing is for newline char in Ubuntu
+            if data[i]=='\n' or data[i]=='\r\n': i+=1; continue
+            if data[i][-2:]=='\r\n': data[i]=zombify(ch,str(data[i][:-2]),key); c=True
+            elif data[i][-1]=='\n': data[i]=zombify(ch,str(data[i][:-1]),key); c=True
             else: data[i]=zombify(ch,str(data[i]),key); c=False
-            if c: data[i]+='\n'
+            if c and 'bin' in ploc: data[i]+='\r\n'
+            elif c: data[i]+='\n'
     except TypeError: print '\n\tWrong password!'; return None
     if ch=='e':
         with open(path,'w') as file: file.writelines(data)
