@@ -1,7 +1,7 @@
 execfile("ADP - Data Collection.py")
 execfile("Standard Atmosphere.py")
 
-def tail(w0=408649.51385):
+def tail(w0=404796.621304):
     try:
         g=9.81; l=rmin(9)[1]; ar=rmin(1)[1]; wload=rmin(21)[1]; s=(w0*g)/wload
         htvc=float(raw_input('Horizontal tail volume coefficient (no unit): '))
