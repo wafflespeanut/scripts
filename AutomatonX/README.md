@@ -2,9 +2,7 @@
 
 Well, this is my cipher, built completely for (my own) learning purposes. For a few months, I've been learning Python by finding different ways of getting into the cipher, and patching the algorithm so that it gets stronger every time.
 
-It's quite straight-forward (should be easy to understand with my comments). And, it's built by a lot of helper functions, for improving readability.
-
-I've written a [blog post](http://wp.me/p3OCmi-qT) on how one of its ancestors (v1.4 "Ranger") works. And, there's a [javascript version](http://wafflespeanut.github.io/Sentinel/) of it in my Github page!
+It's quite straight-forward (should be easy to understand with my comments). And, it's built by a lot of helper functions, for improving readability. I've written a [blog post](http://wp.me/p3OCmi-qT) on how one of its ancestors (v1.4 "Ranger") works. And, there's a [javascript version](http://wafflespeanut.github.io/Sentinel/) of it in my Github page!
 
 ### How it works?
 
@@ -65,7 +63,7 @@ v1.1: [Keydepher](https://github.com/Wafflespeanut/Python/blob/d45d3dd783389c11d
 - Iterated ciphertext outputs
 - Functions: add(), sub(), eit(), dit()
 
-v1.0: [Sorter](https://github.com/Wafflespeanut/Python/blob/00ea11b8068e874fb86c84bc1d466b25053194b9/Encryption) *(Encryption not yet implemented!)*
+v1.0: [Sorter](https://github.com/Wafflespeanut/Python/blob/00ea11b8068e874fb86c84bc1d466b25053194b9/Encryption) *(It doesn't encrypt anything!)*
 - Just hexing and shuffling (key-independent)
 - Iterated shuffled outputs
 - Functions: sieve(), hexed(), combine(), char(), extract()
