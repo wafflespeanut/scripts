@@ -3,15 +3,13 @@ from os import *
 import lxml.html
 
 out="C:\\Users\\Waffles Crazy Peanut\\Desktop\\TEMP\\"; links=[]
-links.append('http://downloads.khinsider.com/game-soundtracks/album/freedom-fighters-original-soundtrack')
+#links.append('http://downloads.khinsider.com/game-soundtracks/album/freedom-fighters-original-soundtrack')
 
 # I used to download embedded MP3 soundtracks with this...
 
-def urls(link):
-    a=set(); dom=lxml.html.fromstring(urlopen(link).read())
-    for l in dom.xpath('//a/@href'):
-        if '#' not in l and 'mp3' in l: a.update([l])
-    return list(a)
+def urls(link,what='mp3'):
+    a=[]; dom=lxml.html.fromstring(urlopen(link).read())
+    return [l for l in dom.xpath('//a/@href') if '#' not in l and what in l]
 
 def get():
     for link in links:
