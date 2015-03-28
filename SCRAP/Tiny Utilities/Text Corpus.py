@@ -23,18 +23,17 @@ def revise():               # A rough cleanup to Gutenberg's license & junks...
         while '***' not in data[i]: i+=1
         with fopen(out+f,'w') as file: file.writelines(''.join(data[i+2:]))
 
-def stats(rmin=32,rmax=127):                # ASCII letter frequencies in range(32,127)
+def scan(rmin=32,rmax=127):                # ASCII letter frequencies in range(32,127)
     freq=[0 for i in range(0,rmax)]; c=0
     for f in listdir(out):
         with fopen(out+f,'r') as file: data=file.readlines()
         for i in ''.join(data):
             m=ord(i)
             if m>=rmin and m<rmax: freq[m]+=1; c+=1
-    print 'Scanned a total of %d characters!\n'%(c)
+    print 'Scanned a total of %d characters from %d files!\n'%(c,len(listdir(out)))
     dfreq=dict(enumerate([float(i)/c for i in freq]))
     for k in range(len(dfreq)):
         if not dfreq[k]: del dfreq[k]
-        k+=1
     print "Most frequently found character: '%s'"%(chr(max(dfreq.iterkeys(),key=(lambda key: dfreq[key]))))
     print "Least frequently found character: '%s'"%(chr(min(dfreq.iterkeys(),key=(lambda key: dfreq[key]))))
-    print '\n'; return dfreq
+    print; return dfreq
