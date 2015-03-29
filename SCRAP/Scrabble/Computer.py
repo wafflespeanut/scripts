@@ -1,4 +1,4 @@
-from User import *
+execfile("User.py")
 
 def compChooseWord(hand,wordList,n):
     maxi=0; best=""
@@ -22,15 +22,15 @@ def compPlayHand(hand, wordList, n):
 def playBoth(wordList):
     r=0; s=''
     while s!='e':
-        s=raw_input("Enter n to deal a new hand, r to replay the last hand, or e to end game: ")    
+        s=raw_input("Enter 'n' to deal a new hand, 'r' to replay the last hand, or 'e' to end game: ")    
         if s=='r' and r==0: print "You have not played a hand yet. Please play a new hand first!\n"
         while s=='r' and r==1:
-            pmt=raw_input("\nEnter u to have yourself to play, c to have the computer play: ")
+            pmt=raw_input("\nEnter 'u' to have yourself to play, 'c' to have the computer play: ")
             if pmt=='u': hand=handcopy.copy(); playHand(hand,wordList,SIZE); break
             elif pmt=='c': hand=handcopy.copy(); compPlayHand(hand,wordList,SIZE); break
             else: print "Invalid command.\n"
         while s=='n':
-            pmt=raw_input("\nEnter u to have yourself to play, c to have the computer play: ")
+            pmt=raw_input("\nEnter 'u' to have yourself to play, 'c' to have the computer play: ")
             if pmt=='u':
                 hand=dealHand(SIZE); handcopy=hand.copy()
                 playHand(hand,wordList,SIZE); r=1; break
