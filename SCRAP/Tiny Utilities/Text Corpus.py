@@ -2,7 +2,7 @@ fopen = open
 execfile("Download MP3s.py")
 from random import shuffle
 
-out=path.expanduser('~\Desktop\TEMP\Text Corpus\\')
+desk=path.expanduser('~\Desktop'); out=desk+'\\TEMP\\Text Corpus\\'
 link='http://www.gutenberg.org/browse/scores/top'
 
 # Downloads the first 20 books (as text files) from the Project Gutenberg homepage
@@ -57,6 +57,9 @@ def scan(rmin=32,rmax=127):                # ASCII letter frequencies in range(3
     return (dfreq,c)
 
 def stats(stuff=None,F='STATS-MAIN.txt'):
+    if path.exists(out+F):
+        s=raw_input('\nSTATS file already exists! Continue? (y/n)')
+        if s!='y': startfile(out+F); return
     if not stuff: stuff=scan()
     w=[]; dfreq=stuff[0]; c=stuff[1]; tab=''
     sc='Scanned a total of %d characters! (in the given range)\n'%(c)
@@ -70,3 +73,4 @@ def stats(stuff=None,F='STATS-MAIN.txt'):
         else: tab='\t\t\t\t'
         w.append('%d\t\t%s\t\t%d%s%.10f %s'%(i,chr(i),dfreq[i],tab,dfreq[i]*100/float(c),chr(ord('%'))))
     with fopen(out+F,'w') as file: file.writelines('\n'.join(w))
+    startfile(out+F)

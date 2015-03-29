@@ -1,24 +1,19 @@
 import string
-import random
-
-WORDLIST_FILENAME="Words.txt"
+from random import choice
 
 def loadWords():
     print "Loading word list from file..."
-    inFile=open(WORDLIST_FILENAME, 'r')
-    wordList=inFile.read().split()
+    inFile=open("Words.txt",'r'); wordList=inFile.read().split()
     print "  ",len(wordList),"words loaded.\n"
     return wordList
 
 def isWord(wordList,word):
-    word=word.lower()
-    word=word.strip(" !@#$%^&*()-_+={}[]|\\:;'<>?,./\"")
+    word=word.lower(); word=word.strip(" !@#$%^&*()-_+={}[]|\\:;'<>?,./\"")
     return word in wordList
 
 def buildCoder(shift):
-    s=shift
+    s=shift; letters={}; temp={}
     if int(shift)>26: s%=26
-    letters={}; temp={}
     group1=string.ascii_uppercase
     group2=string.ascii_lowercase
     for i in range(26):
@@ -28,8 +23,7 @@ def buildCoder(shift):
         else:
             letters[group1[i]]=group1[i+s-26]
             temp[group2[i]]=group2[i+s-26]
-    letters.update(temp)
-    return letters
+    letters.update(temp); return letters
 
 def applyCoder(text,coder):
     code=coder.copy()
@@ -38,12 +32,10 @@ def applyCoder(text,coder):
         for ch in code.keys():
             if ch==cha: char+=code[cha]
             elif cha in string.punctuation or cha in string.digits or cha==" ":
-                char+=cha
-                break
+                char+=cha; break
     return char
 
-def applyShift(text,shift):
-    return applyCoder(text,buildCoder(shift))
+def applyShift(text,shift): return applyCoder(text,buildCoder(shift))
     
 def findBestShift(wordList,text):
     t=text; real=0; best=0; m=0
@@ -52,15 +44,15 @@ def findBestShift(wordList,text):
         split=t.split(' ')
         for j in range(len(split)):
             if isWord(wordList,split[j]): m+=1
-        if m>real:
-            m=real; best=i+1
+        if m>real: m=real; best=i+1
     return best
 
-wordList=loadWords()
-s=applyShift('Hello, world!',8)
-print "Shift-8 applied for 'Hello world': " +s
-bestShift=findBestShift(wordList,s)
-print "\nBest shift found: " +str(bestShift)
-print "Reapplying shift(" +str(bestShift) +")"
-if applyShift(s, bestShift)=='Hello, world!': print True
-else: print False
+if __name__=='__main__':
+    wordList=loadWords(); n=choice(range(26))
+    s=applyShift('Hello, world!',n)
+    print "Shift-%d applied for 'Hello world': "%(n) +s
+    bestShift=findBestShift(wordList,s)
+    print "\nBest shift found: " +str(bestShift)
+    print "Reapplying shift(" +str(bestShift) +")...\n"
+    if applyShift(s,bestShift)=='Hello, world!': print True
+    else: print False
