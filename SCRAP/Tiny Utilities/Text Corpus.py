@@ -75,7 +75,7 @@ def stats(stuff=None,F='STATS-MAIN.txt'):
     w.append("Least frequently found character: '%s'"%(chr(min(dfreq.iterkeys(),key=(lambda key: dfreq[key])))))
     w.append('\nASCII\tChar\tOccurrences\t\t(in percent)')
     w.append('=====\t====\t===========\t\t============')
-    for i in sorted(dfreq,key=dfreq.get,reverse=True):        # To sort by occurrences in decending order
+    for i in sorted(dfreq,key=dfreq.get,reverse=True):          # To sort by occurrences in decending order
         if len(str(dfreq[i]))>=4: tab='\t\t\t'
         else: tab='\t\t\t\t'
         w.append('%d\t\t%s\t\t%d%s%.10f %s'%(i,chr(i),dfreq[i],tab,dfreq[i]*100/float(c),chr(ord('%'))))
