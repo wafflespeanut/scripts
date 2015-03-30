@@ -4,7 +4,7 @@ from random import shuffle
 
 desk=path.expanduser('~\Desktop'); out=desk+'\\TEMP\\Text Corpus\\'
 link='http://www.gutenberg.org/browse/scores/top'
-export=desk+'\\Github\\Python\\SCRAP\\FREQ.txt'
+export=desk+'\\Github\\Python\\SCRAP\\Crypto\\FREQ.txt'
 
 # Downloads the first 20 books (as text files) from the Project Gutenberg homepage
 # They don't want us to download a lot of stuff in a single day (Well, they block our IPs soon). So, let's limit it to 20...
