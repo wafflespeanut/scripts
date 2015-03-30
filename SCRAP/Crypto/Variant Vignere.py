@@ -2,7 +2,7 @@ from math import ceil
 from os import path
 from time import sleep
 
-fin="CTEXT.txt"; key=[] # Key in hex byte strings
+fin="CTEXT.txt"; key=['BA','1F','91','B2','53','CD','3E'] # Key in hex byte strings
 
 def freq():             # Gathering data generated from a known text corpus
     fread=read('FREQ.txt'); dfreq={}
@@ -45,7 +45,8 @@ def find():                         # Find the possible plaintext suspects - Thi
             pi=[hexor(ci,key) for ci in s if hexor(ci,key)>=32 and hexor(ci,key)<127]
             if 32 in pi and len(pi)==len(s): potent.append((pi,key))      # Search for spaces!
         return potent
-    print 'Crunching every Nth byte into sequences...'; sleep(1.5)
+    print 'Crunching every Nth byte into sequences...'; sleep(0.75)
+    print "XOR'ing for possible values..."; sleep(0.75)
     for seq in range(ksp):
         s=[ctext[i] for i in range(seq,len(ctext),ksp)]
         chose=eng(s); print '\n\tSequence',seq+1,'- analysis results...\n\t'; c=[0,'']
