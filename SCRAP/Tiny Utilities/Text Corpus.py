@@ -34,9 +34,9 @@ def revise():               # A rough cleanup of Gutenberg's license & junks...
             if (len(data)-i-1)==0:
                 for i,j in enumerate(data[::-1]):
                     if ("END OF" in j and "PROJECT GUTENBERG" in j): break
-            data=data[:len(data)-i-1]; i=0; j=0
-            while 'Produced' not in data[i] and i<30: i+=1
-            while i==30 and '***' not in data[j] and j<30: j+=1
+            data=data[:len(data)-i-1]
+            for i,j in enumerate(data):         # This has still got issues (due to disorganized stuff in Gutenberg)
+                if 'Produced' in j: break
             write(out+f,''.join(data[min(i,j)+4:]))
             rename(out+f,out+f[2:])
 
@@ -58,12 +58,12 @@ def scan(rmin=32,rmax=127):                # ASCII letter frequencies in range(3
             if m>=rmin and m<rmax: temp[m]+=1; c+=1; ct+=1
         freq=[freq[i]+temp[i] for i in range(rmax)]; dtemp=cleandict(temp)
         #if not path.exists(out+'STATS'): mkdir(out+'STATS')
-        #stats((dtemp,ct),'STATS\\stat-'+f)                     # Use this for individual file data
+        #stats((dtemp,ct),'STATS\\stat-'+f)                     # Use this for individual file-data
     print 'Scanned a total of %d characters (in the given range) from %d files!\n'%(c,z)
     dfreq=cleandict(freq)
     return (dfreq,c)
 
-def stats(stuff=None,F='STATS-MAIN.txt'):
+def stats(stuff=None,F='STATS-MAIN.txt'):           # Order --> get(), revise(), stats()
     if path.exists(out+F):
         s=raw_input('\nSTATS file already exists! Continue? (y/n): ')
         if s!='y': startfile(out+F); return
@@ -73,12 +73,10 @@ def stats(stuff=None,F='STATS-MAIN.txt'):
     w.append('\nASCII Character Frequencies: %s'%(sc))
     w.append("Most frequently found character: '%s'"%(chr(max(dfreq.iterkeys(),key=(lambda key: dfreq[key])))))
     w.append("Least frequently found character: '%s'"%(chr(min(dfreq.iterkeys(),key=(lambda key: dfreq[key])))))
-    w.append('\nASCII\tChar\tOccurrences\t\t(in percent)')
-    w.append('=====\t====\t===========\t\t============')
-    for i in sorted(dfreq,key=dfreq.get,reverse=True):          # To sort by occurrences in decending order
-        if len(str(dfreq[i]))>=4: tab='\t\t\t'
-        else: tab='\t\t\t\t'
-        w.append('%d\t\t%s\t\t%d%s%.10f %s'%(i,chr(i),dfreq[i],tab,dfreq[i]*100/float(c),chr(ord('%'))))
+    w.append('\nASCII\tChar\tAverage (%)\t\t\t\tOccurrences')
+    w.append('=====\t====\t===========\t\t\t\t===========')
+    for i in sorted(dfreq,key=dfreq.get,reverse=True):        # To sort by occurrences in decending order
+        w.append('%d\t\t%s\t\t%.10f %s\t\t\t%d'%(i,chr(i),dfreq[i]*100/float(c),chr(ord('%')),dfreq[i]))
         z.append('%d\t%.10f'%(i,dfreq[i]/float(c)))
     write(out+F,'\n'.join(w)); write(export,'\n'.join(z))
     startfile(out+F)
