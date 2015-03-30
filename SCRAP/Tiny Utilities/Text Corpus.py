@@ -4,7 +4,7 @@ from random import shuffle
 
 desk=path.expanduser('~\Desktop'); out=desk+'\\TEMP\\Text Corpus\\'
 link='http://www.gutenberg.org/browse/scores/top'
-export=desk+'\\Github\\Python\\SCRAP\\FREQ.txt'
+export=desk+'\\Github\\Python\\SCRAP\\Crypto\\FREQ.txt'
 
 # Downloads the first 20 books (as text files) from the Project Gutenberg homepage
 # They don't want us to download a lot of stuff in a single day (Well, they block our IPs soon). So, let's limit it to 20...
@@ -58,7 +58,7 @@ def scan(rmin=32,rmax=127):                # ASCII letter frequencies in range(3
             if m>=rmin and m<rmax: temp[m]+=1; c+=1; ct+=1
         freq=[freq[i]+temp[i] for i in range(rmax)]; dtemp=cleandict(temp)
         #if not path.exists(out+'STATS'): mkdir(out+'STATS')
-        #stats((dtemp,ct),'STATS\\stat-'+f)         # Use this for statistics from individual files
+        #stats((dtemp,ct),'STATS\\stat-'+f)                     # Use this for individual file data
     print 'Scanned a total of %d characters (in the given range) from %d files!\n'%(c,z)
     dfreq=cleandict(freq)
     return (dfreq,c)
@@ -75,7 +75,7 @@ def stats(stuff=None,F='STATS-MAIN.txt'):
     w.append("Least frequently found character: '%s'"%(chr(min(dfreq.iterkeys(),key=(lambda key: dfreq[key])))))
     w.append('\nASCII\tChar\tOccurrences\t\t(in percent)')
     w.append('=====\t====\t===========\t\t============')
-    for i in dfreq:
+    for i in sorted(dfreq,key=dfreq.get,reverse=True):        # To sort by occurrences in decending order
         if len(str(dfreq[i]))>=4: tab='\t\t\t'
         else: tab='\t\t\t\t'
         w.append('%d\t\t%s\t\t%d%s%.10f %s'%(i,chr(i),dfreq[i],tab,dfreq[i]*100/float(c),chr(ord('%'))))
