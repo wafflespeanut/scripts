@@ -2,7 +2,7 @@ from math import ceil
 from os import path
 from time import sleep
 
-fin="CTEXT.txt"; key=['BA','1F','91','B2','53','CD','3E'] # Key in hex byte strings
+fin="CTEXT.txt"; key=[] # Key in hex byte strings
 
 def freq():             # Gathering data generated from a known text corpus
     fread=read('FREQ.txt'); dfreq={}
@@ -48,13 +48,15 @@ def find():                         # Find the possible plaintext suspects - Thi
     print 'Crunching every Nth byte into sequences...'; sleep(0.75)
     print "XOR'ing for possible values..."; sleep(0.75)
     for seq in range(ksp):
-        s=[ctext[i] for i in range(seq,len(ctext),ksp)]
-        chose=eng(s); print '\n\tSequence',seq+1,'- analysis results...\n\t'; c=[0,'']
+        s=[ctext[i] for i in range(seq,len(ctext),ksp)]; cha=[0,'']
+        chose=eng(s); print '\n\n\tSEQUENCE',seq+1,'- analysis results...\n\t'
         for i in chose:
-            print ''.join([chr(j) for j in i[0]]),'\t',i[1]; t=i[0].count(32)
-            if t>c[0]: c[0]=t; c[1]=i[1]
-        found.append(c[1])
-    print '\n\n\tPOSSIBLE KEY:',found,'\n'        # Wrong! Actual key turns out to be ['BA','1F','91','B2','53','CD','3E']
+            chars=sum([ch if ((ch>=65 and ch<=90) or (ch>=97 and ch<=122)) else 0 for ch in i[0]])
+            # Count ASCII codes, since English chars have higher values
+            print ''.join([chr(j) for j in i[0]]),'\t',i[1],'\t',chars
+            if chars>cha[0]: cha[0]=chars; cha[1]=i[1]
+        found.append(cha[1])
+    print '\n\n\tPOSSIBLE KEY:',found,'\n'
 
 def cipher(ch):         # It deviates from the usual Vigenere in that it XORs hexed plaintext & key
     data=read(); k=[]
