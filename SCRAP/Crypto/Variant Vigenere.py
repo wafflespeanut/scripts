@@ -2,7 +2,7 @@ from math import ceil
 from os import path
 from time import sleep
 
-fin="CTEXT.txt"; key=[] # Key in hex byte strings
+fin="CTEXT-1.txt"; key=[]   # Key in hex byte strings
 
 def freq():             # Gathering data generated from a known text corpus
     fread=read('FREQ.txt'); dfreq={}
