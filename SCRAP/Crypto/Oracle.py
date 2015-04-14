@@ -1,4 +1,5 @@
 s=None
+# For a server which returns [0,1] depending on how we modify the ciphertexts
 
 def connect():
     import socket; global s
@@ -15,7 +16,7 @@ def disconnect():
 
 # Packet Structure: < num_blocks(1) || ciphertext(16*num_blocks) || null-terminator(1) >
 
-def send(ctext,num_blocks):     # The server knows the key 
+def send(ctext,num_blocks):
     if not s: print "[WARNING]: You haven't connected to the server yet!"; return -1
     msg = ctext[:]; msg.insert(0,num_blocks); msg.append(0)
     s.send(bytearray(msg)); recvbit = s.recv(2)
