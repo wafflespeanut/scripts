@@ -16,6 +16,10 @@ It's quite straight-forward (should be easy to understand with my comments). And
 
 I know this isn't entirely intrusion-free. There could be a hole somewhere. But, whenever I come across one, I'll try to patch it ASAP...
 
+### Notes
+
+I had a course in cryptography lately. Only then I realized that whatever I've done is one of the most *stupidest* encryption scheme that anyone could possibly imagine...
+
 ### Changelog
 
 v3.0: AutomatonX
