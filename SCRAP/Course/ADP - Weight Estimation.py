@@ -33,7 +33,7 @@ def fan(w0=393085,we=177945,tl=0.27665,ca=10752,cv=0.85,wp=52960,wc=2000,r=14000
                 i-=1; w0,we,wpp,wf,re,rf = (z for z in a[i]); del a[-1]
                 print '\n\t(Getting back to previous iteration...)\n'
 
-def prop(w0=14333,we=7400,pl=0.294906,ca=8000,cv=500,wp=3600,wc=400,r=1800,n=2):
+def prop(w0=14333,we=7400,pl=0.294906,ca=4000,cv=500,wp=3600,wc=400,r=1800,n=2):
     wf=0; rf=0.15; wpp=0; d0=1.225; i=0; re=re0=float(we)/w0
     while True:                             # For Turboshaft/Turboprop engines
         print '\nIteration %s'%(i)
