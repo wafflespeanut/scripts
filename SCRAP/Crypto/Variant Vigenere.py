@@ -16,7 +16,7 @@ def read(f=fin):
 def write(s,f=fin):
     with open(f,'w') as file: file.writelines(s)
 
-def hexor(ch,k): return ord(ch.decode('hex'))^ord(k.decode('hex'))
+def hexor(c1,c2): return int(c1,16)^int(c2,16)
 
 def IC(ls):             # Find the index of coincidences
     data=read(); ctext=[data[0][i:i+2] for i in range(0,len(data[0]),2)]; avg=0

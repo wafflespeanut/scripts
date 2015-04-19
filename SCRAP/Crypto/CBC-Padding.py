@@ -4,8 +4,6 @@ from time import sleep
 
 # A server knows the key. Our job is to find the key by sending & receiving packets...
 
-def hexor(c1,c2): return int(c1,16)^int(c2,16)
-
 def hexed(p): return ''.join([format(i,'02x').upper() for i in p])
 
 def read(File,blocks):      # Our ciphertext had 3 blocks appended as IV|C1|C2
@@ -52,5 +50,3 @@ def find(File='CBC.txt',b=3):
 
 ##if len(sys.argv)>=2: test(sys.argv[1])
 ##else: test()
-
-find()
