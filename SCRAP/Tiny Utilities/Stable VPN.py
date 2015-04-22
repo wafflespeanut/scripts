@@ -3,7 +3,7 @@ from Tkinter import Tk              # ctypes required a slight complication to r
 from math import sin,cos,pi
 from time import time,sleep
 from urllib2 import urlopen,URLError,HTTPError
-event=ctypes.windll.user32; root=Tk()
+event=ctypes.windll.user32
 socket.setdefaulttimeout(20)
 
 # Tiny code to keep a VPN client alive (which usually disconnects in exactly 30 minutes)...
@@ -11,6 +11,7 @@ socket.setdefaulttimeout(20)
 url='http://www.youtube.com'
 
 def ping():
+    print '\nPinging server...',[url]
     try: response=urlopen(url)
     except HTTPError,e: print "The server couldn't fulfill the request! Reason:",str(e.code); return False
     except URLError,e: print 'Failed to reach a server. Reason:', str(e.reason); return False
@@ -18,9 +19,9 @@ def ping():
 
 def position():
     while True:
-        print "Place the cursor at the target - I'll capture it in 5 seconds!"
-        sleep(5); p=root.winfo_pointerxy(); print 'Caught the position!',p
-        if not raw_input('Retry (y/n)? ')=='y': return p; break
+        print "\nPlace the cursor at the target - I'll capture it in 5 seconds!"
+        root=Tk(); sleep(5); p=root.winfo_pointerxy(); print 'Caught the position!',p; root.destroy()
+        if not raw_input('Retry (y/n)?\n\n')=='y': return p; break
 
 def click(p):
     event.SetCursorPos(p[0],p[1])
@@ -37,8 +38,7 @@ def cursor(t):                  # To render the cursor inoperative for a few sec
         except KeyboardInterrupt: break
 
 def action(p=None):             # This is what you should run!
-    if p==None: p=position()
+    if p==None: p=position(); s='\nPinging server...'
     while True:
-        print '\nPinging server...',(url)
         if not ping(): print 'Unable to connect!'; click(p); sleep(20)
         if ping(): sleep(10)
