@@ -18,15 +18,16 @@ def ping():
 
 def position():
     while True:
-        s=raw_input("Place the cursor at the target - I'll capture it in 5 seconds!")
+        print "Place the cursor at the target - I'll capture it in 5 seconds!"
         sleep(5); p=root.winfo_pointerxy(); print 'Caught the position!',p
         if not raw_input('Retry (y/n)? ')=='y': return p; break
 
 def click(p):
     event.SetCursorPos(p[0],p[1])
     event.mouse_event(2,0,0,0,0); event.mouse_event(4,0,0,0,0)
+    print 'Clicked!'
 
-def cursor(t):                      # To render the cursor inoperative for a few seconds
+def cursor(t):                  # To render the cursor inoperative for a few seconds (deprecated)
     i=0; later=time()+t
     res=(event.GetSystemMetrics(0),event.GetSystemMetrics(1))
     while time()<=later:
@@ -37,8 +38,7 @@ def cursor(t):                      # To render the cursor inoperative for a few
 
 def action(p=None):             # This is what you should run!
     if p==None: p=position()
-    click(p); print 'Clicked!'; sleep(20)
-    print 'Pinging server...',(url)
     while True:
+        print '\nPinging server...',(url)
         if not ping(): print 'Unable to connect!'; click(p); sleep(20)
         if ping(): sleep(10)
