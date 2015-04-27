@@ -72,7 +72,7 @@ def check():                        # Allows password to be stored locally (Noth
         for i in range(10): key=char(key)
     return key
 
-def protect(path,ch,key=None):          # A simple method which shifts and turns it to hex!
+def protect(path,ch,key=None):      # A simple method which shifts and turns it to hex!
     if os.path.exists(ploc): key=check()
     try:
         if not key: key=raw_input('\nEnter password for your story: ')
@@ -81,7 +81,7 @@ def protect(path,ch,key=None):          # A simple method which shifts and turns
     with open(path,'r') as file: data=file.readlines()
     if len(data)==0: print 'Nothing in file!'; return None
     try:
-        for i in range(len(data)):          # The '\r\n' thing is for newline char in Ubuntu
+        for i in range(len(data)):      # The '\r\n' thing is for newline char in Ubuntu
             if data[i]=='\n' or data[i]=='\r\n': i+=1; continue
             if data[i][-2:]=='\r\n': data[i]=zombify(ch,str(data[i][:-2]),key); c=True
             elif data[i][-1]=='\n': data[i]=zombify(ch,str(data[i][:-1]),key); c=True
@@ -95,11 +95,13 @@ def protect(path,ch,key=None):          # A simple method which shifts and turns
         with open(loc+'TEMP.tmp','w') as file: file.writelines(data)
     return key
 
-def write():        # Does all the dirty job
-    if not os.path.exists(loc+time('%Y')): os.mkdir(loc+time('%Y'))
-    key=None; f=loc+time('%Y')+os.sep+months[time('%m')]+' ('+time('%Y')+')'
-    if not os.path.exists(f): os.mkdir(f)
-    File=f+os.sep+'Day '+time('%d')+' ('+months[time('%m')]+' '+time('%Y')+')'
+def write(File=None):      # Does all the dirty job
+    key=None
+    if not File:
+        if not os.path.exists(loc+time('%Y')): os.mkdir(loc+time('%Y'))
+        f=loc+time('%Y')+os.sep+months[time('%m')]+' ('+time('%Y')+')'
+        if not os.path.exists(f): os.mkdir(f)
+        File=f+os.sep+'Day '+time('%d')+' ('+months[time('%m')]+' '+time('%Y')+')'
     if os.path.exists(File) and os.path.getsize(File)!=0:
         print '\nFile already exists! Appending to current file...'
         while not key:
@@ -125,23 +127,22 @@ def write():        # Does all the dirty job
     s=raw_input('\nSuccessfully written to file! Do you wanna see it (y/n)? ')
     if s=='y': temp(File,key)
 
-def view():         # To browse the directory, decrypt and view the stories
+def day():              # Return a path based on (day,month,year) input
     y=raw_input('\nYear: ')
-    while len(y)!=4:
-        y=raw_input('\nEnter a valid year: ')
-    if not os.path.exists(loc+y): print '\nNo stories on this year...'; return None
+    while len(y)!=4: y=raw_input('\nEnter a valid year: ')
+    if not os.path.exists(loc+y): print '\nNo stories on this year!'; return None
     while True:
         try:
             s=raw_input('\nMonth: ')
             if s in months: m=months[s]; break
             elif '0'+s in months: m=months['0'+s]; break
         except KeyError: print 'Enter a valid month!'
-    if not os.path.exists(loc+y+os.sep+m+' ('+y+')'): print '\nNo stories on this month...'; return None
+    if not os.path.exists(loc+y+os.sep+m+' ('+y+')'): print '\nNo stories on this month!'; return None
     s=raw_input('\nDay: ')
     if len(s)==1: s='0'+s
     d='Day '+s+' ('+m+' '+y+')'; f=loc+y+os.sep+m+' ('+y+')'+os.sep+d
-    if not os.path.exists(f): print '\nNo stories on this day...'; return None
-    else: temp(f)
+    if not os.path.exists(f): print '\nNo stories on this day!'
+    return f
 
 def random():       # Useful only when you have a lot of stories
     for i in range(100):        # Just to approach pure randomness instead of pseudo-randomness
@@ -153,16 +154,17 @@ def diary():
     while True:
         if os.path.exists(loc+'TEMP.tmp'): os.remove(loc+'TEMP.tmp')
         try:
-            print '\n\tWhat do you wanna do?',"\n\n\t\t1: Write today's story","\n\t\t2: Random story","\n\t\t3: View the story of someday"
+            print '\n\tWhat do you wanna do?',"\n\n\t\t1: Write today's story","\n\t\t2: Random story","\n\t\t3: View the story of someday","\n\t\t4. Write the story for someday you've missed"
             if os.path.exists(ploc): print '\t\t0: Sign out'
             else: print '\t\t0: Sign in'
             s=raw_input('\nChoice: ')
             if s=='1': write()
             elif s=='2': random()
-            elif s=='3': view()
+            elif s=='3': temp(day())
             elif s=='0':
                 if os.path.exists(ploc): os.remove(ploc); print 'Login credentials removed!'
                 else: check(); print 'Login credentials have been saved locally!'
+            elif s=='4': write(day())
             else: print '\nIllegal choice!'
             s=raw_input('\nDo something again (y/n)? ')
             if s!='y': break

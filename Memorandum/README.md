@@ -10,6 +10,7 @@ I've added a function that hexes the password into a local file if you get bored
 
 v2.2: Memorandum
 - Passwords can be stored locally (after 10-layer hexing)
+- Write stories for someday you've missed
 - Sign-in / Sign-out options for easier use
 - Functions: check(), diary()
 
