@@ -7,7 +7,7 @@ def rfile(drive='H:\\'):            # Random walk files to open something! (Got 
         if os.path.isfile(s): os.startfile(s); break
         else: s+='\\'; k=os.listdir(s)
 
-path="C:\\TEMP\\"
+path="C:\\TEMP\\OST\\"
 
 def ren():           # To rename video files after watching
     for i in os.listdir(path):
@@ -27,10 +27,13 @@ def num():            # To rename numbered ones
             while i[k] in '1234567890' or i[k] in ' -': k+=1
         os.rename(path+i,path+i[k:])
 
-def mp3():           # To rename MP3s based on their metadata
+def mp3():           # To rename MP3s based on their title
     for i in os.listdir(path):
         f=eyed3.load(path+i)
-        os.rename(path+i,path+f.tag.title+'.mp3')
+        s=raw_input('Current title: %s\n[Enter] to use the current metadata, or type a new one:\n'%(f.tag.title))
+        if s=='': s=f.tag.title
+        else: f.tag.title=unicode(s); f.tag.save()
+        os.rename(path+i,path+s+'.mp3')
 
 src="D:\\parts\\"
 dest="J:\\Other\\TEMP\\parts\\"

@@ -11,7 +11,7 @@ def read(File,blocks=3):         # Our ciphertext had 3 blocks appended as IV|C1
     s=data[0]; c=len(s)/blocks
     return [s[i:i+c] for i in range(0,len(s),c)]
 
-def test(data,b=3):         # Usage: `python Padding.py <filename>`
+def test(data,b=3):
     ctext=[(int(data[i:i+2],16)) for i in range(0,len(data),2)]
     print "\nCTEXT:",ctext,'\n\nSending ciphertext...'
     rc=send(ctext,b)
@@ -51,3 +51,5 @@ def pad(File='CBC.txt',b=3,l=5):          # Automated brute-force process to fin
         disconnect(); m=len(data[b-2])/2-l
     except KeyboardInterrupt: return a
     return [a[i] for i in a]+[m]*m
+
+# [INCOMPLETE] The same should be done for the previous ciphertext, but I lost the internet back then, and I eventually lost my interest (sigh)...

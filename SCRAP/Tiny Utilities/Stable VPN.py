@@ -6,7 +6,7 @@ from urllib2 import urlopen,URLError,HTTPError
 event=ctypes.windll.user32
 socket.setdefaulttimeout(20)
 
-# Tiny code to keep a VPN client alive (which usually disconnects in exactly 30 minutes)...
+# Some code to keep a VPN client alive (which usually disconnects in exactly 30 minutes)...
 # If the application has admin privileges, then Python needs admin privileges to interact with that application
 url='http://www.youtube.com'
 
@@ -26,7 +26,6 @@ def position():
 def click(p):
     event.SetCursorPos(p[0],p[1])
     event.mouse_event(2,0,0,0,0); event.mouse_event(4,0,0,0,0)
-    print 'Clicked!'
 
 def cursor(t):                  # To render the cursor inoperative for a few seconds (deprecated)
     i=0; later=time()+t
@@ -38,7 +37,7 @@ def cursor(t):                  # To render the cursor inoperative for a few sec
         except KeyboardInterrupt: break
 
 def action(p=None):             # This is what you should run!
-    if p==None: p=position(); s='\nPinging server...'
+    if p==None: p=position()
     while True:
-        if not ping(): print 'Unable to connect!'; click(p); sleep(20)
+        if not ping(): print 'Unable to connect! Clicking...'; click(p); sleep(20)
         if ping(): sleep(10)
