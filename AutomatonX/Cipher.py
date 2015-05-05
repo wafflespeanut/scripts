@@ -1,4 +1,4 @@
-import random, timeit
+import random, timeit, os
 
 # Quite a long & dirty code!
 
@@ -193,11 +193,13 @@ def FILE():     # Encrypts/Decrypts text files
         with open(path,'r') as file: data=file.readlines()
         if len(data)==0: print "Nothing in file!"; return None
         for i in range(len(data)):
-            if data[i]=='\n': i+=1; continue
-            if data[i][-1]=='\n': data[i]=zombify(what,str(data[i][:-1]),key,level); c=True
+            if data[i]=='\n' or data[i]=='\r\n': i+=1; continue
+            if data[i][-2:]=='\r\n': data[i]=zombify(what,str(data[i][:-2]),key,level); c=True
+            elif data[i][-1]=='\n': data[i]=zombify(what,str(data[i][:-1]),key,level); c=True
             else: data[i]=zombify(what,str(data[i]),key,level); c=False
             if data[i]==None: print "\tMismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"; return None
-            if c: data[i]+='\n'
+            if c and '/bin' in os.path.defpath: data[i]+='\r\n'
+            elif c: data[i]+='\n'
         with open(path,'w') as file: file.writelines(data)
         stop=timeit.default_timer()
         print "TOTAL TIME:",round(stop-start,5),"seconds"
