@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import include,url
 from django.contrib import admin
-from git.test import time
+from git.trial import time
 from repos import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-##    url(r'^time/$',time),url(r'^time/([-+]?\d{1,2}[.]?\d*)/$',time),
+    url(r'^time/$',time),url(r'^time/([-+]?\d{1,2}[.]?\d*)/$',time),
     url(r'^$',views.search_form),url(r'^search/$',views.search),
 ]
