@@ -47,6 +47,7 @@ def zombify(ch,data,key):           # Linking helper function
         return char(p)
 
 def temp(File,key=None):            # Uses default notepad to view stuff
+    if File==None: return None
     if protect(File,'d',key):
         subprocess.Popen(["notepad",loc+'TEMP.tmp'])
         sleep(2); os.remove(loc+'TEMP.tmp')
@@ -128,15 +129,14 @@ def write(File=None):      # Does all the dirty job
     if s=='y': temp(File,key)
 
 def day():              # Return a path based on (day,month,year) input
-    y=raw_input('\nYear: ')
-    while len(y)!=4: y=raw_input('\nEnter a valid year: ')
+    while True:
+        y=raw_input('\nYear: ')
+        if len(y)==4: break
     if not os.path.exists(loc+y): print '\nNo stories on this year!'; return None
     while True:
-        try:
-            s=raw_input('\nMonth: ')
-            if s in months: m=months[s]; break
-            elif '0'+s in months: m=months['0'+s]; break
-        except KeyError: print 'Enter a valid month!'
+        s=raw_input('\nMonth: ')
+        if s in months: m=months[s]; break
+        elif '0'+s in months: m=months['0'+s]; break
     if not os.path.exists(loc+y+os.sep+m+' ('+y+')'): print '\nNo stories on this month!'; return None
     s=raw_input('\nDay: ')
     if len(s)==1: s='0'+s

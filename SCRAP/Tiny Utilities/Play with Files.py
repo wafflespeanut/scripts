@@ -29,6 +29,7 @@ def num():            # To rename numbered ones
 
 def mp3():           # To rename MP3s based on their title
     for i in os.listdir(path):
+        if not 'mp3' in i: continue
         f=eyed3.load(path+i)
         s=raw_input('Current title: %s\n[Enter] to use the current metadata, or type a new one:\n'%(f.tag.title))
         if s=='': s=f.tag.title
