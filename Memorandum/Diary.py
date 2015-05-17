@@ -10,19 +10,21 @@ if '/bin' in os.path.defpath:
     loc='/media/'+os.path.expanduser('~').split('/')[-1]+'/Local Disk/Users/Waffles Crazy Peanut/Desktop/Dropbox/Diary/'
 else:
     ploc=os.path.expanduser('~')+'\\AppData\\Local\\SYSTEM.DAT'         # Password location
-    loc=os.path.expanduser('~')+'\\Desktop\\Dropbox\\Diary\\'           # Storage location
+    loc=os.path.expanduser('~')+'\\Desktop\\Dropbox\\Diary - Copy\\'           # Storage location
 
 months={'11':'November','10':'October','12':'December','01':'January','03':'March','02':'February','05':'May','04':'April','07':'July','06':'June','09':'September','08':'August'}
-
-def hashed(stuff):
-    t=stuff
-    for i in range(64): t=hash(str(t))
-    return abs(t)
 
 def hexed(key):             # Hexing function
     pas=list(key)
     for i,j in enumerate(pas): pas[i]=format(ord(pas[i]),'02x')
     return pas
+
+def hashed(stuff,bits=32,rounds=128):        # Hashing a hexed string with specified rounds
+    pad=bits-len(stuff)%bits            # Padding is solely for fun!
+    if not pad/10: pad='0'+pad
+    t=''.join(hexed(stuff))+str(pad)*pad
+    for i in range(rounds): t=hash(str(t))
+    return str(abs(t))
 
 def char(key):              # Hex-decoding function
     pas=[key[i:i+2] for i in range(0,len(key),2)]
@@ -103,11 +105,7 @@ def protect(path,ch,key=None):      # A simple method which shifts and turns it 
 
 def write(File=None):      # Does all the dirty job
     key=None
-    if not File:
-        if not os.path.exists(loc+time('%Y')): os.mkdir(loc+time('%Y'))
-        f=loc+time('%Y')+os.sep+months[time('%m')]+' ('+time('%Y')+')'
-        if not os.path.exists(f): os.mkdir(f)
-        File=f+os.sep+'Day '+time('%d')+' ('+months[time('%m')]+' '+time('%Y')+')'
+    if not File: File=hashed('Day '+time('%d')+' ('+months[time('%m')]+' '+time('%Y')+')')
     if os.path.exists(File) and os.path.getsize(File)!=0:
         print '\nFile already exists! Appending to current file...'
         while not key:
@@ -137,20 +135,20 @@ def day():              # Return a path based on (day,month,year) input
     while True:
         y=raw_input('\nYear: ')
         if len(y)==4: break
-    if not os.path.exists(loc+y): print '\nNo stories on this year!'; return None
     while True:
         s=raw_input('\nMonth: ')
         if s in months: m=months[s]; break
         elif '0'+s in months: m=months['0'+s]; break
-    if not os.path.exists(loc+y+os.sep+m+' ('+y+')'): print '\nNo stories on this month!'; return None
-    s=raw_input('\nDay: ')
-    if len(s)==1: s='0'+s
-    d='Day '+s+' ('+m+' '+y+')'; f=loc+y+os.sep+m+' ('+y+')'+os.sep+d
+    while True:
+        s=raw_input('\nDay: ')
+        if len(s)==1: s='0'+s
+        if int(s)<32: break
+    f=hashed('Day '+s+' ('+m+' '+y+')')
     if not os.path.exists(f): print '\nNo stories on this day!'
     return f
 
 def random():       # Useful only when you have a lot of stories
-    for i in range(100):        # Just to approach pure randomness instead of pseudo-randomness
+    for i in range(128):        # Just to approach pure randomness instead of pseudo-randomness
         y=choice(os.listdir(loc)); m=choice(os.listdir(loc+y))
         d=choice(os.listdir(loc+y+os.sep+m)); f=loc+os.sep+y+os.sep+m+os.sep+d
     print 'Choosing your story from '+d+'...'; temp(f)
