@@ -14,6 +14,11 @@ else:
 
 months={'11':'November','10':'October','12':'December','01':'January','03':'March','02':'February','05':'May','04':'April','07':'July','06':'June','09':'September','08':'August'}
 
+def hashed(stuff):
+    t=stuff
+    for i in range(64): t=hash(str(t))
+    return abs(t)
+
 def hexed(key):             # Hexing function
     pas=list(key)
     for i,j in enumerate(pas): pas[i]=format(ord(pas[i]),'02x')
@@ -158,14 +163,12 @@ def diary():
             if os.path.exists(ploc): print '\t\t0: Sign out'
             else: print '\t\t0: Sign in'
             s=raw_input('\nChoice: ')
-            if s=='1': write()
-            elif s=='2': random()
-            elif s=='3': temp(day())
-            elif s=='0':
+            ch=['write()','random()','temp(day())','write(day())']
+            if s=='0':
                 if os.path.exists(ploc): os.remove(ploc); print 'Login credentials removed!'
                 else: check(); print 'Login credentials have been saved locally!'
-            elif s=='4': write(day())
-            else: print '\nIllegal choice!'
+            try: eval(ch[int(s)-1])
+            except Exception: print '\nIllegal choice!'
             s=raw_input('\nDo something again (y/n)? ')
             if s!='y': break
         except KeyboardInterrupt: print '\nQuitting...'; break
