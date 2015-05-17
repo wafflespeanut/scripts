@@ -1,6 +1,6 @@
 import os,subprocess
-from time import strftime as time
 from time import sleep
+from time import strftime as time
 from random import choice
 
 # Modified for my Ubuntu/Windows-8 dual-boot...
@@ -10,7 +10,7 @@ if '/bin' in os.path.defpath:
     loc='/media/'+os.path.expanduser('~').split('/')[-1]+'/Local Disk/Users/Waffles Crazy Peanut/Desktop/Dropbox/Diary/'
 else:
     ploc=os.path.expanduser('~')+'\\AppData\\Local\\SYSTEM.DAT'         # Password location
-    loc=os.path.expanduser('~')+'\\Desktop\\Dropbox\\Diary - Copy\\'           # Storage location
+    loc=os.path.expanduser('~')+'\\Desktop\\Dropbox\\Diary\\'           # Storage location
 
 months={'11':'November','10':'October','12':'December','01':'January','03':'March','02':'February','05':'May','04':'April','07':'July','06':'June','09':'September','08':'August'}
 
@@ -105,7 +105,7 @@ def protect(path,ch,key=None):      # A simple method which shifts and turns it 
 
 def write(File=None):      # Does all the dirty job
     key=None
-    if not File: File=hashed('Day '+time('%d')+' ('+months[time('%m')]+' '+time('%Y')+')')
+    if not File: File=loc+hashed('Day '+time('%d')+' ('+months[time('%m')]+' '+time('%Y')+')')
     if os.path.exists(File) and os.path.getsize(File)!=0:
         print '\nFile already exists! Appending to current file...'
         while not key:
@@ -143,15 +143,23 @@ def day():              # Return a path based on (day,month,year) input
         s=raw_input('\nDay: ')
         if len(s)==1: s='0'+s
         if int(s)<32: break
-    f=hashed('Day '+s+' ('+m+' '+y+')')
+    f=loc+hashed('Day '+s+' ('+m+' '+y+')')
     if not os.path.exists(f): print '\nNo stories on this day!'
     return f
 
-def random():       # Useful only when you have a lot of stories
-    for i in range(128):        # Just to approach pure randomness instead of pseudo-randomness
-        y=choice(os.listdir(loc)); m=choice(os.listdir(loc+y))
-        d=choice(os.listdir(loc+y+os.sep+m)); f=loc+os.sep+y+os.sep+m+os.sep+d
-    print 'Choosing your story from '+d+'...'; temp(f)
+def random():       # Useful only when you have a lot of stories (obviously)
+    # Just to approach pure randomness instead of pseudo-randomness
+    for i in range(128): f=choice(os.listdir(loc))
+    print 'Choosing a story...'; temp(loc+f)
+
+def version_shift():    # Old tree-method is now deprecated (from v3.0)
+    # This can be used to grab those individual stories for using in this version
+    for y in os.listdir(loc):
+        for m in os.listdir(loc+os.sep+y):
+            for d in os.listdir(loc+os.sep+y+os.sep+m):
+                os.rename(loc+os.sep+y+os.sep+m+os.sep+d,loc+os.sep+hashed(d))
+            os.rmdir(loc+os.sep+y+os.sep+m)
+        os.rmdir(loc+os.sep+y)
 
 def diary():
     while True:
@@ -165,8 +173,9 @@ def diary():
             if s=='0':
                 if os.path.exists(ploc): os.remove(ploc); print 'Login credentials removed!'
                 else: check(); print 'Login credentials have been saved locally!'
-            try: eval(ch[int(s)-1])
-            except Exception: print '\nIllegal choice!'
+            else:
+                try: eval(ch[int(s)-1])
+                except Exception: print '\nIllegal choice!'
             s=raw_input('\nDo something again (y/n)? ')
             if s!='y': break
         except KeyboardInterrupt: print '\nQuitting...'; break

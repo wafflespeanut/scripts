@@ -1,4 +1,4 @@
-## Memorandum (v2.2)
+## Remembrancer (v3.0)
 
 This is a little project of mine. An utility to remember everyday memories. For now, it puts your stories in branched directories for later viewing. And, it supports encryption. I've used a simple algorithm (which is less secure, but enough for this purpose) to hex and shift the ASCII values in the files. It can also detect incorrect passwords.
 
@@ -8,11 +8,17 @@ I've added a function that hexes the password into a local file if you get bored
 
 ### Changelog
 
-v2.2: Memorandum
+v3.0 Remembrancer
+- Old tree-node method is now deprecated, and so the program doesn't know which story it's showing to you. You gotta find it from the timestamps in each story (improved security by compromising user-experience)
+- All stories are present in the specified directory
+- Story names are hashed with 128 rounds (I've also used hexing & padding alongside hashing)
+- Functions: hashed(), day(), write(), diary()
+
+v2.2: [Memorandum](https://github.com/Wafflespeanut/Python/tree/8850c831c10955b5c32d2710abfbfef916031792/Memorandum)
 - Passwords can be stored locally (after 10-layer hexing)
 - Write stories for someday you've missed
 - Sign-in / Sign-out options for easier use
-- Functions: check(), diary()
+- Functions: check(), diary(), day()
 
 v2.1: [Souvenir](https://github.com/Wafflespeanut/Python/tree/937d48dc3bc8608530253fc392594a90a4d59078/Memento)
 - View random stories
