@@ -15,9 +15,7 @@ else:
 months={'11':'November','10':'October','12':'December','01':'January','03':'March','02':'February','05':'May','04':'April','07':'July','06':'June','09':'September','08':'August'}
 
 def hexed(key):             # Hexing function
-    pas=list(key)
-    for i,j in enumerate(pas): pas[i]=format(ord(pas[i]),'02x')
-    return pas
+    return map(lambda i: format(ord(i),'02x'), list(key))
 
 def hashed(stuff,bits=32,rounds=128):        # Hashing a hexed string with specified rounds
     pad=bits-len(stuff)%bits            # Padding is solely for fun!
@@ -28,10 +26,8 @@ def hashed(stuff,bits=32,rounds=128):        # Hashing a hexed string with speci
 
 def char(key):              # Hex-decoding function
     pas=[key[i:i+2] for i in range(0,len(key),2)]
-    for i,j in enumerate(pas):
-        try: pas[i]=pas[i].decode("hex")
-        except TypeError: return None
-    return ''.join(pas)
+    try: return ''.join(i.decode('hex') for i in pas)
+    except TypeError: return None
 
 def shift(text,shift):      # Shifts the ASCII value of the chars (reversible)
     try:

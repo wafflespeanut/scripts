@@ -11,9 +11,8 @@ def sieve(n):
     return [j for j,p in enumerate(sidekick) if p]
 
 def CXOR(phr,key):          # Quite useful for XOR'ing bulk text & key (reversible)
-    def xor(ch1,ch2):           # XOR's two chars
-        a=ord(ch1); b=ord(ch2)
-        return chr(a^b)
+    def xor(ch1,ch2):           # XORs two characters
+        return chr(ord(ch1)^ord(ch2))
     i=0; j=0; make=""
     while i<len(phr):
         if i<len(key): make+=xor(phr[i],key[j])
@@ -27,16 +26,15 @@ def CXOR(phr,key):          # Quite useful for XOR'ing bulk text & key (reversib
     return make
 
 def hexed(key):             # Hexing function
-    pas=list(key)
-    for i,j in enumerate(pas): pas[i]=format(ord(pas[i]),'02x')
-    return pas
+    return map(lambda i: format(ord(i),'02x'), list(key))
 
 def add(text,key):          # Adds the ASCII values of key and phrase chars
     hand=list(''.join(text));give=list(key);
     num=list("0123456789"); i=len(key)-1
     for a,b in enumerate(hand):
-        if i>0 and b in num: hand[a]=str(int(b)+ord(give[i]))[-1]; i-=1
-        elif i==0 and b in num: i=len(key)-1; hand[a]=str(int(b)+ord(give[i]))[-1]; i-=1
+        if b in num:
+            if i==0: i=len(key)-1
+            hand[a]=str(int(b)+ord(give[i]))[-1]; i-=1
     return ''.join(hand)
 
 def keypnum(key,level):     # Generates primes based on the key-chars' ASCII values
@@ -62,19 +60,15 @@ def combine(text,key):      # Dissolves key chars into the phrase
 
 def char(key):              # Hex-decoding function
     pas=[key[i:i+2] for i in range(0,len(key),2)]
-    for i,j in enumerate(pas):
-        try: pas[i]=pas[i].decode("hex")
-        except TypeError: return None
-    return ''.join(pas)
+    try: return ''.join(i.decode('hex') for i in pas)
+    except TypeError: return None
 
 def sub(text,key):          # Gets the key and phrase chars back!
     try:
         hand=list(''.join(text)); give=list(key); num=list("0123456789"); i=len(key)-1
         for a,b in enumerate(hand):         # Executes from the last char
-            if i>0 and b in num:
-                hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]; i-=1
-            elif i==0 and b in num:
-                i=len(key)-1
+            if b in num:
+                if i==0: i=len(key)-1
                 hand[a]=str((10+int(b))-int(str(ord(give[i]))[-1]))[-1]; i-=1
         out=''.join(hand)
     except TypeError: return None
@@ -84,15 +78,13 @@ def find(text,key,level):   # Finds the random key used during encryption
     listed=pop(key,level)
     for i,j in enumerate(listed):
         rkey=combine(j,key)
-        if extract(extract(text,rkey),key)!=None: return extract(text,rkey)
+        if extract(extract(text,rkey),key) is not None: return extract(text,rkey)
         else: continue
     return None
 
 def extract(text,key):      # Removes the key chars from the phrase
-    try:
-        phrase=''.join(char(sub(text,key)))
+    try: return ''.join(char(sub(text,key)))
     except TypeError: return None
-    return phrase
 
 def shift(text,shift):      # Shifts the ASCII value of the chars (reversible)
     try:
@@ -192,12 +184,12 @@ def FILE():     # Encrypts/Decrypts text files
         start=timeit.default_timer(); c=None
         with open(path,'r') as file: data=file.readlines()
         if len(data)==0: print "Nothing in file!"; return None
-        for i in range(len(data)):
+        for i in range(len(data)):          # Correction for linux-based OS
             if data[i]=='\n' or data[i]=='\r\n': i+=1; continue
             if data[i][-2:]=='\r\n': data[i]=zombify(what,str(data[i][:-2]),key,level); c=True
             elif data[i][-1]=='\n': data[i]=zombify(what,str(data[i][:-1]),key,level); c=True
             else: data[i]=zombify(what,str(data[i]),key,level); c=False
-            if data[i]==None: print "\tMismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!!! (Testing me?)\n"; return None
+            if data[i]==None: print "\tMismatch between ciphertext and key!!!\n\nPossibly due to:\n\t- Incorrect key (Check your password!)\n\t- Varied iterations (Check your security level!)\n\t(or) such an exotic ciphertext doesn't even exist!\n"; return None
             if c and '/bin' in os.path.defpath: data[i]+='\r\n'
             elif c: data[i]+='\n'
         with open(path,'w') as file: file.writelines(data)
