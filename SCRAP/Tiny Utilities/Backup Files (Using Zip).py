@@ -15,5 +15,4 @@ def backup(src,tar):      # Making use of GnuWin32 Zip 3.0
     print "Zip command:",cmd; print "\nRunning..."
     if not system(cmd): print '\nSuccessfully backed up to',zipped
     else: print '\nBackup FAILED!'
-    print "Press <Enter> to quit..."
-    raw_input()
+    raw_input("Press <Enter> to quit...")
