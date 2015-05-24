@@ -7,7 +7,8 @@ out="C:\\Users\\Waffles Crazy Peanut\\Desktop\\TEMP\\"; links=[]
 # I used to download embedded MP3 soundtracks with this...
 
 def urls(link,what='mp3'):
-    a=[]; dom=lxml.html.fromstring(urlopen(link).read())
+    response=urlopen(link).read()               # Whole page-source is in here!
+    a=[]; dom=lxml.html.fromstring(response)
     return [l for l in dom.xpath('//a/@href') if '#' not in l and what in l]
 
 def get():
