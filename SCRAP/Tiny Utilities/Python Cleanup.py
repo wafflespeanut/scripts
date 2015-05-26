@@ -20,7 +20,7 @@ def symbols(line):
                 if copy[i]=='\\' and copy[i+1]==ch: i+=1
                 i+=1
         elif copy[i]==',' and copy[i+1] is not ' ': copy[i]+=' '
-        elif copy[i]=='{':              # Group dicts
+        elif copy[i]=='{':              # Grouped dicts
             sp=tab+4; copy[i]+='\n'+sp*' '
             while True:
                 i+=1
@@ -28,6 +28,14 @@ def symbols(line):
                 elif copy[i] is ':' and copy[i+1] is not ' ': copy[i]+=' '
                 elif copy[i] is '}':
                     copy[i]='\n'+tab*' '+'}'; break
+        elif copy[i]=='[':              # Spaced lists
+            i+=1; items=''
+            while copy[i] is not ']': items+=copy[i]; i+=1
+            if ',' in items: i-=len(items); continue
+        elif copy[i]==':':              # Colons with newlines
+            tab+=4
+            if copy[i+1]==' ': copy[i+1]='\n'+tab*' '
+            elif copy[i+1] is not '\n': copy[i]=':\n'+tab*' '
         elif copy[i] in math:           # Spaced symbols
             if copy[i-1] is not ' ': copy[i]=' '+copy[i]
             if copy[i+1] is '=' and copy[i+2] is not ' ': copy[i+1]='= '; i+=1
@@ -42,6 +50,6 @@ def cleanup(File):
     with open(File,'r') as file: data=file.readlines()
     return data
 
-a=cleanup(path)
+a=cleanup(path)             # Only for testing purposes...
 while True:
     print symbols(a[int(raw_input())])
