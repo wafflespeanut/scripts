@@ -9,28 +9,34 @@ def search(path=path,ext='py'):             # For listing all those .py files
         fileList.extend(temp)
     return fileList
 
-def symbols(line):
-    string=['"',"'"]; i=0; copy=list(line)
-    math='+-/*=%<>^!|&'
+def symbols(line):        
+    punc=['"',"'"]; i=0; copy=list(line); math='+-/*=%<>^!|&'
     ch=''.join(line.split())[0]; tab=line.index(ch)
+    
+    def string(index):                  # Skip strings
+        copy=list(line); ch=copy[index]; i=index+1
+        while copy[i] is not ch:
+            if copy[i]=='\\' and copy[i+1]==ch: i+=1
+            i+=1
+        return i
+
     while i<len(copy):
-        if copy[i] in string:           # Skip strings
-            ch=copy[i]; i+=1
-            while copy[i] is not ch:
-                if copy[i]=='\\' and copy[i+1]==ch: i+=1
-                i+=1
+        if copy[i] in punc: i=string(i)
         elif copy[i]==',' and copy[i+1] is not ' ': copy[i]+=' '
         elif copy[i]=='{':              # Grouped dicts
             sp=tab+4; copy[i]+='\n'+sp*' '
             while True:
                 i+=1
+                if copy[i] in punc: i=string(i)
                 if copy[i] is ',': copy[i]+='\n'+sp*' '
                 elif copy[i] is ':' and copy[i+1] is not ' ': copy[i]+=' '
                 elif copy[i] is '}':
                     copy[i]='\n'+tab*' '+'}'; break
         elif copy[i]=='[':              # Spaced lists
             i+=1; items=''
-            while copy[i] is not ']': items+=copy[i]; i+=1
+            while copy[i] is not ']':
+                if copy[i] in punc: i=string(i)
+                items+=copy[i]; i+=1
             if ',' in items: i-=len(items); continue
         elif copy[i]==':':              # Colons with newlines
             tab+=4
