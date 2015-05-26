@@ -1,8 +1,8 @@
 import os
 
-path="C:\\Users\\Waffles Crazy Peanut\\Desktop\\Diary.py"
+path="C:\\Users\\Waffles Crazy Peanut\\Desktop\\Github\\Python"
 
-def search(path=path,ext='py'):             # For listing all those .py files
+def search(path=path,ext='py'):                     # For listing all those .py files
     fileList=[]
     for root,dirs,files in os.walk(path):
         temp=[root+'\\'+f for f in files if f[-len(ext):]==ext]
@@ -14,7 +14,7 @@ def symbols(line):
     punc=['"',"'"]; i=0; copy=list(line); sym='+-/*=%<>^!|&'
     ch=''.join(line.split())[0]; tab=line.index(ch)
     
-    def string(index):                  # Skip strings
+    def string(index):                              # Skip strings
         ch=copy[index]; i=index+1
         if line[index:index+3]=="'''": return line.index("'''")
         while copy[i] is not ch:
@@ -22,54 +22,48 @@ def symbols(line):
             i+=1
         return i
 
-    def math(stuff,index):              # Spaced symbols
+    def math(stuff,index):                          # Spaced symbols
         i=index; copy=stuff[:]
-        if copy[i-1] is not ' ': copy[i]=' '+copy[i]
-        if copy[i+1] is '=' and copy[i+2] is not ' ': copy[i+1]='= '; i+=1
-        elif copy[i+1] is not ' ': copy[i]+=' '
+        if copy[i-1][-1] is not ' ': copy[i]=' '+copy[i]
+        if copy[i+1] is '=' and copy[i+2][0] is not ' ': copy[i+1]='= '; i+=1
+        elif copy[i+1][0] is not ' ': copy[i]+=' '
         return copy,i
 
     while i<len(copy):
         if copy[i] in ['\n','#']: break
         if copy[i] in punc: i=string(i)
-        elif copy[i]==',' and copy[i+1] is not ' ': copy[i]+=' '
-        elif copy[i]=='{':              # Grouped dicts
+        elif copy[i]==',' and copy[i+1][0] is not ' ': copy[i]+=' '
+        elif copy[i]=='{':                          # Grouped dicts
             sp=tab+4; copy[i]+='\n'+sp*' '
             while True:
                 i+=1
                 if copy[i] in punc: i=string(i)
                 elif copy[i] in sym: copy,i = math(copy,i)
                 elif copy[i] is ',': copy[i]+='\n'+sp*' '
-                elif copy[i] is ':' and copy[i+1] is not ' ': copy[i]+=' '
+                elif copy[i] is ':' and copy[i+1][0] is not ' ': copy[i]+=' '
                 elif copy[i] is '}':
                     copy[i]='\n'+tab*' '+'}'; break
-        elif copy[i]=='[':              # Spaced lists
+        elif copy[i]=='[':                          # Spaced lists
             items=''
             while copy[i] is not ']':
                 i+=1
                 if copy[i] in punc: i=string(i)
                 elif copy[i] in sym: copy,i = math(copy,i)
-                elif copy[i]==',' and copy[i+1] is not ' ': copy[i]+=' '
+                elif copy[i] in [':',','] and copy[i+1][0] is not ' ': copy[i]+=' '
                 items+=copy[i]
-        elif copy[i]==':':              # Colons with newlines
+        elif copy[i]==':':                          # Colons with newlines
             if copy[i+1]=='\n': i+=1; continue
             else: tab+=4
             if copy[i+1]==' ': copy[i+1]='\n'+tab*' '
             elif copy[i+1] is not '\n': copy[i]=':\n'+tab*' '
         elif copy[i] in sym: copy,i = math(copy,i)
-        elif copy[i]==';':              # Abandon semicolons!
+        elif copy[i]==';':                          # Abandon semicolons!
             copy[i]='\n'+tab*' '; i+=1
             while copy[i]==' ': copy[i]=''; i+=1
         i+=1
     return ''.join(copy)
 
-def cleanup(File):
+def cleanup(File):                                  # Comments are still unresolved (i.e., they also get indented)
     with open(File,'r') as file: data=file.readlines()
-    return data
-    from time import sleep
-    for i in data:
-        print symbols(i); sleep(1)
-
-a=cleanup(path)             # Only for testing purposes...
-while True:
-    print symbols(a[int(raw_input())])
+    for i in range(len(data)): data[i]=symbols(data[i])
+    with open(File,'w') as file: file.writelines(data)
