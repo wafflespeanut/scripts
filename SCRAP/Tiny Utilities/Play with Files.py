@@ -9,7 +9,7 @@ def rfile(drive='H:\\'):            # Random walk files to open something! (Got 
 
 path="C:\\TEMP\\OST\\"
 
-def ren():           # To rename video files after watching
+def ren(path=path):           # To rename video files after watching
     for i in os.listdir(path):
         p=subprocess.Popen(["vlc.exe",path+i])      # os.startfile() could be used for opening all files!
         print "\nOld name:",i; s=str(raw_input('New name: '))
@@ -20,14 +20,14 @@ def ren():           # To rename video files after watching
             except WindowsError:
                 raw_input('\n\tFile being used! Continue after closing...'); continue
 
-def num():            # To rename numbered ones
+def num(path=path):            # To rename numbered ones
     for i in os.listdir(path):
         k=0
         if i[0] in '1234567890':
             while i[k] in '1234567890' or i[k] in ' -': k+=1
         os.rename(path+i,path+i[k:])
 
-def mp3():           # To rename MP3s based on their title
+def mp3(path=path):           # To rename MP3s based on their title
     for i in os.listdir(path):
         if not 'mp3' in i: continue
         f=eyed3.load(path+i)
@@ -39,7 +39,7 @@ def mp3():           # To rename MP3s based on their title
 src="D:\\parts\\"
 dest="J:\\Other\\TEMP\\parts\\"
 
-def move(s):             # To move files!
+def move(src=src,dest=dest,s='.jpg'):             # To move files!
     for i in os.listdir(src):
         if not os.path.exists(dest): os.mkdir(dest)
         if s in i: shutil.move(src+i,dest+i)        # os.rename() can be used only for moving within the same drives
