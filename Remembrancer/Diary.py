@@ -6,8 +6,8 @@ from random import choice
 # Modified for my Ubuntu/Windows-8 dual-boot...
 
 if '/bin' in os.path.defpath:
-    ploc = '/media/' + os.path.expanduser('~').split('/')[ - 1] + '/Local Disk/Users/Waffles Crazy Peanut/AppData/Local/SYSTEM.DAT'
-    loc = '/media/' + os.path.expanduser('~').split('/')[ - 1] + '/Local Disk/Users/Waffles Crazy Peanut/Desktop/Dropbox/Diary/'
+    ploc = '/media/' + os.path.expanduser('~').split('/')[-1] + '/Local Disk/Users/Waffles Crazy Peanut/AppData/Local/SYSTEM.DAT'
+    loc = '/media/' + os.path.expanduser('~').split('/')[-1] + '/Local Disk/Users/Waffles Crazy Peanut/Desktop/Dropbox/Diary/'
 else:
     ploc = os.path.expanduser('~') + '\\AppData\\Local\\SYSTEM.DAT'         # Password location
     loc = os.path.expanduser('~') + '\\Desktop\\Dropbox\\Diary\\'           # Storage location
@@ -24,7 +24,7 @@ months = {
     '09': 'September',
     '10': 'October',
     '11': 'November',
-    '12': 'December',
+    '12': 'December'
 }
 
 def hexed(key):                                                 # Hexing function
@@ -41,7 +41,7 @@ def hashed(stuff, bits = 32, rounds = 128):                     # Hashing a hexe
     return str(abs(t))
 
 def char(key):                                                  # Hex-decoding function
-    pas = [key[i: i + 2] for i in range(0, len(key), 2)]
+    pas = [key[i:i+2] for i in range(0, len(key), 2)]
     try:
         return ''.join(i.decode('hex') for i in pas)
     except TypeError:
@@ -69,7 +69,7 @@ def zombify(ch, data, key):                                     # Linking helper
         return p
     elif ch == 'd':
         for i in k:
-            p = shift(p, 255 - ord(i))
+            p = shift(p, 255-ord(i))
         return char(p)
 
 def temp(File, key = None):                                     # Uses default notepad to view stuff
@@ -129,15 +129,15 @@ def protect(path, ch, key = None):                              # A simple metho
         print 'Nothing in file!'
         return None
     try:
-        for i in range(len(data)):                              # The '\r\n' thing is for newline char in Ubuntu
+        for i in range(len(data)):                              # The '\r\n' thing is for newline in Ubuntu
             if data[i] == '\n' or data[i] == '\r\n':
                 i += 1
                 continue
-            if data[i][ - 2: ] == '\r\n':
-                data[i] = zombify(ch, str(data[i][: - 2]), key)
+            if data[i][-2:] == '\r\n':
+                data[i] = zombify(ch, str(data[i][:-2]), key)
                 c = True
-            elif data[i][ - 1] == '\n':
-                data[i] = zombify(ch, str(data[i][: - 1]), key)
+            elif data[i][-1] == '\n':
+                data[i] = zombify(ch, str(data[i][:-1]), key)
                 c = True
             else:
                 data[i] = zombify(ch, str(data[i]), key)
@@ -261,7 +261,7 @@ def diary():
                     print 'Login credentials have been saved locally!'
             else:
                 try:
-                    eval(ch[int(s) - 1])
+                    eval(ch[int(s)-1])
                 except Exception:
                     print '\nIllegal choice!'
             s = raw_input('\nDo something again (y/n)? ')
