@@ -125,10 +125,10 @@ def shift(text, shift):                             # Shifts the ASCII value of 
     try:
         shiftedText = ''
         for i, ch in enumerate(text):
-            m = ord(ch) + shift
-            while m > 255:
-                m -= 255
-            shiftedText += chr(m)
+            shiftChar = ord(ch) + shift
+            while shiftChar > 255:
+                shiftChar -= 255
+            shiftedText += chr(shiftChar)
     except TypeError:
         return None
     return shiftedText

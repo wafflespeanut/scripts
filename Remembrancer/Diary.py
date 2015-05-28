@@ -27,9 +27,9 @@ months = {
     '12': 'December'
 }
 
-def hexed(key):                                                 # Hexing function
+def hexed(text):                                                # Hexing function
     return map(lambda i:
-        format(ord(i), '02x'), list(key))
+        format(ord(i), '02x'), list(text))
 
 def hashed(stuff, bits = 32, rounds = 128):                     # Hashing a hexed string with specified rounds
     pad = bits - len(stuff) % bits                              # Padding is solely for fun!
@@ -40,37 +40,37 @@ def hashed(stuff, bits = 32, rounds = 128):                     # Hashing a hexe
         t = hash(str(t))
     return str(abs(t))
 
-def char(key):                                                  # Hex-decoding function
-    pas = [key[i:i+2] for i in range(0, len(key), 2)]
+def char(text):                                                 # Hex-decoding function
+    split = [text[i:i+2] for i in range(0, len(text), 2)]
     try:
-        return ''.join(i.decode('hex') for i in pas)
+        return ''.join(i.decode('hex') for i in split)
     except TypeError:
         return None
 
-def shift(text, shift):                                         # Shifts the ASCII value of the chars (reversible)
+def shift(text, shift):                                         # Shifts the ASCII value of the chars (Vigenere cipher? Yep!)
     try:
-        new = ''
-        for i, j in enumerate(text):
-            m = ord(j) + shift
-            while m > 255:
-                m -= 255
-            new += chr(m)
+        shiftedText = ''
+        for i, ch in enumerate(text):
+            shiftChar = ord(ch) + shift
+            while shiftChar > 255:
+                shiftChar -= 255
+            shiftedText += chr(shiftChar)
     except TypeError:
         return None
-    return new
+    return shiftedText
 
-def zombify(ch, data, key):                                     # Linking helper function
-    k = ''.join(hexed(key))
-    p = data
-    if ch == 'e':
-        p = ''.join(hexed(data))
-        for i in k:
-            p = shift(p, ord(i))
-        return p
-    elif ch == 'd':
-        for i in k:
-            p = shift(p, 255-ord(i))
-        return char(p)
+def zombify(mode, data, key):                                     # Linking helper function
+    hexedKey = ''.join(hexed(key))
+    text = data
+    if mode == 'e':
+        text = ''.join(hexed(data))
+        for ch in hexedKey:
+            text = shift(text, ord(ch))
+        return text
+    elif mode == 'd':
+        for ch in hexedKey:
+            text = shift(text, 255 - ord(ch))
+        return char(text)
 
 def temp(File, key = None):                                     # Uses default notepad to view stuff
     if File == None:
@@ -113,7 +113,7 @@ def check():                                                    # Allows passwor
             key = char(key)
     return key
 
-def protect(path, ch, key = None):                              # A simple method which shifts and turns it to hex!
+def protect(path, mode, key = None):                              # A simple method which shifts and turns it to hex!
     if os.path.exists(ploc):
         key = check()
     try:
@@ -129,30 +129,30 @@ def protect(path, ch, key = None):                              # A simple metho
         print 'Nothing in file!'
         return None
     try:
-        for i in range(len(data)):                              # The '\r\n' thing is for newline in Ubuntu
-            if data[i] == '\n' or data[i] == '\r\n':
+        for i in range(len(data)):
+            if data[i] == '\n' or data[i] == '\r\n':            # The '\r\n' thing is for newline in linux-based OS
                 i += 1
                 continue
             if data[i][-2:] == '\r\n':
-                data[i] = zombify(ch, str(data[i][:-2]), key)
-                c = True
+                data[i] = zombify(mode, str(data[i][:-2]), key)
+                newline = True
             elif data[i][-1] == '\n':
-                data[i] = zombify(ch, str(data[i][:-1]), key)
-                c = True
+                data[i] = zombify(mode, str(data[i][:-1]), key)
+                newline = True
             else:
-                data[i] = zombify(ch, str(data[i]), key)
-                c = False
-            if c and 'bin' in ploc:
+                data[i] = zombify(mode, str(data[i]), key)
+                newline = False
+            if newline and 'bin' in ploc:
                 data[i] += '\r\n'
-            elif c:
+            elif newline:
                 data[i] += '\n'
     except TypeError:
         print '\n\tWrong password!'
         return None
-    if ch == 'e':
+    if mode == 'e':
         with open(path, 'w') as file:
             file.writelines(data)
-    elif ch == 'd':
+    elif mode == 'd':
         with open(loc + 'TEMP.tmp', 'w') as file:
             file.writelines(data)
     return key
@@ -175,21 +175,21 @@ def write(File = None):                                         # Does all the d
     elif os.path.exists(File):
         os.remove(File)
     f = open(File, 'a')
-    a = ['[' + time('%Y') + '-' + time('%m') + '-' + time('%d') + ']' + ' ' + time('%H') + ':' + time('%M') + ':' + time('%S') + '\n']
+    data = ['[' + time('%Y') + '-' + time('%m') + '-' + time('%d') + ']' + ' ' + time('%H') + ':' + time('%M') + ':' + time('%S') + '\n']
     try:
-        s = raw_input('''\nStart writing... (Press Ctrl+C when you're done!)\n\n\t''')
-        a.append('\t' + s)
+        stuff = raw_input('''\nStart writing... (Press Ctrl+C when you're done!)\n\n\t''')
+        data.append('\t' + stuff)
     except KeyboardInterrupt:
         print 'Nothing written! Quitting...'
         protect(File, 'e', key)
         return None
     while True:
         try:
-            s = raw_input()
-            a.append(s)
+            stuff = raw_input()
+            data.append(stuff)
         except KeyboardInterrupt:
             break
-    f.write('\n'.join(a) + '\n\n')
+    f.write('\n'.join(data) + '\n\n')
     f.close()
     k = None
     if key:
@@ -201,8 +201,8 @@ def write(File = None):                                         # Does all the d
         key = protect(File, 'e', key)
         if not key:
             print "\nPlease don't interrupt! Your story is insecure! Running sequence again..."
-    s = raw_input('\nSuccessfully written to file! Do you wanna see it (y/n)? ')
-    if s == 'y':
+    choice = raw_input('\nSuccessfully written to file! Do you wanna see it (y/n)? ')
+    if choice == 'y':
         temp(File, key)
 
 def day():                                                      # Return a path based on (day,month,year) input
@@ -224,35 +224,35 @@ def day():                                                      # Return a path 
             s = '0' + s
         if int(s) < 32:
             break
-    f = loc + hashed('Day ' + s + ' (' + m + ' ' + y + ')')
-    if not os.path.exists(f):
+    fileName = loc + hashed('Day ' + s + ' (' + m + ' ' + y + ')')
+    if not os.path.exists(fileName):
         print '\nNo stories on this day!'
-    return f
+    return fileName
 
 def random():                                                   # Useful only when you have a lot of stories (obviously)
     for i in range(128):                                        # 128 rounds of pseudo-randomness!
-        f = choice(os.listdir(loc))
+        fileName = choice(os.listdir(loc))
     print 'Choosing a story...'
-    temp(loc + f)
+    temp(loc + fileName)
 
 def diary():
     while True:
         if os.path.exists(loc + 'TEMP.tmp'):
             os.remove(loc + 'TEMP.tmp')
         try:
-            q = ('\n\tWhat do you wanna do?\n',
+            choices = ('\n\tWhat do you wanna do?\n',
                 " 1: Write today's story",
                 " 2: Random story",
                 " 3: View the story of someday",
                 " 4. Write the story for someday you've missed")
-            print '\n\t\t'.join(q)
+            print '\n\t\t'.join(choices)
             if os.path.exists(ploc):
                 print '\t\t 0: Sign out'
             else:
                 print '\t\t 0: Sign in'
-            s = raw_input('\nChoice: ')
+            choice = raw_input('\nChoice: ')
             ch = ['write()', 'random()', 'temp(day())', 'write(day())']
-            if s == '0':
+            if choice == '0':
                 if os.path.exists(ploc):
                     os.remove(ploc)
                     print 'Login credentials removed!'
@@ -261,11 +261,11 @@ def diary():
                     print 'Login credentials have been saved locally!'
             else:
                 try:
-                    eval(ch[int(s)-1])
+                    eval(ch[int(choice)-1])
                 except Exception:
                     print '\nIllegal choice!'
-            s = raw_input('\nDo something again (y/n)? ')
-            if s != 'y':
+            choice = raw_input('\nDo something again (y/n)? ')
+            if choice is not 'y':
                 break
         except KeyboardInterrupt:
             print '\nQuitting...'
