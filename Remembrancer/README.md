@@ -9,9 +9,9 @@ I've added a function that hexes the password into a local file if you get bored
 ### Changelog
 
 v3.0 Remembrancer
-- Old tree-node method is now deprecated, and so the program doesn't know which story it's showing to you. You gotta find it from the timestamps in each story (improved security by compromising user-experience)
+- Old tree-node method is now deprecated, and so the program doesn't know which story it's showing to you. You gotta find it from the timestamps in each story, *sorry*. (improved security at the cost of user-experience)
 - All stories are present in the specified directory
-- Story names are hashed with 128 rounds (I've also used hexing & padding alongside hashing)
+- Story names are hashed with MD5 (which is far enough for this purpose)
 - Functions: hashed(), day(), write(), diary()
 
 v2.2: [Memorandum](https://github.com/Wafflespeanut/Python/tree/8850c831c10955b5c32d2710abfbfef916031792/Memorandum)
