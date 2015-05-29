@@ -168,6 +168,18 @@ def protect(path, mode, key = None):                              # A simple met
             file.writelines(data)
     return key
 
+def hashchange():               # Switching hash functions
+    y=2014; d=13; m=12; c=0
+    while True:
+        print (d,m,y),'\t',c
+        if day(y,m,d):
+            os.rename(day(y,m,d)[0],day(y,m,d)[1])
+        d+=1; c+=1
+        if d==32:
+            d=1
+            if m==12: m=1; y+=1
+            else: m+=1
+
 def write(File = None):                                         # Does all the dirty job
     key = None
     if not File:
@@ -216,7 +228,7 @@ def write(File = None):                                         # Does all the d
     if choice == 'y':
         temp(File, key)
 
-def day(year = False, month = False, day = False):              # Return a path based on (day,month,year) input
+def day(year = None, month = None, day = None):              # Return a path based on (day,month,year) input
     if not year or len(str(year)) != 4:
         while True:
             year = raw_input('\nYear: ')
@@ -242,11 +254,12 @@ def day(year = False, month = False, day = False):              # Return a path 
             day = '0' + day
         if int(day) < 32:
             break
-    fileName = loc + hashed1('Day ' + str(day) + ' (' + str(month) + ' ' + str(year) + ')')
-    if not os.path.exists(fileName):
+    fileName1 = hashed1('Day ' + str(day) + ' (' + str(month) + ' ' + str(year) + ')')
+    fileName2 = hashed2('Day ' + str(day) + ' (' + str(month) + ' ' + str(year) + ')')
+    if not os.path.exists(loc+fileName1):
         print '\nNo stories on this day!'
         return None
-    return fileName
+    return loc+fileName1, loc+fileName2
 
 def random():                                                   # Useful only when you have a lot of stories (obviously)
     for i in range(128):                                        # 128 rounds of pseudo-randomness!
