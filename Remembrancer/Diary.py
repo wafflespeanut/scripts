@@ -2,6 +2,7 @@ import os, subprocess
 from time import sleep
 from time import strftime as time
 from random import choice
+from hashlib import md5
 
 # Modified for my Ubuntu/Windows-8 dual-boot...
 
@@ -31,14 +32,24 @@ def hexed(text):                                                # Hexing functio
     return map(lambda i:
         format(ord(i), '02x'), list(text))
 
-def hashed(stuff, bits = 32, rounds = 128):                     # Hashing a hexed string with specified rounds
-    pad = bits - len(stuff) % bits                              # Padding is solely for fun!
+def hashed1(stuff, bits = 32, rounds = 128):                    # Soon to be deprecated
+    pad = bits - len(stuff) % bits
     if not pad / 10:
         pad = '0' + pad
     t = ''.join(hexed(stuff)) + str(pad) * pad
     for i in range(rounds):
         t = hash(str(t))
     return str(abs(t))
+
+def hashed2(stuff):                                              # MD5 hashing
+    hashObject = md5()
+    hashObject.update(stuff)
+    return hashObject.hexdigest()
+
+def hashchange():
+    for f in os.listdir(loc):
+        d = 31
+        m = months
 
 def char(text):                                                 # Hex-decoding function
     split = [text[i:i+2] for i in range(0, len(text), 2)]
@@ -205,28 +216,36 @@ def write(File = None):                                         # Does all the d
     if choice == 'y':
         temp(File, key)
 
-def day():                                                      # Return a path based on (day,month,year) input
+def day(year = False, month = False, day = False):              # Return a path based on (day,month,year) input
+    if not year or len(str(year)) != 4:
+        while True:
+            year = raw_input('\nYear: ')
+            if len(year) == 4:
+                break
     while True:
-        y = raw_input('\nYear: ')
-        if len(y) == 4:
+        if month:
+            m = str(month)
+        else:
+            m = raw_input('\nMonth: ')
+        if m in months:
+            month = months[m]
+            break
+        elif '0' + m in months:
+            month = months['0' + m]
             break
     while True:
-        s = raw_input('\nMonth: ')
-        if s in months:
-            m = months[s]
+        if day:
+            day = str(day)
+        else:
+            day = raw_input('\nDay: ')
+        if len(day) == 1:
+            day = '0' + day
+        if int(day) < 32:
             break
-        elif '0' + s in months:
-            m = months['0' + s]
-            break
-    while True:
-        s = raw_input('\nDay: ')
-        if len(s) == 1:
-            s = '0' + s
-        if int(s) < 32:
-            break
-    fileName = loc + hashed('Day ' + s + ' (' + m + ' ' + y + ')')
+    fileName = loc + hashed1('Day ' + str(day) + ' (' + str(month) + ' ' + str(year) + ')')
     if not os.path.exists(fileName):
         print '\nNo stories on this day!'
+        return None
     return fileName
 
 def random():                                                   # Useful only when you have a lot of stories (obviously)
