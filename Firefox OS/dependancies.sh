@@ -21,7 +21,7 @@ echo "Press <Enter> to continue..."
 read
 
 # Rules for Android SDK on linux platform
-# Edit this to include your device
+# Edit these files to include your device ID
 sudo sh -c "echo 'SUBSYSTEM==\"usb\", ATTR{idVendor}==\"1782\", MODE=\"0666\", GROUP=\"plugdev\"
 SUBSYSTEM==\"usb\", ATTR{idVendor}==\"1782\", ATTR{idProduct}==\"5d24\", \
 SYMLINK+=\"spice-fireone\"\n' > /etc/udev/rules.d/fxos.rules"
