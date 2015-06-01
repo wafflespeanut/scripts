@@ -1,0 +1,1 @@
+### These are the dependancies for getting your Firefox OS device connected to a linux-based OS (like Ubuntu)
