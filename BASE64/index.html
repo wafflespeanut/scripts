@@ -24,11 +24,15 @@
     </header>
     <div class="container">
       <section id="main_content">
-	  <p>[<a href="http://wp.me/p3OCmi-ts">Related blog post on data-URI scheme</a>]</p>
-		<div id="dropspace"><h3>Drag & Drop files into this box...</h3></div><br>
-		<center><h3><< Data-URI code below >></h3>
-		<textarea  style="width:1000px; height:100px;" id="out"></textarea></center>
-		<output id="info"></output>
+	  	<ul><li><a href="http://wp.me/p3OCmi-ts">Related blog post on data-URI scheme</a></li></ul>
+		<div id="dropspace">
+			<h3>Drag & Drop files into this box...</h3>
+		</div><br>
+		<center>
+		<h3><< Data-URI code below >></h3>
+		<textarea  style="width:1000px; height:100px;" id="out"></textarea>
+		</center>
+		<div id="info"></div>
 		<script type="text/javascript">
 		
 			if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -49,7 +53,7 @@
 			var d=document.getElementById('dropspace'), out=document.getElementById("out")
 			out.value=''; out.onclick=function() { out.select() }
 			d.addEventListener('dragover',drag,false); d.addEventListener('drop',read,false)
-		
+
 		</script>
       </section>
     </div>
