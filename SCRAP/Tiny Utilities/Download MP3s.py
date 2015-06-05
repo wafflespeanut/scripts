@@ -3,7 +3,7 @@ from os import *
 import lxml.html
 
 links = []
-path = "C:\\Users\\Waffles Crazy Peanut\\Desktop\\TEMP\\"
+savePath = "C:\\TEMP\\"
 
 # I used to download embedded MP3 soundtracks with this...
 
@@ -14,32 +14,32 @@ def urls(link, what = 'mp3', tag = '//a/@href'):
 
 def get():
     for link in links:
-       folder = link.split('/')[-1]
-        try:
-            mkdir(path + folder)
-        except WindowsError:
+        folder = link.split('/')[-1]
+        if path.exists(savePath + folder):
             print "\n[FOLDER] %s already exists! \n" % folder
+        else:
+            mkdir(savePath + folder)
         for i in urls(link):
             try:
                 dlink = urls(i)[0]
                 name = dlink.split('/')[-1]
-                if name in listdir(path + folder):
+                if name in listdir(savePath + folder):
                     print "[File] %s already exists! " % name      # path.getsize() can also be used
-                    if stat(path + folder + '\\' + name).st_size == int(urlopen(l).info()['Content - Length']):
+                    if stat(savePath + folder + '\\' + name).st_size == int(urlopen(dlink).info()['Content-Length']):
                         continue
                     else:
                         s = str(raw_input("\tFile has different size! Overwrite (y/n)? "))
                         if s == 'y':
                             print "Downloading", dlink, "..."
-                            urlretrieve(l, path + folder + '\\' + name)
+                            urlretrieve(dlink, savePath + folder + '\\' + name)
                             continue
                         else:
                             print "\t[File] %s skipped! " % name
                             continue
                 print "Downloading", dlink, "..."
-                urlretrieve(l, path + folder + '\\' + name)
+                urlretrieve(dlink, savePath + folder + '\\' + name)
             except (IOError, KeyboardInterrupt):
                 print '\t[File] %s skipped! ' % name
-                if path.exists(path + folder + '\\' + name):
-                    remove(path + folder + '\\' + name)
+                if path.exists(savePath + folder + '\\' + name):
+                    remove(savePath + folder + '\\' + name)
                 continue
