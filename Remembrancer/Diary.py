@@ -7,8 +7,8 @@ from hashlib import md5
 # Modified for my Ubuntu/Windows-8 dual-boot...
 
 if '/bin' in os.path.defpath:
-    ploc = '/media/' + os.path.expanduser('~').split('/')[-1] + '/Local Disk/Users/Waffles Crazy Peanut/AppData/Local/SYSTEM.DAT'
-    loc = '/media/' + os.path.expanduser('~').split('/')[-1] + '/Local Disk/Users/Waffles Crazy Peanut/Desktop/Dropbox/Diary/'
+    ploc = '/media/Windows/Users/Waffles Crazy Peanut/AppData/Local/SYSTEM.DAT'
+    loc = '/media/Windows/Users/Waffles Crazy Peanut/Desktop/Dropbox/Diary/'
 else:
     ploc = os.path.expanduser('~') + '\\AppData\\Local\\SYSTEM.DAT'         # Password location
     loc = os.path.expanduser('~') + '\\Desktop\\Dropbox\\Diary\\'           # Storage location
