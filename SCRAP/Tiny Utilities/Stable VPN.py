@@ -17,10 +17,10 @@ def ping():
         response = urlopen(url)
     except HTTPError, e:
         print "The server couldn't fulfill the request! Reason:", str(e.code)
-            return False
+        return False
     except URLError, e:
         print 'Failed to reach a server. Reason:', str(e.reason)
-            return False
+        return False
     else:
         html = response.read()
         print 'Got response! '
@@ -61,9 +61,8 @@ def action(p = None):                       # This is what you should run!
     if p == None:
         p = position()
     while True:
+        sleep(10)
         if not ping():
-            print 'Unable to connect ! Clicking...'
+            print 'Unable to connect! Clicking...'
             click(p)
-            sleep(20)
-        if ping():
             sleep(10)

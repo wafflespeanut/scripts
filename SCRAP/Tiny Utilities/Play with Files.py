@@ -19,7 +19,7 @@ def ren(path = path):                       # Rename video files after watching
     for File in os.listdir(path):
         proc = subprocess.Popen(["vlc.exe", path + File])      # os.startfile() could be used for opening all files!
         print "\nOld name:", File
-            name = str(raw_input('New name:'))
+        name = str(raw_input('New name:'))
         if name == '':
             continue
         elif name == '!':
@@ -44,14 +44,17 @@ def mp3(path = path):                       # Rename MP3s based on their title
     for File in os.listdir(path):
         if not 'mp3' in File:
             continue
-        File = eyed3.load(path + File)
-        title = raw_input('Current title: % s\n[Enter] to use the current metadata, or type a new one:\n' % (f.tag.title))
-        if title == '':
-            title = File.tag.title
+        loadFile = eyed3.load(path + File)
+        newTitle = raw_input('Current title: % s\n[Enter] to use the current metadata, or type a new one:\n' % (loadFile.tag.title))
+        if newTitle == '':
+            newTitle = loadFile.tag.title
         else:
-            File.tag.title = unicode(title)
-            File.tag.save()
-        os.rename(path + File, path + title + '.mp3')
+            loadFile.tag.title = unicode(newTitle)
+            try:
+                loadFile.tag.save()
+            except Exception:
+                print 'Couldn\'t save title!'
+        os.rename(path + File, path + newTitle + '.mp3')
 
 src = "D:\\parts\\"
 dest = "J:\\Other\\TEMP\\parts\\"
