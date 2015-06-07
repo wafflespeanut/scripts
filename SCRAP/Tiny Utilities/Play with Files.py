@@ -33,12 +33,16 @@ def ren(path = path):                       # Rename video files after watching
                 continue
 
 def num(path = path):                       # Rename numbered ones
-    for File in os.listdir(path):
-        k = 0
-        if File[0] in '1234567890':
-            while File[k] in '1234567890' or File[k] in ' -':
-                k += 1
-        os.rename(path + File, path + File[k:])
+    k = 0
+    count = 0
+    files = os.listdir(path)
+    while count < len(files):
+        for name in os.listdir(path):
+            if 'E' + str(k+1).zfill(2) in name:
+                count += 1
+                ext = '.' + name.split('.')[-1]
+                os.rename(path + name, path + 'Episode ' + str(k+1) + ext)
+        k += 1
 
 def mp3(path = path):                       # Rename MP3s based on their title
     for File in os.listdir(path):
