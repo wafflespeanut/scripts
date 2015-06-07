@@ -1,5 +1,4 @@
-import random
-import string
+import random, string
 
 WORDLIST = "Crypto\\Words.txt"
 
@@ -59,7 +58,7 @@ def hangman(secretWord):
         print " --  --  --  --  --  -- "
         print "You have", str(8 - mistakesMade), "guesses left."
         print "Available letters:", getAvailableLetters(lettersGuessed)
-        letter = raw_input("Please guess a letter:").lower()
+        letter = raw_input("Please guess a letter: ").lower()
         lettersGuessed += letter
         if alreadyGuessed(lettersGuessed, letter):
             print "Oops! You've already guessed that letter:", getGuessedWord(secretWord, lettersGuessed)
@@ -69,7 +68,7 @@ def hangman(secretWord):
                 print " --  --  --  --  --  -- \nCongratulations, you've won!"
                 break
         else:
-            print "Oops ! That letter is not in my word:", getGuessedWord(secretWord, lettersGuessed)
+            print "Oops! That letter is not in my word!", getGuessedWord(secretWord, lettersGuessed)
             mistakesMade += 1
     if mistakesMade == 8:
         print " --  --  --  --  --  -- \nSorry, you ran out of guesses. The word was " + secretWord

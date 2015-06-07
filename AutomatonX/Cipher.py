@@ -14,7 +14,7 @@ def CXOR(text, key):                                # Quite useful for XOR'ing b
     i = 0
     j = 0
     result = ""
-    while i < len(text):              # if len(key) < len(text)
+    while i < len(text):                # if len(key) < len(text)
         if i < len(key):
             result += xor(text[i], key[j])
         else:
@@ -180,7 +180,7 @@ def process(mode, text, key, level):
     else:
         return str(finalText)
 
-def ask():
+def ask():                                          # User Interface
     key = raw_input("Password: ")
     while len(key) == 1 or key == "":
         if not key:
@@ -199,7 +199,7 @@ def ask():
         mode = raw_input("Encrypt (e) or Decrypt (d)? ")
     return key, level, mode
 
-def RUN():                                          # User Interface
+def RUN():                                          # This is where you play around with plaintexts
     try:
         choice = 'y'
         while choice == 'y':

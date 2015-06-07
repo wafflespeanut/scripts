@@ -1,10 +1,12 @@
 import os
 
-path = "C:\\Users\\Waffles Crazy Peanut\\Desktop\\Github\\Python"
+path = "C:\\Users\\Waffles Crazy Peanut\\Desktop\\Github\\Python\\SCRAP\\Scrabble\\"
 
 # A script to cleanup my old code
+# Works quite nicely only for totally shitty code!
+# May screw your code if it's already clean (though I never tried it)
 
-def search(path, ext = 'py'):                       # For listing all those .py files
+def search(path, ext = 'py'):                           # For listing all those .py files
     fileList = []
     for root, dirs, files in os.walk(path):
         temp = [root + '\\' + f for f in files if f[ - len(ext): ] == ext]
@@ -22,21 +24,22 @@ def symbols(line):
     copy = list(line)
     sym = '+-/*=%<>^!|&'
 
-    def string(x):                                  # Skip strings
+    def string(x):                                      # Skip strings
         ch = copy[x]
         if line[x: x + 3] == "'''":
             return line[x + 3:].index("'''") + x + 6
+        x += 1
         while copy[x] is not ch:
             if copy[x] == '\\':
                 x += 1
             x += 1
-        return x+1
+        return x
 
-    def math(stuff, index):                         # Spaced symbols
+    def math(stuff, index):                             # Spaced symbols
         i = index
         copy = stuff[:]
 
-        def double(x):                              # For **, +=, //, etc.
+        def double(x):                                  # For **, +=, //, etc.
             ch = [' ', copy[x], copy[x + 1], ' ']
             if all([copy[x] in sym, copy[x + 1] in sym]):
                 if copy[x - 1] is ' ':
@@ -65,7 +68,7 @@ def symbols(line):
         elif copy[i] == ',' and copy[i + 1] is not ' ':
             copy[i] += ' '
 
-        elif copy[i] == '{':                        # Grouped dicts (works only for inline dicts)
+        elif copy[i] == '{' and copy[i+1] is not '\n':      # Grouped dicts
             sp = tab + 4
             copy[i] += '\n' + sp * ' '
             while True:
@@ -79,10 +82,10 @@ def symbols(line):
                 elif copy[i] is ':' and copy[i + 1] is not ' ':
                         copy[i] += ' '
                 elif copy[i] is '}':
-                    copy[i] = '\n' + tab * ' ' + '}'
+                    copy[i] = '\n' + tab * ' ' + '}\n'
                     break
 
-        elif copy[i] == '[':                        # Spaced lists
+        elif copy[i] == '[':                            # Spaced lists
             items = ''
             while copy[i] is not ']':
                 i += 1
@@ -94,10 +97,12 @@ def symbols(line):
                     copy[i] += ' '
                 items += copy[i]
 
-        elif copy[i] == ':':                        # Colons with newlines
+        elif copy[i] == ':':                            # Colons with newlines
             if copy[i + 1] == '\n':
                 i += 1
                 continue
+            elif line[i + 1:].split()[0] is '#':
+                break
             else:
                 tab += 4
             if copy[i + 1] == ' ':
@@ -108,7 +113,7 @@ def symbols(line):
         elif copy[i] in sym:
             copy, i = math(copy, i)
 
-        elif copy[i] == ';':                        # Abandon semicolons!
+        elif copy[i] == ';':                            # Abandon semicolons!
             copy[i] = '\n' + tab * ' '
             i += 1
             while copy[i] == ' ':
@@ -117,14 +122,26 @@ def symbols(line):
         i += 1
     return ''.join(copy)
 
-def cleanup(File):                                  # Comments are still unresolved (i.e., newlines are added to them too)
-    print 'Cleaning up', File, '...'
-    with open(File, 'r') as file:
-        data = file.readlines()
-    for i in range(len(data)):
-        data[i] = symbols(data[i])
-        print data[i]                               # Precaution for exceptions
-    s = raw_input('Continue overwriting the file (y/n)? ')
-    if s == 'y':
-        with open(File, 'w') as file:
-            file.writelines(data)
+def cleanup(path = path, index = 0):                    # The index is just to start from previously interrupted file
+    count = 0
+    for File in search(path):
+        try:
+            if index and count < index:
+                count += 1
+                continue
+            print 'Cleaning up', File, '...\n'
+            with open(File, 'r') as file:
+                data = file.readlines()
+            for i in range(len(data)):
+                data[i] = symbols(data[i])
+                print data[i]
+            if raw_input('Continue writing to file (y/n)? ') == 'y':
+                with open(File, 'w') as file:
+                    file.writelines(data)
+                count += 1
+                os.startfile(File)
+                if raw_input('Continue (y/n)? ') is not 'y':
+                    break
+        except (KeyboardInterrupt, Exception):
+            print '\n\nInterrupted at File %s! (Line: %s)' % (count, i)
+            break
