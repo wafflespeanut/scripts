@@ -9,10 +9,12 @@ I've added a function that hexes the password into a local file if you get bored
 ### Changelog
 
 v3.0 Remembrancer
-- Old tree-node method is now deprecated, and so the program doesn't know which story it's showing to you. You gotta find it from the timestamps in each story, *sorry*. (improved security at the cost of user-experience)
+- Old tree-node method is now deprecated, and so the program doesn't know which story it's showing to you. You gotta find it from the timestamps in each story, *sorry*. (Improved security at the cost of user-experience).
 - All stories are present in the specified directory
 - Story names are hashed with MD5 (which is far enough for this purpose)
 - Functions: hashed(), day(), write(), diary()
+
+      <sup>You can still [use the `version_change()` function to switch](https://github.com/Wafflespeanut/Python/blob/ae05feea4afa3e988da13fbd323b845a32079ddf/Remembrancer/Diary.py#L155) to the new version.</sup>
 
 v2.2: [Memorandum](https://github.com/Wafflespeanut/Python/tree/8850c831c10955b5c32d2710abfbfef916031792/Memorandum)
 - Passwords can be stored locally (after 10-layer hexing)
