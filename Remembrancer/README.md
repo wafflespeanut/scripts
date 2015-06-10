@@ -1,10 +1,10 @@
 ## Remembrancer (v3.0)
 
-This is a little project of mine. An utility to remember everyday memories. For now, it puts your stories in branched directories for later viewing. And, it supports encryption. I've used a simple algorithm (which is less secure, but enough for this purpose) to hex and shift the ASCII values in the files. It can also detect incorrect passwords.
+This is a little project of mine - an utility to remember everyday memories. For now, it puts your stories (with a MD5-hashed filename) in a directory for later viewing. It supports some basic encryption. I've used a simple algorithm to hex and shift the ASCII values in the files, which is just a mixup of 256-char Vigenere cipher, along with XOR. It can also detect incorrect passwords.
 
-Once stored, it doesn't disturb the original story. It decrypts to a temporary file for viewing, which gets deleted in two seconds. The same goes for updating on the same day - It decrypts to TEMP, appends your story, and finally overwrites the previous story.
+Once stored, it doesn't disturb the original story (unless you play around). It decrypts to a temporary file for viewing, which gets deleted in two seconds. While updating stories, it just appends your story to the previous story.
 
-I've added a function that hexes the password into a local file if you get bored of typing the password each time you write/view some story. It also supports viewing random stories...
+I've also added a function that hexes the password into a local file, so that instead of typing the password each time you write/view some story, you can save it by signing in. It also supports viewing random stories.
 
 ### Changelog
 
