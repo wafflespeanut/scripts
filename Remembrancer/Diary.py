@@ -1,4 +1,4 @@
-import os, sys, subprocess
+import os, subprocess
 from time import sleep
 from time import strftime as time
 from random import choice
@@ -28,13 +28,6 @@ months = {
     '12': 'December'
 }
 
-def startfile(File):                                            # Platform-independent viewer
-    if sys.platform is "win32":
-        os.startfile(File)
-    else:
-        app = "open" if sys.platform is "darwin" else "xdg-open"
-        subprocess.call([app, File])
-
 def hexed(text):                                                # Hexing function
     return map(lambda i:
         format(ord(i), '02x'), list(text))
@@ -63,7 +56,7 @@ def shift(text, shift):                                         # Shifts the ASC
         return None
     return shiftedText
 
-def zombify(mode, data, key):                                     # Linking helper function
+def zombify(mode, data, key):                                   # Linking helper function
     hexedKey = ''.join(hexed(key))
     text = data
     if mode == 'e':
@@ -80,7 +73,7 @@ def temp(File, key = None):                                     # Uses default n
     if File == None:
         return None
     if protect(File, 'd', key):
-        startfile(loc + 'TEMP.tmp')
+        subprocess.Popen(["notepad", loc + 'TEMP.tmp'])
         sleep(2)
         os.remove(loc + 'TEMP.tmp')
 
@@ -117,7 +110,7 @@ def check():                                                    # Allows passwor
             key = char(key)
     return key
 
-def protect(path, mode, key = None):                              # A simple method which shifts and turns it to hex!
+def protect(path, mode, key = None):                            # A simple method which shifts and turns it to hex!
     if os.path.exists(ploc):
         key = check()
     try:
@@ -209,7 +202,7 @@ def write(File = None):                                         # Does all the d
     if choice == 'y':
         temp(File, key)
 
-def day(year = None, month = None, day = None):              # Return a path based on (day,month,year) input
+def day(year = None, month = None, day = None):                 # Return a path based on (day,month,year) input
     if not year or len(str(year)) != 4:
         while True:
             year = raw_input('\nYear: ')
