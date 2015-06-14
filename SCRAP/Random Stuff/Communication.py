@@ -1,5 +1,5 @@
 import random
-nameList = []
+nameList = range(1, 43)
 
 def calls(people = nameList):           # This is still an exhaustive way - goes as O(n^2)
     num = len(people)
@@ -9,12 +9,13 @@ def calls(people = nameList):           # This is still an exhaustive way - goes
         print 'We need at least two fellas to have an inter-chat!'
     total = (num * (num - 1)) / 2
     lowerLimit = total / num
-    print total, 'calls have to be made! Each user has to make at least', lowerLimit, 'calls!'
+    print 'Calls to be made:', total
+    print 'Minimum calls per user:', lowerLimit
     if total % num:
         noluck = total % num            # Notice that also, noluck = len(people) / 2
-        print 'Unequalized calls!', noluck, 'unlucky users gotta make an extra call!'
+        print 'Status: Unbalanced (%s unlucky users gotta make an extra call!)' % noluck
     else:
-        print 'Balanced calls...'
+        print 'Status: Balanced (Equal calls for everyone!\n'
     random.shuffle(people)
     for person1 in people:
         count = 0
@@ -33,6 +34,6 @@ def calls(people = nameList):           # This is still an exhaustive way - goes
                     unlucky.append(person1)
                 if len(unlucky) == noluck:
                     break
-        print '\nUnlucky users:', unlucky, '\n'
+        print 'Unlucky users: %s\n' % unlucky
     for person in assigned:
-        print '%s: %s' % ([person], ', '.join([str(i) for i in assigned[person]]))
+        print '%s:\t%s' % ([person], ', '.join([str(i) for i in assigned[person]]))
