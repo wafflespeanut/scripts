@@ -113,100 +113,210 @@
 		</table></form></div>
 		<script type="text/javascript">
 
-		eng=document.getElementById('engine'); con=document.getElementById('proc'); it=document.getElementById('change'); eng.value=0
+		eng = document.getElementById('engine');
+		con = document.getElementById('proc');
+		it = document.getElementById('change');
+		eng.value = 0;
 
 		con.onclick = function() {
-			document.getElementById('dhide').style.display='none';
-			document.getElementById('ihide').style.display='block';
-			restart() }
+			document.getElementById('dhide').style.display = 'none';
+			document.getElementById('ihide').style.display = 'block';
+			restart()
+		}
 
-		it.onclick = function() { document.getElementById('ihide').style.display='none'; document.getElementById('dhide').style.display='block'; restart() }
+		it.onclick = function() {
+			document.getElementById('ihide').style.display = 'none';
+			document.getElementById('dhide').style.display='block';
+			restart()
+		}
 
 		eng.onclick = function() {
-			if(eng.value==0) { document.getElementById('dhide').style.display='none' }
-			else { document.getElementById('dhide').style.display='block' }
-			if(eng.value==1) { location.href='#data'
-				document.getElementById('load').value='Thrust Loading'
-				document.getElementById('flight').value=0.4; document.getElementById('pl').value=' (no unit)'
-				document.getElementById('req').value='Thrust required (per engine), T'
-				document.getElementById('thu').value='lbf'; document.getElementById('cru').value='N'
-				document.getElementById('cr').value='Cruise Thrust (per engine), T'
-				document.getElementById('et').value='Engine Thrust, T'; document.getElementById('etu').value='lbf'
-				document.getElementById('sfcu').value='lb/lbf-hr'; document.getElementById('N').value=4 }
-			else if(eng.value==2) { location.href='#data'
-				document.getElementById('load').value='Power Loading'
-				document.getElementById('flight').value=0.15; document.getElementById('pl').value=' SHP/kg'
-				document.getElementById('req').value='Power required (per engine), P'
-				document.getElementById('thu').value='SHP'; document.getElementById('cru').value='SHP'
-				document.getElementById('cr').value='Cruise Power (per engine), P'
-				document.getElementById('et').value='Engine Power, P'; document.getElementById('etu').value='SHP'
-				document.getElementById('sfcu').value='lb/SHP-hr'; document.getElementById('N').value=2 } }
 
-		vcr=document.getElementById("VCR"); mcr=document.getElementById("MCR")
-		h=document.getElementById("alt"); wpp=0; W=document.getElementById('W0')
-		document.getElementById('W01').value=W.value; WE=document.getElementById('WE')
-		document.getElementById('RE1').value=document.getElementById('WE').value/W.value
-		re0=document.getElementById('RE1').value
+			if (eng.value == 0) {
+				document.getElementById('dhide').style.display = 'none';
+			}
+
+			else {
+				document.getElementById('dhide').style.display = 'block';
+			}
+
+			if (eng.value == 1) {
+				location.href = '#data';
+				document.getElementById('load').value = 'Thrust Loading';
+				document.getElementById('flight').value = 0.4;
+				document.getElementById('pl').value = ' (no unit)';
+				document.getElementById('req').value = 'Thrust required (per engine), T';
+				document.getElementById('thu').value = 'lbf';
+				document.getElementById('cru').value = 'N';
+				document.getElementById('cr').value = 'Cruise Thrust (per engine), T';
+				document.getElementById('et').value = 'Engine Thrust, T';
+				document.getElementById('etu').value ='lbf';
+				document.getElementById('sfcu').value = 'lb/lbf-hr';
+				document.getElementById('N').value = 4;
+			}
+
+			else if (eng.value == 2) {
+				location.href = '#data';
+				document.getElementById('load').value = 'Power Loading';
+				document.getElementById('flight').value = 0.15;
+				document.getElementById('pl').value = ' SHP/kg';
+				document.getElementById('req').value = 'Power required (per engine), P';
+				document.getElementById('thu').value = 'SHP';
+				document.getElementById('cru').value = 'SHP';
+				document.getElementById('cr').value = 'Cruise Power (per engine), P';
+				document.getElementById('et').value = 'Engine Power, P';
+				document.getElementById('etu').value = 'SHP';
+				document.getElementById('sfcu').value = 'lb/SHP-hr';
+				document.getElementById('N').value = 2;
+			}
+		}
+
+		vcr = document.getElementById("VCR");
+		mcr = document.getElementById("MCR")
+		h = document.getElementById("alt");
+		wpp = 0;
+		W = document.getElementById('W0');
+		document.getElementById('W01').value = W.value;
+		WE = document.getElementById('WE');
+		document.getElementById('RE1').value = document.getElementById('WE').value / W.value;
+		re0 = document.getElementById('RE1').value;
 
 		mcr.onkeyup = function() {
-			vcr.value = mcr.value*Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5 }
+			vcr.value = mcr.value * (Math.sqrt(atmos(parseInt(h.value))[1] * 1.4 * 287) * 18 / 5);
+		}
+
 		vcr.onkeyup = function() {
-			mcr.value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) }
+			mcr.value = vcr.value / (Math.sqrt(atmos(parseInt(h.value))[1] * 1.4 * 287) * 18 / 5);
+		}
 
 		h.onkeyup = function() {
-			document.getElementById('P0').value=atmos(parseInt(h.value))[0];
-			document.getElementById('T0').value=atmos(parseInt(h.value))[1];
-			document.getElementById('d0').value=atmos(parseInt(h.value))[2];
-			if(vcr.value) { document.getElementById('MCR').value = vcr.value/(Math.sqrt(atmos(parseInt(h.value))[1]*1.4*287)*18/5) } }
+			document.getElementById('P0').value = atmos(parseInt(h.value))[0];
+			document.getElementById('T0').value = atmos(parseInt(h.value))[1];
+			document.getElementById('d0').value = atmos(parseInt(h.value))[2];
+
+			if(vcr.value) {
+				document.getElementById('MCR').value = vcr.value / (Math.sqrt(atmos(parseInt(h.value))[1] * 1.4 * 287) * 18 / 5);
+			}
+		}
 
 		W.onkeyup = function() {
-			document.getElementById('W01').value=W.value
-			document.getElementById('RE1').value=WE.value/W.value }
+			document.getElementById('W01').value = W.value;
+			document.getElementById('RE1').value = WE.value / W.value;
+		}
+
 		WE.onkeyup = function() {
-			document.getElementById('RE1').value=WE.value/W.value }
+			document.getElementById('RE1').value = WE.value / W.value
+		}
 
 		function restart() {
-			document.getElementById('W01').value=document.getElementById('W0').value
-			document.getElementById('RE1').value=document.getElementById('WE').value/document.getElementById('W0').value
-			document.getElementById('iter').value=0; document.getElementById('SFC').value=0
-			document.getElementById('WPP1').value=0; document.getElementById('TE1').value=0
-			document.getElementById('T1').value=0; document.getElementById('TCR1').value=0
-			document.getElementById('RF1').value=0; wpp=0 }
+			document.getElementById('W01').value = document.getElementById('W0').value
+			document.getElementById('RE1').value = document.getElementById('WE').value / document.getElementById('W0').value
+			document.getElementById('iter').value = 0;
+			document.getElementById('SFC').value = 0;
+			document.getElementById('WPP1').value = 0;
+			document.getElementById('TE1').value = 0;
+			document.getElementById('T1').value = 0;
+			document.getElementById('TCR1').value = 0;
+			document.getElementById('RF1').value = 0;
+			wpp = 0;
+		}
 
 		function fan() {
-			i=document.getElementById('iter'); n=parseFloat(document.getElementById('N').value)
-			tl=parseFloat(document.getElementById('TL').value); ca=parseFloat(h.value); d0=1.225
-			cv=parseFloat(document.getElementById('VCR').value); wp=parseFloat(document.getElementById('WP').value)
-			wc=parseFloat(document.getElementById('WC').value); r=parseFloat(document.getElementById('R').value)
-			w0=parseFloat(document.getElementById('W01').value); TE=document.getElementById('TE1')
-			wf=parseFloat(document.getElementById('RF1').value)*parseFloat(document.getElementById('W01').value)
-			WPP=document.getElementById('WPP1'); sfc=document.getElementById('SFC')
-			re=parseFloat(document.getElementById('RE1').value)
-			if(i.value==0) {
-				rf=parseFloat(document.getElementById('flight').value) }
-			else { rf=0 }
-			re=document.getElementById('RE1').value; w0=(wc+wp+wpp+wf)/(1-re-rf)
-			document.getElementById('W01').value=w0
-			if(eng.value==1) { t=w0*tl*9.81*1.2; document.getElementById('T1').value=t/(4.448*n) }
-			else { t=w0*tl*1.2; document.getElementById('T1').value=t/n }
-			if(i.value>0) {
-				if(eng.value==1) { tc=TE.value*4.448*n*Math.pow((atmos(ca)[2]/d0),1.2) }
-				else { tc=TE.value*n*Math.pow((atmos(ca)[2]/d0),1.2) }
-				document.getElementById('TCR1').value=tc/n
-				if(eng.value==1) { wf=(sfc.value*tc*r*1.2)/(cv*9.81) }
-				else { wf=(sfc.value*tc*r*1.2*0.4535924)/(cv) }
-				document.getElementById('RF1').value=wf/w0
-				wpp=WPP.value*0.4535924*n; document.getElementById('RE1').value=re0-wpp/w0 }
+			i = document.getElementById('iter');
+			n = parseFloat(document.getElementById('N').value);
+			tl = parseFloat(document.getElementById('TL').value);
+			ca = parseFloat(h.value);
+			d0 = 1.225;
+			cv = parseFloat(document.getElementById('VCR').value);
+			wp = parseFloat(document.getElementById('WP').value);
+			wc = parseFloat(document.getElementById('WC').value);
+			r = parseFloat(document.getElementById('R').value);
+			w0 = parseFloat(document.getElementById('W01').value);
+			TE = document.getElementById('TE1');
+			wf = parseFloat(document.getElementById('RF1').value) * parseFloat(document.getElementById('W01').value);
+			WPP = document.getElementById('WPP1');
+			sfc=document.getElementById('SFC');
+			re = parseFloat(document.getElementById('RE1').value);
+
+			if (i.value == 0) {
+				rf = parseFloat(document.getElementById('flight').value);
+			}
+
+			else {
+				rf = 0;
+			}
+
+			re = document.getElementById('RE1').value;
+			w0 = (wc + wp + wpp + wf) / (1 - re - rf);
+			document.getElementById('W01').value = w0;
+
+			if (eng.value == 1) {
+				t = w0 * tl * 9.81 * 1.2;
+				document.getElementById('T1').value = t / (4.448 * n);
+			}
+
+			else {
+				t = w0 * tl * 1.2;
+				document.getElementById('T1').value = t / n;
+			}
+
+			if (i.value>0) {
+
+				if (eng.value == 1) {
+					tc = TE.value * 4.448 * n * Math.pow((atmos(ca)[2] / d0), 1.2);
+				}
+
+				else {
+					tc = TE.value * n * Math.pow((atmos(ca)[2] / d0), 1.2);
+				}
+
+				document.getElementById('TCR1').value = tc / n;
+
+				if (eng.value == 1) {
+					wf = (sfc.value * tc * r * 1.2) / (cv * 9.81);
+				}
+
+				else {
+					wf = (sfc.value * tc * r * 1.2 * 0.4535924) / (cv);
+				}
+
+				document.getElementById('RF1').value = wf / w0;
+				wpp = WPP.value * 0.4535924 * n;
+				document.getElementById('RE1').value = re0 - wpp / w0;
+			}
+
 			TE.onkeyup = function() {
-				if(eng.value==1) { tc=TE.value*4.448*n*Math.pow((atmos(ca)[2]/d0),1.2) }
-				else { tc=TE.value*n*Math.pow((atmos(ca)[2]/d0),1.2) }
-				document.getElementById('TCR1').value=tc/n }
+
+				if (eng.value == 1) {
+					tc = TE.value * 4.448 * n * Math.pow((atmos(ca)[2] / d0), 1.2);
+				}
+
+				else {
+					tc = TE.value * n * Math.pow((atmos(ca)[2] / d0), 1.2);
+				}
+
+				document.getElementById('TCR1').value = tc / n;
+			}
+
 			sfc.onkeyup = function() {
-				if(eng.value==1) { wf=(sfc.value*tc*r*1.2)/(cv*9.81) }
-				else { wf=(sfc.value*tc*r*1.2*0.4535924)/(cv) }
-				document.getElementById('RF1').value=wf/w0 }
-			WPP.onkeyup = function() { wpp=WPP.value*0.4535924*n; document.getElementById('RE1').value=re0-wpp/w0 }
-			i.value=parseFloat(i.value)+1 }
+				if (eng.value == 1) {
+					wf = (sfc.value * tc * r * 1.2) / (cv * 9.81);
+				}
+
+				else {
+					wf = (sfc.value * tc * r * 1.2 * 0.4535924) / cv;
+				}
+
+				document.getElementById('RF1').value = wf / w0;
+			}
+
+			WPP.onkeyup = function() {
+				wpp = WPP.value * 0.4535924 * n;
+				document.getElementById('RE1').value = re0 - wpp / w0;
+			}
+
+			i.value = parseFloat(i.value) + 1;
+		}
 
 		</script>
       </section>

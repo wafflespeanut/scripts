@@ -59,19 +59,19 @@
         	phr = document.getElementById("cipherspace").value;
         	k = document.getElementById("keyspace").value;
 
-        	if( phr == 0 || k == 0 ) {
+        	if (phr == 0 || k == 0) {
         		alert("C'mon... Fill up the input");
         		return false;
             }
 
         	cipher = document.forms[0].cipher;
 
-        	if(cipher[0].checked) {
+        	if (cipher[0].checked) {
         		cipherout = eit(phr,k);
             }
 
-        	else if(cipher[1].checked) {
-        		if(test(phr)) {
+        	else if (cipher[1].checked) {
+        		if ( test(phr) ) {
         			cipherout = dit(phr,k);
                 }
         		else {
