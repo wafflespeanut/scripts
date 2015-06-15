@@ -28,8 +28,8 @@
         <table border="0" cellspacing="0">
 
         <tr><p>I once <a href="https://github.com/Wafflespeanut/Python/blob/581574ddd9c59cf0f45b933548aa2f2dc64203ae/Encryption/Sentinel/Cipher.py">wrote a cipher</a>, when I first got into cryptography. For now, I've written this rather <em>simplified</em> javascript version of it, with which you can play around (killing your own browser!)</p>
-        <p>You can also check out <a href="http://wp.me/p3OCmi-qT">how its <em>"ancestor"</em> works</a>, or have a look at <a href="https://github.com/Wafflespeanut/Python/blob/master/Remembrancer/Cipher.py">my latest patch</a>...</p></tr>
-        <br>
+        <p>You can also check out <a href="http://wp.me/p3OCmi-qT">how its <em>"ancestor"</em> works</a>, or have a look at <a href="https://github.com/Wafflespeanut/Python/blob/master/Remembrancer/Cipher.py">my latest patch</a>...</p>
+        </tr><br>
 
         <h3>Text input:</h3>
         <center><p>
@@ -56,24 +56,35 @@
         <script type="text/javascript">
 
         function zombify() {
-        	phr = document.getElementById("cipherspace").value
-        	k = document.getElementById("keyspace").value
-        	if( phr==0 || k==0 ) {
+        	phr = document.getElementById("cipherspace").value;
+        	k = document.getElementById("keyspace").value;
+
+        	if( phr == 0 || k == 0 ) {
         		alert("C'mon... Fill up the input");
-        		return false }
-        	cipher = document.forms[0].cipher
-        	if(cipher[0].checked)
-        		cipherout = eit(phr,k)
+        		return false;
+            }
+
+        	cipher = document.forms[0].cipher;
+
+        	if(cipher[0].checked) {
+        		cipherout = eit(phr,k);
+            }
+
         	else if(cipher[1].checked) {
-        		if(test(phr))
-        			cipherout = dit(phr,k)
+        		if(test(phr)) {
+        			cipherout = dit(phr,k);
+                }
         		else {
-        			alert("Invalid ciphertext! Is it encrypted?")
-        			document.getElementById("cipherspace").value = ""
-        			document.getElementById("keyspace").value = ""
-        			return false } }
-        	document.getElementById("cipherspace").value = cipherout
-        	return cipherout }
+        			alert("Invalid ciphertext! Is it encrypted?");
+        			document.getElementById("cipherspace").value = "";
+        			document.getElementById("keyspace").value = "";
+        			return false;
+                }
+            }
+
+        	document.getElementById("cipherspace").value = cipherout;
+        	return cipherout;
+        }
 
         </script>
         <hr><br>
