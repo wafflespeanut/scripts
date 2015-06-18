@@ -210,34 +210,27 @@ def write(File = None):                                         # Does all the d
         temp(File, key)
 
 def day(year = None, month = None, day = None):                 # Return a path based on (day,month,year) input
-    if not year or len(str(year)) != 4:
-        while True:
-            year = raw_input('\nYear: ')
-            if len(year) == 4:
+    while True:
+        try:
+            if not year:
+                year = int(raw_input('\nYear: '))
+            if not month:
+                month = int(raw_input('\nMonth: '))
+            if not day:
+                day = int(raw_input('\nDay: '))
+            date = str(datetime(year, month, day)).split(' ')[0].split('-')
+            if date:
+                year = date[0]
+                month = months[date[1]]
+                day = date[2]
                 break
-    while True:
-        if month:
-            m = str(month)
-        else:
-            m = raw_input('\nMonth: ')
-        if m in months:
-            month = months[m]
-            break
-        elif '0' + m in months:
-            month = months['0' + m]
-            break
-    while True:
-        if day:
-            day = str(day)
-        else:
-            day = raw_input('\nDay: ')
-        if len(day) == 1:
-            day = '0' + day
-        if int(day) < 32:
-            break
-    fileName = loc + hashed('Day ' + str(day) + ' (' + str(month) + ' ' + str(year) + ')')
+        except Exception as err:
+            print "An error occurred:", err
+            year, month, day = None, None, None
+            continue
+    fileName = loc + hashed('Day ' + day + ' (' + month + ' ' + year + ')')
     if not os.path.exists(fileName):
-        print '\nNo stories on this day!'
+        print '\nNo stories on {} {}, {}.'.format(month, day, year)
         return None
     return fileName
 
@@ -257,13 +250,13 @@ def search():                                                   # Exhaustive pro
         print 'You must sign-in to continue...'                 # Just for security...
         key = check()
     word = raw_input("Enter a word: ")
-    choice = int(raw_input("\n\t1. Search everything!\n\t2. Search between two dates\n"))
+    choice = int(raw_input("\n\t1. Search everything!\n\t2. Search between two dates\n\nChoice: "))
     if choice == 1:
         d1 = datetime(2014, 12, 13)                             # Happy Birthday, Diary!
         d2 = datetime.now()
     while choice == 2:
         try:
-            print 'Enter dates in the form YYYY-MM-DD (Mind you, with hyphen!)'
+            print '\nEnter dates in the form YYYY-MM-DD (Mind you, with hyphen!)'
             d1 = datetime.strptime(raw_input('Start date: '), '%Y-%m-%d')
             d2 = datetime.strptime(raw_input('End date: '), '%Y-%m-%d')
         except ValueError:
@@ -271,14 +264,13 @@ def search():                                                   # Exhaustive pro
             continue
         break
     delta = (d2 - d1).days
-    print '\nDecrypting files sequentially...'
+    print '\nDecrypting %d stories sequentially...' % delta
     print '\nSit back & relax... (May take some time)\n'
-    files = []
-    count = 0
+    fileData = [], []
     displayProg = 0
     printed = False
-    for i in range(delta + 1):
-        d1 = d1 + timedelta(i)
+    for i in range(delta):
+        d = d1 + timedelta(days = i)
         File = day(d1.year, d1.month, d1.day)
         if File == None:
             continue
@@ -287,20 +279,20 @@ def search():                                                   # Exhaustive pro
             displayProg = progress
             printed = False
         howMany = 0
-        if protect(loc + File, 'd'):
+        if protect(File, 'd'):
             with open(loc + 'TEMP.tmp', 'r') as file:
                 data = file.readlines()
             occurred = [1 for line in data if word in line]
             if occurred:
                 howMany = len(occurred)
-                files.append(howMany)
+                fileData[0].append(i)
+                fileData[1].append(howMany)
         else:
             print 'Cannot decrypt story! Skipping...'
         if not printed:
             print 'Progress: %d%s' % (displayProg, '%')
             printed = True
-        count += howMany
-    print '\nFound %d occurrences in %d stories' % (count, len(files))
+    print '\nFound %d occurrences in %d stories!' % (sum(fileData[1]), len(fileData[0]))
     os.remove(loc + 'TEMP.tmp')
 
 def diary():
