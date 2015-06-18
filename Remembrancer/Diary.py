@@ -160,7 +160,7 @@ def protect(path, mode, key = None):                            # A simple metho
             file.writelines(data)
     return key
 
-def write(File = None):                                         # Does all the dirty job
+def write(File = None):                                         # Does the dirty writing job
     key = None
     if not File:
         File = loc + hashed('Day ' + time('%d') + ' (' + months[time('%m')] + ' ' + time('%Y') + ')')
@@ -209,7 +209,7 @@ def write(File = None):                                         # Does all the d
     if choice == 'y':
         temp(File, key)
 
-def day(year = None, month = None, day = None):                 # Return a path based on (day,month,year) input
+def hashDate(year = None, month = None, day = None):                 # Return a path based on (day,month,year) input
     while True:
         try:
             if not year:
@@ -218,7 +218,7 @@ def day(year = None, month = None, day = None):                 # Return a path 
                 month = int(raw_input('\nMonth: '))
             if not day:
                 day = int(raw_input('\nDay: '))
-            date = str(datetime(year, month, day)).split(' ')[0].split('-')
+            date = str(datetime(year, month, day).date()).split('-')
             if date:
                 year = date[0]
                 month = months[date[1]]
@@ -240,8 +240,8 @@ def random():                                                   # Useful only wh
     print 'Choosing a story...'
     temp(loc + fileName)
 
-def search():                                                   # Exhaustive process requires a low-level language
-    if os.path.exists(ploc):                                    # That's why I'm learning Rust by translating this...
+def search():                                                   # Quite an interesting function for searching
+    if os.path.exists(ploc):
         k = raw_input('Enter your password to continue: ')
         if not k == check():
             print '\n\tWrong password!'
@@ -258,42 +258,64 @@ def search():                                                   # Exhaustive pro
         try:
             print '\nEnter dates in the form YYYY-MM-DD (Mind you, with hyphen!)'
             d1 = datetime.strptime(raw_input('Start date: '), '%Y-%m-%d')
-            d2 = datetime.strptime(raw_input('End date: '), '%Y-%m-%d')
+            d2 = raw_input("End date (Press <Enter> for today's date): ")
+            if not d2:
+                d2 = datetime.now()
+            else:
+                d2 = datetime.strptime(d2, '%Y-%m-%d')
         except ValueError:
-            print 'You missed a hyphen. Try again...'
+            print 'Oops! Error in input. Try again...'
             continue
         break
     delta = (d2 - d1).days
-    print '\nDecrypting %d stories sequentially...' % delta
-    print '\nSit back & relax... (May take some time)\n'
-    fileData = [], []
+    print '\nDecrypting %d stories sequentially...' % delta     # Exhaustive process requires a low-level language
+    print '\nSit back & relax... (May take some time)\n'        # That's why I'm learning Rust by translating this...
+    fileData = [], [], []
     displayProg = 0
     printed = False
     for i in range(delta):
         d = d1 + timedelta(days = i)
-        File = day(d1.year, d1.month, d1.day)
+        File = hashDate(d.year, d.month, d.day)
         if File == None:
             continue
         progress = int((float(i + 1) / delta) * 100)
         if progress is not displayProg:
             displayProg = progress
             printed = False
-        howMany = 0
+        occurred = 0
         if protect(File, 'd'):
             with open(loc + 'TEMP.tmp', 'r') as file:
                 data = file.readlines()
-            occurred = [1 for line in data if word in line]
-            if occurred:
-                howMany = len(occurred)
-                fileData[0].append(i)
-                fileData[1].append(howMany)
+            occurred = ''.join(data).count(word)
         else:
             print 'Cannot decrypt story! Skipping...'
+            continue
+        if occurred:
+            fileData[0].append(i)
+            fileData[1].append(occurred)
+            fileData[2].append(File)
         if not printed:
-            print 'Progress: %d%s' % (displayProg, '%')
+            print 'Progress: %d%s (Found: %d)' % (displayProg, '%', sum(fileData[1]))
             printed = True
+    r1 = str(d1.date()).split('-')
+    r2 = str(d2.date()).split('-')
+    ranges = months[r1[1]], r1[2], r1[0], months[r2[1]], r2[2], r2[0]
+    print "\nSearch results from %s %s, %s to %s %s, %s" % ranges
+    if fileData[1]:
+        print "\nStories on these days have the word '%s' in them...\n" % word
+    else:
+        print '\nBad luck! Nothing...'
+    for i, delta in enumerate(fileData[0]):
+        d = str(datetime(d1.year, d1.month, d1.day).date() + timedelta(days = delta)).split('-')
+        print '%d. %s %s, %s' % (i + 1, months[d[1]], d[2], d[0])
     print '\nFound %d occurrences in %d stories!' % (sum(fileData[1]), len(fileData[0]))
     os.remove(loc + 'TEMP.tmp')
+    while fileData[2]:
+        try:
+            ch = int(raw_input('Enter a number to open the corresponding story: '))
+            temp(fileData[2][ch - 1])
+        except Exception:
+            print 'Oops! Bad input...'
 
 def diary():
     choice = 'y'
@@ -313,18 +335,19 @@ def diary():
             else:
                 print '\t\t 0: Sign in'
             choice = raw_input('\nChoice: ')
-            ch = ['write()', 'random()', 'temp(day())', 'write(day())', 'search()']
+            ch = ['write()', 'random()', 'temp(hashDate())', 'write(hashDate())', 'search()']
             if choice == '0':
                 if os.path.exists(ploc):
                     os.remove(ploc)
                     print 'Login credentials removed!'
                 else:
+                    print "[WARNING] Anyone will be able to see your story if you don't sign out!"
                     check()
             else:
                 try:
                     eval(ch[int(choice)-1])
                 except Exception:
-                    print '\nAh, something bad has happened!'
+                    print '\nAh, something bad has happened! Did you do it?'
             choice = raw_input('\nDo something again (y/n)? ')
         except KeyboardInterrupt:
             print '\nQuitting...'

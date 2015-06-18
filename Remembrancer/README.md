@@ -9,11 +9,11 @@ I've also added a function that hexes the password into a local file, so that in
 ### Changelog
 
 v3.0 Remembrancer
-- Search your stories for specific words
+- Smart search for specific words in stories
 - Old tree-node method is now deprecated, and so the program doesn't know which story it's showing to you. You gotta find it from the timestamps in each story, *sorry*. (Improved security at the cost of user-experience).
 - All stories are present in the specified directory
 - Story names are hashed with MD5 (which is far enough for this purpose)
-- Functions: hashed(), day(), write(), diary(), search()
+- Functions: hashed(), hashDate(), write(), diary(), search()
 
       <sup>You can still [use the `version_change()` function to switch](https://github.com/Wafflespeanut/Python/blob/ae05feea4afa3e988da13fbd323b845a32079ddf/Remembrancer/Diary.py#L155) to the new version.</sup>
 
