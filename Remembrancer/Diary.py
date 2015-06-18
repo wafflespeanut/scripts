@@ -1,6 +1,7 @@
 import os, sys, subprocess
 from time import sleep
 from time import strftime as time
+from datetime import datetime, timedelta
 from random import choice
 from hashlib import md5
 
@@ -29,8 +30,8 @@ months = {
 }
 
 def startfile(File):                                            # Platform-independent viewer
-    if sys.platform is "win32":
-        os.startfile(File)
+    if sys.platform == "win32":
+        subprocess.Popen(["notepad", File])
     else:
         app = "open" if sys.platform is "darwin" else "xdg-open"
         subprocess.call([app, File])
@@ -177,7 +178,8 @@ def write(File = None):                                         # Does all the d
     elif os.path.exists(File):
         os.remove(File)
     f = open(File, 'a')
-    data = ['[' + time('%Y') + '-' + time('%m') + '-' + time('%d') + ']' + ' ' + time('%H') + ':' + time('%M') + ':' + time('%S') + '\n']
+    timestamp = str(datetime.now()).split('.')[0].split(' ')
+    data = ['[' + timestamp[0] + '] ' + timestamp[1] + '\n']
     try:
         stuff = raw_input('''\nStart writing... (Press Ctrl+C when you're done!)\n\n\t''')
         data.append('\t' + stuff)
@@ -252,35 +254,52 @@ def search():                                                   # Exhaustive pro
             print '\n\tWrong password!'
             return None
     else:
-        print 'You must sign-in to continue...'
+        print 'You must sign-in to continue...'                 # Just for security...
         key = check()
     word = raw_input("Enter a word: ")
+    choice = int(raw_input("\n\t1. Search everything!\n\t2. Search between two dates\n"))
+    if choice == 1:
+        d1 = datetime(2014, 12, 13)                             # Happy Birthday, Diary!
+        d2 = datetime.now()
+    while choice == 2:
+        try:
+            print 'Enter dates in the form YYYY-MM-DD (Mind you, with hyphen!)'
+            d1 = datetime.strptime(raw_input('Start date: '), '%Y-%m-%d')
+            d2 = datetime.strptime(raw_input('End date: '), '%Y-%m-%d')
+        except ValueError:
+            print 'You missed a hyphen. Try again...'
+            continue
+        break
+    delta = (d2 - d1).days
     print '\nDecrypting files sequentially...'
-    print '\nSit back & relax... (Have a cup of coffee, maybe)\n'
-    files = {}
+    print '\nSit back & relax... (May take some time)\n'
+    files = []
     count = 0
-    num = len(os.listdir(loc))
     displayProg = 0
     printed = False
-    for i, File in enumerate(os.listdir(loc)):
-        progress = int((float(i+1) / num) * 100)
+    for i in range(delta + 1):
+        d1 = d1 + timedelta(i)
+        File = day(d1.year, d1.month, d1.day)
+        if File == None:
+            continue
+        progress = int((float(i + 1) / delta) * 100)
         if progress is not displayProg:
             displayProg = progress
             printed = False
-        c = 0
+        howMany = 0
         if protect(loc + File, 'd'):
             with open(loc + 'TEMP.tmp', 'r') as file:
                 data = file.readlines()
             occurred = [1 for line in data if word in line]
             if occurred:
-                c = len(occurred)
-                files[File] = c
+                howMany = len(occurred)
+                files.append(howMany)
         else:
             print 'Cannot decrypt story! Skipping...'
         if not printed:
             print 'Progress: %d%s' % (displayProg, '%')
             printed = True
-        count += c
+        count += howMany
     print '\nFound %d occurrences in %d stories' % (count, len(files))
     os.remove(loc + 'TEMP.tmp')
 
