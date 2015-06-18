@@ -1,4 +1,4 @@
-import os, subprocess
+import os, sys, subprocess
 from time import sleep
 from time import strftime as time
 from random import choice
@@ -27,6 +27,13 @@ months = {
     '11': 'November',
     '12': 'December'
 }
+
+def startfile(File):                                            # Platform-independent viewer
+    if sys.platform is "win32":
+        os.startfile(File)
+    else:
+        app = "open" if sys.platform is "darwin" else "xdg-open"
+        subprocess.call([app, File])
 
 def hexed(text):                                                # Hexing function
     return map(lambda i:
@@ -73,7 +80,7 @@ def temp(File, key = None):                                     # Uses default n
     if File == None:
         return None
     if protect(File, 'd', key):
-        subprocess.Popen(["notepad", loc + 'TEMP.tmp'])
+        startfile(loc + 'TEMP.tmp')
         sleep(2)
         os.remove(loc + 'TEMP.tmp')
 
