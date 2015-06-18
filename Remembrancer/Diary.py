@@ -44,11 +44,11 @@ def char(text):                                                 # Hex-decoding f
     except TypeError:
         return None
 
-def shift(text, shift):                                         # Shifts the ASCII value of the chars (Vigenere cipher? Yep!)
+def shift(text, amount):                                         # Shifts the ASCII value of the chars (Vigenere cipher? Yep!)
     try:
         shiftedText = ''
         for i, ch in enumerate(text):
-            shiftChar = ord(ch) + shift
+            shiftChar = ord(ch) + amount
             while shiftChar > 255:
                 shiftChar -= 255
             shiftedText += chr(shiftChar)
@@ -80,22 +80,20 @@ def temp(File, key = None):                                     # Uses default n
 def check():                                                    # Allows password to be stored locally
     if not os.path.exists(ploc):
         try:
-            k1 = True
-            k2 = False
             while True:
-                k1 = raw_input('\nEnter password: ')
-                while len(k1) < 8:
-                    k1 = raw_input('\nEnter password of at least 8 chars: ')
-                k2 = raw_input('Re-enter password: ')
-                if k1 == k2:
+                key = raw_input('\nEnter password: ')
+                if len(key) < 8:
+                    print 'Choose a strong password! (at least 8 chars)'
+                    continue
+                if raw_input('Re-enter password: ') == key:
                     break
                 else:
                     print "\nPasswords don't match!\n"
-            key = k1 = k2
             for i in range(10):                                 # Nothing too serious, it just hexes the thing 10 times!
                 key = ''.join(hexed(key))
             with open(ploc, 'w') as file:
                 file.writelines(key)
+            print 'Login credentials have been saved locally!'
         except KeyboardInterrupt:
             print 'Login credentials failed!'
             return None
@@ -240,8 +238,48 @@ def random():                                                   # Useful only wh
     print 'Choosing a story...'
     temp(loc + fileName)
 
+def search():                                                   # Exhaustive process requires a low-level language
+    if os.path.exists(ploc):                                    # That's why I'm learning Rust by translating this...
+        k = raw_input('Enter your password to continue: ')
+        if not k == check():
+            print '\n\tWrong password!'
+            return None
+    else:
+        print 'You must sign-in to continue...'
+        key = check()
+    word = raw_input("Enter a word: ")
+    print '\nDecrypting files sequentially...'
+    print '\nSit back & relax... (Have a cup of coffee, maybe)\n'
+    files = {}
+    count = 0
+    num = len(os.listdir(loc))
+    displayProg = 0
+    printed = False
+    for i, File in enumerate(os.listdir(loc)):
+        progress = int((float(i+1) / num) * 100)
+        if progress is not displayProg:
+            displayProg = progress
+            printed = False
+        c = 0
+        if protect(loc + File, 'd'):
+            with open(loc + 'TEMP.tmp', 'r') as file:
+                data = file.readlines()
+            occurred = [1 for line in data if word in line]
+            if occurred:
+                c = len(occurred)
+                files[File] = c
+        else:
+            print 'Cannot decrypt story! Skipping...'
+        if not printed:
+            print 'Progress: %d%s' % (displayProg, '%')
+            printed = True
+        count += c
+    print '\nFound %d occurrences in %d stories' % (count, len(files))
+    os.remove(loc + 'TEMP.tmp')
+
 def diary():
-    while True:
+    choice = 'y'
+    while choice is 'y':
         if os.path.exists(loc + 'TEMP.tmp'):
             os.remove(loc + 'TEMP.tmp')
         try:
@@ -249,29 +287,27 @@ def diary():
                 " 1: Write today's story",
                 " 2: Random story",
                 " 3: View the story of someday",
-                " 4. Write the story for someday you've missed")
+                " 4. Write the story for someday you've missed",
+                " 5. Search your stories")
             print '\n\t\t'.join(choices)
             if os.path.exists(ploc):
                 print '\t\t 0: Sign out'
             else:
                 print '\t\t 0: Sign in'
             choice = raw_input('\nChoice: ')
-            ch = ['write()', 'random()', 'temp(day())', 'write(day())']
+            ch = ['write()', 'random()', 'temp(day())', 'write(day())', 'search()']
             if choice == '0':
                 if os.path.exists(ploc):
                     os.remove(ploc)
                     print 'Login credentials removed!'
                 else:
                     check()
-                    print 'Login credentials have been saved locally!'
             else:
                 try:
                     eval(ch[int(choice)-1])
                 except Exception:
-                    print '\nIllegal choice!'
+                    print '\nAh, something bad has happened!'
             choice = raw_input('\nDo something again (y/n)? ')
-            if choice is not 'y':
-                break
         except KeyboardInterrupt:
             print '\nQuitting...'
             break
