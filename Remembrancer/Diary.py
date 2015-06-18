@@ -72,7 +72,7 @@ def zombify(mode, data, key):                                   # Linking helper
         for ch in hexedKey:
             text = shift(text, ord(ch))
         return text
-    elif mode == 'd':
+    elif mode in ('d', 'rw'):
         for ch in hexedKey:
             text = shift(text, 255 - ord(ch))
         return char(text)
@@ -96,7 +96,7 @@ def check():                                                    # Allows passwor
                 if raw_input('Re-enter password: ') == key:
                     break
                 else:
-                    print "\nPasswords don't match!\n"
+                    print "\nPasswords don't match!"
             for i in range(10):                                 # Nothing too serious, it just hexes the thing 10 times!
                 key = ''.join(hexed(key))
             with open(ploc, 'w') as file:
@@ -151,8 +151,8 @@ def protect(path, mode, key = None):                            # A simple metho
                 data[i] += '\n'
     except TypeError:
         print '\n\tWrong password!'
-        return None
-    if mode == 'e':
+        return 0
+    if mode in ('e', 'rw'):
         with open(path, 'w') as file:
             file.writelines(data)
     elif mode == 'd':
@@ -164,61 +164,53 @@ def write(File = None):                                         # Does the dirty
     key = None
     if not File:
         File = loc + hashed('Day ' + time('%d') + ' (' + months[time('%m')] + ' ' + time('%Y') + ')')
-    if os.path.exists(File) and os.path.getsize(File) != 0:
+    if os.path.exists(File) and os.path.getsize(File) >= 16:
         print '\nFile already exists! Appending to current file...'
         while not key:
-            key = protect(File, 'd')
+            key = protect(File, 'rw')
+            if key == 0:
+                return None
             if not key:
                 print 'A password is required to append to an existing file. Running sequence again...'
-        with open(loc + 'TEMP.tmp', 'r') as file:
-            data = file.readlines()
-        with open(File, 'w') as file:
-            file.writelines(data)
-        os.remove(loc + 'TEMP.tmp')
     elif os.path.exists(File):
         os.remove(File)
-    f = open(File, 'a')
     timestamp = str(datetime.now()).split('.')[0].split(' ')
     data = ['[' + timestamp[0] + '] ' + timestamp[1] + '\n']
     try:
         stuff = raw_input('''\nStart writing... (Press Ctrl+C when you're done!)\n\n\t''')
-        data.append('\t' + stuff)
+        data.append(stuff)
     except KeyboardInterrupt:
         print 'Nothing written! Quitting...'
         protect(File, 'e', key)
         return None
     while True:
         try:
-            stuff = raw_input()
+            stuff = raw_input('\t')                             # Auto-tabbing
             data.append(stuff)
         except KeyboardInterrupt:
             break
-    f.write('\n'.join(data) + '\n\n')
-    f.close()
-    k = None
-    if key:
-        k = key
-        key = None
-    while not key:
-        if k:
-            key = k
+    with open(File, 'a') as file:
+        file.writelines('\n\t'.join(data) + '\n\n')
+    while True:
         key = protect(File, 'e', key)
         if not key:
             print "\nPlease don't interrupt! Your story is insecure! Running sequence again..."
+        else:
+            break
     choice = raw_input('\nSuccessfully written to file! Do you wanna see it (y/n)? ')
     if choice == 'y':
         temp(File, key)
 
-def hashDate(year = None, month = None, day = None):                 # Return a path based on (day,month,year) input
+def hashDate(year = None, month = None, day = None):            # Return a path based on (day,month,year) input
     while True:
         try:
             if not year:
-                year = int(raw_input('\nYear: '))
+                year = raw_input('\nYear: ')
             if not month:
-                month = int(raw_input('\nMonth: '))
+                month = raw_input('\nMonth: ')
             if not day:
-                day = int(raw_input('\nDay: '))
-            date = str(datetime(year, month, day).date()).split('-')
+                day = raw_input('\nDay: ')
+            date = str(datetime(int(year), int(month), int(day)).date()).split('-')
             if date:
                 year = date[0]
                 month = months[date[1]]
@@ -264,7 +256,7 @@ def search():                                                   # Quite an inter
             else:
                 d2 = datetime.strptime(d2, '%Y-%m-%d')
         except ValueError:
-            print 'Oops! Error in input. Try again...'
+            print '\nOops! Error in input. Try again...'
             continue
         break
     delta = (d2 - d1).days
@@ -315,7 +307,7 @@ def search():                                                   # Quite an inter
             ch = int(raw_input('Enter a number to open the corresponding story: '))
             temp(fileData[2][ch - 1])
         except Exception:
-            print 'Oops! Bad input...'
+            print '\nOops! Bad input...\n'
 
 def diary():
     choice = 'y'
@@ -341,7 +333,7 @@ def diary():
                     os.remove(ploc)
                     print 'Login credentials removed!'
                 else:
-                    print "[WARNING] Anyone will be able to see your story if you don't sign out!"
+                    print "\n[WARNING] Anyone will be able to see your story if you don't sign out!"
                     check()
             else:
                 try:
