@@ -40,15 +40,15 @@ def revise():                                       # A rough cleanup of Gutenbe
             for i, char in enumerate(data[::-1]):
                 if ("End of" in char and "Project Gutenberg" in char):
                     break
-            if (len(data) - i - 1) == 0:
+            if (len(data)-i-1) == 0:
                 for i, char in enumerate(data[::-1]):
                     if ("END OF" in char and "PROJECT GUTENBERG" in char):
                         break
-            data = data[: len(data) - i - 1]
+            data = data[:len(data)-i-1]
             for i, char in enumerate(data):         # This has still got issues (due to disorganized stuff in Gutenberg)
                 if 'Produced' in char:
                     break
-            write(out + File, ''.join(data[min(i, char) + 4 :]))
+            write(out + File, ''.join(data[min(i, char)+4:]))
             rename(out + File, out + File[2:])
 
 # Cleanup also requires a checkup on hand to ensure that we don't have garbage stuff
@@ -79,14 +79,14 @@ def scan(rmin = 32, rmax = 127):                    # ASCII letter frequencies i
                 stat += 1
         freq = [freq[i] + values[i] for i in range(rmax)]
         dvalues = cleandict(values)
-        #if not path.exists(out + 'STATS'):
+        #if not path.exists(out + 'STATS'):                     # Use this for individual file-data
         #    mkdir(out + 'STATS')
-        #stats((dvalues, stat),'STATS\\stat-' + File)            # Use this for individual file-data
+        #stats((dvalues, stat),'STATS\\stat-' + File)
     print 'Scanned a total of %d characters (in the given range) from %d files! \n' % (chars, files)
     dfreq = cleandict(freq)
     return (dfreq, chars)
 
-def stats(stuff = None, File = 'STATS-MAIN.txt'):             # Order --> get(), revise(), stats()
+def stats(stuff = None, File = 'STATS-MAIN.txt'):               # Order --> get(), revise(), stats()
     if path.exists(out + File):
         choice = raw_input('\nSTATS file already exists ! Continue? (y/n):')
         if choice is not 'y':

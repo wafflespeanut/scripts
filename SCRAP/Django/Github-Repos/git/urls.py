@@ -20,6 +20,8 @@ from repos import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^time/$',time),url(r'^time/([-+]?\d{1,2}[.]?\d*)/$',time),
-    url(r'^$',views.search_form),url(r'^search/$',views.search),
+    url(r'^time/$', time),
+    url(r'^time/([-+]?\d{1,2}[.]?\d*)/$', time),
+    url(r'^$', views.search_form),
+    url(r'^search/$', views.search),
 ]

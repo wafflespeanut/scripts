@@ -12,10 +12,10 @@ def read(File, blocks = 3):             # Our ciphertext had 3 blocks appended a
         data = file.readlines()
     s = data[0]
     c = len(s) / blocks
-    return [s[i: i + c] for i in range(0, len(s), c)]
+    return [s[i:i+c] for i in range(0, len(s), c)]
 
 def test(data, b = 3):
-    ctext = [(int(data[i: i + 2], 16)) for i in range(0, len(data), 2)]
+    ctext = [(int(data[i:i+2], 16)) for i in range(0, len(data), 2)]
     print "\nCTEXT:", ctext, '\n\nSending ciphertext...'
     rc = send(ctext, b)
     print "Oracle returned: %d\n" % (rc)
@@ -62,7 +62,7 @@ def pad(File = 'CBC.txt', b = 3, l = 5):          # Automated brute-force proces
         for j in range(l):
             p = len(k) / 2 - l + j
             print 'Padding key: %s (%s)' % (p, format(p, '02x').upper())
-            k = [int(k[i: i + 2], 16) if i < 2 * (l - j) else int(k[i: i + 2], 16) ^ p ^ (p + 1) for i in range(0, len(k), 2)]
+            k = [int(k[i:i+2], 16) if i < 2 * (l - j) else int(k[i:i+2], 16) ^ p ^ (p + 1) for i in range(0, len(k), 2)]
             i = l - (j + 1)
             t = k[i]
             k[i] = 0

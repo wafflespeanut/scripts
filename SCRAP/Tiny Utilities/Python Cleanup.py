@@ -68,7 +68,7 @@ def symbols(line):
         elif copy[i] == ',' and copy[i + 1] is not ' ':
             copy[i] += ' '
 
-        elif copy[i] == '{' and copy[i+1] is not '\n':      # Grouped dicts
+        elif copy[i] == '{' and copy[i + 1] is not '\n':      # Grouped dicts
             sp = tab + 4
             copy[i] += '\n' + sp * ' '
             while True:

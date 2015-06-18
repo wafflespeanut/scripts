@@ -8,7 +8,6 @@ key = []                # Key in hex byte strings
 def freq():             # Gathering data generated from a known text corpus
     fread = read('FREQ.txt')
     dfreq = {}
-
     for i in range(256):
         dfreq[format(i, '02x').upper()] = 0
     for i in fread:
@@ -29,12 +28,11 @@ def hexor(c1, c2):
 
 def IC(ls):             # Find the index of coincidences
     data = read()
-    ctext = [data[0][i: i + 2] for i in range(0, len(data[0]), 2)]
+    ctext = [data[0][i:i+2] for i in range(0, len(data[0]), 2)]
     avg = 0
     for k in range(ls):
         s = [ctext[i] for i in range(k, len(ctext), ls)]
         d = {}
-        
         for i in set(ctext):
             d[i] = s.count(i)
         ic = sum([d[i] * (d[i] - 1) for i in d]) / (float(len(s)) * (len(s) - 1))
@@ -61,7 +59,7 @@ def find():                         # Find the possible plaintext suspects - Thi
     data = read()
     d = freq()
     found = []
-    ctext = [data[0][i: i + 2] for i in range(0, len(data[0]), 2)]
+    ctext = [data[0][i:i+2] for i in range(0, len(data[0]), 2)]
     def eng(s):
         potent = []
         for key in d:
@@ -94,7 +92,7 @@ def cipher(ch):         # It deviates from the usual Vigenere in that it XORs he
     if ch == 'e':
         ptext = [format(ord(i), '02x') for i in data[0]]
     elif ch == 'd':
-        ptext = [data[0][i: i + 2] for i in range(0, len(data[0]), 2)]
+        ptext = [data[0][i:i+2] for i in range(0, len(data[0]), 2)]
     else:
         print 'Invalid option!'
         return None
