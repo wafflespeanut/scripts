@@ -126,8 +126,7 @@ def shift(text, shift):                             # Shifts the ASCII value of 
         shiftedText = ''
         for i, ch in enumerate(text):
             shiftChar = ord(ch) + shift
-            while shiftChar > 255:
-                shiftChar -= 255
+            shiftChar = (shiftChar - 255 if shiftChar > 255 else shiftChar)
             shiftedText += chr(shiftChar)
     except TypeError:
         return None
