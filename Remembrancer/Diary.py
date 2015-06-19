@@ -57,7 +57,7 @@ def shift(text, amount):                                         # Shifts the AS
         shiftedText = ''
         for i, ch in enumerate(text):
             shiftChar = ord(ch) + amount
-            while shiftChar > 255:
+            if shiftChar > 255:
                 shiftChar -= 255
             shiftedText += chr(shiftChar)
     except TypeError:

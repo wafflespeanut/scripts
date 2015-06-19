@@ -1,10 +1,12 @@
 ## Remembrancer (v0.3.0)
 
-This is a little project of mine - an utility to remember everyday memories. For now, it puts your stories (with a MD5-hashed filename) in a directory for later viewing. It supports some basic encryption. I've used a simple algorithm to hex and shift the ASCII values in the files, which is just a complex mixup of 256-char Vigenere cipher, along with XOR. It can also detect incorrect passwords.
+This is a little project of mine - an utility to remember everyday memories. For now, it puts your stories (with a MD5-hashed filename) in a directory for later viewing. It supports some basic encryption. I've used a simple algorithm to hex and shift the ASCII values in the files, which is similar to a 256-char Vigenere cipher<sup>[1]</sup>. It can also detect incorrect passwords.
 
 Once stored, it doesn't disturb the original story (unless you play around). It decrypts to a temporary file for viewing, which gets deleted in two seconds. While updating stories, it just appends your story to the previous story.
 
 I've also added a function that hexes the password into a local file, so that instead of typing the password each time you write/view some story, you can save it by signing in. It also supports viewing random stories. And, the cool part - you can search your stories for specific words (between a range of dates). Currently, I'm trying to minimize the time it takes to search. Since Python is high-level, I'm planning to link it to Rust.
+
+<sup>[1]: It's not at all secure, but that's not my goal either. This is just to prevent people from peeking into the stories using text editors. But, if someone's really involved, then he'll be able to crack it in a few days.</sup>
 
 ### Changelog
 
