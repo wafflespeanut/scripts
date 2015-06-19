@@ -77,7 +77,7 @@ def zombify(mode, data, key):                                   # Linking helper
             text = shift(text, 255 - ord(ch))
         return char(text)
 
-def temp(File, key = None):                                     # Uses default notepad to view stuff
+def temp(File, key = None):                                     # Uses default notepad to view the 'temporary' story
     if File == None:
         return None
     if protect(File, 'd', key):
@@ -152,12 +152,12 @@ def protect(path, mode, key = None):                            # A simple metho
     except TypeError:
         print '\n\tWrong password!'
         return 0
-    if mode in ('e', 'rw'):
-        with open(path, 'w') as file:
-            file.writelines(data)
-    elif mode == 'd':
-        with open(loc + 'TEMP.tmp', 'w') as file:
-            file.writelines(data)
+    File = (path if mode in ('e', 'rw') else (loc + 'TEMP.tmp') if mode == 'd' else None)
+    if not File:
+        print 'Wrong mode!'
+        return None
+    with open(File, 'w') as file:
+        file.writelines(data)
     return key
 
 def write(File = None):                                         # Does the dirty writing job
@@ -201,7 +201,7 @@ def write(File = None):                                         # Does the dirty
     if choice == 'y':
         temp(File, key)
 
-def hashDate(year = None, month = None, day = None):            # Return a path based on (day,month,year) input
+def hashDate(year = None, month = None, day = None):            # Return a path based on (day, month, year) input
     while True:
         try:
             if not year:
@@ -287,7 +287,7 @@ def search():                                                   # Quite an inter
             fileData[1].append(occurred)
             fileData[2].append(File)
         if not printed:
-            print 'Progress: %d%s (Found: %d)' % (displayProg, '%', sum(fileData[1]))
+            print 'Progress: %d%s \t(Found: %d)' % (displayProg, '%', sum(fileData[1]))
             printed = True
     r1 = str(d1.date()).split('-')
     r2 = str(d2.date()).split('-')
@@ -342,5 +342,4 @@ def diary():
                     print '\nAh, something bad has happened! Did you do it?'
             choice = raw_input('\nDo something again (y/n)? ')
         except KeyboardInterrupt:
-            print '\nQuitting...'
-            break
+            choice = raw_input('\nInterrupted! Do something again (y/n)? ')
