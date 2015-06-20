@@ -70,7 +70,7 @@ def shift(text, amount):                                         # Shifts the AS
     try:
         shiftedText = ''
         for i, ch in enumerate(text):
-            shiftChar = (ord(ch) + amount) % 255
+            shiftChar = (ord(ch) + amount) % 256
             shiftedText += chr(shiftChar)
     except TypeError:
         return None
@@ -83,7 +83,7 @@ def zombify(mode, data, key):                                   # Linking helper
         text = ''.join(hexed(data))
         return CXOR(shift(text, ch), key)
     elif mode in ('d', 'w'):
-        text = shift(CXOR(data, key), 255 - ch)
+        text = shift(CXOR(data, key), 256 - ch)
         return char(text)
 
 def temp(File, key = None):                                     # Uses default notepad to view the 'temporary' story
@@ -142,12 +142,12 @@ def protect(path, mode, key = None):                            # A simple metho
         return None
     try:
         data = zombify(mode, ''.join(data), key)
+        File = (path if mode in ('e', 'w') else (loc + 'TEMP.tmp') if mode == 'd' else None)
+        with open(File, 'w') as file:
+            file.writelines([data])
     except TypeError:
         print '\n\tWrong password!'
         return 0
-    File = (path if mode in ('e', 'w') else (loc + 'TEMP.tmp') if mode == 'd' else None)
-    with open(File, 'w') as file:
-        file.writelines([data])
     return key
 
 def write(File = None):                                         # Does the dirty writing job
