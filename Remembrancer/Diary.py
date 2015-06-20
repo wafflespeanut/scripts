@@ -52,12 +52,25 @@ def char(text):                                                 # Hex-decoding f
     except TypeError:
         return None
 
+def CXOR(text1, text2):                                         # Byte-wise XOR
+    def xor(char1, char2):
+        return chr(ord(char1) ^ ord(char2))
+    l = l1 = len(text1)
+    l2 = len(text2)
+    if l2 > l1:
+        l1, l2 = l2, l1
+        text1, text2 = text2, text1
+    total = l1 / l2
+    extra = l1 % l2
+    balance = total * text2 + (text2[:extra] if extra else '')
+    out = [xor(balance[i], text1[i]) for i in range(l)]
+    return ''.join(out)
+
 def shift(text, amount):                                         # Shifts the ASCII value of the chars (Vigenere cipher? Yep!)
     try:
         shiftedText = ''
         for i, ch in enumerate(text):
-            shiftChar = ord(ch) + amount
-            shiftChar = (shiftChar - 255 if shiftChar > 255 else shiftChar)
+            shiftChar = (ord(ch) + amount) % 255
             shiftedText += chr(shiftChar)
     except TypeError:
         return None
@@ -65,15 +78,12 @@ def shift(text, amount):                                         # Shifts the AS
 
 def zombify(mode, data, key):                                   # Linking helper function
     hexedKey = ''.join(hexed(key))
-    text = data
+    ch = sum([ord(i) for i in hexedKey])
     if mode == 'e':
         text = ''.join(hexed(data))
-        for ch in hexedKey:
-            text = shift(text, ord(ch))
-        return text
-    elif mode in ('d', 'rw'):
-        for ch in hexedKey:
-            text = shift(text, 255 - ord(ch))
+        return CXOR(shift(text, ch), key)
+    elif mode in ('d', 'w'):
+        text = shift(CXOR(data, key), 255 - ch)
         return char(text)
 
 def temp(File, key = None):                                     # Uses default notepad to view the 'temporary' story
@@ -127,36 +137,17 @@ def protect(path, mode, key = None):                            # A simple metho
         return False
     with open(path, 'r') as file:
         data = file.readlines()
-    if len(data) == 0:
+    if not len(data):
         print 'Nothing in file!'
         return None
     try:
-        for i in range(len(data)):
-            if data[i] == '\n' or data[i] == '\r\n':            # The '\r\n' thing is for newline in linux-based OS
-                i += 1
-                continue
-            if data[i][-2:] == '\r\n':
-                data[i] = zombify(mode, str(data[i][:-2]), key)
-                newline = True
-            elif data[i][-1] == '\n':
-                data[i] = zombify(mode, str(data[i][:-1]), key)
-                newline = True
-            else:
-                data[i] = zombify(mode, str(data[i]), key)
-                newline = False
-            if newline and 'bin' in ploc:
-                data[i] += '\r\n'
-            elif newline:
-                data[i] += '\n'
+        data = zombify(mode, ''.join(data), key)
     except TypeError:
         print '\n\tWrong password!'
         return 0
-    File = (path if mode in ('e', 'rw') else (loc + 'TEMP.tmp') if mode == 'd' else None)
-    if not File:
-        print 'Wrong mode!'
-        return None
+    File = (path if mode in ('e', 'w') else (loc + 'TEMP.tmp') if mode == 'd' else None)
     with open(File, 'w') as file:
-        file.writelines(data)
+        file.writelines([data])
     return key
 
 def write(File = None):                                         # Does the dirty writing job
@@ -166,7 +157,7 @@ def write(File = None):                                         # Does the dirty
     if os.path.exists(File) and os.path.getsize(File) >= 16:
         print '\nFile already exists! Appending to current file...'
         while not key:
-            key = protect(File, 'rw')
+            key = protect(File, 'w')
             if key == 0:
                 return None
             if not key:

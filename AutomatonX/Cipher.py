@@ -8,31 +8,19 @@ def sieve(n):                                       # Generates a list of primes
                 primes[j] = False
     return [prime for prime, index in enumerate(primes) if index]
 
-def CXOR(text, key):                                # Quite useful for XOR'ing bulk text & key
-    def xor(char1, char2):              # XORs two characters
+def CXOR(text1, text2):                             # Byte-wise XOR
+    def xor(char1, char2):
         return chr(ord(char1) ^ ord(char2))
-    i = 0
-    j = 0
-    result = ""
-    while i < len(text):                # if len(key) < len(text)
-        if i < len(key):
-            result += xor(text[i], key[j])
-        else:
-            j = 0
-            result += xor(text[i], key[j])
-        i += 1
-        j += 1
-    i = 0
-    j = 0
-    while i < len(key):                 # if len(text) < len(key)
-        if i < len(text):
-            result = result[:j] + xor(text[j], key[i]) + result[j+1:]
-        else:
-            j = 0
-            result = result[:j] + xor(text[j], key[i]) + result[j+1:]
-        i += 1
-        j += 1
-    return result
+    l = l1 = len(text1)
+    l2 = len(text2)
+    if l2 > l1:
+        l1, l2 = l2, l1
+        text1, text2 = text2, text1
+    total = l1 / l2
+    extra = l1 % l2
+    balance = total * text2 + (text2[:extra] if extra else '')
+    out = [xor(balance[i], text1[i]) for i in range(l)]
+    return ''.join(out)
 
 def hexed(text):                                    # Hexing function
     return map(lambda i:
