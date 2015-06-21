@@ -134,9 +134,7 @@
 
 			if (eng.value == 0) {
 				document.getElementById('dhide').style.display = 'none';
-			}
-
-			else {
+			} else {
 				document.getElementById('dhide').style.display = 'block';
 			}
 
@@ -153,9 +151,7 @@
 				document.getElementById('etu').value ='lbf';
 				document.getElementById('sfcu').value = 'lb/lbf-hr';
 				document.getElementById('N').value = 4;
-			}
-
-			else if (eng.value == 2) {
+			} else if (eng.value == 2) {
 				location.href = '#data';
 				document.getElementById('load').value = 'Power Loading';
 				document.getElementById('flight').value = 0.15;
@@ -240,9 +236,7 @@
 
 			if (i.value == 0) {
 				rf = parseFloat(document.getElementById('flight').value);
-			}
-
-			else {
+			} else {
 				rf = 0;
 			}
 
@@ -253,9 +247,7 @@
 			if (eng.value == 1) {
 				t = w0 * tl * 9.81 * 1.2;
 				document.getElementById('T1').value = t / (4.448 * n);
-			}
-
-			else {
+			} else {
 				t = w0 * tl * 1.2;
 				document.getElementById('T1').value = t / n;
 			}
@@ -264,19 +256,13 @@
 
 				if (eng.value == 1) {
 					tc = TE.value * 4.448 * n * Math.pow((atmos(ca)[2] / d0), 1.2);
-				}
-
-				else {
+				} else {
 					tc = TE.value * n * Math.pow((atmos(ca)[2] / d0), 1.2);
-				}
-
-				document.getElementById('TCR1').value = tc / n;
+				} document.getElementById('TCR1').value = tc / n;
 
 				if (eng.value == 1) {
 					wf = (sfc.value * tc * r * 1.2) / (cv * 9.81);
-				}
-
-				else {
+				} else {
 					wf = (sfc.value * tc * r * 1.2 * 0.4535924) / (cv);
 				}
 
@@ -289,33 +275,23 @@
 
 				if (eng.value == 1) {
 					tc = TE.value * 4.448 * n * Math.pow((atmos(ca)[2] / d0), 1.2);
-				}
-
-				else {
+				} else {
 					tc = TE.value * n * Math.pow((atmos(ca)[2] / d0), 1.2);
-				}
-
-				document.getElementById('TCR1').value = tc / n;
+				} document.getElementById('TCR1').value = tc / n;
 			}
 
 			sfc.onkeyup = function() {
 				if (eng.value == 1) {
 					wf = (sfc.value * tc * r * 1.2) / (cv * 9.81);
-				}
-
-				else {
+				} else {
 					wf = (sfc.value * tc * r * 1.2 * 0.4535924) / cv;
-				}
-
-				document.getElementById('RF1').value = wf / w0;
+				} document.getElementById('RF1').value = wf / w0;
 			}
 
 			WPP.onkeyup = function() {
 				wpp = WPP.value * 0.4535924 * n;
 				document.getElementById('RE1').value = re0 - wpp / w0;
-			}
-
-			i.value = parseFloat(i.value) + 1;
+			} i.value = parseFloat(i.value) + 1;
 		}
 
 		</script>
