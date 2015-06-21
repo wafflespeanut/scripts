@@ -1,8 +1,8 @@
 import os
+from random import choice as rchoice
 from getpass import getpass
 from time import strftime as time
 from datetime import datetime, timedelta
-from random import choice
 from hashlib import md5, sha256
 
 if '/bin' in os.path.defpath:
@@ -102,10 +102,9 @@ def check():                                                    # Allows passwor
             hashedKey = hashed(sha256, key)
             with open(ploc, 'w') as file:
                 file.writelines([hashedKey])
-            print 'Login credentials have been saved locally!'
-            return key
+            print '\nLogin credentials have been saved locally!'
         except KeyboardInterrupt:
-            print "Couldn't store login credentials!"
+            print "\nCouldn't store login credentials!"
             return None
     else:
         try:
@@ -126,10 +125,9 @@ def protect(path, mode, key):                                   # A simple metho
     if not len(data):
         print 'Nothing in file!'
         return key
-    try:
-        data = zombify(mode, ''.join(data), key)
-    except TypeError:
-        print '\n\tWrong password!'                             # Indicates failure while decrypting
+    data = zombify(mode, ''.join(data), key)
+    if not data:
+        print '\n\tWrong password!'                         # Indicates failure while decrypting
         return None
     File = (path if mode in ('e', 'w') else (loc + 'TEMP.tmp') if mode == 'd' else None)
     with open(File, 'w') as file:
@@ -143,10 +141,11 @@ def write(key, File = None):                                    # Does the dirty
             return key
         File = loc + date
     if os.path.exists(File) and os.path.getsize(File):
-        print '\nFile already exists! Appending to current file...'
         key = protect(File, 'w', key)                           # Intentionally decrypting the original file
-    if not key:                                                 # It's an easy workaround to modify your original story
-        return None
+        if not key:                                             # It's an easy workaround to modify your original story
+            return None
+        else:                                                 
+            print '\nFile already exists! Appending to current file...'
     timestamp = str(datetime.now()).split('.')[0].split(' ')
     data = ['[' + timestamp[0] + '] ' + timestamp[1] + '\n']
     try:
@@ -198,19 +197,16 @@ def hashDate(year = None, month = None, day = None):            # Return a path 
 def random(key):                                                # Useful only when you have a lot of stories (obviously)
     stories = len(os.listdir(loc))
     while True:
-        ch = choice(range(stories))
+        ch = rchoice(range(stories))
         d = datetime(2014, 12, 13).date() + timedelta(days = ch)
         fileName = hashDate(d.year, d.month, d.day)
         if fileName:
             break
     d = str(d).split('-')
-    print 'Choosing your story from %s %s, %s...' % (months[d[1]], d[2], d[0])
+    print '\nChoosing your story from %s %s, %s...' % (months[d[1]], d[2], d[0])
     return temp(fileName, key)
 
-def search():                                                   # Quite an interesting function for searching
-    key = check()
-    if not key:
-        return None
+def search(key):                                                # Quite an interesting function for searching
     word = raw_input("Enter a word: ")
     choice = int(raw_input("\n\t1. Search everything!\n\t2. Search between two dates\n\nChoice: "))
     if choice == 1:
@@ -279,7 +275,7 @@ def search():                                                   # Quite an inter
         except Exception:
             print '\nOops! Bad input...\n'
 
-def diary():
+if __name__ == '__main__':
     choice = 'y'
     key = None
     while choice is 'y':
@@ -296,13 +292,13 @@ def diary():
             if os.path.exists(ploc):
                 print '\t\t 0: Sign out'
             choice = raw_input('\nChoice: ')
-            ch = ['write(key)', 'random(key)', 'temp(hashDate(), key)', 'write(key, hashDate())', 'search()']
+            ch = ['write(key)', 'random(key)', 'temp(hashDate(), key)', 'write(key, hashDate())', 'search(key)']
             if choice == '0' and os.path.exists(ploc):
                 os.remove(ploc)
                 print 'Login credentials have been removed!'
                 key = None
             else:
-                if not key:                                     # Remembers the password throughout the session
+                while not key:                                  # Remembers the password throughout the session
                     key = check()                               # But, you have to sign-in for each session
                 try:
                     key = eval(ch[int(choice)-1])
