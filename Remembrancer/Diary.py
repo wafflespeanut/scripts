@@ -1,17 +1,15 @@
-import os, sys, subprocess
-from time import sleep
+import os
+from getpass import getpass
 from time import strftime as time
 from datetime import datetime, timedelta
 from random import choice
-from hashlib import md5
-
-# Modified for my Ubuntu/Windows-8 dual-boot...
+from hashlib import md5, sha256
 
 if '/bin' in os.path.defpath:
-    ploc = '/media/Windows/Users/Waffles Crazy Peanut/AppData/Local/SYSTEM.DAT'
-    loc = '/media/Windows/Users/Waffles Crazy Peanut/Desktop/Dropbox/Diary/'
+    ploc = os.path.expanduser('~') + '/.diary'
+    loc = os.path.expanduser('~/Desktop') + '/Desktop/Dropbox/Diary/'
 else:
-    ploc = os.path.expanduser('~') + '\\AppData\\Local\\SYSTEM.DAT'         # Password location
+    ploc = os.path.expanduser('~') + '\\AppData\\Local\\TEMP.DAT'           # Config location
     loc = os.path.expanduser('~') + '\\Desktop\\Dropbox\\Diary\\'           # Storage location
 
 months = {
@@ -29,19 +27,12 @@ months = {
     '12': 'December'
 }
 
-def startfile(File):                                            # Platform-independent viewer
-    if sys.platform == "win32":
-        subprocess.Popen(["notepad", File])
-    else:
-        app = "open" if sys.platform is "darwin" else "xdg-open"
-        subprocess.call([app, File])
-
 def hexed(text):                                                # Hexing function
     return map(lambda i:
         format(ord(i), '02x'), list(text))
 
-def hashed(stuff):                                              # MD5 hashing
-    hashObject = md5()
+def hashed(hashFunction, stuff):                                # Hashing function (could be MD5 or SHA-256)
+    hashObject = hashFunction()
     hashObject.update(stuff)
     return hashObject.hexdigest()
 
@@ -64,7 +55,7 @@ def CXOR(text, key):                                            # Byte-wise XOR
             j = 0
     return ''.join(out)
 
-def shift(text, amount):                                         # Shifts the ASCII value of the chars (Vigenere cipher? Yep!)
+def shift(text, amount):                                        # Shifts the ASCII value of the chars (Vigenere cipher? Yep!)
     try:
         shiftedText = ''
         for i, ch in enumerate(text):
@@ -84,110 +75,100 @@ def zombify(mode, data, key):                                   # Linking helper
         text = shift(CXOR(data, key), 256 - ch)
         return char(text)
 
-def temp(File, key = None):                                     # Uses default notepad to view the 'temporary' story
-    if File == None:
-        return None
+def temp(File, key):                                            # Decrypts and prints the story on the screen
     if protect(File, 'd', key):
-        startfile(loc + 'TEMP.tmp')
-        sleep(2)
+        with open(loc + 'TEMP.tmp', 'r') as file:
+            data = file.readlines()
+        print "\n<----- START OF STORY ----->\n"
+        print ''.join(data)
+        print "<----- END OF STORY ----->"
         os.remove(loc + 'TEMP.tmp')
+        return key
+    else:
+        return None
 
 def check():                                                    # Allows password to be stored locally
     if not os.path.exists(ploc):
         try:
             while True:
-                key = raw_input('\nEnter password: ')
+                key = getpass('\nEnter your password: ')
                 if len(key) < 8:
                     print 'Choose a strong password! (at least 8 chars)'
                     continue
-                if raw_input('Re-enter password: ') == key:
+                if getpass('Re-enter the password: ') == key:
                     break
                 else:
                     print "\nPasswords don't match!"
-            for i in range(10):                                 # Nothing too serious, it just hexes the thing 10 times!
-                key = ''.join(hexed(key))
+            hashedKey = hashed(sha256, key)
             with open(ploc, 'w') as file:
-                file.writelines(key)
+                file.writelines([hashedKey])
             print 'Login credentials have been saved locally!'
+            return key
         except KeyboardInterrupt:
-            print 'Login credentials failed!'
+            print "Couldn't store login credentials!"
             return None
     else:
-        with open(ploc, 'r') as file:
-            key = file.readlines()
-        if key:
-            key = key[0]
-        else:
+        try:
+            with open(ploc, 'r') as file:
+                hashedKey = file.readlines()[0]
+            key = getpass('\nEnter your password to continue: ')
+            if not hashedKey == hashed(sha256, key):            # Fails if the password doesn't match with the credential
+                print 'Wrong password!'
+                return None
+        except KeyboardInterrupt:
+            print 'Failed to authenticate!'
             return None
-        for i in range(10):
-            key = char(key)
     return key
 
-def protect(path, mode, key = None):                            # A simple method which shifts and turns it to hex!
-    if os.path.exists(ploc):
-        key = check()
-    try:
-        if not key:
-            key = raw_input('\nEnter password for your story: ')
-        while len(key) < 8:
-            key = raw_input('\nEnter password of at least 8 chars: ')
-    except KeyboardInterrupt:
-        return False
+def protect(path, mode, key):                                   # A simple method which shifts and turns it to hex!
     with open(path, 'r') as file:
         data = file.readlines()
     if not len(data):
         print 'Nothing in file!'
-        return None
+        return key
     try:
         data = zombify(mode, ''.join(data), key)
-        File = (path if mode in ('e', 'w') else (loc + 'TEMP.tmp') if mode == 'd' else None)
-        with open(File, 'w') as file:
-            file.writelines([data])
     except TypeError:
-        print '\n\tWrong password!'
-        return 0
+        print '\n\tWrong password!'                             # Indicates failure while decrypting
+        return None
+    File = (path if mode in ('e', 'w') else (loc + 'TEMP.tmp') if mode == 'd' else None)
+    with open(File, 'w') as file:
+        file.writelines([data])
     return key
 
-def write(File = None):                                         # Does the dirty writing job
-    key = None
+def write(key, File = None):                                    # Does the dirty writing job
     if not File:
-        File = loc + hashed('Day ' + time('%d') + ' (' + months[time('%m')] + ' ' + time('%Y') + ')')
-    if os.path.exists(File) and os.path.getsize(File) >= 16:
+        date = hashed(md5, 'Day ' + time('%d') + ' (' + months[time('%m')] + ' ' + time('%Y') + ')')
+        if not date:
+            return key
+        File = loc + date
+    if os.path.exists(File) and os.path.getsize(File):
         print '\nFile already exists! Appending to current file...'
-        while not key:
-            key = protect(File, 'w')
-            if key == 0:
-                return None
-            if not key:
-                print 'A password is required to append to an existing file. Running sequence again...'
-    elif os.path.exists(File):
-        os.remove(File)
+        key = protect(File, 'w', key)                           # Intentionally decrypting the original file
+    if not key:                                                 # It's an easy workaround to modify your original story
+        return None
     timestamp = str(datetime.now()).split('.')[0].split(' ')
     data = ['[' + timestamp[0] + '] ' + timestamp[1] + '\n']
     try:
-        stuff = raw_input('''\nStart writing... (Press Ctrl+C when you're done!)\n\n\t''')
+        stuff = raw_input("\nStart writing... (Press Ctrl+C when you're done!)\n\n\t")
         data.append(stuff)
     except KeyboardInterrupt:
         print 'Nothing written! Quitting...'
-        protect(File, 'e', key)
-        return None
+        key = protect(File, 'e', key)
+        return key
     while True:
         try:
-            stuff = raw_input('\t')                             # Auto-tabbing
+            stuff = raw_input('\t')                             # Auto-tabbing of paragraphs (for each <RETURN>)
             data.append(stuff)
         except KeyboardInterrupt:
             break
     with open(File, 'a') as file:
         file.writelines('\n\t'.join(data) + '\n\n')
-    while True:
-        key = protect(File, 'e', key)
-        if not key:
-            print "\nPlease don't interrupt! Your story is insecure! Running sequence again..."
-        else:
-            break
-    choice = raw_input('\nSuccessfully written to file! Do you wanna see it (y/n)? ')
-    if choice == 'y':
+    key = protect(File, 'e', key)
+    ch = raw_input('\nSuccessfully written to file! Do you wanna see it (y/n)? ')
+    if ch == 'y':
         temp(File, key)
+    return key
 
 def hashDate(year = None, month = None, day = None):            # Return a path based on (day, month, year) input
     while True:
@@ -208,27 +189,28 @@ def hashDate(year = None, month = None, day = None):            # Return a path 
             print "An error occurred:", err
             year, month, day = None, None, None
             continue
-    fileName = loc + hashed('Day ' + day + ' (' + month + ' ' + year + ')')
+    fileName = loc + hashed(md5, 'Day ' + day + ' (' + month + ' ' + year + ')')
     if not os.path.exists(fileName):
         print '\nNo stories on {} {}, {}.'.format(month, day, year)
         return None
     return fileName
 
-def random():                                                   # Useful only when you have a lot of stories (obviously)
-    for i in range(128):                                        # 128 rounds of pseudo-randomness!
-        fileName = choice(os.listdir(loc))
-    print 'Choosing a story...'
-    temp(loc + fileName)
+def random(key):                                                # Useful only when you have a lot of stories (obviously)
+    stories = len(os.listdir(loc))
+    while True:
+        ch = choice(range(stories))
+        d = datetime(2014, 12, 13).date() + timedelta(days = ch)
+        fileName = hashDate(d.year, d.month, d.day)
+        if fileName:
+            break
+    d = str(d).split('-')
+    print 'Choosing your story from %s %s, %s...' % (months[d[1]], d[2], d[0])
+    return temp(fileName, key)
 
 def search():                                                   # Quite an interesting function for searching
-    if os.path.exists(ploc):
-        k = raw_input('Enter your password to continue: ')
-        if not k == check():
-            print '\n\tWrong password!'
-            return None
-    else:
-        print 'You must sign-in to continue...'                 # Just for security...
-        key = check()
+    key = check()
+    if not key:
+        return None
     word = raw_input("Enter a word: ")
     choice = int(raw_input("\n\t1. Search everything!\n\t2. Search between two dates\n\nChoice: "))
     if choice == 1:
@@ -263,7 +245,7 @@ def search():                                                   # Quite an inter
             displayProg = progress
             printed = False
         occurred = 0
-        if protect(File, 'd'):
+        if protect(File, 'd', key):
             with open(loc + 'TEMP.tmp', 'r') as file:
                 data = file.readlines()
             occurred = ''.join(data).count(word)
@@ -293,12 +275,13 @@ def search():                                                   # Quite an inter
     while fileData[2]:
         try:
             ch = int(raw_input('Enter a number to open the corresponding story: '))
-            temp(fileData[2][ch - 1])
+            temp(fileData[2][ch-1], key)
         except Exception:
             print '\nOops! Bad input...\n'
 
 def diary():
     choice = 'y'
+    key = None
     while choice is 'y':
         if os.path.exists(loc + 'TEMP.tmp'):
             os.remove(loc + 'TEMP.tmp')
@@ -308,24 +291,21 @@ def diary():
                 " 2: Random story",
                 " 3: View the story of someday",
                 " 4. Write the story for someday you've missed",
-                " 5. Search your stories")
+                " 5. Search your stories",)
             print '\n\t\t'.join(choices)
             if os.path.exists(ploc):
                 print '\t\t 0: Sign out'
-            else:
-                print '\t\t 0: Sign in'
             choice = raw_input('\nChoice: ')
-            ch = ['write()', 'random()', 'temp(hashDate())', 'write(hashDate())', 'search()']
-            if choice == '0':
-                if os.path.exists(ploc):
-                    os.remove(ploc)
-                    print 'Login credentials removed!'
-                else:
-                    print "\n[WARNING] Anyone will be able to see your story if you don't sign out!"
-                    check()
+            ch = ['write(key)', 'random(key)', 'temp(hashDate(), key)', 'write(key, hashDate())', 'search()']
+            if choice == '0' and os.path.exists(ploc):
+                os.remove(ploc)
+                print 'Login credentials have been removed!'
+                key = None
             else:
+                if not key:                                     # Remembers the password throughout the session
+                    key = check()                               # But, you have to sign-in for each session
                 try:
-                    eval(ch[int(choice)-1])
+                    key = eval(ch[int(choice)-1])
                 except Exception:
                     print '\nAh, something bad has happened! Did you do it?'
             choice = raw_input('\nDo something again (y/n)? ')
