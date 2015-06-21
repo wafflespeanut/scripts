@@ -52,18 +52,16 @@ def char(text):                                                 # Hex-decoding f
     except TypeError:
         return None
 
-def CXOR(text1, text2):                                         # Byte-wise XOR
+def CXOR(text, key):                                            # Byte-wise XOR
     def xor(char1, char2):
         return chr(ord(char1) ^ ord(char2))
-    l = l1 = len(text1)
-    l2 = len(text2)
-    if l2 > l1:
-        l1, l2 = l2, l1
-        text1, text2 = text2, text1
-    total = l1 / l2
-    extra = l1 % l2
-    balance = total * text2 + (text2[:extra] if extra else '')
-    out = [xor(balance[i], text1[i]) for i in range(l)]
+    out = ''
+    i, j = 0, 0
+    while i < len(text):
+        out += xor(text[i], key[j])
+        (i, j) = (i + 1, j + 1)
+        if j == len(key):
+            j = 0
     return ''.join(out)
 
 def shift(text, amount):                                         # Shifts the ASCII value of the chars (Vigenere cipher? Yep!)
