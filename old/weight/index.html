@@ -31,7 +31,7 @@
 
 		<ul><p><li>This program is used for iterating the "weights" of a selected aircraft so that the sum of payload, crew, engine, fuel & empty weights match the net weight of the aircraft. Since both empty & net weights are unknowns, iteration is the only approach to the solution.</li></p>
 
-		<p><li>The script just displays the iteration results. If you wanna print them out, use the <a href="https://github.com/Wafflespeanut/Python/blob/master/Scrap/Course/ADP - Weight Estimation.py">Python script</a> instead. Begin by choosing your engine type, fill up the boxes with your <s>assumption</s> data and <strong>ITERATE!</strong> (make sure you check the units). Units are based on the data <a href="http://www.jet-engine.net">available here</a>.</li></p></ul><br>
+		<p><li>The script just displays the iteration results. If you wanna print them out, use the <a href="https://github.com/Wafflespeanut/Python/blob/master/SCRAP/Course/ADP - Weight Estimation.py">Python script</a> instead. Begin by choosing your engine type, fill up the boxes with your <s>assumption</s> data and <strong>ITERATE!</strong> (make sure you check the units). Units are based on the data <a href="http://www.jet-engine.net">available here</a>.</li></p></ul><br>
 
 		<form class="demo" action="form_action.asp">
 		<center><strong><p style="font-size: 20px; font-family: 'Courier New'""">Type of Engine:
@@ -134,7 +134,9 @@
 
 			if (eng.value == 0) {
 				document.getElementById('dhide').style.display = 'none';
-			} else {
+			}
+
+			else {
 				document.getElementById('dhide').style.display = 'block';
 			}
 
@@ -151,7 +153,9 @@
 				document.getElementById('etu').value ='lbf';
 				document.getElementById('sfcu').value = 'lb/lbf-hr';
 				document.getElementById('N').value = 4;
-			} else if (eng.value == 2) {
+			}
+
+			else if (eng.value == 2) {
 				location.href = '#data';
 				document.getElementById('load').value = 'Power Loading';
 				document.getElementById('flight').value = 0.15;
@@ -236,7 +240,9 @@
 
 			if (i.value == 0) {
 				rf = parseFloat(document.getElementById('flight').value);
-			} else {
+			}
+
+			else {
 				rf = 0;
 			}
 
@@ -247,7 +253,9 @@
 			if (eng.value == 1) {
 				t = w0 * tl * 9.81 * 1.2;
 				document.getElementById('T1').value = t / (4.448 * n);
-			} else {
+			}
+
+			else {
 				t = w0 * tl * 1.2;
 				document.getElementById('T1').value = t / n;
 			}
@@ -256,13 +264,19 @@
 
 				if (eng.value == 1) {
 					tc = TE.value * 4.448 * n * Math.pow((atmos(ca)[2] / d0), 1.2);
-				} else {
+				}
+
+				else {
 					tc = TE.value * n * Math.pow((atmos(ca)[2] / d0), 1.2);
-				} document.getElementById('TCR1').value = tc / n;
+				}
+
+				document.getElementById('TCR1').value = tc / n;
 
 				if (eng.value == 1) {
 					wf = (sfc.value * tc * r * 1.2) / (cv * 9.81);
-				} else {
+				}
+
+				else {
 					wf = (sfc.value * tc * r * 1.2 * 0.4535924) / (cv);
 				}
 
@@ -275,23 +289,33 @@
 
 				if (eng.value == 1) {
 					tc = TE.value * 4.448 * n * Math.pow((atmos(ca)[2] / d0), 1.2);
-				} else {
+				}
+
+				else {
 					tc = TE.value * n * Math.pow((atmos(ca)[2] / d0), 1.2);
-				} document.getElementById('TCR1').value = tc / n;
+				}
+
+				document.getElementById('TCR1').value = tc / n;
 			}
 
 			sfc.onkeyup = function() {
 				if (eng.value == 1) {
 					wf = (sfc.value * tc * r * 1.2) / (cv * 9.81);
-				} else {
+				}
+
+				else {
 					wf = (sfc.value * tc * r * 1.2 * 0.4535924) / cv;
-				} document.getElementById('RF1').value = wf / w0;
+				}
+
+				document.getElementById('RF1').value = wf / w0;
 			}
 
 			WPP.onkeyup = function() {
 				wpp = WPP.value * 0.4535924 * n;
 				document.getElementById('RE1').value = re0 - wpp / w0;
-			} i.value = parseFloat(i.value) + 1;
+			}
+
+			i.value = parseFloat(i.value) + 1;
 		}
 
 		</script>
