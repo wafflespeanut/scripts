@@ -1,4 +1,4 @@
-## Memoir (v0.3.0)
+## Memoir (v0.4.0)
 
 This is a little project of mine - an utility to remember everyday memories. For now, it puts your stories (with a MD5-hashed filename) in a directory for later viewing. It supports some basic encryption. I've used a simple algorithm to hex and shift the ASCII values in the files, which is similar to a *hexed* 256-char Caesar cipher with a byte-wise XOR<sup>[1]</sup>. It can also detect incorrect passwords.
 
@@ -10,7 +10,7 @@ There's a SHA-256 hashing function which hashes the password into a local file, 
 
 ### Changelog
 
-v0.3.1: Memoir
+v0.4.0: Memoir
 - Fixed a major flaw in the cipher. All these days, this has been consuming more time & memory. It's now been updated to a mixup of 256-char Caesar cipher and byte-wise XOR.
 - No longer depends on text editors. It just prints the stories on the screen.
 - No longer stores passwords, but hashes them (with SHA-256) to allow authentication for a particular session (which means you have to sign-in at the start of every session). While local password storage appeals our minds, it's a *really* bad move!
