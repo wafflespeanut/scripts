@@ -2,7 +2,7 @@
 
 Well, this is my cipher, built completely for (my own) learning purposes. For a few months, I've been learning Python by finding different ways of getting into the cipher, and patching the algorithm so that it gets stronger every time.
 
-It's quite straight-forward (should be easy to understand with my comments). And, it's built by a lot of helper functions, for improving readability. I've written a [blog post](http://wp.me/p3OCmi-qT) on how one of its ancestors (v1.4 "Ranger") works. And, there's a [javascript version](http://wafflespeanut.github.io/Sentinel/) of it in my Github page!
+It's quite straight-forward (should be easy to understand with my comments). And, it's built by a lot of helper functions, for improving readability. I've written a [blog post](http://wp.me/p3OCmi-qT) on how one of its ancestors (v0.1.4 "Ranger") works. And, there's a [javascript version](http://wafflespeanut.github.io/old/sentinel/) of it in my Github page!
 
 ### How it works?
 
@@ -16,9 +16,9 @@ It's quite straight-forward (should be easy to understand with my comments). And
 
 This isn't entirely intrusion-free (I know!). There could be a hole somewhere. But, whenever I come across one, I'll try to patch it ASAP...
 
-### Notes
+### Note: I don't update this anymore!
 
-I had a course in cryptography lately. Only then I realized that whatever I've done is one of the most *stupidest* encryption scheme that anyone could possibly imagine...
+I had a course in cryptography lately. Only then I realized that whatever I've done is one of the most *stupidest* encryption scheme that anyone could possibly imagine. I wanted something nice, not something that'd consume a lot of time & memory...
 
 ### Changelog
 
