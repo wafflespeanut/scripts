@@ -1,0 +1,3 @@
+### Spoler Alert!
+
+Well, these are my (rather dull) approaches to "Project Euler" problems. You can check out what I've done, but I suggest you try things by yourself...

@@ -1,0 +1,1 @@
+### Dependancies for connecting your Firefox OS mobile to Ubuntu
