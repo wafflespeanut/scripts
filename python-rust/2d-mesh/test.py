@@ -1,22 +1,38 @@
 import matplotlib.pyplot as plt
 
-def generate():
+def generate(xmax = 1, ymax = 1):       # draw a closed structure
     plt.plot()
     ax = plt.gca()
-    ax.set_xlim([0, 5])
-    ax.set_ylim([0, 5])
+    ax.set_xlim([0, xmax])
+    ax.set_ylim([0, ymax])
     points = plt.ginput(0)
+    while intersectionExists(points):
+        points = plt.ginput(0)
+    points.append(points[0])    # form a closed structure
     x, y = zip(*points)
     line = plt.plot(x, y)
     ax.figure.canvas.draw()
     return points
 
-def approxEqual(a, b, tol = 1e-10):         # check the actual difference with the allowable relative difference
-    # because, one can't check the equality of two floats, due to the erroneous internal representation of floats
-    return abs(a - b) <= tol
+def intersectionExists(points):         # check whether points intersect in a list of point tuples
+    if not points:
+        print 'No input! Try again...'
+        return True
+    i, j = 0, 0
+    while i < len(points) - 1:
+        line1 = points[i], points[i+1]
+        j = i + 2
+        while j < len(points) - 1:
+            line2 = points[j], points[j+1]
+            if intersects(line1, line2):
+                print 'Line intersection detected! Try again...'
+                return True
+            j += 1
+        i += 2
+    return False
 
-# assert 5.5001 - 5.0 != 0.5001                 # crap!
-# assert approxEqual(5.5001 - 5.0, 0.5001)      # works!
+def approxEqual(a, b, tol = 1e-10):     # check the difference within a tolerance instead of a direct equality
+    return abs(a - b) <= tol
 
 def intersects(line1, line2, point = False):
     # using Cramer's rule for the parametric forms, with 0 <= (s, t) <= 1
