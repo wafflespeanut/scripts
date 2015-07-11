@@ -1,18 +1,25 @@
 import matplotlib.pyplot as plt
 
+image = "target/image.png"
+dataFile = "target/sample"              # Rust's input sample (for testing)
+
 def generate(xmax = 1, ymax = 1):       # draw a closed structure
     plt.plot()
     ax = plt.gca()
     ax.set_xlim([0, xmax])
     ax.set_ylim([0, ymax])
+    img = plt.imread(image)
+    ax.imshow(img, extent = [0, xmax, 0, ymax], aspect = 'auto')
     points = plt.ginput(0)
     while intersectionExists(points):
         points = plt.ginput(0)
-    points.append(points[0])    # form a closed structure
+    points.append(points[0])            # form a closed structure
     x, y = zip(*points)
     line = plt.plot(x, y)
     ax.figure.canvas.draw()
-    return points
+    data = [str(x) + '\t' + str(y) for x, y in points]
+    with open(dataFile, 'w') as file:
+        file.writelines('\n'.join(data))
 
 def intersectionExists(points):         # check whether points intersect in a list of point tuples
     if not points:
