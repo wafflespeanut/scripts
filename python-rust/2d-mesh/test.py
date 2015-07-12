@@ -85,7 +85,7 @@ def intersectionExists(points):         # check whether points intersect in a li
 def approxEqual(a, b, tol = 1e-10):     # check the difference within a tolerance instead of a direct equality
     return abs(a - b) <= tol
 
-def intersects(line1, line2, point = False):
+def intersects(line1, line2, point = False):    # find line intersection (along with point, if required)
     # using Cramer's rule for the parametric forms, with 0 <= (s, t) <= 1
     # l1(t) = (x1, y1)*(1-t) + (x2, y2)*t
     # l2(s) = (u1, v1)*(1-s) + (u2, v2)*s

@@ -1,6 +1,7 @@
 use std::fmt;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+mod triangle;
 
 struct Point {
     x: f64,
