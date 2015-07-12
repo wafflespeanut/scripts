@@ -1,25 +1,69 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
-image = "target/image.png"
-dataFile = "target/sample"              # Rust's input sample (for testing)
+image = "target/image.png"      # sample image background for tracing
+inFile = "target/sample"        # Rust's input sample (for testing)
+outFile = "target/output"       # output from Rust
+
+def zoom(ax, scale = 1.5):      # for zooming the plots
+    def zoomEvent(event):
+        xlim = ax.get_xlim()        # get the current x & y limits
+        ylim = ax.get_ylim()
+        xRange = (xlim[1] - xlim[0]) * 0.5
+        yRange = (ylim[1] - ylim[0]) * 0.5
+        xdata = event.xdata         # get the event locations
+        ydata = event.ydata
+        if event.button == 'up':        # zoom in
+            factor = 1 / scale
+        elif event.button == 'down':    # zoom out
+            factor = scale
+        else:                           # do nothing!
+            factor = 1
+        ax.set_xlim([xdata - xRange * factor, xdata + xRange * factor])
+        ax.set_ylim([ydata - yRange * factor, ydata + yRange * factor])
+        plt.draw()      # redraw everything
+
+    fig = ax.get_figure()   # get the figure and attach the event
+    fig.canvas.mpl_connect('scroll_event', zoomEvent)
+    return zoomEvent
 
 def generate(xmax = 1, ymax = 1):       # draw a closed structure
     plt.plot()
     ax = plt.gca()
     ax.set_xlim([0, xmax])
     ax.set_ylim([0, ymax])
-    img = plt.imread(image)
-    ax.imshow(img, extent = [0, xmax, 0, ymax], aspect = 'auto')
+    try:
+        img = plt.imread(image)         # attach image background if needed
+        ax.imshow(img, extent = [0, xmax, 0, ymax], aspect = 'auto')
+    except IOError:
+        pass
     points = plt.ginput(0)
     while intersectionExists(points):
         points = plt.ginput(0)
     points.append(points[0])            # form a closed structure
     x, y = zip(*points)
     line = plt.plot(x, y)
+    img = np.zeros([200, 200, 3], dtype = np.uint8)
+    img.fill(255)
+    ax.imshow(img, extent = [0, xmax, 0, ymax], aspect = 'auto')
     ax.figure.canvas.draw()
+    zoom(ax)
     data = [str(x) + '\t' + str(y) for x, y in points]
-    with open(dataFile, 'w') as file:
+    with open(inFile, 'w') as file:
         file.writelines('\n'.join(data))
+
+def output(xmax = 1, ymax = 1):         # draw the output
+    plt.plot()
+    ax = plt.gca()
+    ax.set_xlim([0, xmax])
+    ax.set_ylim([0, ymax])
+    with open(inFile, 'r') as file:
+        points = [map(float, line.split()) for line in file]
+    x, y = zip(*points)
+    line = plt.plot(x, y)
+    ax.figure.canvas.draw()
+    zoom(ax)
+    plt.show()
 
 def intersectionExists(points):         # check whether points intersect in a list of point tuples
     if not points:
