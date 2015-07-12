@@ -1,3 +1,4 @@
 ### checklist
 
-- implement **Delaunay triangulation**
+- implement simple structured mesh
+- <s>**Delaunay triangulate**</s> *later*
