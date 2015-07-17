@@ -1,10 +1,10 @@
 import os
 
-path = "C:\\Users\\Waffles Crazy Peanut\\Desktop\\Github\\Python\\SCRAP\\Scrabble\\"
+path = "C:\\Users\\Waffles Crazy Peanut\\Desktop\\Github\\scripts\\python\\Project Euler"
 
 # A script to cleanup my old code
 # Works quite nicely only for totally shitty code!
-# May screw your code if it's already clean (though I never tried it)
+# May screw your code if it's already clean (though I've never tried it)
 
 def search(path, ext = 'py'):                           # For listing all those .py files
     fileList = []
@@ -134,7 +134,7 @@ def cleanup(path = path, index = 0):                    # The index is just to s
                 data = file.readlines()
             for i in range(len(data)):
                 data[i] = symbols(data[i])
-                print data[i]
+            print '<----- START OF FILE ----->\n', ''.join(data), '\n<----- END OF FILE ----->'
             if raw_input('Continue writing to file (y/n)? ') == 'y':
                 with open(File, 'w') as file:
                     file.writelines(data)
