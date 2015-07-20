@@ -1,17 +1,17 @@
 import os
 
-path = "C:\\Users\\Waffles Crazy Peanut\\Desktop\\Github\\scripts\\python\\Project Euler"
+path = os.path.expanduser('~/Desktop/Github/scripts/python/Project Euler')
 
-# A script to cleanup my old code
-# Works quite nicely only for totally shitty code!
+# A script to cleanup my old code (works quite nicely only for totally shitty code!)
 # May screw your code if it's already clean (though I've never tried it)
+# It works only on Windows!
 
 def search(path, ext = 'py'):                           # For listing all those .py files
     fileList = []
     for root, dirs, files in os.walk(path):
-        temp = [root + '\\' + f for f in files if f[ - len(ext): ] == ext]
+        temp = [root + os.sep + f for f in files if f[-len(ext):] == ext]
         fileList.extend(temp)
-    return fileList
+    return sorted(fileList)
 
 def symbols(line):
     firstChar = ''.join(line.split())
@@ -132,8 +132,8 @@ def cleanup(path = path, index = 0):                    # The index is just to s
             print 'Cleaning up', File, '...\n'
             with open(File, 'r') as file:
                 data = file.readlines()
-            for i in range(len(data)):
-                data[i] = symbols(data[i])
+            for l in range(len(data)):
+                data[l] = symbols(data[l])
             print '<----- START OF FILE ----->\n', ''.join(data), '\n<----- END OF FILE ----->'
             if raw_input('Continue writing to file (y/n)? ') == 'y':
                 with open(File, 'w') as file:
@@ -143,5 +143,5 @@ def cleanup(path = path, index = 0):                    # The index is just to s
                 if raw_input('Continue (y/n)? ') is not 'y':
                     break
         except (KeyboardInterrupt, Exception):
-            print '\n\nInterrupted at File %s! (Line: %s)' % (count, i)
+            print '\n\nInterrupted at File %s! (Line: %s)' % (count, l)
             break
