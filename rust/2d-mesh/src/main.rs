@@ -28,6 +28,10 @@ fn get_points(path: &str) -> Vec<Point> {
     }).collect()
 }
 
+// for now, this just provides the environment for meshing
+// which is nothing more than a simple file reader which gets the data points
+// from a python-generated file
+
 fn main() {
     let data_file = "target/sample";            // input sample (generated from Python)
     println!("{:?}", get_points(data_file));
