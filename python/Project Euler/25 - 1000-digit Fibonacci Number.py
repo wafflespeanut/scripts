@@ -1,8 +1,10 @@
 def fibo(n):
-    i=-1; j=1; c=0; k=0
+    a = [0, 1]
     while True:
-        c=i+j; i=j; j=c; k+=1
-        if len(str(c))==n: break
-    return k-1
+        a.append(a[-1] + a[-2])
+        if len(str(a[-1])) == n:
+            break
+    return len(a) - 1
 
-#n=1000; print "The first term in the Fibonacci series to contain " +str(n)+ " digits: " +str(fibo(1000))
+# n = 1000
+# print "The first term in the Fibonacci series to contain " + str(n) + " digits: " + str(fibo(1000))

@@ -1,10 +1,9 @@
-import os
+import os, sys, subprocess
 
 path = os.path.expanduser('~/Desktop/Github/scripts/python/Project Euler')
 
 # A script to cleanup my old code (works quite nicely only for totally shitty code!)
 # May screw your code if it's already clean (though I've never tried it)
-# It works only on Windows!
 
 def search(path, ext = 'py'):                           # For listing all those .py files
     fileList = []
@@ -13,12 +12,20 @@ def search(path, ext = 'py'):                           # For listing all those 
         fileList.extend(temp)
     return sorted(fileList)
 
+def startFile(File):
+    if sys.platform == 'win32':
+        os.startfile(File)
+    else:
+        opener ="open" if sys.platform == "darwin" else "xdg-open"
+        subprocess.call([opener, File])
+
 def symbols(line):
     firstChar = ''.join(line.split())
+    newline = (line[-2:] if line[-2:] == '\r\n' else line[-1])
     if firstChar:
         tab = line.index(firstChar[0])
     else:
-        return '\n'
+        return newline
     i = 0
     punc = ['"', "'"]
     copy = list(line)
@@ -59,7 +66,7 @@ def symbols(line):
         return copy, i
 
     while i < len(copy):
-        if copy[i] in ['\n', '#']:
+        if copy[i] in list(newline) + ['#']:
             break
 
         if copy[i] in punc:
@@ -68,9 +75,9 @@ def symbols(line):
         elif copy[i] == ',' and copy[i + 1] is not ' ':
             copy[i] += ' '
 
-        elif copy[i] == '{' and copy[i + 1] is not '\n':      # Grouped dicts
+        elif copy[i] == '{' and copy[i + 1] is not newline:      # Grouped dicts
             sp = tab + 4
-            copy[i] += '\n' + sp * ' '
+            copy[i] += newline + sp * ' '
             while True:
                 i += 1
                 if copy[i] in punc:
@@ -78,11 +85,11 @@ def symbols(line):
                 elif copy[i] in sym:
                     copy, i = math(copy, i)
                 elif copy[i] is ',':
-                    copy[i] += '\n' + sp * ' '
+                    copy[i] += newline + sp * ' '
                 elif copy[i] is ':' and copy[i + 1] is not ' ':
                         copy[i] += ' '
                 elif copy[i] is '}':
-                    copy[i] = '\n' + tab * ' ' + '}\n'
+                    copy[i] = newline + tab * ' ' + '}' + newline
                     break
 
         elif copy[i] == '[':                            # Spaced lists
@@ -98,23 +105,24 @@ def symbols(line):
                 items += copy[i]
 
         elif copy[i] == ':':                            # Colons with newlines
-            if copy[i + 1] == '\n':
+            if copy[i + 1] in list(newline):
                 i += 1
                 continue
-            elif line[i + 1:].split()[0] is '#':
-                break
-            else:
-                tab += 4
+            elif line[i + 1:].split()[0]:
+                if line[i + 1:].split()[0] == '#':
+                    break
+                else:
+                    tab += 4
             if copy[i + 1] == ' ':
-                copy[i + 1] = '\n' + tab * ' '
-            elif copy[i + 1] is not '\n':
-                copy[i] = ':\n' + tab * ' '
+                copy[i + 1] = newline + tab * ' '
+            elif copy[i + 1] is not newline:
+                copy[i] = ':' + newline + tab * ' '
 
         elif copy[i] in sym:
             copy, i = math(copy, i)
 
         elif copy[i] == ';':                            # Abandon semicolons!
-            copy[i] = '\n' + tab * ' '
+            copy[i] = newline + tab * ' '
             i += 1
             while copy[i] == ' ':
                 copy[i] = ''
@@ -123,25 +131,30 @@ def symbols(line):
     return ''.join(copy)
 
 def cleanup(path = path, index = 0):                    # The index is just to start from previously interrupted file
-    count = 0
+    count, breaker = 0, False
     for File in search(path):
         try:
             if index and count < index:
                 count += 1
                 continue
             print 'Cleaning up', File, '...\n'
-            with open(File, 'r') as file:
+            with open(File, 'rb') as file:
                 data = file.readlines()
             for l in range(len(data)):
                 data[l] = symbols(data[l])
             print '<----- START OF FILE ----->\n', ''.join(data), '\n<----- END OF FILE ----->'
             if raw_input('Continue writing to file (y/n)? ') == 'y':
-                with open(File, 'w') as file:
+                with open(File, 'wb') as file:
                     file.writelines(data)
                 count += 1
-                os.startfile(File)
+                startFile(File)
                 if raw_input('Continue (y/n)? ') is not 'y':
-                    break
+                    breaker = True
+            else:
+                breaker = True
+            if breaker:
+                print '\n\nInterrupted at File %s!' % (count)
+                break
         except (KeyboardInterrupt, Exception):
             print '\n\nInterrupted at File %s! (Line: %s)' % (count, l)
             break
