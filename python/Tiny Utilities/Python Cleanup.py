@@ -52,7 +52,7 @@ def symbols(line):
                 if copy[x - 1] is ' ':
                     ch[0] = ''
                 if copy[x + 2] is ' ':
-                    ch[ - 1] = ''
+                    ch[-1] = ''
                 return ''.join(ch)
             return False
 
@@ -94,6 +94,9 @@ def symbols(line):
 
         elif copy[i] == '[':                            # Spaced lists
             items = ''
+            if ']' not in line:
+                i += 1
+                continue
             while copy[i] is not ']':
                 i += 1
                 if copy[i] in punc:
@@ -108,7 +111,7 @@ def symbols(line):
             if copy[i + 1] in list(newline):
                 i += 1
                 continue
-            elif line[i + 1:].split()[0]:
+            elif line[i + 1:].split():
                 if line[i + 1:].split()[0] == '#':
                     break
                 else:
@@ -131,30 +134,36 @@ def symbols(line):
     return ''.join(copy)
 
 def cleanup(path = path, index = 0):                    # The index is just to start from previously interrupted file
-    count, breaker = 0, False
-    for File in search(path):
+    toughLines, breaker = [], False
+    files = search(path)
+    while index < len(files):
+        File = files[index]
         try:
-            if index and count < index:
-                count += 1
-                continue
             print 'Cleaning up', File, '...\n'
             with open(File, 'rb') as file:
                 data = file.readlines()
             for l in range(len(data)):
-                data[l] = symbols(data[l])
-            print '<----- START OF FILE ----->\n', ''.join(data), '\n<----- END OF FILE ----->'
+                try:
+                    data[l] = symbols(data[l])
+                except IndexError:
+                    toughLines.append(l)
+            print '<----- START OF FILE %d ----->\n' % index
+            print ''.join(data), '\n<----- END OF FILE %d ----->' % index
+            if toughLines:
+                print "\nCouldn't cleanup the following line(s):", toughLines
             if raw_input('Continue writing to file (y/n)? ') == 'y':
                 with open(File, 'wb') as file:
                     file.writelines(data)
-                count += 1
                 startFile(File)
                 if raw_input('Continue (y/n)? ') is not 'y':
+                    index += 1
                     breaker = True
             else:
                 breaker = True
             if breaker:
-                print '\n\nInterrupted at File %s!' % (count)
+                print '\n\nInterrupted at File %s!' % (index)
                 break
-        except (KeyboardInterrupt, Exception):
-            print '\n\nInterrupted at File %s! (Line: %s)' % (count, l)
+            index += 1
+        except KeyboardInterrupt:
+            print '\n\nInterrupted at File %s! (Line: %s)' % (index, l)
             break
