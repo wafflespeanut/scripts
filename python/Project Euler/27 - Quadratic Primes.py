@@ -31,6 +31,5 @@ def gen(r):
                     found = [a, b]
     return found
 
-# plist = sieve(100000)
-# f = gen(1000)
+# plist, f = sieve(100000), gen(1000)
 # print "The coefficients " + str(f) + " produce the maximum number of primes for consecutive 'n'\n\nProduct of the coefficients: " + str(f[0] * f[1])

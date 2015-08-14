@@ -13,5 +13,5 @@ def genpans(n, r):
     return [pans, cats]
 
 # n, r = 9, 10000
-# pan=genpans(n, r)[-1][-1]      # Another stupid guess!
+# pan = genpans(n, r)[-1][-1]      # Another stupid guess!
 # print "The largest 1-9 pandigital number formed as a concatenated product of an integer with 1,2,...,n is: " + str(pan)

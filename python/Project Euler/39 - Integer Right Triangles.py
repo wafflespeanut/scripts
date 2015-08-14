@@ -20,5 +20,5 @@ def findsol(r):
     return t
 
 # n = 1000
-# p=findsol(n)
+# p = findsol(n)
 # print "The perimeter (within " + str(n) + ") having the maximum number of solutions is: " + str(p[0]) + " with " + str(p[1]) + " solutions!"
