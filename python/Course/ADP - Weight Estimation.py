@@ -4,13 +4,10 @@ execfile("Standard Atmosphere.py")
 path = 'C:\\Users\\Waffles Crazy Peanut\\Desktop\\Dropbox\\ADP\\Week 6 (Reset)\\Iter.txt'
 
 def fan(w0 = 393085, we = 177945, tl = 0.27665, ca = 10752, cv = 0.85, wp = 52960, wc = 2000, r = 14000, n = 4):
-    a = []
+    a, i = [], 0
     cv *= ((1.4 * 287 * atmos(ca)[0]) ** 0.5) * (18.0 / 5)
-    wf = 0
-    rf = 0.4
-    wpp = 0
+    wf, rf, wpp = 0, 0.4, 0
     d0 = 1.225
-    i = 0
     re = re0 = float(we) / w0
     while True:                             # For Turbojet/Turbofan engines
         try:
@@ -49,11 +46,9 @@ def fan(w0 = 393085, we = 177945, tl = 0.27665, ca = 10752, cv = 0.85, wp = 5296
                 print '\n\t(Getting back to previous iteration...)\n'
 
 def prop(w0 = 14333, we = 7400, pl = 0.294906, ca = 4000, cv = 500, wp = 3600, wc = 400, r = 1800, n = 2):
-    wf = 0
-    rf = 0.15
-    wpp = 0
-    d0 = 1.225
     i = 0
+    wf, rf, wpp = 0, 0.15, 0
+    d0 = 1.225
     re = re0 = float(we) / w0
     while True:                             # For Turboshaft/Turboprop engines
         print '\nIteration %s' % (i)
@@ -75,8 +70,7 @@ def prop(w0 = 14333, we = 7400, pl = 0.294906, ca = 4000, cv = 500, wp = 3600, w
         i += 1
 
 def iterplot():
-    i = 2
-    d = []
+    i, d = 2, []
     with open(path, 'r') as file:
         data = file.readlines()
     while i < len(data):

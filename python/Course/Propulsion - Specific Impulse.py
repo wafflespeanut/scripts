@@ -32,25 +32,18 @@ def cprop():
     system(p)
 
 def f(s):
-    t = ''
-    i =- 1
+    i, t = -1, ''
     while s[i] != ' ':
         t += s[i]
         i -= 1
-    return float(t[: : -1])
+    return float(t[::-1])
 
 def readval():                  # Reads the output from 'cpropep' & computes ISP
-    P = [float(i) for i in range(20, 201, 20)]
-    T = []
-    M = []
-    G = []
-    V = []
-    SP = []
     k = 0
+    P = [float(i) for i in range(20, 201, 20)]
+    T, M, G, V, SP = [], [], [], [], []
     F = open(p2, 'r')
-    List = ''
-    for i in F:
-        List += i
+    List = [i for i in F]
     l = List.split('\n')
     for i in l:
         if 'Temperature (K)' in i:

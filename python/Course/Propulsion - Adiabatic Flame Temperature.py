@@ -26,7 +26,7 @@ r = 8.314
 t0 = 298.15
 
 s = 'CH4'
-hf =- 74831
+hf = -74831
 
 def count(s):           # Finds the coefficients for future progress
     k = {
