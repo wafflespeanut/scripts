@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Python</title>
+		<meta name="description" content="An introduction to Programming using Python!">
+		<meta name="author" content="Wafflespeanut">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/simple-sky.css" id="theme">
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-background="images/logo.png" data-background-size="600px">
+					<h3>An introduction to programming using...</h3>
+					<h2><code>>>> python (2)</code></h2><br>
+					<p>
+						<small><a href="http://twitter.com/Wafflespeanut">@Wafflespeanut</a></small>
+					</p>
+				</section>
+				<section>
+					<h3>Why do "we" need Python?</h3>
+					<br/>
+					<ol>
+						<li class="fragment roll-in">We dance around computations, and <em>Matlab</em> is proprietary!</li>
+						<li class="fragment roll-in">It's not a <em>mumbo-jumbo</em>, and it's quite easy to pick up!</li>
+						<li class="fragment roll-in">Organizations might be interested in our coding skills</li>
+					</ol>
+					<br/>
+					<br/>
+					<p align=right class="fragment roll-in">... or, so we hope.</p>
+				</section>
+				<section>
+					<h3>How is Python so exciting?</h3>
+					<br/>
+					<p align=left class="fragment roll-in">Say, <strong>objects!</strong></p>
+					<pre class="fragment"><code>
+						print float(5)		# 5.0
+						float = str
+						print float(5)		# '5'
+					</code></pre>
+					<p align=left class="fragment roll-in"><em>Cool indents</em>... <strong>No curly braces!</strong> (or semicolons!)</p>
+					<pre class="fragment"><code>
+					from __future__ import braces
+					</code></pre>
+					<p align=left class="fragment roll-in">No variables & assignments! Only <em>names & bindings!</em></em></p>
+					<pre class="fragment"><code>
+						old_list = range(1, 8, 2)		# Python'ish way of saying [1, 3, 5, 7]
+						new_list = old_list
+						del old_list[1:3]	# now, a = [1, 7]
+						print new_list 		# how the heck did new_list change?
+					</code></pre>
+				</section>
+				<section>
+					<h3>Let's begin with its "Zen"</h3>
+					<br/>
+					<pre class="fragment roll-in"><code data-trim>
+					import this
+					</code></pre>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+		<script>
+
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				autoSlideStoppable: false,
+				transitionSpeed: 'slow',
+				mouseWheel: true,
+
+				theme: Reveal.getQueryHash().theme,
+				transition: Reveal.getQueryHash().transition || 'default',
+
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+	</body>
+</html>
