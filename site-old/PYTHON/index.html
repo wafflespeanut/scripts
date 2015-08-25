@@ -87,19 +87,42 @@
 						</code></pre>
 					</section>
 					<section>
-						<h3>Basic data structures</h3>
+						<h4 align=left>Basic data structures: <em>lists & sets...</em></h4>
 						<br/>
-						<p align=left class="fragment roll-in"><em>lists & sets...</em></p>
 						<pre class="fragment"><code class="python">
 							string = '''Hello, world!'''
-							list_ = list(string)
-							set_ = set(string)
+							list_ = list(string)		# print list_
+							set_ = set(string)			# print set_
+
 							set(list(string)) == set(string)	# True
 							set(list(string)) is set(string)	# False?
-						</code></pre>
-						<p align=left class="fragment roll-in"><em>tuples & dicts...</em></p>
-						<pre class="fragment"><code class="python">
 
+							[] == [] and [] is []		# False?
+							256 is 32 * 8				# (small integers) True
+							65536 is 256 * 256			# (big ones) False?
+
+							"zzz" is "z" * 3
+							x = "z"				# a binding changes the result
+							"zzz" is x * 3		# Meh...
+						</code></pre>
+					</section>
+					<section>
+						<h4 align=left>Basic data structures: <em>Immutable tuples & hashed dicts...</em></h4>
+						<br/>
+						<pre class="fragment"><code class="python">
+							tuple_ = tuple(range(10))		# immutable
+							tuple_[0] = 1				# wrong!
+
+							dict_ = zip(range(1, 10), range(1, 10))
+							dict_ = zip(enumerate(range(1, 10)))
+
+							# awesomeness of dictionaries...
+							dict_[0] = 'Meow...'
+							dict_['dog'] = 'Woof!'			# apparently, we can do anything!
+							dict_[tuple(range(3))] = True
+							dict_[range(3)] = False			# well, almost...
+
+							print "{} {}".format(dict_[0], dict_['dog'])
 						</code></pre>
 					</section>
 					<section>
@@ -107,7 +130,7 @@
 						<br/>
 						<p align=left class="fragment roll-in"><em>Comprehension</em></p>
 						<pre class="fragment"><code class="python">
-
+							
 						</code></pre>
 					</section>
 				</section>
