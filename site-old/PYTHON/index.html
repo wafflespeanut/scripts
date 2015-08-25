@@ -48,28 +48,74 @@
 					<h3>How is Python so exciting?</h3>
 					<br/>
 					<p align=left class="fragment roll-in">Say, <strong>objects!</strong></p>
-					<pre class="fragment"><code>
+					<pre class="fragment"><code class="python">
 						print float(5)		# 5.0
 						float = str
 						print float(5)		# '5'
 					</code></pre>
 					<p align=left class="fragment roll-in"><em>Cool indents</em>... <strong>No curly braces!</strong> (or semicolons!)</p>
-					<pre class="fragment"><code>
+					<pre class="fragment"><code class="python">
 					from __future__ import braces
 					</code></pre>
 					<p align=left class="fragment roll-in">No variables & assignments! Only <em>names & bindings!</em></em></p>
-					<pre class="fragment"><code>
-						old_list = range(1, 8, 2)		# Python'ish way of saying [1, 3, 5, 7]
-						new_list = old_list
-						del old_list[1:3]	# now, a = [1, 7]
-						print new_list 		# how the heck did new_list change?
+					<pre class="fragment"><code class="python">
+						old_list = range(1, 8)		# Python'ish way of saying [1, 3, 5, 7]
+						new_list = old_list			# id(new_list) == id(old_list)
+						del old_list[1:3]
+						print new_list
 					</code></pre>
 				</section>
 				<section>
-					<h3>Let's begin with its "Zen"</h3>
+					<section>
+						<h3>Basic types & operators</h3>
+						<p align=left class="fragment roll-in"><em>Weird</em> types:</p>
+						<pre class="fragment"><code class="python">
+							import sys, math
+							integer = sys.maxint		# which is just a 32-bit or 64-bit integer
+							floating = math.pi			# universal constant
+							string = "Hello, " + 'world!'	# first program of any coder
+							long_int = i + 1		# what's after the integer's limit?
+							print s, i, '\t', l, '\t', f
+						</code></pre>
+						<p align=left class="fragment roll-in"><em>Weird</em> operators:</p>
+						<pre class="fragment"><code class="python">
+							a, b = 10, 100		# sequence unpacking
+							true = a == a or b != b
+							false = not true
+							10 ^ 100 is not 10 ** 100
+							# you already know the other operators
+						</code></pre>
+					</section>
+					<section>
+						<h3>Basic data structures</h3>
+						<br/>
+						<p align=left class="fragment roll-in"><em>lists & sets...</em></p>
+						<pre class="fragment"><code class="python">
+							string = '''Hello, world!'''
+							list_ = list(string)
+							set_ = set(string)
+							set(list(string)) == set(string)	# True
+							set(list(string)) is set(string)	# False?
+						</code></pre>
+						<p align=left class="fragment roll-in"><em>tuples & dicts...</em></p>
+						<pre class="fragment"><code class="python">
+
+						</code></pre>
+					</section>
+					<section>
+						<h3>Unleash the power of their combination!</h3>
+						<br/>
+						<p align=left class="fragment roll-in"><em>Comprehension</em></p>
+						<pre class="fragment"><code class="python">
+
+						</code></pre>
+					</section>
+				</section>
+				<section>
+					<h3>Let's do something...</h3>
 					<br/>
-					<pre class="fragment roll-in"><code data-trim>
-					import this
+					<pre class="fragment"><code>
+						# blah blah blah
 					</code></pre>
 				</section>
 			</div>
