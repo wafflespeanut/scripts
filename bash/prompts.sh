@@ -26,4 +26,4 @@ elif [[ $hour == 18 ]]
 else
     c=${symbols["24/7"]}
 fi
-export PS1='[\@] \u@\h:\w (${c} ) '
+export PS1='$(date +(%A)\ %B\ %d,\ %Y) [\@] \u@\h (${c} ) (\[\033[96m\]\w\[\033[0m\])\n$ '

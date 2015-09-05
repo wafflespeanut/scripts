@@ -1,6 +1,6 @@
-import random, string
+import os, random, string
 
-WORDLIST = "Crypto\\Words.txt"
+WORDLIST = os.path.realpath("../Crypto/Words.txt")
 
 def loadWords():
     print "Loading words from the list..."
@@ -47,7 +47,7 @@ def getAvailableLetters(lettersGuessed):
     default = "abcdefghijklmnopqrstuvwxyz"
     for ch in lettersGuessed:
         default = default.replace(ch, "")
-    return default    
+    return default
 
 def hangman(secretWord):
     mistakesMade = 0
