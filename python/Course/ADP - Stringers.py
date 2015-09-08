@@ -10,13 +10,15 @@ points = [(0.285, 0.285), (1.425, 0.57), (1.425, 0.57),
           (1.425, -0.285), (0.475, -0.19)]
 
 total = len(points)
-stringer_area = 2.64516129e-3
-spar_area = 0.000748
+stringer_area = 2.27741935e-3
 
-if 'stringer_area' in globals():
-    A = [stringer_area if i not in [1, 2, 8, 9, 14, 15, 20, 21] else spar_area for i in range(total)]
+spar_front = [1, 2, 20, 21]
+spar_rear = [8, 9, 14, 15]
+
+if 'stringer_area' in locals():
+    A = [0.0004645 if i in spar_front else 0.0004 if i in spar_rear else stringer_area for i in range(total)]
 else:
-    A = [spar_area for i in range(total)]
+    A = [stringer_area for i in range(total)]
 
 Ax = [A[i] * points[i][0] for i in range(total)]
 Ay = [A[i] * points[i][1] for i in range(total)]
