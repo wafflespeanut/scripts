@@ -20,6 +20,7 @@ octopress-blog/source/blog
 octopress-blog/source/images/*
 !octopress-blog/source/images/bg-img.png
 !octopress-blog/source/images/github.png
+!octopress-blog/source/images/streak.png
 !octopress-blog/source/images/twitter.png
 octopress-blog/source/javascripts
 octopress-blog/source/stylesheets
