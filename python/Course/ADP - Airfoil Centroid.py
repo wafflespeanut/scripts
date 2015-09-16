@@ -6,14 +6,17 @@ datapoints = [[0, 0], [3, 4], [6, 0]]     # sample data (triangle)
 # approximating airfoil as an irregular non-intersecting closed polygon (given by data points)
 # let's now find the centroid: https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
 
-def get_points(file_name):
+def get_points(file_name, special = None):
     with open(file_name, 'r') as File:
         stuff = File.readlines()
     datapoints = []
     for line in stuff:
         try:
             thing = line.split()
-            point = float(thing[0]), float(thing[1])
+            if special and thing[-1] == special:
+                point = float(thing[0]), float(thing[1]), special
+            else:
+                point = float(thing[0]), float(thing[1])
         except ValueError:
             continue
         datapoints.append(point)

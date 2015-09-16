@@ -2,10 +2,19 @@ execfile("ADP - Airfoil Centroid.py")
 from math import pi
 import matplotlib.pyplot as plt
 
+out = "STRINGERS.dat"
 data = get_points("AIRFOIL.dat")
+red, blue_1, blue_2, green, yellow, null = ('\033[' + str(i) + 'm' for i in (91, 96, 94, 92, 93, 0))
+
+chord = 9.5
+flanges = [1.425, 6.65]
+stringers_top, stringers_bottom = 9, 6
+stringer_area = 7e-3
+front_area, rear_area = 0.0036946, 0.0034003
+Sx, Sy = 11391789.36, 178265.8194
 
 def stringers(nodes, dist_list, airfoil_data, sep):
-    i, x, y, dist, resolved = 0, 0, 0, 0, []
+    i, dist, resolved = 0, 0, []
     for node in nodes:
         while dist < node:
             (x0, y0), (x1, y1) = airfoil_data[i], airfoil_data[i + 1]
@@ -20,7 +29,7 @@ def stringers(nodes, dist_list, airfoil_data, sep):
         resolved.append((x, y))
     return resolved
 
-def form_stringers(chord = 9.5, stringers_top = 9, stringers_bottom = 6):
+def form_stringers():
     def slope(p1, p2):
         try:
             return (p2[1] - p1[1]) / (p2[0] - p1[0])
@@ -36,51 +45,69 @@ def form_stringers(chord = 9.5, stringers_top = 9, stringers_bottom = 6):
     dist_top = [dist(airfoil_top[i], airfoil_top[i + 1]) for i in range(len(airfoil_top) - 1)]
     dist_bottom = [dist(airfoil_bottom[i], airfoil_bottom[i + 1]) for i in range(len(airfoil_bottom) - 1)]
     sep_top, sep_bottom = sum(dist_top) / (stringers_top + 1), sum(dist_bottom) / (stringers_bottom + 1)
+    print '\n Spacing at the top (m):', sep_top * chord, '\n Spacing at the bottom (m):', sep_bottom * chord
+
     nodes_top = [sep_top * i for i in range(1, stringers_top + 1)]
     nodes_bottom = [sep_bottom * i for i in range(1, stringers_bottom + 1)]
 
     resolved_top = stringers(nodes_top, dist_top, airfoil_top, sep_top)
     resolved_bottom = stringers(nodes_bottom, dist_bottom, airfoil_bottom, sep_bottom)
+
+    def find_y(x, p1, p2):
+        (x0, y0), (x1, y1) = p1, p2
+        dx, dy, dz = x1 - x0, y1 - y0, dist((x0, y0), (x1, y1))
+        cos, sin = dx / dz, dy / dz
+        return y0 + (x - x0) * (sin / cos)
+
+    def insert_flanges(top = resolved_top, bottom = resolved_bottom, flanges = flanges):
+        i, j = 0, stringers_bottom - 1
+        for fx in flanges:                  # insert the stuff simultaneously to avoid unwanted complication
+            fx = fx / chord
+            while fx > top[i][0]:
+                i += 1
+            fy = find_y(fx, top[i - 1], top[i])
+            top.insert(i, (fx, fy, 'f'))
+            while fx > bottom[j][0]:
+                j -= 1
+            fy = find_y(fx, bottom[j + 1], bottom[j])
+            bottom.insert(j + 1, (fx, fy, 'f'))
+
+    insert_flanges(resolved_top, resolved_bottom)
     points = resolved_top + resolved_bottom
-    st_x, st_y = zip(*points)
-    plot_over_airfoil(data, st_x, st_y)
-    flanges = []
-
-    # while True:
-    #     try:
-    #         f = float(raw_input("Enter X-value of flange (in meters): "))
-    #         flanges.append(f)
-    #     except ValueError, KeyboardInterrupt:
-    #         pass
-
     for i, point in enumerate(points):
-        points[i] = str(point[0] * chord) + '\t' + str(point[1] * chord) + '\n'
-    with open("STRINGERS.dat", 'w') as File:
+        f = 'flange\t' if 'f' in point else ''
+        points[i] = str(point[0] * chord) + '\t' + str(point[1] * chord) + '\t' + f + '\n'     # scale up
+    with open(out, 'w') as File:
         File.writelines(points)
-    raw_input('Data has been written to STRINGERS.dat. Continue after adding flanges...')
+    raw_input('\n {}NOTE:{} Data has been written to "{}"! Continue after checking the flanges...\n'.format(yellow, null, out))
+    stringer_calc()
 
-def stringer_calc(chord = 9.5, stringer_area = 7e-3,
-                  spar_front = [2, 18], spar_rear = [8, 14],
-                  front_area = 0.0036946, rear_area = 0.0034003,
-                  Sx = 11391789.36, Sy = 178265.8194):
-    points = get_points("STRINGERS.dat")
-    for i, point in enumerate(points):
-        points[i] = point[0] / chord, point[1] / chord
+def stringer_calc():
+    flange_pos, spar_front, spar_rear = [], [], []
+    points = get_points("STRINGERS.dat", 'flange')
     total = len(points)
 
+    for i, point in enumerate(points):
+        points[i] = point[0] / chord, point[1] / chord          # scale down (back to original)
+        if 'flange' in point:
+            flange_pos.append(i)
+
+    for i in range(len(flange_pos) / 2):
+        spar_front.append(flange_pos[i])
+        spar_rear.append(flange_pos[-(i + 1)])
+
     st_x, st_y = zip(*points)
-    f_x, f_y = zip(*[point for i, point in enumerate(points) if (i + 1) in spar_front + spar_rear])
+    f_x, f_y = zip(*[point for i, point in enumerate(points) if i in spar_front + spar_rear])
 
     if front_area and rear_area:
-        A = [front_area if (i + 1) in spar_front
-                       else rear_area if (i + 1) in spar_rear
+        A = [front_area if i in spar_front
+                       else rear_area if i in spar_rear
                                       else stringer_area for i in range(total)]
     else:
         A = [stringer_area for i in range(total)]
 
     Ax = [A[i] * points[i][0] for i in range(total)]
     Ay = [A[i] * points[i][1] for i in range(total)]
-
     Xc, Yc = sum(Ax) / sum(A), sum(Ay) / sum(A)
 
     X_Xc = [points[i][0] - Xc for i in range(total)]
@@ -90,30 +117,22 @@ def stringer_calc(chord = 9.5, stringer_area = 7e-3,
     Iyy_ = [A[i] * X_Xc[i] ** 2 for i in range(total)]
     Ixy_ = [A[i] * X_Xc[i] * Y_Yc[i] for i in range(total)]
 
-    Ixx = sum(Ixx_)
-    Iyy = sum(Iyy_)
-    Ixy = sum(Ixy_)
+    Ixx, Iyy, Ixy = sum(Ixx_), sum(Iyy_), sum(Ixy_)
 
     Sigma = [((Ixy * Sx - Ixx * Sy) / (Ixx * Iyy - Ixy ** 2)) * (X_Xc)[i] +
             ((Ixy * Sy - Iyy * Sx) / (Ixx * Iyy - Ixy ** 2)) * (Y_Yc)[i] for i in range(total)]
 
-    red, blue_1, blue_2, green, yellow, null = ('\033[' + str(i) + 'm' for i in (91, 96, 94, 92, 93, 0))
-
-    print
     for i in range(total):
         a, b = blue_1, null
-        if (i + 1) not in spar_front + spar_rear:
+        if i not in spar_front + spar_rear:
             a, b = '', ''
-        print "  {}{}\t{}{}".format(a, i + 1, Sigma[i] / 10 ** 6, b)
-
-    print '\n {}Least value of Ixx: {}{}\n'.format(blue_2, min(Ixx_), null)
+        print "\t{}{}\t{}{}".format(a, i + 1, Sigma[i] / 10 ** 6, b)
 
     max_sigma = max(map(abs, Sigma)) / 10 ** 6
     critical_sigma = ((pi ** 2) * 70e9 * min(Ixx_) / (stringer_area * 1.4 ** 2)) / 10 ** 6
-
     color = red if max_sigma >= critical_sigma else green
 
-    print ' {}Max value of Sigma: {} MPa{}'.format(color, max_sigma, null)
-    print ' {}Critical Sigma: {} MPa{}'.format(yellow, critical_sigma, null)
-
+    print '\n {}Least value of Ixx: {}{}\n'.format(blue_2, min(Ixx_), null)
+    print ' {}Maximum Stress: {} MPa{}'.format(color, max_sigma, null)
+    print ' {}Critical Stress: {} MPa{}'.format(yellow, critical_sigma, null)
     plot_over_airfoil(data, st_x, st_y, f_x, f_y)
