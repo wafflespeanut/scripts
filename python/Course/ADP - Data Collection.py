@@ -20,8 +20,7 @@ def get():          # For getting the input
 
 def write(s):       # For appending the given input
     f = open(path + 'Data.txt', 'a')
-    i = 0
-    j = 0
+    i, j = 0, 0
     while j < len(max(s)):
         while i < len(s):
             f.write(s[i][j] + '\t')
@@ -33,15 +32,10 @@ def write(s):       # For appending the given input
     f.close()
 
 def dplot(s = None):      # If you have already have the input, copy-paste from Excel to notepad with a 'tab' at the end of each line
-    dx = 0.2
-    dy = 0.3
-    ddx = 0
-    ddy = 0.02
+    dx, dy, dr = 0.2, 0.3, 0.2
+    ddx, ddy = 0, 0.02
     c = 12000
-    dr = 0.2
-    d = []
-    a = []
-    p = []
+    a, d, p = [], [], []
     with open(path + 'Data.txt', 'r') as file:
         f = file.readlines()
     names = f[0].split('\t')[:-1]
@@ -57,8 +51,7 @@ def dplot(s = None):      # If you have already have the input, copy-paste from 
                 a.append(r[i])
                 d.append(float(m[i]))
                 p.append(i + 1)
-        r = a
-        z = rmin(s)
+        r, z = a, rmin(s)
         r.append(z[0])
         d.append(z[1])
         plot(r, d, 'ro')          # Plots the list with indices at some tolerance
@@ -68,8 +61,7 @@ def dplot(s = None):      # If you have already have the input, copy-paste from 
 ##            circle = Circle((c, (max(d) + min(d)) / 2.0), max(d) * dr, color = 'b', fill = False)
 ##            fig=gcf()
 ##            fig.gca().add_artist(circle)
-        r = r[:-1]
-        d = d[:-1]
+        r, d = r[:-1], d[:-1]
         for i in range(len(r)):
             (x, y) = (r[i] + r[i] * ddx, d[i] + d[i] * ddy)
             text(x, y, r'$\mathbf{' + str(p[i]) + r'}$', fontsize = 16, bbox = dict(facecolor = 'blue', alpha = 0.15))
@@ -85,17 +77,14 @@ def rmin(s, ran = 14000):        # To find the minimum point for a given range (
         f = file.readlines()
     ranges = [float(i) for i in f[15].split('\t')[:-1]]
     data = [float(i) for i in f[s].split('\t')[:-1] if len(i)]
-    y = min(data)
-    y0 = max(data)
+    y, y0 = min(data), max(data)
     s = (ranges[0] - ran) ** 2 + (data[0] - y) ** 2
-    t = 0
+    t, p = 0, 0
     dy = (y0 - y) / 100.0
-    p = 0
     while y < y0:
         k = [sqrt((ran - ranges[i]) ** 2 + (y - data[i]) ** 2) for i in range(len(data))]
         if sum(k) < s:
-            s = sum(k)
-            t = y
+            s, t = sum(k), y
             p = k.index(max(k)) + 1
         y += dy
     return (ran, t, p)

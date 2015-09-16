@@ -3,8 +3,7 @@ execfile("Standard Atmosphere.py")
 
 def airfoil(w0 = 404796.621304, wf = 166589.906793, ca = 10752, cv = 0.85):
     d = rmin(16)[1]
-    rho = 804
-    g = 9.81
+    rho, g = 804, 9.81
     cv *= ((1.4 * 287 * atmos(ca)[0]) ** 0.5)
     print 'Cruise velocity: %s m/s' % cv
     wload = rmin(21)[1]
