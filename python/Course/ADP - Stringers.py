@@ -3,7 +3,7 @@ from math import pi
 import matplotlib.pyplot as plt
 
 out = "STRINGERS.dat"
-data = get_points("AIRFOIL.dat")
+data = get_points("AIRFOIL.dat")        # airfoil data obtained from http://airfoiltools.com/
 red, blue_1, blue_2, green, yellow, null = ('\033[' + str(i) + 'm' for i in (91, 96, 94, 92, 93, 0))
 
 chord = 9.5
@@ -15,8 +15,8 @@ Sx, Sy = 11391789.36, 178265.8194
 
 def stringers(nodes, dist_list, airfoil_data, sep):
     i, dist, resolved = 0, 0, []
-    for node in nodes:
-        while dist < node:
+    for node in nodes:          # join every two points to form a right triangle (relative to the horizontal)
+        while dist < node:      # iterate over the points to find the co-ordinates by resolving individual triangles
             (x0, y0), (x1, y1) = airfoil_data[i], airfoil_data[i + 1]
             delta = node - dist
             delta_x, delta_y = delta * (x1 - x0) / dist_list[i], delta * (y1 - y0) / dist_list[i]
@@ -33,8 +33,8 @@ def form_stringers():
     def slope(p1, p2):
         try:
             return (p2[1] - p1[1]) / (p2[0] - p1[0])
-        except ZeroDivisionError:
-            return None
+        except ZeroDivisionError:       # slope's undefined for a vertical line
+            return None                 # which is how we're splitting the airfoil data
 
     split_index = [slope(data[i], data[i + 1]) for i in range(len(data) - 1)].index(None)
     airfoil_top, airfoil_bottom = data[:split_index + 1], data[split_index + 1:]
@@ -42,41 +42,42 @@ def form_stringers():
     def dist(p1, p2):
         return ((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2) ** 0.5
 
+    # generate the lengths of line segments
     dist_top = [dist(airfoil_top[i], airfoil_top[i + 1]) for i in range(len(airfoil_top) - 1)]
     dist_bottom = [dist(airfoil_bottom[i], airfoil_bottom[i + 1]) for i in range(len(airfoil_bottom) - 1)]
+    # find the separation for placing the given stringers
     sep_top, sep_bottom = sum(dist_top) / (stringers_top + 1), sum(dist_bottom) / (stringers_bottom + 1)
     print '\n Spacing at the top (m):', sep_top * chord, '\n Spacing at the bottom (m):', sep_bottom * chord
-
+    # generate the equidistant positions for stringers along the curve of the airfoil
     nodes_top = [sep_top * i for i in range(1, stringers_top + 1)]
     nodes_bottom = [sep_bottom * i for i in range(1, stringers_bottom + 1)]
-
+    # resolve the points from the curve to the horizontal to find their absolute position
     resolved_top = stringers(nodes_top, dist_top, airfoil_top, sep_top)
     resolved_bottom = stringers(nodes_bottom, dist_bottom, airfoil_bottom, sep_bottom)
 
-    def find_y(x, p1, p2):
+    def find_y(x, p1, p2):              # find `y` for a given `x` lying on the line joining two points
         (x0, y0), (x1, y1) = p1, p2
-        dx, dy, dz = x1 - x0, y1 - y0, dist((x0, y0), (x1, y1))
-        cos, sin = dx / dz, dy / dz
-        return y0 + (x - x0) * (sin / cos)
+        dx, dy = x1 - x0, y1 - y0
+        return y0 + (x - x0) * (dy / dx)        # just a simplified form of sines & cosines
 
     def insert_flanges(top = resolved_top, bottom = resolved_bottom, flanges = flanges):
         i, j = 0, stringers_bottom - 1
-        for fx in flanges:                  # insert the stuff simultaneously to avoid unwanted complication
+        for fx in flanges:      # insert the stuff simultaneously to avoid unwanted complication
             fx = fx / chord
             while fx > top[i][0]:
                 i += 1
             fy = find_y(fx, top[i - 1], top[i])
-            top.insert(i, (fx, fy, 'f'))
+            top.insert(i, (fx, fy, 'FLANGE'))
             while fx > bottom[j][0]:
                 j -= 1
             fy = find_y(fx, bottom[j + 1], bottom[j])
-            bottom.insert(j + 1, (fx, fy, 'f'))
+            bottom.insert(j + 1, (fx, fy, 'FLANGE'))
 
     insert_flanges(resolved_top, resolved_bottom)
     points = resolved_top + resolved_bottom
     for i, point in enumerate(points):
-        f = 'flange\t' if 'f' in point else ''
-        points[i] = str(point[0] * chord) + '\t' + str(point[1] * chord) + '\t' + f + '\n'     # scale up
+        f = 'FLANGE' if 'FLANGE' in point else ''        # just to differentiate the flanges for later use
+        points[i] = str(point[0] * chord) + '\t' + str(point[1] * chord) + '\t\t' + f + '\n'     # scale up
     with open(out, 'w') as File:
         File.writelines(points)
     raw_input('\n {}NOTE:{} Data has been written to "{}"! Continue after checking the flanges...\n'.format(yellow, null, out))
@@ -84,12 +85,12 @@ def form_stringers():
 
 def stringer_calc():
     flange_pos, spar_front, spar_rear = [], [], []
-    points = get_points("STRINGERS.dat", 'flange')
+    points = get_points("STRINGERS.dat", 'FLANGE')
     total = len(points)
 
     for i, point in enumerate(points):
         points[i] = point[0] / chord, point[1] / chord          # scale down (back to original)
-        if 'flange' in point:
+        if 'FLANGE' in point:
             flange_pos.append(i)
 
     for i in range(len(flange_pos) / 2):
