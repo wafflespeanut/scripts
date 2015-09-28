@@ -9,9 +9,9 @@ red, blue_1, blue_2, green, yellow, null = ('\033[' + str(i) + 'm' for i in (91,
 chord = 9.5
 flanges = [1.425, 6.65]
 stringers_top, stringers_bottom = 9, 6
-stringer_area = 7e-3
-front_area, rear_area = 0.0036946, 0.0034003
-Sx, Sy = 11391789.36, 178265.8194
+stringer_area = 1.16 / 1550
+front_area, rear_area = 11.462e-4, 9.8338e-4
+Sx, Sy = 28479473.4, 2847947.34
 
 def stringers(nodes, dist_list, airfoil_data, sep):
     i, dist, resolved = 0, 0, []
@@ -29,7 +29,7 @@ def stringers(nodes, dist_list, airfoil_data, sep):
         resolved.append((x, y))
     return resolved
 
-def form_stringers():
+def form_stringers(stringers_top = 9, stringers_bottom = 6):
     def slope(p1, p2):
         try:
             return (p2[1] - p1[1]) / (p2[0] - p1[0])
@@ -88,17 +88,17 @@ def stringer_calc():
     points = get_points("STRINGERS.dat", 'FLANGE')
     total = len(points)
 
-    for i, point in enumerate(points):
-        points[i] = point[0] / chord, point[1] / chord          # scale down (back to original)
+    scaled_points = points[:]
+    for i, point in enumerate(scaled_points):
+        scaled_points[i] = point[0] / chord, point[1] / chord   # scale down (back to original values for plotting)
         if 'FLANGE' in point:
             flange_pos.append(i)
 
-    for i in range(len(flange_pos) / 2):
-        spar_front.append(flange_pos[i])
-        spar_rear.append(flange_pos[-(i + 1)])
+    spar_front.extend([flange_pos[0], flange_pos[-1]])
+    spar_rear.extend([flange_pos[1], flange_pos[-2]])
 
-    st_x, st_y = zip(*points)
-    f_x, f_y = zip(*[point for i, point in enumerate(points) if i in spar_front + spar_rear])
+    st_x, st_y = zip(*scaled_points)
+    f_x, f_y = zip(*[point for i, point in enumerate(scaled_points) if i in spar_front + spar_rear])
 
     if front_area and rear_area:
         A = [front_area if i in spar_front
@@ -127,13 +127,31 @@ def stringer_calc():
         a, b = blue_1, null
         if i not in spar_front + spar_rear:
             a, b = '', ''
-        print "\t{}{}\t{}{}".format(a, i + 1, Sigma[i] / 10 ** 6, b)
+        print "\t{}{}\t{}\t{}{}".format(a, i + 1, Ixx_[i], Sigma[i] / 10 ** 6, b)
 
     max_sigma = max(map(abs, Sigma)) / 10 ** 6
-    critical_sigma = ((pi ** 2) * 70e9 * min(Ixx_) / (stringer_area * 1.4 ** 2)) / 10 ** 6
+    critical_sigma = ((pi ** 2) * 150e9 * min(Ixx_) / (stringer_area * 1.4 ** 2)) / 10 ** 6
     color = red if max_sigma >= critical_sigma else green
 
     print '\n {}Least value of Ixx: {}{}\n'.format(blue_2, min(Ixx_), null)
     print ' {}Maximum Stress: {} MPa{}'.format(color, max_sigma, null)
     print ' {}Critical Stress: {} MPa{}'.format(yellow, critical_sigma, null)
     plot_over_airfoil(data, st_x, st_y, f_x, f_y)
+
+while True:
+    try:
+        something = raw_input('\nContinue after making changes. You can either...\n\n\
+        1. [Enter] to continue with stringer calculation...\n\
+        2. Enter the values for number of stringers (both top and bottom) and [Enter]...\n\
+        3. Ctrl-C to quit!\n')
+        if something == '':
+            stringer_calc()
+        else:
+            try:
+                s = something.split()
+                form_stringers(int(s[0]), int(s[1]))
+            except (ValueError, IndexError):
+                print '\n{}[ERROR]{} Cannot parse the value! Going back to old values...'.format(red, null)
+                form_stringers()
+    except KeyboardInterrupt:
+        break
