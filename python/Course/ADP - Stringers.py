@@ -7,11 +7,15 @@ data = get_points("AIRFOIL.dat")        # airfoil data obtained from http://airf
 red, blue_1, blue_2, green, yellow, null = ('\033[' + str(i) + 'm' for i in (91, 96, 94, 92, 93, 0))
 
 chord = 9.5
+aero_x = 0.25 * chord
 flanges = [1.425, 6.65]
 stringers_top, stringers_bottom = 9, 6
 stringer_area = 1.16 / 1550
 front_area, rear_area = 11.462e-4, 9.8338e-4
 Sx, Sy = 28479473.4, 2847947.34
+
+def dist(p1, p2):
+    return ((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2) ** 0.5
 
 def stringers(nodes, dist_list, airfoil_data, sep):
     i, dist, resolved = 0, 0, []
@@ -35,18 +39,17 @@ def form_stringers(distance_required = False, n_top = stringers_top, n_bottom = 
             if point[1] < 0:
                 return i
 
-    def dist(p1, p2):
-        return ((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2) ** 0.5
-
     def find_dist(points):
         return [dist(points[i], points[i + 1]) for i in range(len(points) - 1)]
 
+    st_data = get_points(out, 'FLANGE')
+    split_idx = split(st_data)
+    sd_top = find_dist([(0, 0)] + st_data[:split_idx])
+    sd_bottom = find_dist(st_data[split_idx:] + [(0, 0)])
+    dist_list = sd_top + sd_bottom
+
     if distance_required:   # to find the approx. inter-stringer distance everywhere except behind the rear spar
-        st_data = get_points(out, 'FLANGE')
-        split_idx = split(st_data)
-        sd_top = find_dist([(0, 0)] + st_data[:split_idx])
-        sd_bottom = find_dist(st_data[split_idx:] + [(0, 0)])
-        return sd_top + sd_bottom
+        return dist_list
 
     split_index = split(data)
     airfoil_top, airfoil_bottom = data[:split_index + 1], data[split_index + 1:]
@@ -90,12 +93,22 @@ def form_stringers(distance_required = False, n_top = stringers_top, n_bottom = 
     with open(out, 'w') as File:
         File.writelines(points)
     raw_input('\n {}NOTE:{} Data has been written to "{}"! Continue after checking the flanges...\n'.format(yellow, null, out))
-    stringer_calc()
+    stringer_calc(dist_list)
 
 def stringer_calc(dist_list):
-    flange_pos, spar_front, spar_rear = [], [], []
+    flange_pos= []
     points = get_points("STRINGERS.dat", 'FLANGE')
     total = len(points)
+    points_for_areas = [(0.0, 0.0)] + points + [(0.0, 0.0)]
+
+    area_list = []
+    for i in range(len(points) + 1):        # find the area with respect to the aerodynamic center
+        a = dist(points_for_areas[i], (aero_x, 0.0))
+        b = dist(points_for_areas[i + 1], (aero_x, 0.0))
+        c = dist(points_for_areas[i], points_for_areas[i + 1])
+        peri = (a + b + c) / 2
+        area = (peri * (peri - a) * (peri - b) * (peri - c)) ** 0.5
+        area_list.append(area)
 
     scaled_points = points[:]
     for i, point in enumerate(scaled_points):
@@ -103,8 +116,9 @@ def stringer_calc(dist_list):
         if 'FLANGE' in point:
             flange_pos.append(i)
 
-    spar_front.extend([flange_pos[0], flange_pos[-1]])
-    spar_rear.extend([flange_pos[1], flange_pos[-2]])
+    spar_front = [flange_pos[0], flange_pos[-1]]
+    spar_rear = [flange_pos[1], flange_pos[-2]]
+    dist_list.insert(spar_rear[0] + 1, '\t')
 
     st_x, st_y = zip(*scaled_points)
     f_x, f_y = zip(*[point for i, point in enumerate(scaled_points) if i in spar_front + spar_rear])
@@ -132,13 +146,14 @@ def stringer_calc(dist_list):
     Sigma = [((Ixy * Sx - Ixx * Sy) / (Ixx * Iyy - Ixy ** 2)) * (X_Xc)[i] +
             ((Ixy * Sy - Iyy * Sx) / (Ixx * Iyy - Ixy ** 2)) * (Y_Yc)[i] for i in range(total)]
 
-    print '  ID\t(inter-dist.)\tIxx\t\tSigma'
+    print '  ID\t(inter-dist.)\tArea\t\tIxx\t\tSigma'
     for i in range(total):
         a, b = blue_1, null
         if i not in spar_front + spar_rear:
             a, b = '', ''
-        print "  {}{}\t{}\t{}\t{}{}" \
-              .format(a, i + 1, dist_list[i], round(Ixx_[i], 8), round(Sigma[i] / 10 ** 6, 8), b)
+        print "  {}{}\t{}\t{}\t{}\t{}{}" \
+              .format(a, i + 1, dist_list[i], area_list[i], round(Ixx_[i], 8), round(Sigma[i] / 10 ** 6, 8), b)
+    print '\t{}\t{}'.format(dist_list[i + 1], area_list[i + 1])
 
     max_sigma = max(map(abs, Sigma)) / 10 ** 6
     critical_sigma = ((pi ** 2) * 150e9 * min(Ixx_) / (stringer_area * 1.4 ** 2)) / 10 ** 6

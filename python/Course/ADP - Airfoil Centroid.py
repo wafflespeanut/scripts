@@ -1,12 +1,15 @@
+import os
 import matplotlib.pyplot as plt
 
+data_file = "AIRFOIL.dat"
+temp_file = 'TEMP.dat'
 datapoints = [[0, 0], [3, 4], [6, 0]]     # sample data (triangle)
 # the vertices should be either clockwise or anticlockwise in direction (i.e., forming a loop)
 
 # approximating airfoil as an irregular non-intersecting closed polygon (given by data points)
 # let's now find the centroid: https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
 
-def get_points(file_name, special = None):
+def get_points(file_name, special = None, scale = 1):
     with open(file_name, 'r') as File:
         stuff = File.readlines()
     datapoints = []
@@ -20,14 +23,25 @@ def get_points(file_name, special = None):
         except ValueError:
             continue
         datapoints.append(point)
+    if scale is not 1:
+        points = map(lambda (x, y): str(x * scale) + '\t' + str(y * scale) + '\n', datapoints)
+        with open(temp_file, 'w') as File:
+            File.writelines(points)
+        print '\nSuccessfully written the scaled points to %r' % temp_file
+        return
     return datapoints
 
-def centroid(data = "AIRFOIL.dat", ex = 0.1, ey = 0.05):
+def centroid(data = data_file, scale = 1):
     if type(data) is str:
         try:
+            if scale is not 1:
+                get_points(data, None, scale)
+                raw_input('\nMake your changes and continue...')
+                data = temp_file
             data = get_points(data)
         except IOError:
             data = datapoints
+    os.remove(temp_file)
     def dry_helper(x0, x1, y0, y1):
         return x0 * y1 - y0 * x1
     num = len(data)
