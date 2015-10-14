@@ -5,10 +5,10 @@ path = os.path.expanduser('~/Desktop/Github/scripts/python/Project Euler')
 # A script to cleanup my old code (works quite nicely only for totally shitty code!)
 # May screw your code if it's already clean (though I've never tried it)
 
-def search(path, ext = 'py'):                           # For listing all those .py files
+def search(path, ext = '.py'):                           # For listing all those .py files
     fileList = []
     for root, dirs, files in os.walk(path):
-        temp = [root + os.sep + f for f in files if f[-len(ext):] == ext]
+        temp = [root + os.sep + f for f in files if f.endswith(ext)]
         fileList.extend(temp)
     return sorted(fileList)
 

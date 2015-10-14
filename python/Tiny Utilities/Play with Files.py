@@ -46,10 +46,11 @@ def num(path = path):                       # Rename numbered ones
 
 def mp3(path = path):                       # Rename MP3s based on their title
     for File in os.listdir(path):
-        if not 'mp3' in File:
+        if File.endswith('.mp3'):
             continue
         loadFile = eyed3.load(path + File)
-        newTitle = raw_input('Current title: % s\n[Enter] to use the current metadata, or type a new one:\n' % (loadFile.tag.title))
+        newTitle = raw_input('Current title: % s\n[Enter] to use the current metadata, or type a new one:\n' \
+                   % (loadFile.tag.title))
         if newTitle == '':
             newTitle = loadFile.tag.title
         else:
