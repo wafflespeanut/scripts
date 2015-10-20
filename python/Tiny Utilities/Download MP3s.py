@@ -2,8 +2,8 @@ from urllib import *
 from os import *
 import lxml.html
 
-links = []
-savePath = "C:\\TEMP\\"
+links = ["http://downloads.khinsider.com/game-soundtracks/album/assassin-s-creed-iv-black-flag-the-complete-edition"]
+savePath = path.expanduser('~/Desktop/TEMP/')
 
 # I used to download embedded MP3 soundtracks with this...
 
@@ -12,34 +12,34 @@ def urls(link, what = 'mp3', tag = '//a/@href'):
     dom = lxml.html.fromstring(response)
     return [l for l in dom.xpath(tag) if '#' not in l and what in l]
 
-def get():
+def get(savePath = savePath):
     for link in links:
         folder = link.split('/')[-1]
-        if path.exists(savePath + folder):
+        if path.exists(path.join(savePath, folder)):
             print "\n[FOLDER] %s already exists! \n" % folder
         else:
-            mkdir(savePath + folder)
+            mkdir(path.join(savePath, folder))
         for i in urls(link):
             try:
                 dlink = urls(i)[0]
                 name = dlink.split('/')[-1]
-                if name in listdir(savePath + folder):
+                if name in listdir(path.join(savePath, folder)):
                     print "[File] %s already exists! " % name      # path.getsize() can also be used
-                    if stat(savePath + folder + '\\' + name).st_size == int(urlopen(dlink).info()['Content-Length']):
+                    if stat(path.join(savePath, folder, name)).st_size == int(urlopen(dlink).info()['Content-Length']):
                         continue
                     else:
                         s = str(raw_input("\tFile has different size! Overwrite (y/n)? "))
                         if s == 'y':
                             print "Downloading", dlink, "..."
-                            urlretrieve(dlink, savePath + folder + '\\' + name)
+                            urlretrieve(dlink, path.join(savePath, folder, name))
                             continue
                         else:
                             print "\t[File] %s skipped! " % name
                             continue
                 print "Downloading", dlink, "..."
-                urlretrieve(dlink, savePath + folder + '\\' + name)
+                urlretrieve(dlink, path.join(savePath, folder, name))
             except (IOError, KeyboardInterrupt):
                 print '\t[File] %s skipped! ' % name
-                if path.exists(savePath + folder + '\\' + name):
-                    remove(savePath + folder + '\\' + name)
+                if path.exists(path.join(savePath, folder, name)):
+                    remove(path.join(savePath, folder, name))
                 continue
