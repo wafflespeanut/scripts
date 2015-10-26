@@ -95,7 +95,7 @@ def form_stringers(distance_required = False, n_top = stringers_top, n_bottom = 
     raw_input('\n {}NOTE:{} Data has been written to "{}"! Continue after checking the flanges...\n'.format(yellow, null, out))
     stringer_calc(dist_list)
 
-def stringer_calc(dist_list):
+def stringer_calc(dist_list, to_print = False):
     flange_pos= []
     points = get_points("STRINGERS.dat", 'FLANGE')
     total = len(points)
@@ -162,17 +162,22 @@ def stringer_calc(dist_list):
     print '\n {}Least value of Ixx: {}{}\n'.format(blue_2, min(Ixx_), null)
     print ' {}Maximum Stress: {} MPa{}'.format(color, max_sigma, null)
     print ' {}Critical Stress: {} MPa{}'.format(yellow, critical_sigma, null)
-    plot_over_airfoil(data, st_x, st_y, f_x, f_y)
+    if to_print:
+        plot_over_airfoil(data, st_x, st_y, True)
+    else:
+        plot_over_airfoil(data, st_x, st_y, False, f_x, f_y)
 
 while True:
     try:
         something = raw_input('\nContinue after making changes. You can...\n\n\
         1. [Enter] to continue with stringer calculation...\n\
-        2. Regenerate, by entering the values for the number of stringers (both top and bottom) and [Enter]...\n\
+        2. Regenerate, by entering the values for the number of stringers (both top and bottom separated by spaces) and [Enter]...\n\
+        3. Type in "print" and [Enter] to generate black & white plot \n\
         4. Ctrl-C to quit!\n')
-        if something == '':
+        if something == '' or something == 'print':
             dist_list = form_stringers(True)
-            stringer_calc(dist_list)
+            to_print = True if something == 'print' else False
+            stringer_calc(dist_list, to_print)
         else:
             try:
                 s = something.split()

@@ -53,16 +53,23 @@ def centroid(data = data_file, scale = 1):
     print '\nTotal area:', abs(area), '\n(X_c, Y_c) =', (cx, cy)
     plot_over_airfoil(data, [cx], [cy])
 
-def plot_over_airfoil(data, px1, py1, px2 = None, py2 = None, ex = 0.1, ey = 0.05):
+def plot_over_airfoil(data, px1, py1, to_be_printed = False,
+                      px2 = None, py2 = None, ex = 0.1, ey = 0.05):
     x, y = zip(*data)
     plt.plot()
     ax = plt.gca()
     ax.set_xlim([min(x) - ex, max(x) + ex])
     ax.set_ylim([min(y) - ey, max(y) + ey])
     ax.set_aspect('equal')
-    line = plt.plot(x, y)
+    color = 'black' if to_be_printed else 'blue'
+    plt.plot(x, y, color)
     ax.figure.canvas.draw()
-    ax.plot(px1, py1, 'ob')
-    if px2 and py2:
-        ax.plot(px2, py2, 'or')
+    if to_be_printed:
+        ax.plot(px1, py1, 'ok')
+        for i in range(len(px1)):
+            ax.annotate(i + 1, (px1[i], py1[i]))
+    else:
+        ax.plot(px1, py1, 'ob')
+        if px2 and py2:
+            ax.plot(px2, py2, 'or')
     plt.show()
