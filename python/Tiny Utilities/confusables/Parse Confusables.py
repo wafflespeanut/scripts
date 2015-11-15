@@ -5,9 +5,8 @@
 def const_array_of_strings(name, type_spec = "&'static str"):
     return [unicode("const %s: &'static [%s] = &[" % (name, type_spec))]
 
-arrays = [const_array_of_strings('ASCII_ARRAY', "(char, &'static str)"),
-          const_array_of_strings('UNICODE_ARRAY', 'char'),
-          const_array_of_strings('SUB_ARRAY', "(usize, &'static str)"),]
+arrays = [const_array_of_strings('UNICODE_ARRAY', "(char, &'static str, char)"),
+          const_array_of_strings('ASCII_ARRAY', "(char, &'static str)")]
 lengths = map(lambda arr: len(arr[0]), arrays)
 
 def format_for_type(thing):
@@ -17,12 +16,14 @@ def format_for_type(thing):
         return u'"%s"' % thing
     return u'%s' % thing
 
-def put_into_list(list_at_work, initial_len, stuff, limit = 100):
+def put_into_list(list_at_work, initial_len, stuff, limit = 100, newline = False):
     if len(stuff) > 1:
         uni_str = u'(' + u', '.join([format_for_type(thing) for thing in stuff]) + '), '
     else:
         uni_str = format_for_type(stuff[0]) + u', '
-    if len(list_at_work[-1] + uni_str) >= limit:
+    if newline:
+        list_at_work.append(u'\n' + u' ' * 4 + uni_str)
+    elif len(list_at_work[-1] + uni_str) >= limit:
         list_at_work.append(u'\n' + u' ' * initial_len + uni_str)
     else:
         list_at_work[-1] += uni_str
@@ -39,16 +40,14 @@ with open('CONFUSABLES.txt', 'rb') as file_data:
         uni_char = unichr(int(u_char, 16))
         if uni_char not in uni_list:        # too many duplicates really
             uni_list.append(uni_char)
-            put_into_list(arrays[1], lengths[1], [uni_char])
             ascii_char = unichr(int(sub_char, 16))
             ascii_char = '\\' + ascii_char if ascii_char in '\'"\\' else ascii_char
+            put_into_list(arrays[0], lengths[0], [uni_char, u_name, ascii_char], newline = True)
             try:
                 idx = ascii_list.index((ascii_char, sub_name))
-                put_into_list(arrays[2], lengths[2], [idx, u_name])
             except ValueError:
-                put_into_list(arrays[2], lengths[2], [len(ascii_list), u_name])
                 ascii_list.append((ascii_char, sub_name))
-                put_into_list(arrays[0], lengths[0], [ascii_char, sub_name])
+                put_into_list(arrays[1], lengths[1], [ascii_char, sub_name], newline = True)
 
 arrays = map(lambda arr: u''.join(arr) + u'];' , arrays)
 with open('unicode_chars.rs', 'wb') as file_data:
