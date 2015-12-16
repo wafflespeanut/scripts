@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void insertion_sort(int *array, int length) {
+void insertion_sort(int *array, int length) {   // in-place sort
     int i, j, value;
     for (i = 1; i < length; i++) {
         j = i - 1;

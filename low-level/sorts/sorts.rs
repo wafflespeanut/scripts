@@ -1,6 +1,6 @@
 use std::cmp::Ord;
 
-fn insertion_sort<T: Ord>(array: &mut [T]) {
+fn insertion_sort<T: Ord>(array: &mut [T]) {    // in-place sort
     for i in 1..array.len() {
         let mut j = i;
         while j > 0 && array[j] < array[j - 1] {
