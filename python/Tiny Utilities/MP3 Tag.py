@@ -7,14 +7,14 @@ from time import sleep
 # It generates a json file, parses that as a dictionary and applies it to the tracks
 # any changes we want, can be made to that json file using regex search & replace
 
-path = os.path.expanduser('~/Desktop/TEMP')
+path = '~/Desktop/TEMP'
 colors = { 'R': '91', 'G': '92', 'Y': '93', 'B2': '94', 'P': '95', 'B1': '96', 'W': '97', '0': '0', }
 
 def fmt(color = '0'):
     return {'win32': ''}.get(sys.platform, '\033[' + colors[color] + 'm')
 
-avoid_titles = ['the', 'for', 'a', 'an', 'if', 'is', 'on', 'or',
-                'in', 'by', 'am', 'not', 'of', 'to', 'at', 'be']
+avoid_titles = ['in', 'by', 'am', 'a', 'an', 'if', 'is', 'on', 'or',
+                'the', 'for', 'not', 'of', 'to', 'at', 'be', 'vs']
 # I prefer punctuations over some words and hyphen over some punctuations
 word_subs = { 'and': '&' }
 prefer_hyphen = ':_/'
@@ -118,7 +118,8 @@ def get_metadata(path):     # walk over a given path and get the metadata of MP3
         File.write(meta_data.encode('utf-8'))
     return True
 
-def change_meta(path = path, meta_exists = False):      # get the dumped metadata and modify the files
+def change_meta(rel_path = path, meta_exists = False):      # get the dumped metadata and modify the files
+    path = os.path.expanduser(rel_path)
     eyed3.log.setLevel("ERROR")
     temp_loc = os.path.join(path, 'TEMP')
     if not os.path.exists(temp_loc):
