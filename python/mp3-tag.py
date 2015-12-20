@@ -1,4 +1,3 @@
-execfile('Python Cleanup.py')
 import eyed3, os, sys, shutil
 from PIL import Image
 from time import sleep
@@ -6,6 +5,12 @@ from time import sleep
 # A script to cleanup my soundtracks...
 # It generates a json file, parses that as a dictionary and applies it to the tracks
 # any changes we want, can be made to that json file using regex search & replace
+
+def search(path, ext = '.py'):                           # For listing all those .py files
+    file_list = []
+    for root, dirs, files in os.walk(path):
+        file_list.extend([os.path.join(root, f) for f in files if f.endswith(ext) or f.endswith(ext.upper())])
+    return sorted(file_list)
 
 path = '~/Desktop/TEMP'
 colors = { 'R': '91', 'G': '92', 'Y': '93', 'B2': '94', 'P': '95', 'B1': '96', 'W': '97', '0': '0', }
@@ -76,7 +81,7 @@ def get_metadata(path):     # walk over a given path and get the metadata of MP3
     temp_loc = os.path.join(path, 'TEMP')
     meta_data, image_data = [], {}
     mime = { 'image/jpeg': '.jpg', 'image/jpg': '.jpg', 'image/png': '.png' }
-    files = search(path, '.mp3') + search(path, '.MP3')
+    files = search(path, '.mp3')
     if not files:
         return False
     i, total = 1, len(files)

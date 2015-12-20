@@ -1,6 +1,5 @@
-execfile('Python Cleanup.py')
-import subprocess as sub
-import os, sys
+execfile('mp3-tag.py')
+import os, sys, subprocess as sub
 
 program = 'C:\Program Files (x86)\MKVToolNix\mkvmerge.exe' if sys.platform == 'win32' else '/usr/bin/mkvmerge'
 default = ['"%s"' % program, '-o "%s"',
