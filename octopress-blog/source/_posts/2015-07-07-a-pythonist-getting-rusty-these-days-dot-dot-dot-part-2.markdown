@@ -21,11 +21,12 @@ My script was a bit *cranky*. Each time, it has a specific list of files (with M
 In Rust, I should already have a setup like this...
 
 ``` rust
-#![feature(libc)]       // the thing is pretty useful, but unstable
+extern crate libc;      // because, the standard library is unstable
+
 use std::slice;
 use libc::{size_t, c_char};
 
-#[no_mangle]            // Please don't mangle the names, my dear Rust!
+#[no_mangle]            // "Please don't mangle the names, my dear Rust!"
 pub extern fn get_stuff(array: *const *const c_char, length: size_t) {
     let array = unsafe { slice::from_raw_parts(array, length as usize) };
     // do some stuff with the array
@@ -47,9 +48,9 @@ lib.get_stuff(c_array, len(list_to_send))   # sending stuff to our Rust library
 
 Python's side is pretty much self-explanatory - just take a list, declare the argument types, form an array from the list and send its reference, along with its length. But, there are some interesting things going on at Rust's side. I'm sure you're aware of `pub extern`, which allows a function to be publicly called and especially from "C".
 
-Now, there's an `unsafe`. Like I said previously, Rust guarantees memory safety, but it doesn't know whether the data from an FFI is safe or not. So, we're supposed to use `unsafe` to tell Rust that everything outside this `unsafe { }` block is *truly* safe indeed, and that it should kindly lower its safety measures a little bit, so that the *unsafe* data jumps inside[^2].
+Now, there's an `unsafe`. Like I said previously, Rust guarantees memory safety, but it doesn't know whether the data from an FFI is safe or not. So, we're supposed to use an `unsafe` block to tell Rust that everything outside this `unsafe` block is *truly* safe indeed, and that it should kindly lower its safety measures a little bit, so that the *unsafe* data jumps inside[^2].
 
-The arguments indicate an array as a whole (which is understandable). `*const c_char` is a string in C, and so `*const *const c_char` is a pointer to an array of string of length `size_t`, from which the data is extracted into a Rust-type slice using `from_raw_parts`.
+The arguments indicate an array as a whole (which is understandable). `*const c_char` is a string in C, and so `*const *const c_char` is a pointer to an array of strings of length `size_t`, from which the data is extracted into a Rust-type slice using `from_raw_parts`.
 
 Now that we've got a slice of **C-type** strings, we gotta convert them to Rust-type strings - either `&str` or `String` (well, I prefer `&str`). For that, we can do some nice things with the `map`,
 
@@ -58,10 +59,11 @@ use std::str;
 use std::ffi::CStr;
 
 let mut stuff: Vec<&str> = array.iter()
-    .map(|&p| unsafe { CStr::from_ptr(p) })
-    .map(|c_string| c_string.to_bytes())
-    .map(|byte| str::from_utf8(byte).unwrap())
-    .collect();
+                                .map(|&p| {
+                                    let c_str = unsafe { CStr::from_ptr(p) };
+                                    let byte = c_str.to_bytes();
+                                    str::from_utf8(byte).unwrap()
+                                }).collect();
 ```
 
 We simply iterate through the slice, get the C-type string, convert it to bytes, from which we can then extract our UTF-8 strings[^3].
@@ -77,45 +79,41 @@ use std::mem;
 use std::ffi::CString;
 
 pub extern fn get_stuff(array: *const *const c_char, length: size_t) -> *const c_char {
-    // our entire operations
-    let count_string = occurrences.connect(" ");
+    // some operation here that finally gives us a data stream `count_string`
     let c_string = CString::new(count_string).unwrap();
     let raw_ptr = c_string.as_ptr();    // get the pointer and forget the object
-    mem::forget(c_string);              // bzzzz... leak, leak, leak...
+    mem::forget(c_string);              // wheeeee... leak everything away...
     raw_ptr
 }
 ```
 
-The `as_ptr` method takes an *immutable* reference and constructs a `CString` object. Then, I've used `mem::forget` because the `c_string` is owned by Rust. Even if we transfer the pointer, we can't be sure if it's been freed on Rust's side. So, we ask Rust to cut it loose, thereby *purposely* leak the memory, so that the FFI code (which, in this case, is Python) now owns the thing.
+The `as_ptr` method takes an *immutable* reference and constructs a `CString` object. Then, I've used `mem::forget` because the `c_string` is owned by Rust. Even if we transfer the pointer, we can't be sure if it's been freed on Rust's side. So, we ask Rust to cut it loose, thereby *purposely* leak the memory, so that the FFI code (Python, in this case) now owns the thing.
 
-Or, we could do something else. The nightly version offers an `into_ptr` method, which consumes the `CString` without deallocating the memory. So, we could also use that...
+Or, we could do something else. The nightly version offers an `into_raw` method, which consumes the `CString` without deallocating the memory. So, we could also use that...
 
 ``` rust
-#![feature(cstr_memory)]        // unstable feature
 use std::ffi::CString;
 
 pub extern fn get_stuff(array: *const *const c_char, length: size_t) -> *const c_char {
-    // blah blah blah
-    let c_string = CString::new(count_string).unwrap().into_ptr();
-    c_string
+    // all the code here
+    CString::new(count_string).unwrap().into_raw()
 }
 ```
 
-And, I personally think it's better, because there's another *unstable* method which does the opposite (which we'll be needing soon). If you just wanna stick to the stable version (*and* avoid memory leaks), then you've got no other choice, but to wait for a while, so that those methods become stable.
+I personally think this is better, because there's another method which does the opposite (which we'll be needing soon). Or, if you just wanna stick to the stable version (*and* avoid memory leaks), then you've got no other choice, but to wait for a while, so that those methods become stable.
 
-Anyways, let's get back to business. Now, that `c_string` is sent back to Python as a pointer, Python receives it nicely, gets the string from it and *finally*, do all the things I desired. Yeah, but life's not that simple. There's a problem here. What happened to the pointer we had just received? It's just there (as a dump!). We can't simply free the pointer in Python (like I said, both Rust & Python have totally different implementations). So, that represents a terrible [**memory leak!**](https://en.wikipedia.org/wiki/Memory_leak)
+Anyways, let's get back into business. Now, that `c_string` is sent back to Python as a pointer, Python receives it, gets the string from it and finally, does all the things *nicely*, just like I desired. Yeah, but life's not that simple. There's a problem here. What happened to the pointer we've just received? It's just there (as a dump!). We can't simply free the pointer in Python (like I said, both Rust & Python have totally different implementations). So, that represents a terrible [**memory leak!**](https://en.wikipedia.org/wiki/Memory_leak)
 
-The leak isn't a big problem for my application (the memory is gonna be flushed out by the OS sometime anyway), but it's still bad to have leaks. A good way is to return the pointer back to Rust, so that it can be freed properly. Only one (unstable) method offers this "proper freeing" of a pointer - `CString::from_ptr`, which does the inverse of `CString::into_ptr` (this is why I suggested using it in the first place).
+The leak isn't a big problem for my application (the memory is gonna be flushed out by the OS sometime anyway), but it's still bad to have leaks. A good way is to return the pointer back to Rust, so that it can be freed properly. Only one (unstable) method offers this "proper freeing" of a pointer - `CString::from_raw`, which does the inverse of `CString::into_raw` (this is why I suggested using it in the first place).
 
 Now, there's a little addition to the Rust code,
 
 ``` rust
-#![feature(cstr_memory)]        // unstable feature
 use std::ffi::CString;
 
 #[no_mangle]
 pub extern fn kill_pointer(p: *const c_char) {
-    unsafe { CString::from_ptr(p) };
+    unsafe { CString::from_raw(p) };
 }
 ```
 
@@ -127,7 +125,7 @@ import ctypes
 lib = ctypes.cdll.LoadLibrary("test.so")
 list_to_send = ['blah', 'blah', 'blah']
 # argument types should be mentioned while doing FFI in Python
-# forgetting that has caused segfaults for me
+# forgetting to do that has caused segfaults for me
 lib.get_stuff.argtypes = (ctypes.POINTER(ctypes.c_char_p), ctypes.c_size_t)
 lib.get_stuff.restype = ctypes.c_void_p
 lib.kill_pointer.argtypes = [ctypes.c_void_p]
@@ -140,7 +138,7 @@ count_string = ctypes.c_char_p(c_pointer).value     # get the string
 lib.kill_pointer(c_pointer)     # send the pointer back for hack & slash!
 ```
 
-In Python, I get the pointer, extract the string from it, and send it back to Rust. So, I (had to) create a function in Rust to just *kill* this ugly pointer. The `CString::from_ptr` consumes the pointer and produces a `CString` for Rust, which then gets deallocated as the scope runs out of life, which means that the obtained `CString` should get destroyed[^5]. And, the processes are now memory safe!
+In Python, I get the pointer, extract the string from it, and send it back to Rust. So, I (had to) create a function in Rust to just *kill* this ugly pointer. The `CString::from_raw` consumes the pointer and produces a `CString` for Rust, which then gets deallocated as the scope runs out of life, which means that the obtained `CString` should get destroyed[^5]. And, the processes are now memory safe!
 
 ## So much for the FFI. What are the perks?
 
@@ -148,11 +146,11 @@ Only one - *performance*. The decrypting & searching (of ~200 files) took about 
 
 When I got to see that *effect*, I decided (almost immediately) to use the Rust-Python FFI for almost all my computation-related works in the future. As an undergrad in aeronautics, I've got some ugly computations (for which I've always used proprietary software). Maybe it's time for me to start using open-source and do the works all by myself!
 
-<small>**Sidenote:** I'm still entirely not sure whether this is efficient, or whether this is the proper way to do things in systems programming, so feel free to drop any suggestions. I welcome your *criticism* happily! Again, thanks to all the Rustaceans at the #rust IRC channel for helping me out whenever I got stuck.</small>
+<small>**Sidenote:** I'm still entirely not sure whether this is efficient, or whether this is the proper way to do things in systems programming, so feel free to drop any suggestions. I welcome your *criticism* happily! Again, thanks to all the Rustaceans at the [#rust IRC channel](https://botbot.me/mozilla/rust/) for helping me out whenever I got stuck.</small>
 
 <small>You can also check out the discussion on [HN](https://news.ycombinator.com/item?id=9853688) and [Reddit](https://www.reddit.com/r/rust/comments/3ckv6z/a_pythonist_getting_rusty_these_days_part_2/).</small>
 
-[^1]: Of course, it's for that very same [diary](https://github.com/Wafflespeanut/biographer) I had talked about. I had to decrypt a lot of files and search through them (which Rust is pretty good at).
+[^1]: Of course, it's for that very same [diary](https://github.com/Wafflespeanut/biographer) I'd talked about. I had to decrypt a lot of files and search through them (which Rust is pretty good at).
 
 [^2]: Well, this also means that it's the coder's job to ensure that the code inside the `unsafe` block is actually safe.
 

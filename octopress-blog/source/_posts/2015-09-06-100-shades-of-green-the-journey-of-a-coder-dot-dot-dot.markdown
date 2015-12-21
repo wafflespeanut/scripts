@@ -74,7 +74,7 @@ I got into IRC and discovered that they offered mentors for new users. I got one
 
 It was by that time Rust 1.0.0 was released. I've never played with a low-level language. The release of Rust and its success was my motivation. I got excited about it, and immediately got indulged in it (with the help of the [wonderful docs & book](https://doc.rust-lang.org/). Now, an idea popped up while reading about [concurrency and FFI](https://doc.rust-lang.org/book/rust-inside-other-languages.html) in Rust (that was my first time reading about "FFI", though I had some idea about concurrency). Anyways, that diary I'd written was completely in Python. So, If I could somehow link it through FFI and hand over the searching to Rust (and utilize its concurrency), then I could save a lot of time. And, it did.
 
-This task consumed a whole weekend of mine (but, it was worth it!). Though FFI was hard, I got help from a lot of Rustaceans (mostly at IRC for minor things, or Stackoverflow, when [things went out of hand](https://stackoverflow.com/q/31083223/2313792)). I loved Rust so much (just like I loved Python), which is also why I never felt hopeless, and by the end of the day, I [got the thing to work!](http://wafflespeanut.github.io/blog/2015/07/08/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2/) *(finally...)*
+This task consumed an entire weekend of mine (but, it was worth it!). Though FFI was hard, I got help from a lot of Rustaceans (mostly at IRC for minor things, or Stackoverflow, when [things went out of hand](https://stackoverflow.com/q/31083223/2313792)). I loved Rust so much (just like I loved Python), which is also why I never felt hopeless, and by the end of the day, I [got the thing to work!](http://wafflespeanut.github.io/blog/2015/07/08/a-pythonist-getting-rusty-these-days-dot-dot-dot-part-2/) *(finally...)*
 
 ## Coding everyday...
 
@@ -88,9 +88,9 @@ Nowadays, I'm involved in the [Servo browser engine](https://github.com/servo/se
 
 [^1]: If you had grown in my locality (in your childhood), then all you know is that a computer (which you often see in school) is *"something"* where you can only type, draw, and play games - nothing more! I'm not embarrassed to say that we were never curious!
 
-[^2]: Well, we learned that from a virus (and that too because we never believed in the concept of an anti-virus (since everything is just the cause & effect of code). This command is often utilized by a harmless worm which infects pen drives.
+[^2]: Well, we learned that from a virus (and that too because we never believed in the concept of an anti-virus, since everything is just the cause & effect of code). This command is often utilized by a harmless worm which infects pen drives.
 
-[^3]: It was required for a course, where we draw instantaneous vector diagrams of parts of machines. I had even [made some (not so boring) videos](https://www.youtube.com/playlist?list=PLpqCCxmTKpa1NBYfoEJlKb8X4fq0Pf6N9) for the junior undergrads using those animations.
+[^3]: It was required for a course, where we draw instantaneous vector diagrams of parts of machines. I'd even [made some (not so boring) videos](https://www.youtube.com/playlist?list=PLpqCCxmTKpa1NBYfoEJlKb8X4fq0Pf6N9) for the junior undergrads using those animations.
 
 [^4]: It's not a great *project* and all (I created that only to dig deeper into Python, and I have!). And yeah, I do write my story every day (I've got about a year of stories now). I don't usually spend much time other than just recalling the events, and I just write a paragraph or two (like hints) - to just remind myself that something so nice/worse has happened on that day.
 

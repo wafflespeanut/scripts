@@ -6,11 +6,11 @@ comments: true
 categories: [Python, Rust]
 ---
 
-Though I've been playing with Python and JS for a while, getting into systems programming is one of the things I've always wanted to do. The increased talks about Rust in the IRC (in the previous months), followed by the release of Rust 1.0 gave me a kickstart, which took me into Rust about two weeks back.
+Though I've been playing with Python and JS for a while, getting into systems programming is one of the things I've always wanted to do. The increased talks about Rust in the IRC (over the last few months), followed by the release of Rust 1.0 gave me a kickstart, which took me into it about two weeks back.
 
 I got to see the beauty of Rust (thanks to the [wonderful book](http://doc.rust-lang.org/book/)) and I immediately liked it - its syntax, static type system, vast compile-time checking, etc., especially how it tackles the problem of memory safety by introducing a new concept called **ownership** and it does all those without the use of a garbage collector.
 
-Today, I'll try to explain what I liked about Rust. The upcoming ones are reserved for topics like FFI and concurrency, and how I got around some of the worst situations I've experienced as a newbie who just into the systems programming world.
+Today, I'll try to explain what I liked about the language. The upcoming ones are reserved for topics like FFI and concurrency, and how I got around some of the worst situations I experienced (as a newbie who just got into the systems programming world).
 
 <!-- more -->
 
@@ -22,7 +22,7 @@ It was quite hard for me at first, to understand how Rust worked. So, I decided 
 
 As I got to know more and more about Rust, I began to look for ways to make my code more *efficient*. Honestly, I had to rewrite my entire diary to achieve that. I changed the data structure, the encryption scheme, the options it provided, etc., that one day it got quite big, (~500 lines of code) that I had to shift it to [a new repository](https://github.com/Wafflespeanut/biographer).
 
-I realized that translating the diary is probably a bad idea at this point. Luckily, there was one thing I could offer. My diary supported *searching* through the encrypted stories. This is where high-level languages suck. So, I decided to integrate Rust into my diary, by writing a library (which can search at lightning speed!). To achieve that, I had two things in mind - [FFI](http://en.wikipedia.org/wiki/Foreign_function_interface) and concurrency, which Rust handled quite *nicely*. That's where my life as a *Rustacean* began.
+At this point, I realized that translating the diary is probably a bad idea. Luckily, there was one thing I could offer. My diary supported *searching* through the encrypted stories. This is where scripting languages (like Python) suck, in the sense that they take too much time. So, I decided to integrate Rust into my diary, by writing a library (which can search at lightning speed!). To achieve that, I had two things in mind - [FFI](http://en.wikipedia.org/wiki/Foreign_function_interface) and concurrency, which Rust handled quite *nicely*. That's where my life as a *Rustacean* began.
 
 # Some things I liked...
 
@@ -44,8 +44,8 @@ In the case of Rust, I decided to work with bytes rather than strings (as it see
 fn shift(text_bytes: &Vec<u8>, amount: u8) -> Vec<u8> {
     text_bytes.iter() // wrap around the boundary if the sum overflows
         .map(|byte| amount.wrapping_add(*byte))
-        .collect() }
-// we don't have to say `collect::<Vec<u8>>()` explicitly, thanks to Rust's type inference
+        .collect()
+} // we don't have to say `collect::<Vec<u8>>()` explicitly, thanks to Rust's type inference
 ```
 
 I'm just iterating over the bytes, mapping a function over the values using a closure `|byte|` and finally collect everything into a vector of 8-bit unsigned integers. Notice the absence of `;` at the end of the expression. Since the function has a return type denoted by `->` (which is a `Vec<u8>` in this case), Rust automatically *infers* this as the result of the function. Then, there are these types for each argument, which brings me to my next favorite thing - **static type system**.
@@ -64,18 +64,18 @@ fn shift(text_bytes: &Vec<u8>, amount: u8) -> Vec<u8> {
 
 Obviously, Rust doesn't compile! Instead, it shows a nice helpful error[^3]...
 
-```
-Compiling demo v0.0.1 (file:///home/wafflespeanut/Desktop/demo)
-src/lib.rs:104:10: 104:16 error: no method named `blah` found for type
-`core::iter::Map<core::slice::Iter<_, u8>, [closure src/lib.rs:102:14: 102:47]>`
-in the current scope
-src/lib.rs:104         .blah()
-                     ^~~~~~
-error: aborting due to previous error
-Could not compile `demo`.
 
-To learn more, run the command again with --verbose.
-```
+    Compiling demo v0.0.1 (file:///home/wafflespeanut/Desktop/demo)
+    src/lib.rs:104:10: 104:16 error: no method named `blah` found for type
+    `core::iter::Map<core::slice::Iter<_, u8>, [closure src/lib.rs:102:14: 102:47]>`
+    in the current scope
+    src/lib.rs:104         .blah()
+                            ^~~~~~
+    error: aborting due to previous error
+    Could not compile `demo`.
+
+    To learn more, run the command again with --verbose.
+
 
 It tells us that the type `core::iter::Map<core::slice::Iter<_, u8>, [closure ...]>` doesn't implement our `blah` method (by which it's letting us know about the exact type), and it also points to the exact location where it has occurred (the same goes for warnings, which can come out of camel cases, deprecated APIs, unused variables, etc.). This *type-shouting* was very helpful for me while working with complicated types, specifically when I'm not sure about what type I get at some location.
 
@@ -92,7 +92,8 @@ In Rust, `let` does the same job, and `in` works more or less the same (in the s
 ``` rust
 let (mut x, y, z) = (1, 2, 3);  // same unpacking
 for i in &[3, 5, 7] {           // iterating directly over a slice
-    println!("{:?}", i); }
+    println!("{}", i);
+}
 ```
 
 Now, there's a `mut` in `x`, and you can also notice the `&` operator in the slice, which brings us to the ultimate weapons of Rust - **mutability** and **ownership**. These are the things that allow Rust to guarantee memory safety[^4]. By default, variable bindings are *immutable* in Rust. In order to modify the binding in any way, you should specify it as `mut`, so that the binding becomes mutable, or else you can't change its value.
@@ -136,7 +137,7 @@ That's the only way we can prevent data races. That being said, we can achieve m
 
 As far as I've seen, Rust offers various kinds of interesting options to easily get around most of the complex situations. For all the high-level coders out there, if you've always wanna get into systems programming, then I suggest "Rust" as a nice start!
 
-<small>Thanks to Manish for reviewing this post and thanks to all the *Rustaceans* who helped me whenever I got into the #rust channel at the IRC. For more, see the [discussion about this post](https://www.reddit.com/r/rust/comments/3c7r1l/a_pythonist_getting_rusty_these_days/) on Reddit.</small>
+<small>Thanks to Manish for reviewing this post and thanks to all the *Rustaceans* who helped me whenever I got into the [#rust channel](https://botbot.me/mozilla/rust/) at IRC. For more, see the [discussion about this post](https://www.reddit.com/r/rust/comments/3c7r1l/a_pythonist_getting_rusty_these_days/) on Reddit.</small>
 
 [^1]: It *was* a very basic thing - it just wrote the story into a file, hexes and shifts the ASCII values (my encryption was just a hexed Caesar cipher). That was the state of it [until about a month ago](https://github.com/Wafflespeanut/scripts/blob/8850c831c10955b5c32d2710abfbfef916031792/Memorandum/Diary.py).
 
