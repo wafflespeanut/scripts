@@ -17,6 +17,7 @@ def cleanup_html(path = file_path + file_name):
     '''
     Prettify an uglified (a.k.a., minified) HTML. Note that this works only for the minified version!
     Since this doesn't check for whitespaces, partially (or) fully cleaned up files may be screwed up!
+    Well, it was created to play with the Facebook data, and it serves its purpose very well...
     '''
     i, spaces, clean_data = 0, 0, ''
     expect_tag = []
