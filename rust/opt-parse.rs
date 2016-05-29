@@ -3,6 +3,7 @@
 // while compiling your binary, like so - `rustc -O <binary> -L <libopt_parse.rlib directory>`
 #![crate_type = "rlib"]
 #![allow(dead_code)]
+use std::collections::HashMap;
 use std::env::Args;
 use std::iter::repeat;
 
@@ -29,9 +30,9 @@ pub enum ExpectOpt {
 pub struct ArgsParser {
     // FIXME: doesn't work very well for duplicated options
     // Construct an actual parser, either mark or remove the args from vector once they're parsed
-    args: Vec<String>,
+    pub args: Vec<String>,
     // (argument, value)
-    parsed_stuff: Vec<(String, String)>,
+    parsed_stuff: HashMap<String, String>,
     // (argument, value, help string) - stored only to print the help message
     expected_stuff: Vec<(String, String, String)>,
     usage: String,
@@ -41,13 +42,12 @@ pub struct ArgsParser {
 impl ArgsParser {
     // `args_format` is the format of the args passed to your binary (for e.g., "FILE [OPTIONS]")
     // (which will be prefixed by the binary's name while showing the help message)
-    pub fn new(args: Args, args_format: &str, suffix: &str) -> ArgsParser {
-        let mut args = args.skip(0);
+    pub fn new(mut args: Args, args_format: &str, suffix: &str) -> ArgsParser {
         let name = args.next().unwrap();
         let args_vec = args.collect();
         ArgsParser {
             args: args_vec,
-            parsed_stuff: Vec::with_capacity(PROBABLE_SIZE),
+            parsed_stuff: HashMap::with_capacity(PROBABLE_SIZE),
             expected_stuff: Vec::with_capacity(PROBABLE_SIZE),
             usage: format!("USAGE: {} {}", name, args_format),
             suffix: suffix.to_owned(),
@@ -69,10 +69,8 @@ impl ArgsParser {
             if arg.starts_with('-') {
                 let arg = arg.trim_left_matches('-');
                 if arg == opt_small {
+                    bool_found = true;
                     match expected {
-                        ExpectOpt::BoolVal => {
-                            bool_found = true;
-                        },
                         ExpectOpt::StringVal => {
                             if let Some(val) = args.next() {
                                 val_for_opt = val;
@@ -84,10 +82,8 @@ impl ArgsParser {
 
                 let mut arg = arg.split('=');
                 if arg.next().unwrap() == opt_big {     // first value always exists in a split!
+                    bool_found = true;
                     match expected {
-                        ExpectOpt::BoolVal => {
-                            bool_found = true;
-                        },
                         ExpectOpt::StringVal => {
                             if let Some(val) = arg.next() {
                                 val_for_opt = val;
@@ -107,19 +103,22 @@ impl ArgsParser {
         self.expected_stuff.push((opt_small.to_owned(), opt_big.to_owned(), help_msg.to_owned()));
         match expected {
             ExpectOpt::BoolVal if !bool_found => (),
-            _ => self.parsed_stuff.push((accessor.to_owned(), val_for_opt.to_owned())),
+            ExpectOpt::StringVal if !bool_found => (),
+            _ => {
+                let _ = self.parsed_stuff.insert(accessor.to_owned(), val_for_opt.to_owned());
+            },
         }
     }
 
-    // check whether an option exists (useful only for ExpectOpt::BoolVal)
+    // check whether an option exists
     pub fn is_opt_exists(&self, accessor: &str) -> bool {
-        self.parsed_stuff.iter().find(|&&(ref a, _)| a == accessor).is_some()
+        self.parsed_stuff.get(accessor).is_some()
     }
 
     // check whether an option exists and get its value (if any)
     pub fn get_val(&self, accessor: &str, error_msg: &str) -> Option<String> {
-        match self.parsed_stuff.iter().find(|&&(ref a, _)| a == accessor) {
-            Some(&(_, ref val)) if !val.is_empty() => Some(val.clone()),
+        match self.parsed_stuff.get(accessor) {
+            Some(val) if !val.is_empty() => Some(val.clone()),
             _ => {
                 if !error_msg.is_empty() {
                     println!("{}", error_msg);
@@ -139,7 +138,7 @@ impl ArgsParser {
                                           } else {
                                               Some(format!("    -{}{}--{}{}{}",
                                                            arg_small, nspace(6 - arg_small.len() % 6),
-                                                           arg_big, nspace(10 - arg_big.len() % 10), msg))
+                                                           arg_big, nspace(14 - arg_big.len() % 14), msg))
                                           }
                                       }).collect::<Vec<String>>();
         let options = match help.is_empty() {

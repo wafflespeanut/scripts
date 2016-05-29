@@ -10,13 +10,14 @@ def urls(link, what = '.mp3', tag = '//a/@href'):
     dom = lxml.html.fromstring(response)
     return sorted(set([l for l in dom.xpath(tag) if '#' not in l and l.endswith(what)]))
 
-def get(save_path = path):
+def mp3_get(save_path = path):
     for link in links:
         dir_path = os.path.join(save_path, link.split('/')[-1])
         if os.path.exists(dir_path):
             print "\n[FOLDER] %s already exists! \n" % dir_path
         else:
             os.mkdir(dir_path)
+
         for url in urls(link):
             try:
                 dlink = urls(url)[0]
@@ -26,10 +27,9 @@ def get(save_path = path):
                     print "[File] %s already exists! " % name      # path.getsize() can also be used
                     if os.stat(file_path).st_size == int(urllib.urlopen(dlink).info()['Content-Length']):
                         continue
-                    else:
-                        if raw_input("\tFile has different size! Overwrite (y/n)? ") != 'y':
-                            print "\t[File] %s skipped! " % name
-                            continue
+                    elif raw_input("\tFile has different size! Overwrite (y/n)? ") != 'y':
+                        print "\t[File] %s skipped! " % name
+                        continue
                 print "Downloading", dlink, "..."
                 urllib.urlretrieve(dlink, file_path)
             except (IOError, KeyboardInterrupt):

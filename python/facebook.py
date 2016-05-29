@@ -1,98 +1,110 @@
-# Parse the "messages.htm" file in your Facebook data
-# Nothing useful or interesting, other than a cumbersome counting
-# I just wanted to review my history
+# Parse the "messages.htm" file in your Facebook data and put them
+# into a JSON file for analysis (I just wanted to review my history)
+# I (personally) think that HTMLParser is very inefficient, but well,
+# it's available in all python distributions...
 
-# FIXME: Rewrite the thing to build a dictionary (JSON or tree structure, whatever you wanna call it)
-# out of the HTML, so that we can traverse through the keys whenever we want (which is way more elegant)
+from HTMLParser import HTMLParser
+from datetime import datetime as dt
+from timeit import default_timer as timer
 
-import os
-from datetime import datetime
+import os, sys, contextlib
 
-TAB_WIDTH = 4
-file_path = os.path.expanduser('~/Desktop/')
-file_name = 'messages.htm'
-new_name = 'clean_messages.htm'
+INIT_PATH = os.path.expanduser('~/Desktop')
+FILE_PATH = os.path.join(INIT_PATH, 'messages.htm')
 
-def cleanup_html(path = file_path + file_name):
-    '''
-    Prettify an uglified (a.k.a., minified) HTML. Note that this works only for the minified version!
-    Since this doesn't check for whitespaces, partially (or) fully cleaned up files may be screwed up!
-    Well, it was created to play with the Facebook data, and it serves its purpose very well...
-    '''
-    i, spaces, clean_data = 0, 0, ''
-    expect_tag = []
-    with open(path, 'r') as file_data:
-        data = ''.join(file_data.readlines())
-    max_length = len(data)
-    while i < max_length:               # FIXME: HTML -> JSON & indexing -> iterator
-        if data[i] == '<' and data[i + 1] != '/':
-            expect_tag.append(True)         # which means we're inside a block
-            clean_data += ' ' * spaces
-            spaces += TAB_WIDTH
-            while data[i] != '>':
-                clean_data += data[i]
-                i += 1
-            if data[i - 1] == '/':      # tags like <br/>, <link ... />, or <meta ... />
-                expect_tag.pop()
-                spaces -= TAB_WIDTH
-            clean_data += '>\n'
-        elif expect_tag and expect_tag[-1] and data[i] == '<' and data[i + 1] == '/':
-            if expect_tag.pop():
-                spaces -= TAB_WIDTH
-            clean_data += ' ' * spaces
-            while data[i] != '>':
-                clean_data += data[i]
-                i += 1
-            clean_data += '>\n'
-        if expect_tag and expect_tag[-1]:       # grab everthing inside a block (especially for <p> ... </p>)
-            i += 1
-            if i < max_length and data[i] != '<':
-                clean_data += ' ' * spaces
-                while i < max_length and data[i] != '<':
-                    clean_data += data[i]
-                    if data[i] == '\n':
-                        clean_data += ' ' * spaces
-                    i += 1
-                clean_data += '\n'
-            i -= 1
-        i += 1
-    with open(file_path + new_name, 'w') as file_buff:
-        file_buff.write(clean_data)
 
-def parse_to_dict():    # a terrible excuse for a parser, really!
-    with open(file_path + new_name, 'r') as file_data:
-        data = map(lambda line: line.strip(), file_data.read().split('\n'))
-    i, length, parsed = 0, len(data), {}
-    while i < length:   # find the user (we don't need any stuff other than the messages)
-        if data[i] == '<div class="contents">':     # FIXME: prefer regex for finding tags instead of raw-comparison
-            i += 2
-            username = data[i][:]
-            break
-        i += 1
-    while i < length:                   # FIXME: HTML -> JSON & indexing -> iterator
-        is_in_thread = False
-        if data[i] == '<div class="thread">':
-            is_in_thread = True
-            i += 1
-            people = data[i][:]
-            # we can safely reset this because the conversations are in (descending) order, and we won't lose anything!
-            parsed[people] = []
-        while is_in_thread and i < length:
-            if data[i] == '<div class="thread">':
-                is_in_thread = False
-            elif data[i] == '<span class="user">':
-                parsed[people] += [data[i + 1]]     # get the participant's name
-                i += 4      # parse the timestamp into a datetime object
-                parsed[people] += [datetime.strptime(data[i], '%A, %d %B %Y at %H:%M UTC+05:30')]
-                i += 5      # wheee... skipping happily because the structure is so predictable!
-                parsed[people].append('')
-                while data[i] != '</p>':    # grab the contents and chain replacements (probably inefficient)
-                    parsed[people][-1] += data[i].replace('&#039;', "'").replace('&amp;', '&').replace('&quot;', '"')
-                    i += 1
-            i += 1
-        i += 1
-    return parsed
+class FacebookDataParser(HTMLParser):
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.username = None
+        self.current_participants = None
+        self.message = ''
+        self.current_transcript = []
+        self.stack = []
+        self.parsed = {}
+
+        self.count = 0
+        self.timer = timer()
+        self.last_time = self.timer
+        self.total_time = 0
+
+        self.set_user = False
+        self.get_participant = False
+        self.get_talker = False
+        self.get_time = False
+
+    def handle_starttag(self, tag, attrs):
+        self.stack.append(tag)
+        if tag == 'div':
+            for name, value in attrs:
+                if name == 'class':
+                    if not self.username and value == 'contents':
+                        self.set_user = True
+                    elif value == 'thread':
+                        self.get_participant = True
+        elif tag == 'span':
+            for name, value in attrs:
+                if name == 'class':
+                    if value == 'user':
+                        self.get_talker = True
+                    elif value == 'meta':
+                        self.get_time = True
+
+    def handle_endtag(self, tag):
+        tag = self.stack.pop()
+        if tag == 'p':
+            self.current_transcript += [self.message]
+            self.message = ''   # ignore this and you'll probably crash your PC
+            self.parsed[self.current_participants].append(self.current_transcript)
+        elif tag == 'body':
+            print '\n\nTotal time: %s s' % round(self.total_time, 3)
+
+    def handle_data(self, data):
+        data = data.strip()
+
+        if self.set_user and self.stack[-1] == 'h1':
+            self.username = data
+            self.set_user = False
+
+        elif self.get_participant:
+            users = data.split(', ')
+            if self.username in users:
+                users.remove(self.username)
+
+            self.current_participants = ', '.join(users)
+            self.parsed[self.current_participants] = []
+            self.get_participant = False
+
+            self.timer = timer()
+            interval = self.timer - self.last_time
+            self.total_time += interval
+            self.last_time = self.timer
+            if self.count:
+                print ' (%s s)' % round(interval, 3)
+            sys.stdout.write('%s. %s' % (self.count + 1, self.current_participants))
+            sys.stdout.flush()
+            self.count += 1
+
+        elif self.get_talker:
+            self.current_transcript = [data]
+            self.get_talker = False
+
+        elif self.get_time:
+            timestamp = dt.strptime(data, '%A, %d %B %Y at %H:%M UTC+05:30')
+            self.current_transcript += [timestamp.strftime('%Y-%m-%d %H:%M')]
+            self.get_time = False
+
+        elif self.stack and self.stack[-1] == 'p':
+            self.message += data.decode('utf-8')
+
+    def handle_charref(self, ref):
+        self.handle_entityref("#" + ref)
+
+    def handle_entityref(self, ref):
+        self.handle_data(self.unescape("&%s;" % ref))
+
 
 if __name__ == '__main__':
-    cleanup_html()      # once we clean this up, it's pretty easy to parse it (efficiency doesn't matter here)
-    parsed_dict = parse_to_dict()
+    with open(FILE_PATH, 'r') as in_fd, \
+         contextlib.closing(FacebookDataParser()) as parser:
+        parser.feed(in_fd.read())
