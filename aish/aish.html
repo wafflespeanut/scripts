@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Abnormally Injecting Style into HTML</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <script type="text/javascript" src='aish.js'></script>
+        <script type="text/javascript">
+            let spewer = new SlowPrinter(0);
+            window.addEventListener('click', function() {
+              if (spewer.is_running) {
+                spewer.pause();
+              } else {
+                spewer.resume();
+              }
+            }, false);
+        </script>
+    </body>
+</html>
