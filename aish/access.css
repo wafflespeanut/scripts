@@ -19,6 +19,7 @@
     font-family: 'monospace';
     background-color: black; color: white;
     border: 1px solid green; border-radius: 7px;
+    transition: border 1s;
     padding: 5px;
     resize: none;
 }

@@ -23,6 +23,13 @@
     button.value = 'Go!';
     img_container.appendChild(button);
 
+    function red_glow() {
+        key_space.style.border = '1px solid red';
+        setTimeout(function() {
+            key_space.style.border = '1px solid green';
+        }, 1000);
+    }
+
     // the unbreakable one-time pad!
     function bytewise_xor(ciphertext, key) {
         var text = '';
@@ -45,15 +52,24 @@
 
     function get_content() {
         var script = document.createElement('script');
+        key_space.style.border = '1px solid yellow';    // checking script in background
         var result = bytewise_xor(CIPHERTEXT, key_space.value);
         if (!result) {
+            red_glow();
             return;
         }
 
         script.src = LINK_PREFIX + result + LINK_SUFFIX;
-        document.getElementsByTagName('head')[0].appendChild(script);
+        document.head.appendChild(script);
 
         script.onload = function() {
+            if (typeof tags == 'undefined' || typeof style == 'undefined') {
+                console.log('Definitely wrong key!');
+                document.head.removeChild(script);
+                red_glow();
+                return;
+            }
+
             // now, 'style' and 'tags' will be in global scope
             document.body.removeChild(img_container);
             document.body.innerHTML += tags;
