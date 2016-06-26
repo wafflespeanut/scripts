@@ -1,6 +1,4 @@
-document.body.innerHTML += tags;
-
-function SlowPrinter(delay_ms) {
+function SlowPrinter(delay_ms, style_string) {
     this.delay = delay_ms;
     var idx = 0, timer_id = 0;
     var code = document.getElementById('style-text');
@@ -17,18 +15,18 @@ function SlowPrinter(delay_ms) {
     }
 
     function print_next_char() {
-        var char = style[idx];
+        var char = style_string[idx];
         var replace_last_node = '';
         node.innerHTML += char;
 
         if (is_in_comment) {    // color scheme for code
-            if (char == '/' && style[idx - 1] == '*') {
+            if (char == '/' && style_string[idx - 1] == '*') {
                 is_in_comment = false;
                 tag_nodes[tag_nodes.length - 1].innerHTML += '/';
                 replace_last_node = prev_class;
             }
         } else {
-            if (char == '/' && style[idx + 1] == '*') {
+            if (char == '/' && style_string[idx + 1] == '*') {
                 is_in_comment = true;
                 // remember the previous class, so that once we get out of the comment,
                 // we should be able to restore it

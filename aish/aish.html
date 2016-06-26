@@ -3,18 +3,94 @@
     <head>
         <title>Abnormally Injecting Style into HTML</title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <style type="text/css">
+            #bg-image {
+                position: absolute;
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                background-position: center; background-size: cover;
+            }
+
+            #bg-dissolve {
+                height: 100%;
+                background-color: black;
+                opacity: 0.5;
+            }
+
+            #key-space {
+                position: fixed;
+                top: 50%; left: 50%;
+                width: 230px; height: 20px;
+                margin-top: 100px; margin-left: -130px;
+                font-family: 'monospace';
+                background-color: black; color: white;
+                border: 1px solid green; border-radius: 7px;
+                padding: 5px;
+                resize: none;
+            }
+
+            #key-button {
+                position: fixed;
+                top: 50%; left: 50%;
+                height: 30px;
+                margin-top: 100px; margin-left: 130px;
+                background-color: black; color: white;
+                border: 1px solid green; border-radius: 7px;
+            }
+        </style>
     </head>
+
     <body>
+        <style id="style-tag"></style>
+        <pre id="style-text"></pre>
+        <!-- MD5 implementation stolen from: https://github.com/blueimp/JavaScript-MD5 -->
+        <script type="text/javascript" src='md5.min.js'></script>
         <script type="text/javascript" src='aish.js'></script>
         <script type="text/javascript">
-            let spewer = new SlowPrinter(0);
-            window.addEventListener('click', function() {
-              if (spewer.is_running) {
-                spewer.pause();
-              } else {
-                spewer.resume();
-              }
-            }, false);
+            const LINK_PREFIX = 'https://www.dropbox.com/s/rq0gq89qga7nov1/';
+            const LINK_SUFFIX = '.js?dl=1';
+
+            // background
+            var img_container = document.createElement('div');
+            img_container.id = 'bg-image';
+            img_container.style.backgroundImage = 'url(access-denied.jpg)';
+            document.body.appendChild(img_container);
+            var dissolver = document.createElement('div');
+            dissolver.id = 'bg-dissolve';
+            img_container.appendChild(dissolver);
+
+            // password area
+            var key_space = document.createElement('input');
+            key_space.id = 'key-space';
+            key_space.type = 'password';
+            img_container.appendChild(key_space);
+            var button = document.createElement('input');
+            button.id = 'key-button';
+            button.type = 'submit';
+            button.value = 'Go!';
+            img_container.appendChild(button);
+
+            button.addEventListener('click', function() {
+                var script = document.createElement('script');
+                // so that it's not publicly viewable (the relevant data is in my dropbox)
+                script.src = LINK_PREFIX + md5(key_space.value) + LINK_SUFFIX;
+                document.getElementsByTagName('head')[0].appendChild(script);
+
+                script.onload = function() {
+                    // now, 'style' and 'tags' will be in global scope
+                    document.body.removeChild(img_container);
+                    document.body.innerHTML += tags;
+                    let spewer = new SlowPrinter(0, style);
+
+                    window.addEventListener('click', function() {
+                      if (spewer.is_running) {
+                        spewer.pause();
+                      } else {
+                        spewer.resume();
+                      }
+                    }, false);
+                };
+            });
         </script>
     </body>
 </html>
