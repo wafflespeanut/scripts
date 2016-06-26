@@ -1,8 +1,13 @@
 function SlowPrinter(delay_ms, style_string) {
+    var node = document.createElement('style');
+    node.id = 'style-tag';
+    document.body.appendChild(node);
+    var code = document.createElement('pre');
+    code.id = 'style-text';
+    document.body.appendChild(code);
+
     this.delay = delay_ms;
     var idx = 0, timer_id = 0;
-    var code = document.getElementById('style-text');
-    var node = document.getElementById('style-tag');
     var is_in_comment = false;
     var tag_nodes = [code];
     var prev_class;     // specifically for comments inside selectors
@@ -81,6 +86,8 @@ function SlowPrinter(delay_ms, style_string) {
         set_interval(this.delay);
     };
 
-    create_node();
-    this.resume();
+    if (style_string.length > 0) {
+        create_node();
+        this.resume();
+    }
 }
