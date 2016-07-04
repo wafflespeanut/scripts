@@ -1,3 +1,30 @@
+const INTER_STROKE_DELAY = 150;
+
+function setup_strokes(node) {
+    var delay = 0;
+    var trans_timeout = 0;
+    var paths = node.querySelectorAll('path');
+
+    for (i = 0; i < paths.length; i++) {
+        var length = paths[i].getTotalLength();
+        delay += trans_timeout + INTER_STROKE_DELAY;
+        trans_timeout = Math.floor(length);
+        // so that no dash drawing is performed initially
+        paths[i].style.strokeDashoffset = length;
+        // ... and nothing's visible (given the spacing)
+        paths[i].style.strokeDasharray = length + ',' + length;
+        paths[i].style.transition = 'stroke-dashoffset ' + trans_timeout + 'ms ' + delay + 'ms linear';
+    }
+}
+
+function write_strokes(node) {
+    var paths = node.querySelectorAll('path');
+
+    for (i = 0; i < paths.length; i++) {
+        paths[i].style.strokeDashoffset = 0;
+    }
+}
+
 function SlowPrinter(delay_ms, style_string) {
     var node = document.createElement('style');
     node.id = 'style-tag';
