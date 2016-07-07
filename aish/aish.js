@@ -1,5 +1,6 @@
 const INTER_STROKE_DELAY = 150;
 
+// compute the time taken to draw strokes and set necessary attributes for transitioning later
 function setup_strokes(node) {
     var delay = 0;
     var trans_timeout = 0;
@@ -15,14 +16,19 @@ function setup_strokes(node) {
         paths[i].style.strokeDasharray = length + ',' + length;
         paths[i].style.transition = 'stroke-dashoffset ' + trans_timeout + 'ms ' + delay + 'ms linear';
     }
+
+    paths[paths.length - 1].delay = delay;
 }
 
-function write_strokes(node) {
+function write_strokes(node, callback) {
     var paths = node.querySelectorAll('path');
 
     for (i = 0; i < paths.length; i++) {
         paths[i].style.strokeDashoffset = 0;
     }
+
+    // final delay for executing the callback after the strokes are drawn
+    setTimeout(callback, paths[paths.length - 1].delay);
 }
 
 function SlowPrinter(delay_ms, style_string) {
@@ -34,10 +40,13 @@ function SlowPrinter(delay_ms, style_string) {
     document.body.appendChild(code);
 
     this.delay = delay_ms;
-    var idx = 0, timer_id = 0;
+    var callbacks = {};
+    var idx = 0, idx_state = 0, timer_id = 0;
     var is_in_comment = false;
+    var is_waiting_on_input = false;
     var tag_nodes = [code];
     var prev_class;     // specifically for comments inside selectors
+    var func_name = '';     // for collecting the name of the callback
 
     function create_node() {
         var tag = document.createElement('span');
@@ -49,8 +58,26 @@ function SlowPrinter(delay_ms, style_string) {
     function print_next_char() {
         var char = style_string[idx];
         var replace_last_node = '';
-        node.innerHTML += char;
 
+        // optional callback, so that we can initiate something from CSS by enclosing a name between '~'
+        // names and callbacks are initialized with the `add_callback` method
+        // error prone! (ensure that the names are present in CSS, and callbacks are initialized in JS)
+        if (is_waiting_on_input) {
+            if (char == '~') {
+                idx += 1;       // so that we don't loop on this indefinitely!
+                callbacks[func_name]();
+                is_waiting_on_input = false;
+            } else {
+                func_name += char;
+            }
+
+            return;
+        } else if (char == '~') {
+            is_waiting_on_input = true;
+            return;
+        }
+
+        node.innerHTML += char;
         if (is_in_comment) {    // color scheme for code
             if (char == '/' && style_string[idx - 1] == '*') {
                 is_in_comment = false;
@@ -89,7 +116,7 @@ function SlowPrinter(delay_ms, style_string) {
     }
 
     function read_char() {
-        if (idx == style.length) {
+        if (idx == style_string.length) {
             clearInterval(timer_id);
         } else {
             print_next_char();
@@ -103,6 +130,7 @@ function SlowPrinter(delay_ms, style_string) {
         timer_id = setInterval(read_char, delay_ms);
     }
 
+    // TODO: display message overlay when paused or resumed...
     this.pause = function() {
         this.is_running = false;
         clearInterval(timer_id);
@@ -112,6 +140,49 @@ function SlowPrinter(delay_ms, style_string) {
         this.is_running = true;
         set_interval(this.delay);
     };
+
+    this.add_callback = function(name, callback) {
+        callbacks[name] = callback;     // as simple as it could be
+    }
+
+    // Writes comments to the code area (very useful for writing custom messages along the way)
+    // For example, we can `force_stop` printing (we should, whenever we're about to call this),
+    // then add a callback which continuously call this (until some event is fired, say 'click')
+    // and finally, `restore` the printer's state and resume printing the remaining stuff...
+    this.print_message = function(message) {
+        var i = 0;
+        var msg = '/* ' + message + ' */\n\n';
+        tag_nodes[tag_nodes.length - 1].className = 'comment';
+
+        function print_char() {
+            if (i == msg.length) {
+                tag_nodes.pop();
+                create_node();
+                clearInterval(id);
+                return;
+            }
+
+            node.innerHTML += msg[i];
+            tag_nodes[tag_nodes.length - 1].innerHTML += msg[i];
+            code.scrollTop = code.scrollHeight;
+            i += 1;
+        }
+
+        var id = setInterval(print_char, this.delay);
+    }
+
+    // force stops the printer (but stores the state), so that we don't listen to
+    // click inputs for pausing/resuming
+    this.force_stop = function() {
+        this.pause();
+        idx_state = idx;
+        idx = style_string.length;
+    }
+
+    this.restore = function() {     // restore the state and resume printing!
+        idx = idx_state;
+        this.resume();
+    }
 
     if (style_string.length > 0) {
         create_node();
