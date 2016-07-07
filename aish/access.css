@@ -34,7 +34,12 @@
 }
 
 .fav-four {
-    visibility: hidden;
     position: absolute;
     width: 200px;
+    visibility: hidden;
+}
+
+#my-stroke {
+    visibility: hidden;
+    position: absolute;
 }

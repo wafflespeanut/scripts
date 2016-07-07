@@ -12,18 +12,20 @@
     dissolver.id = 'bg-dissolve';
     img_container.appendChild(dissolver);
 
-    // access code
+    // access code area
     var key_space = document.createElement('input');
     key_space.id = 'key-space';
     key_space.type = 'password';
     img_container.appendChild(key_space);
+
+    // optional button ([Enter] should also work)
     var button = document.createElement('input');
     button.id = 'key-button';
     button.type = 'submit';
     button.value = 'Go!';
     img_container.appendChild(button);
 
-    function red_glow() {
+    function red_glow() {   // indicates invalid key
         key_space.style.border = '1px solid red';
         setTimeout(function() {
             key_space.style.border = '1px solid green';
@@ -52,7 +54,8 @@
 
     function get_content() {
         var script = document.createElement('script');
-        key_space.style.border = '1px solid yellow';    // checking script in background
+        // It maybe a valid key, so let's try loading the resource
+        key_space.style.border = '1px solid yellow';
         var result = bytewise_xor(CIPHERTEXT, key_space.value);
         if (!result) {
             red_glow();
@@ -73,9 +76,36 @@
             // now, 'style' and 'tags' will be in global scope
             document.body.removeChild(img_container);
             document.body.innerHTML += tags;
-            let spewer = new SlowPrinter(0, style);
 
-            window.addEventListener('click', function() {
+            var svg_div = document.getElementById('my-stroke');
+            svg_div.innerHTML += happy;
+            svg_div.innerHTML += birthday;
+            setup_strokes(svg_div);
+
+            var i = 0;
+            let spewer = new SlowPrinter(0, style);
+            spewer.add_callback('stroke', function() {
+                spewer.force_stop();
+                var image_area = document.getElementById('block');
+
+                image_area.addEventListener('click', function() {
+                    clearInterval(msg_id);
+                    write_strokes(svg_div, function() {
+                        spewer.restore();
+                    });
+                }, false);
+
+                function input_msg() {
+                    var msg = input_msgs[i % input_msgs.length];
+                    spewer.print_message(msg);
+                    i += 1;
+                }
+
+                msg_id = setInterval(input_msg, 5000);
+            });
+
+            var code_area = document.getElementById('style-text');
+            code_area.addEventListener('click', function() {
               if (spewer.is_running) {
                 spewer.pause();
               } else {
