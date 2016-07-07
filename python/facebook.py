@@ -18,6 +18,7 @@ class FacebookDataParser(HTMLParser):
         HTMLParser.__init__(self)
         self.username = None
         self.current_participants = None
+        self.repetition = 0
         self.message = ''
         self.current_transcript = []
         self.stack = []
@@ -72,6 +73,9 @@ class FacebookDataParser(HTMLParser):
                 users.remove(self.username)
 
             self.current_participants = ', '.join(users)
+            if self.current_participants in self.parsed:
+                self.current_participants += '-%d' % self.repetition
+                self.repetition += 1
             self.parsed[self.current_participants] = []
             self.get_participant = False
 
@@ -91,7 +95,7 @@ class FacebookDataParser(HTMLParser):
 
         elif self.get_time:
             timestamp = dt.strptime(data, '%A, %d %B %Y at %H:%M UTC+05:30')
-            self.current_transcript += [timestamp.strftime('%Y-%m-%d %H:%M')]
+            self.current_transcript += [timestamp]
             self.get_time = False
 
         elif self.stack and self.stack[-1] == 'p':
