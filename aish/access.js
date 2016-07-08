@@ -92,7 +92,7 @@
                     clearInterval(msg_id);
                     write_strokes(svg_div, function() {
                         spewer.restore();
-                    });
+                    }, false);
                 }, false);
 
                 function input_msg() {
@@ -106,9 +106,9 @@
 
             var code_area = document.getElementById('style-text');
             code_area.addEventListener('click', function() {
-              if (spewer.is_running) {
+              if (spewer.is_running == 1) {
                 spewer.pause();
-              } else {
+              } else if (spewer.is_running == 0) {
                 spewer.resume();
               }
             }, false);
