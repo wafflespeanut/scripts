@@ -1,6 +1,6 @@
 (function() {
     const LINK_PREFIX = 'https://www.dropbox.com/s/';
-    const CIPHERTEXT = 'F\x04J\x18\x03\x0f\x00YXTDy\x12\x0c\x04F\rG\x10\x07\x18';
+    const CIPHERTEXT = 'S\x08J\x04\x1fSWYS^Dy\x12\x0c\x04F\rG\x10\x07\x18';
     const LINK_SUFFIX = '.js?dl=1';
 
     // background
@@ -73,6 +73,7 @@
                 return;
             }
 
+            var start = new Date().getTime();
             // now, 'style' and 'tags' will be in global scope
             document.body.removeChild(img_container);
             document.body.innerHTML += tags;
@@ -83,7 +84,7 @@
             setup_strokes(svg_div);
 
             var i = 0;
-            let spewer = new SlowPrinter(0, style);
+            var spewer = new SlowPrinter(35, style);
             spewer.add_callback('stroke', function() {
                 spewer.force_stop();
                 var image_area = document.getElementById('block');
@@ -104,12 +105,23 @@
                 msg_id = setInterval(input_msg, 5000);
             });
 
+            spewer.add_callback('bubbles', function() {
+                setTimeout(function() {
+                    setInterval(start_bubbling, 800);
+                }, 2000);
+            });
+
+            spewer.add_callback('time', function() {
+                var current = new Date().getTime();
+                console.log((current - start) / 60000);
+            });
+
             var code_area = document.getElementById('style-text');
             code_area.addEventListener('click', function() {
               if (spewer.is_running == 1) {
-                spewer.pause();
+                  spewer.pause();
               } else if (spewer.is_running == 0) {
-                spewer.resume();
+                  spewer.resume();
               }
             }, false);
         };
