@@ -9,9 +9,6 @@ from timeit import default_timer as timer
 
 import os, sys, contextlib
 
-INIT_PATH = os.path.expanduser('~/Desktop')
-FILE_PATH = os.path.join(INIT_PATH, 'messages.htm')
-
 
 class FacebookDataParser(HTMLParser):
     def __init__(self):
@@ -108,7 +105,8 @@ class FacebookDataParser(HTMLParser):
         self.handle_data(self.unescape("&%s;" % ref))
 
 
-if __name__ == '__main__':
-    with open(FILE_PATH, 'r') as in_fd, \
+def parse_data(path):
+    with open(path, 'r') as in_fd, \
          contextlib.closing(FacebookDataParser()) as parser:
         parser.feed(in_fd.read())
+        return parser.parsed

@@ -5,6 +5,7 @@ DEFAULT = 'Hello, world!'
 LOOKUP_NODE = 'class="t0"'
 YELLOW, NULL = ('', '') if sys.platform == 'win32' else ('\033[93m', '\033[0m')
 
+
 def translate(string, from_lang, to_lang):  # Makes use of Google translate for mobile
     parser = HTMLParser()
     url = 'https://translate.google.com/m?sl=%s&tl=%s&q=%s' % (from_lang, to_lang, string.replace(' ', '+'))
@@ -15,6 +16,7 @@ def translate(string, from_lang, to_lang):  # Makes use of Google translate for 
     next_idx = page_source.find('<', node_idx)
     word = page_source[(node_idx + len(LOOKUP_NODE)) : next_idx]
     return parser.unescape(word)
+
 
 if __name__ == '__main__':
     _name, args = sys.argv[0], sys.argv[1:]

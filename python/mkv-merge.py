@@ -12,6 +12,7 @@ default = ['"%s"' % program, '-o "%s"',
 
 path = "/media/Windows/TEMP/GOT"
 
+
 def check_name(s):
     i = 0
     while i < len(s) - 3:
@@ -20,6 +21,7 @@ def check_name(s):
         i += 1
     return None
 
+
 def check_srt(file_name):
     with open(file_name, 'r') as file_data:
         for line in file_data.readlines():
@@ -27,21 +29,26 @@ def check_srt(file_name):
                 return True
     return False
 
+
 def mkv(path = path, ext = '.mp4'):
     new_path = os.path.join(path, 'Converted')
     if not os.path.exists(new_path):
         os.mkdir(new_path)
+
     for in_file in search(path, ext):
         name = os.path.basename(in_file)
         dir_name = os.path.dirname(in_file)
+
         try:
             s, e = check_name(name)
         except ValueError:
             print 'Cannot infer season & episode IDs for %s!' % in_file
             continue
+
         out_path = os.path.join(new_path, 'Season %d' % s)
         if not os.path.exists(out_path):
             os.mkdir(out_path)
+
         out_file = os.path.join(out_path, 'Episode %d.mkv' % e)
         try:
             srt = [f for f in os.listdir(dir_name) if f.endswith('.srt')]
@@ -54,6 +61,7 @@ def mkv(path = path, ext = '.mp4'):
         except AssertionError, IndexError:
             print 'SRT not found for %s!' % in_file
             continue
+
         command = ' '.join(default) % (out_file, in_file, srt)
         print 'Muxing ...\nCommand: %s\n' % command
         process = sub.Popen(command, stderr = sub.STDOUT, stdout = sub.PIPE, shell = True)

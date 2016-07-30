@@ -23,6 +23,7 @@ try:
                 continue
             print 'Downloading %s... (%s bytes)' % \
                   (sub_link, urllib.urlopen(sub_link).info()['Content-Length'])
+
             try:
                 urllib.urlretrieve(sub_link, archive)
             except (Exception, KeyboardInterrupt):

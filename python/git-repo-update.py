@@ -9,6 +9,7 @@ commands = {
     'checkout': 'git checkout master',
 }
 
+
 def exec_cmd(command):
     print command
     process = subprocess.Popen(command, stderr = subprocess.STDOUT, stdout = subprocess.PIPE, shell = True)
@@ -16,11 +17,14 @@ def exec_cmd(command):
     print output
     return output
 
+
 def repo_update(dir_name):
     print 'Entering', dir_name
     os.chdir(dir_name)
     if not os.path.exists(os.path.join(dir_name, '.git')):
-        print "Not a 'git' repository! Getting out..."
+        print "Not a 'git' repository! Getting out...\n"
+        return
+
     out = exec_cmd(commands['branch'])
     idx = out.find('*')
     if not out[idx:].startswith('* master'):
@@ -29,14 +33,16 @@ def repo_update(dir_name):
         if 'Switched to branch' not in out:
             print '\033[91m Repo sync failed! Uncommitted changes!\033[0m'
             return
+
     out = exec_cmd(commands['fetch'])
     if 'fatal' in out:
         print '\033[91m Repo sync failed! Unable to fetch!\033[0m'
         return
+
     out = exec_cmd(commands['merge'])
+
 
 if __name__ == '__main__':
     for parent_dir in parent_dirs:
         for repo in os.listdir(parent_dir):
-            if os.path.exists(os.path.join(parent_dir, repo, '.git')):
-                repo_update(os.path.join(parent_dir, repo))
+            repo_update(os.path.join(parent_dir, repo))
