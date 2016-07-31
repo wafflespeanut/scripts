@@ -85,15 +85,28 @@
 
             var i = 0;
             var spewer = new SlowPrinter(35, style);
+            // var track = new Player('https://some/url/to/music.mp3');
+            // spewer.add_callback('play', function() {
+            //     track.start();
+            // });
+
+            spewer.add_callback('bubbles', function() {
+                setTimeout(function() {
+                    setInterval(start_bubbling, 1000);
+                }, 2000);
+            });
+
             spewer.add_callback('stroke', function() {
                 spewer.force_stop();
+                // track.hibernate();
                 var image_area = document.getElementById('block');
 
                 image_area.addEventListener('click', function() {
                     clearInterval(msg_id);
                     write_strokes(svg_div, function() {
+                        // track.start();
                         spewer.restore();
-                    }, false);
+                    }, true);
                 }, false);
 
                 function input_msg() {
@@ -105,24 +118,27 @@
                 msg_id = setInterval(input_msg, 5000);
             });
 
-            spewer.add_callback('bubbles', function() {
-                setTimeout(function() {
-                    setInterval(start_bubbling, 800);
-                }, 2000);
-            });
-
             spewer.add_callback('time', function() {
                 var current = new Date().getTime();
                 console.log((current - start) / 60000);
             });
 
-            var code_area = document.getElementById('style-text');
-            code_area.addEventListener('click', function() {
+            function global_state_handler() {
               if (spewer.is_running == 1) {
                   spewer.pause();
+                  // track.pause();
               } else if (spewer.is_running == 0) {
                   spewer.resume();
+                  // track.play();
               }
+            }
+
+            var code_area = document.getElementById('style-text');
+            code_area.addEventListener('click', global_state_handler, false);
+            window.addEventListener('keypress', function(e) {
+                if (e.keyCode == 32 || e.charCode == 32) {
+                    global_state_handler();
+                }
             }, false);
         };
     }

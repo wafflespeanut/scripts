@@ -2,6 +2,57 @@ const INTER_STROKE_DELAY = 150;
 const BUBBLE_TIME = 1000;
 const BUBBLE_SCALE_FACTOR = 400;
 
+const AUDIO_VOLUME = 0.5;
+const AUDIO_FADE_TIME = 1500;
+const STEP_TIME = 10;
+
+function Player(url) {
+    var loaded = new Audio(url);
+    var current_pos = 0;
+    var steps = AUDIO_FADE_TIME / STEP_TIME;
+    var step_length = AUDIO_VOLUME / steps;
+    loaded.volume = AUDIO_VOLUME;
+    this.is_playing = false;
+
+    this.play = function() {
+        if (this.is_playing) {
+            loaded.currentTime = current_pos;
+            var id = setInterval(function() {
+                loaded.play();
+                if ((loaded.volume + step_length) <= AUDIO_VOLUME) {
+                    loaded.volume += step_length;
+                } else {
+                    clearInterval(id);
+                }
+            }, STEP_TIME);
+        }
+    }
+
+    this.pause = function() {
+        if (this.is_playing) {
+            current_pos = loaded.currentTime;
+            var id = setInterval(function() {
+                if ((loaded.volume - step_length) >= 0.0) {
+                    loaded.volume -= step_length;
+                } else {
+                    clearInterval(id);
+                    loaded.pause();
+                }
+            }, STEP_TIME);
+        }
+    }
+
+    this.start = function() {
+        this.is_playing = true;
+        this.play();
+    }
+
+    this.hibernate = function() {
+        this.pause();
+        this.is_playing = false;
+    }
+}
+
 function start_bubbling() {
     var color = 'rgb(' + Math.floor(Math.random() * 255) + ','
                        + Math.floor(Math.random() * 255) + ','
