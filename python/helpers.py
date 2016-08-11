@@ -1,3 +1,17 @@
+import os, subprocess
+
+def exec_cmd(command):
+    print command
+    process = subprocess.Popen(command, stderr = subprocess.STDOUT,
+                               stdout = subprocess.PIPE, shell = True)
+    output, error = process.communicate()
+    if output:
+        print output
+    if error:
+        print 'ERROR: %s' % error
+    return output
+
+
 def search(path, ext):
     file_list = []
     for root, dirs, files in os.walk(path):

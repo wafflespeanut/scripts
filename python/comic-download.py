@@ -5,7 +5,7 @@ import os, shutil, sys, re, urllib, lxml.html
 try:
     link = ''.join(sys.argv[1:])
     if not link:
-        sys.exit()
+        exit('Invalid link!')
 
     main_response = urllib.urlopen(link).read()
     for match in re.finditer('<a href=[\'"](.*?)[\'"].*?</a>', main_response):
@@ -23,13 +23,9 @@ try:
                 continue
             print 'Downloading %s... (%s bytes)' % \
                   (sub_link, urllib.urlopen(sub_link).info()['Content-Length'])
+            urllib.urlretrieve(sub_link, archive)
 
-            try:
-                urllib.urlretrieve(sub_link, archive)
-            except (Exception, KeyboardInterrupt):
-                print 'Interrupted!'
-                if os.path.exists(archive):
-                    os.remove(archive)
-                sys.exit()
 except KeyboardInterrupt:
-    pass
+    if os.path.exists(archive):
+        os.remove(archive)
+    exit('Interrupted!')
