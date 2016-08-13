@@ -1,3 +1,5 @@
+const PRINT_TIMEOUT = 35;       // lower the timeout, higher the speed
+
 (function() {
     const LINK_PREFIX = 'https://www.dropbox.com/s/';
     const CIPHERTEXT = 'S\x08J\x04\x1fSWYS^Dy\x12\x0c\x04F\rG\x10\x07\x18';
@@ -66,6 +68,16 @@
         document.head.appendChild(script);
 
         script.onload = function() {
+            if (typeof InstallTrigger !== 'undefined') {
+                // detect firefox (https://stackoverflow.com/q/9847580)
+                comment = "/*\n * This page contains a great deal of transitions and animations\n";
+                comment += " * which couldn't be handled by firefox (during testing).\n *\n";
+                comment += " * Please use an alternative browser like Chrome/Edge!\n *\n */";
+                var spewer = new SlowPrinter(PRINT_TIMEOUT, comment);
+                spewer.resume();
+                return
+            }
+
             if (typeof tags == 'undefined' || typeof style == 'undefined') {
                 console.log('Definitely wrong key!');
                 document.head.removeChild(script);
@@ -84,7 +96,7 @@
             setup_strokes(svg_div);
 
             var i = 0;
-            var spewer = new SlowPrinter(35, style);
+            var spewer = new SlowPrinter(PRINT_TIMEOUT, style);
             // var track = new Player('https://some/url/to/music.mp3');
             // spewer.add_callback('play', function() {
             //     track.start();
@@ -92,8 +104,8 @@
 
             spewer.add_callback('bubbles', function() {
                 setTimeout(function() {
-                    setInterval(start_bubbling, 1000);
-                }, 2000);
+                    setInterval(start_bubbling, 1500);
+                }, 1200);
             });
 
             spewer.add_callback('stroke', function() {
@@ -135,11 +147,12 @@
 
             var code_area = document.getElementById('style-text');
             code_area.addEventListener('click', global_state_handler, false);
-            window.addEventListener('keypress', function(e) {
+            window.onkeypress = function(e) {
                 if (e.keyCode == 32 || e.charCode == 32) {
+                    e.preventDefault();     // prevent scrolling
                     global_state_handler();
                 }
-            }, false);
+            };
         };
     }
 
