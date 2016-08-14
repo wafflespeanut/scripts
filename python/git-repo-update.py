@@ -15,29 +15,27 @@ commands = {
 
 
 def repo_update(dir_name):
-    print 'Entering', dir_name
+    print '\nEntering', dir_name
     os.chdir(dir_name)
     if not os.path.exists(os.path.join(dir_name, '.git')):
-        print "Not a 'git' repository! Getting out...\n"
+        print "Not a 'git' repository! Getting out..."
         return
 
     out = exec_cmd(commands['branch'])
     idx = out.find('*')
     if 'master' not in out:
-        print "'master' branch unavailable!"
+        print "'master' branch unavailable! Getting out..."
         return
 
     if not out[idx:].startswith('* master'):
         print 'This looks like another branch. Trying to checkout to master...'
         out = exec_cmd(commands['checkout'])
         if 'Switched to branch' not in out:
-            print '\033[91m Repo sync failed! Unable to switch branch!\033[0m'
-            return
+            raise Exception('Unable to switch branch!')
 
     out = exec_cmd(commands['fetch'])
     if 'fatal' in out:
-        print '\033[91m Repo sync failed! Unable to fetch!\033[0m'
-        return
+        raise Exception('Unable to fetch!')
 
     out = exec_cmd(commands['merge'])
 
@@ -49,3 +47,5 @@ if __name__ == '__main__':
                 repo_update(os.path.join(parent_dir, repo))
             except KeyboardInterrupt:
                 exit('Interrupted!')
+            except Exception as err:
+                print '\033[91mRepo sync failed! %s' % err
