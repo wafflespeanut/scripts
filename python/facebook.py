@@ -70,10 +70,10 @@ class FacebookDataParser(HTMLParser):
                 users.remove(self.username)
 
             self.current_participants = ', '.join(users)
-            if self.current_participants in self.parsed:
+            if self.parsed.get(self.current_participants):
                 self.current_participants += '-%d' % self.repetition
                 self.repetition += 1
-            self.parsed[self.current_participants] = []
+            self.parsed.setdefault(self.current_participants, [])
             self.get_participant = False
 
             self.timer = timer()
@@ -104,9 +104,19 @@ class FacebookDataParser(HTMLParser):
     def handle_entityref(self, ref):
         self.handle_data(self.unescape("&%s;" % ref))
 
+    def finish(self):       # call this in the end to resolve repetitions
+        participants = {}
+        for participant in sorted(self.parsed):
+            split = participant.split('-')
+            repetition_filter = '-'.join(split[:-1]) if len(split) > 1 else '-'.join(split)
+            participants.setdefault(repetition_filter, [])
+            participants[repetition_filter] += self.parsed[participant][::-1]
+        self.parsed = participants
+
 
 def parse_data(path):
     with open(path, 'r') as in_fd, \
          contextlib.closing(FacebookDataParser()) as parser:
         parser.feed(in_fd.read())
+        parser.finish()
         return parser.parsed

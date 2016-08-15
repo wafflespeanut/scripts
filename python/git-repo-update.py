@@ -48,4 +48,4 @@ if __name__ == '__main__':
             except KeyboardInterrupt:
                 exit('Interrupted!')
             except Exception as err:
-                print '\033[91mRepo sync failed! %s' % err
+                print '\033[91mRepo sync failed! %s\033[0m' % err

@@ -10,9 +10,8 @@ execfile(os.path.join(exec_path, 'helpers.py'))     # for safely executing a com
 PATH = '/media/Windows/Mozilla/mozilla-central/'
 
 CONSTS_REL_PATH = os.path.join('layout', 'style', 'nsStyleConsts.h')
-PREFIX_NAMES = ['NS', 'STYLE']
+PREFIX_NAMES = []
 PREFIX = '_'.join(PREFIX_NAMES)
-SIMULATE = True     # Invert this to dangerously attempt and make changes in files!
 TAB_LEN = 2
 PREFER_UNDERSCORES = ['None']
 
@@ -83,14 +82,24 @@ def collect_all(contents, prefix, idx = 0):     # get all the constants
 
 if __name__ == '__main__':
     os.chdir(PATH)
-    args = sys.argv[1:]
-    if not args:
+    simulate = True
+    const_group = map(str.upper, '_'.join(sys.argv[1:]).split('_'))
+
+    try:
+        idx = const_group.index('-s')
+        const_group.pop(idx)
+        simulate = False
+    except ValueError:
+        pass
+
+    if not const_group:
         exit('\nRequires a constant group')
 
     # neglect 'ns' or 'style' stuff present (if any) - we'll prepend those later
-    const_group = '_'.join(filter(lambda word: word.upper() not in PREFIX_NAMES,
-                                  args[:len(PREFIX_NAMES)]) + args[len(PREFIX_NAMES):])
-    const_upper = const_group.upper()
+    for word in PREFIX_NAMES:
+        if word == const_group[0]:
+            const_group.pop(0)
+    const_upper = '_'.join(const_group)
 
     if not const_upper.startswith(PREFIX):
         const_upper = PREFIX + '_' + const_upper
@@ -155,19 +164,12 @@ if __name__ == '__main__':
     print replace_enum
 
     contents[start_idx:end_idx] = [replace_enum]
-    if not SIMULATE:
-        with open(CONSTS_REL_PATH, 'wb') as fd:
-            fd.writelines(contents)
-
-    print 'Changes have been made to %r...' % CONSTS_REL_PATH
-    print '\nReplacement map for constants:'
+    print 'Replacement map for constants:'
     for c, v in replacements.items():
         print '%s -> %s' % (c, v)
 
     if raw_input('\nContinue with replacement (y/n)? ') != 'y':
         exit()
-
-    files = {}
 
     def parse_grepped(line):    # replace the constant with enum variant in grepped line
         split = iter(line.split(':'))
@@ -190,6 +192,7 @@ if __name__ == '__main__':
 
 
     try:
+        files = {}
         command = "hg grep -n '%s'" % prefix
         print "\nCollecting files to be modified... (Press 'Ctrl-C' to interrupt)"
         exec_cmd(command, parse_grepped)
@@ -210,6 +213,15 @@ if __name__ == '__main__':
                     contents[idx] = contents[idx].replace(const, variant)
                 print '%d: %s => %s' % (line_num, old_line.strip(), contents[idx].strip())
 
-            if not SIMULATE:
+            if not simulate:
                 with open(path, 'wb') as fd:
                     fd.writelines(contents)
+
+        if not simulate:
+            with open(CONSTS_REL_PATH, 'wb') as fd:
+                fd.writelines(contents)
+        print '\nConstants in %r have been replaced with the respective enum class!' % CONSTS_REL_PATH
+
+        print '\nFile changes have been made!'
+        print "The build won't probably succeed, since this script replaces only the directly visible constants."
+        print 'Please run `./mach build` and fix the errors (if any)...'
