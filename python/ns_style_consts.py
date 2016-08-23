@@ -1,3 +1,4 @@
+from time import sleep
 import inspect, os, sys
 
 # for https://bugzilla.mozilla.org/show_bug.cgi?id=1277133
@@ -14,6 +15,7 @@ PREFIX_NAMES = []
 PREFIX = '_'.join(PREFIX_NAMES)
 TAB_LEN = 2
 PREFER_UNDERSCORES = ['None']
+SCRAPE_SLEEP_TIMEOUT = 5
 
 
 def left_trim(string, sub):
@@ -83,14 +85,22 @@ def collect_all(contents, prefix, idx = 0):     # get all the constants
 if __name__ == '__main__':
     os.chdir(PATH)
     simulate = True
+    is_offline = True
     const_group = map(str.upper, '_'.join(sys.argv[1:]).split('_'))
 
     try:
-        idx = const_group.index('-s')
+        import dryscrape        # awesomesauce!
+        from lxml.html import document_fromstring
+        is_offline = False
+    except ImportError:
+        print "'dryscraper' module not found! Falling back to offline 'grep'ing..."
+
+    try:
+        idx = const_group.index('-W')
         const_group.pop(idx)
         simulate = False
     except ValueError:
-        pass
+        print "\033[93m\033[1mSimulating actual process (pass '-w' to override)...\033[0m"
 
     if not const_group:
         exit('\nRequires a constant group')
@@ -171,6 +181,7 @@ if __name__ == '__main__':
     if raw_input('\nContinue with replacement (y/n)? ') != 'y':
         exit()
 
+
     def parse_grepped(line):    # replace the constant with enum variant in grepped line
         split = iter(line.split(':'))
         rel_path = split.next()
@@ -184,38 +195,84 @@ if __name__ == '__main__':
         for const in replacements:
             if const in line:       # so that we filter only those variants we want
                 print '%s:%d: %s' % (rel_path, line_num, line.rstrip())
-                if rel_path in files:
+                if files.get(rel_path):
                     files[rel_path].append(line_num)
                 else:
-                    files[rel_path] = []
+                    files[rel_path] = [line_num]
                 break       # one match is enough
 
+    def parse_response(response):
+        doc = document_fromstring(response)
+        results = doc.xpath('//div[@id="content"]/div[@class="results"]/div[@class="result"]')
+        if not results:
+            return
 
-    try:
-        files = {}
-        command = "hg grep -n '%s'" % prefix
-        print "\nCollecting files to be modified... (Press 'Ctrl-C' to interrupt)"
-        exec_cmd(command, parse_grepped)
+        print '\nObtained file paths! Getting line numbers from local repo...'
+        for element in results:
+            # ignoring the line numbers because local and remote repos could be at different revisions
+            rel_path = element.get('data-path')
+            if rel_path == CONSTS_REL_PATH:
+                continue
+
+            with open(rel_path, 'r') as fd:     # FIXME: inefficient! (wrote it to comply with the other function)
+                for i, line in enumerate(fd.readlines()):
+                    for const in replacements:
+                        if const in line:
+                            print '%s:%d: %s' % (rel_path, i + 1, line.strip())
+                            if files.get(rel_path):
+                                files[rel_path].append(i + 1)
+                            else:
+                                files[rel_path] = [i + 1]
+                            break
+
+
+    files = {}
+
+    try:        # go for DXR
+        url = 'https://dxr.mozilla.org/mozilla-central/search?q=%s' % prefix
+        print '\nScraping results from DXR: %s' % url
+        session = dryscrape.Session()
+        session.visit(url)
+        print 'Sleeping for %s seconds...' % SCRAPE_SLEEP_TIMEOUT
+        # sleeping is necessary for getting the entire page (JS stuff is loaded async)
+        sleep(SCRAPE_SLEEP_TIMEOUT)
+        response = session.body()
+        parse_response(response)
     except KeyboardInterrupt:
         pass
+    except:     # fall back to the good ol' days...
+        is_offline = True
 
-    if files and raw_input('\n%d file(s) could be modified! Continue (y/n)? ' % len(files)) == 'y':
+    if is_offline:
+        try:    # default grep
+            command = "hg grep -n '%s'" % prefix
+            print "\nCollecting files to be modified... (Press 'Ctrl-C' to interrupt)"
+            exec_cmd(command, parse_grepped)
+        except KeyboardInterrupt:
+            pass
+
+    if not files:
+        exit('No changes to be made!')
+
+    if raw_input('\n%d file(s) could be modified! Continue (y/n)? ' % len(files)) == 'y':
         for path in files:
             print "\nModifying '%s'..." % path
             with open(path, 'rb') as fd:
-                contents = fd.readlines()
+                lines = fd.readlines()
 
             for line_num in files[path]:
                 idx = line_num - 1
-                old_line = contents[idx]
+                old_line = lines[idx]
 
                 for const, variant in replacements.items():
-                    contents[idx] = contents[idx].replace(const, variant)
-                print '%d: %s => %s' % (line_num, old_line.strip(), contents[idx].strip())
+                    if path.endswith('.h'):
+                        variant = 'mozilla::%s' % variant
+                    lines[idx] = lines[idx].replace(const, variant)
+                print '%d: %s \033[91m\033[1m=>\033[0m %s' % (line_num, old_line.strip(), lines[idx].strip())
 
             if not simulate:
                 with open(path, 'wb') as fd:
-                    fd.writelines(contents)
+                    fd.writelines(lines)
 
         if not simulate:
             with open(CONSTS_REL_PATH, 'wb') as fd:
