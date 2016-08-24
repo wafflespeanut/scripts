@@ -11,7 +11,7 @@ execfile(os.path.join(exec_path, 'helpers.py'))     # for safely executing a com
 PATH = '/media/Windows/Mozilla/mozilla-central/'
 
 CONSTS_REL_PATH = os.path.join('layout', 'style', 'nsStyleConsts.h')
-PREFIX_NAMES = []
+PREFIX_NAMES = []       # something like ['NS', 'STYLE']
 PREFIX = '_'.join(PREFIX_NAMES)
 TAB_LEN = 2
 PREFER_UNDERSCORES = ['None']
@@ -23,16 +23,31 @@ def left_trim(string, sub):
 
 
 def parse_const(line):      # try to parse a line containing the constant (allowing errors to bubble, if any)
+    global_names = globals()
     stripped = left_trim(line, '#define').strip()
-    stuff = iter(stripped.split())
-    name, value = stuff.next(), int(stuff.next())
-    return name, value, ' '.join(word for word in stuff)
+    comment_idx = stripped.find('//')
+    comment = ''
+
+    if comment_idx > 0:
+        comment = stripped[comment_idx:]
+        stripped = stripped[:comment_idx] + '#' + comment
+
+    stuff = stripped.split()
+    name = stuff.pop(0)
+    value = ' '.join(word for word in stuff)
+    # magic to evaluate RHS and put it into the global namespace
+    exec '%s = %s' % (name, value) in global_names
+    return name, global_names.get(name), comment
 
 
 def find_constant(prefix, contents, idx = 0):       # find first matching constant
     for (i, line) in enumerate(contents[idx:]):
-        const = left_trim(line, '#define').strip()
-        if not const.startswith(PREFIX):
+        if not line.startswith('#define'):
+            continue
+
+        try:    # store all the previous constants in the namespace
+            const, _, _ = parse_const(line)
+        except:
             continue
 
         if const.startswith(prefix):
@@ -41,45 +56,38 @@ def find_constant(prefix, contents, idx = 0):       # find first matching consta
 
 # Constants are mostly grouped with incrementally occurring integers
 # (here, we find such a group by setting its boundaries)
-def find_boundary(contents, idx, reverse = False):      # works only for integers
+def find_boundary(contents, idx, reverse = False):
     i = idx
-    try:
-        _n, prev_val, _c = parse_const(contents[i])
+    _n, prev_val, _c = parse_const(contents[i])
 
-        if reverse:
-            while i > 0 and contents[i - 1].startswith('#define'):
-                _n, cur_val, _c = parse_const(contents[i - 1])
-                if cur_val >= prev_val:
-                    break
+    if reverse:
+        while i > 0 and contents[i - 1].startswith('#define'):
+            i -= 1
+            _n, cur_val, _c = parse_const(contents[i])
+            if cur_val >= prev_val:
+                break
 
-                prev_val = cur_val
-                i -= 1
-        else:
-            while i < len(contents) - 1 and contents[i + 1].startswith('#define'):
-                _n, cur_val, _c = parse_const(contents[i + 1])
-                if cur_val <= prev_val:
-                    break
-
-                prev_val = cur_val
-                i += 1
+            prev_val = cur_val
+    else:
+        while i < len(contents) - 1 and contents[i + 1].startswith('#define'):
             i += 1
-        return i
-    except ValueError:
-        raise ValueError, i + 1 if reverse else i + 2
+            _n, cur_val, _c = parse_const(contents[i])
+            if cur_val <= prev_val:
+                break
+
+            prev_val = cur_val
+        i += 1
+    return i
 
 
 def collect_all(contents, prefix, idx = 0):     # get all the constants
-    lines, consts = [], []
+    indices = []
     for i, line in enumerate(contents[idx:]):
         if line.startswith('#define'):
             stripped = left_trim(line, '#define').strip()
             if stripped.startswith(prefix):
-                try:
-                    consts.append(parse_const(line))
-                except ValueError:
-                    pass
-                lines.append(idx + i)
-    return lines, consts
+                indices.append(idx + i)
+    return indices
 
 
 if __name__ == '__main__':
@@ -128,8 +136,6 @@ if __name__ == '__main__':
         stuff = contents[start_idx:end_idx]
         assert len(stuff) > 1, "The script won't do any good for a group containing single constant!"
         print ''.join(['%d:\t%s' % (start_idx + i + 1, line) for i, line in enumerate(stuff)])
-    except ValueError as i:
-        exit('Error parsing line %s: This currently works only for integer constants!' % i)
     except AssertionError as err:
         exit(err)
 
@@ -145,24 +151,54 @@ if __name__ == '__main__':
     enum_class_name = ''.join(map(str.title, names[1:]))        # ignore 'NS_' prefix
     print 'Predicted enum class name: %r' % enum_class_name
     print 'Searching for similar constants...'
-
     prefix = '_'.join(names)
-    lines, more_consts = collect_all(contents, prefix, end_idx)
-    if lines:       # FIXME (could be fixed if the intermediate lines are only comments)
-        print '\n%d new constants have been found with the same prefix!' % len(lines)
-        exit("It's not safe to run this script on these cases (yet)...")
 
+    def collect_and_try_parsing(contents, end_idx):
+        indices = collect_all(contents, prefix, end_idx)
+        if indices:
+            # check whether the intermediate lines are comments (and proceed only if they are)
+            idx_iter = iter(indices)
+            prev_idx = end_idx - 1
+
+            while True:
+                parsed = parse_const(contents[prev_idx])
+                try:
+                    idx = idx_iter.next()
+                except StopIteration:
+                    const_stuff.append(parsed)
+                    break
+
+                prev_idx += 1
+                if prev_idx == idx:
+                    const_stuff.append(parsed)
+
+                for line in contents[prev_idx:idx]:
+                    stripped = line.strip()
+                    if not stripped or line.startswith('//'):
+                        name, val, comment = const_stuff[-1]
+                        const_stuff[-1] = name, val, comment + '\n' + ' ' * TAB_LEN + stripped
+                    else:
+                        print '\n%d more line(s) have been found to contain constants with the same prefix!' \
+                              % len(indices)
+                        exit("It's not safe to run this script in these cases...")
+                prev_idx = idx
+        print 'Found %d more... (and updated the list)' % len(indices)
+
+
+    collect_and_try_parsing(contents, end_idx)
     enum = ['enum class %s : uint8_t {' % enum_class_name]
     filter_prefix = '_'.join(map(str.upper, names)) + '_'
     variants, replacements = [], {}
     max_len = 0
+    prev_val = const_stuff[0][1] - 1
 
-    for name, _val, comment in const_stuff:
+    for name, val, comment in const_stuff:
         variant = ''.join(map(str.title, left_trim(name, filter_prefix).split('_')))
         variant += '_' if variant in PREFER_UNDERSCORES else ''
         replacements[name] = '%s::%s' % (enum_class_name, variant)
-        line = '  %s,' % variant
+        line = '  %s,' % variant if val == prev_val + 1 else '  %s = %d,' % (variant, val)
         variants.append((line, comment))
+        prev_val = val
         if comment and len(line) > max_len:     # figure out comment position
             max_len = len(line)
 
