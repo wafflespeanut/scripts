@@ -71,7 +71,7 @@ def find_boundary(file_contents, idx, reverse = False):
     return len(contents) - i - 1 if reverse else i + 1
 
 
-def collect_all(contents, prefix, idx = 0):     # get all the constants
+def collect_all(contents, prefix, idx = 0):     # get all the line indices containing the constants
     indices = []
     for i, line in enumerate(contents[idx:]):
         if line.startswith('#define'):
@@ -88,8 +88,7 @@ if __name__ == '__main__':
     const_group = map(str.upper, '_'.join(sys.argv[1:]).split('_'))
 
     try:
-        import dryscrape        # awesomesauce!
-        from lxml.html import document_fromstring
+        execfile(os.path.join(exec_path, 'dxr_grep.py'))
         is_offline = False
     except ImportError:
         print "'dryscraper' module not found! Falling back to offline 'grep'ing..."
@@ -175,6 +174,7 @@ if __name__ == '__main__':
     max_len = 0
     prev_val = const_stuff[0][1] - 1
 
+    # format the variants appropriately
     for name, val, comment in const_stuff:
         variant = ''.join(map(str.title, left_trim(name, filter_prefix).split('_')))
         variant += '_' if variant in PREFER_UNDERSCORES else ''
@@ -220,43 +220,28 @@ if __name__ == '__main__':
                     files[rel_path] = [line_num]
                 break       # one match is enough
 
-    def parse_response(response):
-        doc = document_fromstring(response)
-        results = doc.xpath('//div[@id="content"]/div[@class="results"]/div[@class="result"]')
-        if not results:
-            return
-
-        print '\nObtained file paths! Getting line numbers from local repo...'
-        for element in results:
-            # ignoring the line numbers because local and remote repos could be at different revisions
-            rel_path = element.get('data-path')
+    def check_files(files):     # because local and remote repos could be at different revisions
+        modified = {}
+        for rel_path in files:
             if rel_path == CONSTS_REL_PATH:
                 continue
 
+            modified[rel_path] = []
             with open(rel_path, 'r') as fd:     # FIXME: inefficient! (wrote it to comply with the other function)
                 for i, line in enumerate(fd.readlines()):
                     for const in replacements:
                         if const in line:
                             print '%s:%d: %s' % (rel_path, i + 1, line.strip())
-                            if files.get(rel_path):
-                                files[rel_path].append(i + 1)
-                            else:
-                                files[rel_path] = [i + 1]
+                            modified[rel_path].append(i + 1)
                             break
+        return modified
 
 
     files = {}
 
     try:        # go for DXR
-        url = 'https://dxr.mozilla.org/mozilla-central/search?q=%s' % prefix
-        print '\nScraping results from DXR: %s' % url
-        session = dryscrape.Session()
-        session.visit(url)
-        print 'Sleeping for %s seconds...' % SCRAPE_SLEEP_TIMEOUT
-        # sleeping is necessary for getting the entire page (JS stuff is loaded async)
-        sleep(SCRAPE_SLEEP_TIMEOUT)
-        response = session.body()
-        parse_response(response)
+        files, all_found = search_dxr(prefix, print_results = False)
+        files = check_files(files)
     except KeyboardInterrupt:
         pass
     except:     # fall back to the good ol' days...

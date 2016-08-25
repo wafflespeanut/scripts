@@ -1,10 +1,7 @@
 import os, sys, subprocess
 
-def print_line(line):
-    sys.stdout.write(line)
-    sys.stdout.flush()
 
-def exec_cmd(command, call = print_line):
+def exec_cmd(command, call = lambda line: sys.stdout.write(line) and sys.stdout.flush()):
     output = []
     print command
     process = subprocess.Popen(command, stderr = subprocess.STDOUT,
