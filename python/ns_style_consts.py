@@ -37,7 +37,7 @@ def parse_const(line):      # try to parse a line containing the constant (allow
     value = ' '.join(word for word in stuff)
     # magic to evaluate RHS and put it into the global namespace
     exec '%s = %s' % (name, value) in global_names
-    return name, global_names.get(name), comment
+    return name, global_names[name], comment
 
 
 def find_constant(prefix, contents, idx = 0):       # find first matching constant
@@ -56,28 +56,19 @@ def find_constant(prefix, contents, idx = 0):       # find first matching consta
 
 # Constants are mostly grouped with incrementally occurring integers
 # (here, we find such a group by setting its boundaries)
-def find_boundary(contents, idx, reverse = False):
-    i = idx
+def find_boundary(file_contents, idx, reverse = False):
+    contents = file_contents[::-1] if reverse else file_contents
+    i = len(contents) - idx - 1 if reverse else idx
     _n, prev_val, _c = parse_const(contents[i])
+    check = (lambda cur, prev: cur >= prev) if reverse else lambda cur, prev: cur <= prev
 
-    if reverse:
-        while i > 0 and contents[i - 1].startswith('#define'):
-            i -= 1
-            _n, cur_val, _c = parse_const(contents[i])
-            if cur_val >= prev_val:
-                break
-
-            prev_val = cur_val
-    else:
-        while i < len(contents) - 1 and contents[i + 1].startswith('#define'):
-            i += 1
-            _n, cur_val, _c = parse_const(contents[i])
-            if cur_val <= prev_val:
-                break
-
-            prev_val = cur_val
+    while i < len(contents) - 1 and contents[i + 1].startswith('#define'):
         i += 1
-    return i
+        _n, cur_val, _c = parse_const(contents[i])
+        if cur_val <= prev_val:
+            return i
+        prev_val = cur_val
+    return len(contents) - i - 1 if reverse else i + 1
 
 
 def collect_all(contents, prefix, idx = 0):     # get all the constants
@@ -131,6 +122,7 @@ if __name__ == '__main__':
         exit('Constant group not found in file!')
 
     try:
+        print 'Isolating the group...'
         start_idx = find_boundary(contents, found, reverse = True)
         end_idx = find_boundary(contents, found)
         stuff = contents[start_idx:end_idx]
@@ -157,32 +149,23 @@ if __name__ == '__main__':
         indices = collect_all(contents, prefix, end_idx)
         if indices:
             # check whether the intermediate lines are comments (and proceed only if they are)
-            idx_iter = iter(indices)
-            prev_idx = end_idx - 1
+            for idx in range(end_idx, indices[-1] + 1):
+                line = contents[idx]
+                stripped = line.strip()
+                if not stripped:
+                    continue
+                elif line.startswith('//'):
+                    name, val, comment = const_stuff[-1]
+                    const_stuff[-1] = name, val, comment + '\n' + ' ' * TAB_LEN + stripped
+                elif idx in indices:
+                    const = parse_const(line)
+                    const_stuff.append(const)
+                else:
+                    print '\n%d more constants have been found with the same prefix! (lines: %s)' \
+                          % (len(indices), ', '.join(map(lambda i: str(i + 1), indices)))
+                    exit("It's not safe to run this script in these cases...")
 
-            while True:
-                parsed = parse_const(contents[prev_idx])
-                try:
-                    idx = idx_iter.next()
-                except StopIteration:
-                    const_stuff.append(parsed)
-                    break
-
-                prev_idx += 1
-                if prev_idx == idx:
-                    const_stuff.append(parsed)
-
-                for line in contents[prev_idx:idx]:
-                    stripped = line.strip()
-                    if not stripped or line.startswith('//'):
-                        name, val, comment = const_stuff[-1]
-                        const_stuff[-1] = name, val, comment + '\n' + ' ' * TAB_LEN + stripped
-                    else:
-                        print '\n%d more line(s) have been found to contain constants with the same prefix!' \
-                              % len(indices)
-                        exit("It's not safe to run this script in these cases...")
-                prev_idx = idx
-        print 'Found %d more... (and updated the list)' % len(indices)
+            print 'Found %d more (and updated the list!)' % len(indices)
 
 
     collect_and_try_parsing(contents, end_idx)
