@@ -1,4 +1,4 @@
-import inspect, os, subprocess
+import inspect, os
 
 filename = inspect.getframeinfo(inspect.currentframe()).filename
 exec_path = os.path.dirname(os.path.abspath(filename))
