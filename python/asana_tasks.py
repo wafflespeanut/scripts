@@ -28,11 +28,11 @@ SAMPLE_CONFIG = {
                 # "custom" - create a custom task in gnats
                 "type": "",
                 "project": "",          # some project name (case insensitive)
-                "task_name": "",        # some task name or pattern
+                "task_name": "",        # some task name (if it's created) or pattern (if it's updated)
                 "task_assignee": "",    # (optional) assignee for new tasks (default: you)
                 "task_date": "",        # (optional) due date for new tasks (default: null)
 
-                "subtask": "",          # some subtask name (subtasks are always created)
+                "subtask": "",          # some subtask name (if it's created) or pattern (if it's updated)
                 # (optional) due date for this subtask
                 # (default: date you've mentioned above, for this task group)
                 "subtask_date": "",
@@ -105,18 +105,13 @@ class AsanaTasksCreator(object):
 
     def create_task_data(self, **kwargs):
         data = {}
-        if kwargs.get('space_id'):
-            data['workspace'] = kwargs['space_id']
-        if kwargs.get('proj_id'):
-            data['projects'] = [kwargs['proj_id']]
-        if kwargs.get('name'):
-            data['name'] = kwargs['name']
-        if kwargs.get('assignee'):
-            data['assignee'] = kwargs['assignee']
-        if kwargs.get('completed'):
-            data['completed'] = kwargs['completed']
         if kwargs.get('date') and try_parse_datetime(kwargs['date']):
             data['due_on'] = kwargs['date']
+
+        for key in ['workspace', 'projects', 'name', 'assignee', 'completed']:
+            if kwargs.get(key):
+                data[key] = kwargs[key]
+
         return data
 
     def update_task(self, task_id, is_root=False, **kwargs):
@@ -127,12 +122,12 @@ class AsanaTasksCreator(object):
         self._request('PUT', self.tasks_url % task_id, data)
 
     def create_new_task(self, parent_id, is_root=False, **kwargs):
-        if not (kwargs.get('name') and kwargs.get('space_id')):
+        if not (kwargs.get('name') and kwargs.get('workspace')):
             print 'WARNING: Name and Workspace IDs are required!'
             return
 
         if is_root:
-            kwargs['proj_id'] = parent_id
+            kwargs['projects'] = [parent_id]
 
         data = self.create_task_data(**kwargs)
         url = self.root_tasks_url if is_root else self.sub_tasks_url
@@ -268,6 +263,7 @@ def begin_battle(config):
     space = config['space']
 
     if isinstance(space, str):
+        print 'Finding your workspace...'
         spaces = asana.get_workspaces()
         spaces = filter(lambda (name, sp): re.search(config['space'], name), spaces.items())
         if not spaces:
@@ -279,6 +275,7 @@ def begin_battle(config):
     fill_tasks = config['tasks']
     projects = {}
 
+    print '\nGetting projects and associated tasks...'
     # get the projects mentioned in the config
     for dt, tasks in fill_tasks.items():
         for task in tasks:
@@ -294,7 +291,7 @@ def begin_battle(config):
             projects[proj]['id'] = proj_id
             projects[proj]['tasks'] = asana.get_tasks(proj_id, is_root=True)
 
-    # start the driver
+    print '\nStarting driver...'
     username = config.get('gnats_user')
     password = config.get('gnats_pass')
     gnats = GnatsFiller(username, password)
@@ -306,6 +303,11 @@ def begin_battle(config):
             print 'Error parsing date: %r. Skipping task group...' % date
             continue
 
+        if datetime.now().strftime('%Y-%d-%m') == date:
+            print "Skipping today's task group..."
+            continue
+
+        print '\nDate: %s' % date
         created, picked, custom = [], [], []
         asana_tasks, custom_tasks = [], []
 
@@ -326,7 +328,7 @@ def begin_battle(config):
             if task['type'] in ['update-create', 'create-create', 'update-update']:
                 asana_tasks.append(task)
             else:
-                print "Task handling for %r has not been implemented! Skipping %r..." % \
+                print "Task handling for %r hasn't been implemented! Skipping %r..." % \
                     (task['type'], task['subtask'])
 
         try:
@@ -338,7 +340,7 @@ def begin_battle(config):
                 task_id = None
 
                 if task_type == 'create':
-                    created = asana.create_new_task(parent_id=proj['id'], space_id=space,
+                    created = asana.create_new_task(parent_id=proj['id'], workspace=space,
                                                     is_root=True, name=task_name_or_pattern,
                                                     assignee=task.get('task_assignee', 'me'),
                                                     date=try_parse_datetime(task.get('task_date')))
@@ -362,8 +364,8 @@ def begin_battle(config):
                 subtask_id = None
 
                 if subtask_type == 'create':
-                    print 'Creating new subtask %r...' % subtask_name
-                    sub_task = asana.create_new_task(parent_id=task_id, space_id=space,
+                    print '\nCreating new subtask %r...' % subtask_name
+                    sub_task = asana.create_new_task(parent_id=task_id, workspace=space,
                                                      name=subtask_name,
                                                      assignee=task.get('subtask_assignee', 'me'),
                                                      date=try_parse_datetime(task.get('subtask_date')) or date)
@@ -372,31 +374,37 @@ def begin_battle(config):
 
                 elif subtask_type == 'update':
                     subtasks = asana.get_tasks(task_id)
-                    found = filter(lambda (name, _): re.search(subtask_name, name),
-                                   subtasks.items())
+                    found = filter(lambda (name, _): re.search(subtask_name, name), subtasks.items())
                     if not found:
                         print 'No matching sub-tasks found! Skipping %r...'
                         continue
 
                     subtask_name, subtask_id = found[0]
-                    print 'Sub-task matched: %r' % subtask_name
+                    print '\nSub-task matched: %r' % subtask_name
                     asana.update_task(subtask_id,
                                       assignee=task.get('subtask_assignee'),
                                       date=task.get('subtask_date'))
 
+                print 'Switching to current date...'
                 gnats.switch_to_date(date)
+                print 'Listing tasks...'
                 gnats.list_tasks(proj['id'])
                 gnats.list_subtasks(task_name)
+                print 'Picking the subtask...'
                 gnats.pick_subtask(subtask_name)
                 picked.append(subtask_name)
 
                 gnats.show_picked()
+                print 'Updating the subtask with hours...'
                 gnats.fill_picked(subtask_name, task['hours'])
                 gnats.update_filled()
 
                 if task.get('completed', True):
+                    print '\nMarking %r as completed!' % subtask_name
                     asana.update_task(subtask_id, completed=True)
-                    print 'Marked %r as completed!' % subtask_name
+
+            print '\nSwitching to current date...'
+            gnats.switch_to_date(date)
 
             for task in custom_tasks:
                 print 'Adding custom task... %r' % task['subtask']
@@ -405,10 +413,11 @@ def begin_battle(config):
                 custom.append(task['subtask'])
                 gnats.update_filled()
 
+        # rollback current task related stuff on exception or interruption
         except KeyboardInterrupt, Exception:
-            print 'Interrupted! Rolling back the task group for %r' % date
+            print '\nInterrupted! Rolling back the task group for %r' % date
             if created:
-                print 'Deleting now-created tasks/subtasks...'
+                print 'Deleting tasks/subtasks...'
                 for task_id in created:
                     asana.delete_task(task_id)
             if picked:
