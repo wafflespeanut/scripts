@@ -21,15 +21,38 @@ SAMPLE_CONFIG = {
     "tasks": {
         "YYYY-MM-DD": [
             {
-                "type": "",     # "update", "custom", or "create"
-                "project": "",  # some project name (case insensitive)
-                "task": "",     # some task name or pattern
-                "subtask": "",  # some subtask name (subtasks are always created)
-                "hours": ""     # hours taken for this task
+                # "type" says what should be done for this group
+                # "create-create" - create a new task and create a subtask
+                # "update-create" - update an existing task and create a subtask
+                # "update-update" - update an existing task and subtask
+                # "custom" - create a custom task in gnats
+                "type": "",
+                "project": "",          # some project name (case insensitive)
+                "task_name": "",        # some task name or pattern
+                "task_assignee": "",    # (optional) assignee for new tasks (default: you)
+                "task_date": "",        # (optional) due date for new tasks (default: null)
+
+                "subtask": "",          # some subtask name (subtasks are always created)
+                # (optional) due date for this subtask
+                # (default: date you've mentioned above, for this task group)
+                "subtask_date": "",
+                "subtask_assignee": "", # (optional) assignee for subtasks (default: you)
+
+                "hours": "",            # hours taken for this task
+                # (optional) bool for "completed" (defaults to True)
+                # (which marks the subtask as completed once we update it in Gnats)
+                "completed": False,
             }
         ]
     }
 }
+
+
+def try_parse_datetime(dt, dt_format='%Y-%m-%d'):
+    try:
+        return datetime.strptime(dt, dt_format).strftime(dt_format)
+    except ValueError:
+        return None
 
 
 class AsanaTasksCreator(object):
@@ -92,9 +115,8 @@ class AsanaTasksCreator(object):
             data['assignee'] = kwargs['assignee']
         if kwargs.get('completed'):
             data['completed'] = kwargs['completed']
-        if kwargs.get('date'):
-            date = datetime.strptime(kwargs['date'], '%Y-%m-%d')
-            data['due_on'] = date.strftime('%Y-%m-%d')
+        if kwargs.get('date') and try_parse_datetime(kwargs['date']):
+            data['due_on'] = kwargs['date']
         return data
 
     def update_task(self, task_id, is_root=False, **kwargs):
@@ -109,13 +131,15 @@ class AsanaTasksCreator(object):
             print 'WARNING: Name and Workspace IDs are required!'
             return
 
-        if is_root and not kwargs.get('proj_id'):
-            print 'WARNING: Project ID is required for creating root tasks'
-            return
+        if is_root:
+            kwargs['proj_id'] = parent_id
 
         data = self.create_task_data(**kwargs)
         url = self.root_tasks_url if is_root else self.sub_tasks_url
         return self._request('POST', url % parent_id, {'data': data})
+
+    def delete_task(self, task_id):
+        self._request('DELETE', self.tasks_url % task_id)
 
 
 class GnatsFiller(object):
@@ -198,7 +222,10 @@ class GnatsFiller(object):
         def inner():
             td = self.driver.find_element_by_xpath("//td[contains(.,'%s')]" % subtask_name)
             tr = td.find_element_by_xpath('..')
-            dt_hrs = datetime.strptime(hours, '%H:%M').strftime('%H:%M')
+            dt_hrs = try_parse_datetime(hours, '%H:%M')
+            if not dt_hrs:
+                print 'Unable to parse datetime (%s)' % hours
+                dt_hrs = '00:00'
             tr.find_element_by_tag_name('input').send_keys(dt_hrs)
 
         self.loop_wait(inner)
@@ -236,34 +263,42 @@ def begin_battle(config):
         space = spaces[0][1]
 
     print 'Workspace ID: %d' % space
-    projects = {}
     fill_tasks = config['tasks']
+    projects = {}
 
+    # get the projects mentioned in the config
+    for dt, tasks in fill_tasks.items():
+        for task in tasks:
+            if task.get('project'):
+                proj = task['project'].lower()
+                task['project'] = proj
+                projects[proj] = {}
+
+    # get the tasks corresponding to those projects
     for proj_name, proj_id in asana.get_projects().items():
         proj = proj_name.lower()
-        projects[proj] = {}
-        projects[proj]['id'] = proj_id
-        projects[proj]['tasks'] = asana.get_tasks(proj_id, is_root=True)
+        if projects.get(proj) is not None:
+            projects[proj]['id'] = proj_id
+            projects[proj]['tasks'] = asana.get_tasks(proj_id, is_root=True)
 
+    # start the driver
     username = config.get('gnats_user')
     password = config.get('gnats_pass')
     gnats = GnatsFiller(username, password)
 
+    # Main loop
     for date, tasks_info in fill_tasks.items():
-        try:
-            date = datetime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d')
-        except ValueError:
-            print 'Error parsing %r. Skipping task group...'
+        date = try_parse_datetime(date)
+        if not date:
+            print 'Error parsing date: %r. Skipping task group...' % date
             continue
 
         tasks = []
-        update_tasks = []
+        asana_tasks = []
         custom_tasks = []
 
         for task in tasks_info:
-            try:
-                datetime.strptime(task['hours'], '%H:%M').strftime('%H:%M')
-            except ValueError:
+            if not try_parse_datetime(task['hours'], '%H:%M'):
                 print 'Unable to parse hours (%s). Skipping %r...' % (task['hours'], task['subtask'])
                 continue
 
@@ -271,45 +306,89 @@ def begin_battle(config):
                 custom_tasks.append(task)
                 continue
 
-            proj = task['project'].lower()
+            proj = task['project']
             if not projects.get(proj):
                 print 'Project %r not found in Asana! Skipping %r...' % (proj, task['subtask'])
                 continue
 
-            if task['type'] == 'update':
-                update_tasks.append(task)
+            if task['type'] in ['update-create', 'create-create', 'update-update']:
+                asana_tasks.append(task)
+            else:
+                print "Task handling for %r has not been implemented! Skipping %r..." % \
+                    (task['type'], task['subtask'])
 
-        for task in update_tasks:
-            proj = projects[task['project'].lower()]
-            task_pattern = task['task']
+        for task in asana_tasks:
+            created = []
+            proj = projects[task['project']]
+            task_name_or_pattern = task['task_name']
+            task_type, subtask_type = task['type'].split('-')
+            task_id = None
 
-            for task_name, task_id in proj['tasks'].items():
-                if not re.search(task_pattern, task_name):
+            if task_type == 'create':
+                created = asana.create_new_task(parent_id=proj['id'], space_id=space,
+                                                is_root=True, name=task_name_or_pattern,
+                                                assignee=task.get('task_assignee', 'me'),
+                                                date=try_parse_datetime(task.get('task_date')))
+                task_id, task_name = created['id'], task_name_or_pattern
+                proj['tasks'][task_name_or_pattern] = task_id
+                print 'Created new task: %r' % task_name
+                created.append(task_id)
+
+            elif task_type == 'update':
+                found = filter(lambda (name, _): re.search(task_name_or_pattern, name),
+                               proj['tasks'].items())
+                if not found:
+                    print 'No matching tasks found! Skipping %r...' % task_name_or_pattern
                     continue
 
-                subtask_name = task['subtask']
+                task_name, task_id = found[0]
+                print 'Task matched: %r' % task_name
+                asana.update_task(task_id, assignee=task.get('task_assignee'), date=task.get('task_date'))
+
+            subtask_name = task['subtask']
+            subtask_id = None
+
+            if subtask_type == 'create':
                 print 'Creating new subtask %r...' % subtask_name
                 sub_task = asana.create_new_task(parent_id=task_id, space_id=space,
-                                                 name=subtask_name, assignee='me', date=date)
+                                                 name=subtask_name,
+                                                 assignee=task.get('subtask_assignee', 'me'),
+                                                 date=task.get('subtask_date'))
                 subtask_id = sub_task['id']
+                created.append(subtask_id)
 
-                gnats.switch_to_date(date)
-                gnats.list_tasks(proj['id'])
-                gnats.list_subtasks(task_name)
-                gnats.pick_subtask(subtask_name)
-                gnats.show_picked()
-                gnats.fill_picked(subtask_name, task['hours'])
-                gnats.update_filled()
+            elif subtask_type == 'update':
+                subtasks = asana.get_tasks(task_id)
+                found = filter(lambda (name, _): re.search(subtask_name, name),
+                               subtasks.items())
+                if not found:
+                    print 'No matching sub-tasks found! Skipping %r...'
+                    continue
 
+                subtask_name, subtask_id = found[0]
+                print 'Sub-task matched: %r' % subtask_name
+                asana.update_task(subtask_id,
+                                  assignee=task.get('subtask_assignee'),
+                                  date=task.get('subtask_date'))
+
+            gnats.switch_to_date(date)
+            gnats.list_tasks(proj['id'])
+            gnats.list_subtasks(task_name)
+            gnats.pick_subtask(subtask_name)
+            gnats.show_picked()
+            gnats.fill_picked(subtask_name, task['hours'])
+            gnats.update_filled()
+
+            if task.get('completed', True):
                 asana.update_task(subtask_id, completed=True)
                 print 'Marked %r as completed!' % subtask_name
 
-                break
+            # FIXME: delete created tasks (and unpick them) on exception
 
         for task in custom_tasks:
             print 'Adding custom task... %r' % task['subtask']
             gnats.show_picked()
-            gnats.custom_add(task['task'], task['subtask'], task['hours'])
+            gnats.custom_add(task['task_name'], task['subtask'], task['hours'])
             gnats.update_filled()
 
 
