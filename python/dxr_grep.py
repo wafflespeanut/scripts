@@ -7,7 +7,7 @@ REPO = 'mozilla-central'
 SCRAPE_SLEEP_TIMEOUT = 2
 
 
-def search_dxr(word, print_results = True):
+def search_dxr(word, print_results=True):
     url = 'https://dxr.mozilla.org/%s/search?q=%s' % (REPO, word)
     print '\nScraping results from DXR: %s' % url
     session = dryscrape.Session()

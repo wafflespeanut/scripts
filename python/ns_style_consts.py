@@ -40,7 +40,7 @@ def parse_const(line):      # try to parse a line containing the constant (allow
     return name, global_names[name], comment
 
 
-def find_constant(prefix, contents, idx = 0):       # find first matching constant
+def find_constant(prefix, contents, idx=0):       # find first matching constant
     for (i, line) in enumerate(contents[idx:]):
         if not line.startswith('#define'):
             continue
@@ -56,7 +56,7 @@ def find_constant(prefix, contents, idx = 0):       # find first matching consta
 
 # Constants are mostly grouped with incrementally occurring integers
 # (here, we find such a group by setting its boundaries)
-def find_boundary(file_contents, idx, reverse = False):
+def find_boundary(file_contents, idx, reverse=False):
     contents = file_contents[::-1] if reverse else file_contents
     i = len(contents) - idx - 1 if reverse else idx
     _n, prev_val, _c = parse_const(contents[i])
@@ -71,7 +71,7 @@ def find_boundary(file_contents, idx, reverse = False):
     return len(contents) - i - 1 if reverse else i + 1
 
 
-def collect_all(contents, prefix, idx = 0):     # get all the line indices containing the constants
+def collect_all(contents, prefix, idx=0):     # get all the line indices containing the constants
     indices = []
     for i, line in enumerate(contents[idx:]):
         if line.startswith('#define'):
@@ -122,7 +122,7 @@ if __name__ == '__main__':
 
     try:
         print 'Isolating the group...'
-        start_idx = find_boundary(contents, found, reverse = True)
+        start_idx = find_boundary(contents, found, reverse=True)
         end_idx = find_boundary(contents, found)
         stuff = contents[start_idx:end_idx]
         assert len(stuff) > 1, "The script won't do any good for a group containing single constant!"
@@ -240,7 +240,7 @@ if __name__ == '__main__':
     files = {}
 
     try:        # go for DXR
-        files, all_found = search_dxr(prefix, print_results = False)
+        files, all_found = search_dxr(prefix, print_results=False)
         files = check_files(files)
     except KeyboardInterrupt:
         pass

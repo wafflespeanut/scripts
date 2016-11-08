@@ -1,11 +1,13 @@
 import os, sys, subprocess
 
 
-def exec_cmd(command, call = lambda line: sys.stdout.write(line) and sys.stdout.flush()):
+def exec_cmd(command, call=lambda line: sys.stdout.write(line) and sys.stdout.flush(),
+             print_cmd=True):
     output = []
-    print command
-    process = subprocess.Popen(command, stderr = subprocess.STDOUT,
-                               stdout = subprocess.PIPE, shell = True)
+    if print_cmd:
+        print '\033[93m%s\033[0m' % command
+    process = subprocess.Popen(command, stderr=subprocess.STDOUT,
+                               stdout=subprocess.PIPE, shell=True)
     if call:
         stdout_lines = iter(process.stdout.readline, "")
         for line in stdout_lines:   # do something as and whenever we get an output
