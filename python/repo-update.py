@@ -31,10 +31,10 @@ class Git(Repo):
                 raise Exception('Unable to switch branch!')
 
     def merge(self):
-        out = exec_cmd('git fetch upstream')
+        out = exec_cmd('git fetch upstream', prefer_lines=False)
         if 'fatal' in out:
             raise Exception("Unable to fetch from 'upstream'!")
-        _out = exec_cmd('git merge upstream/master')
+        exec_cmd('git merge upstream/master', needs_output=False, prefer_lines=False)
 
 
 class Hg(Repo):
@@ -43,10 +43,10 @@ class Hg(Repo):
 
     def check(self):
         print 'Popping all patches from queue...'
-        _out = exec_cmd('hg qpop -a')
+        exec_cmd('hg qpop -a', needs_output=False)
 
     def merge(self):
-        out = exec_cmd('hg pull -u')
+        out = exec_cmd('hg pull -u', prefer_lines=False)
         if 'abort' in out:
             raise Exception('Merging failed!')
 
@@ -62,9 +62,9 @@ if __name__ == '__main__':
                 elif os.path.exists(os.path.join(abs_path, '.hg')):
                     instance = Hg
                 if instance is None:
-                    raise Exception("Not a 'git' or 'hg' repo! Getting out...")
+                    raise Exception("%s is not a 'git' or 'hg' repo! Getting out..." % abs_path)
                 instance(abs_path)
             except KeyboardInterrupt:
                 exit('Interrupted!')
             except Exception as err:
-                print '\033[91m%s\033[0m' % err
+                print '\n\033[91m%s\033[0m' % err
