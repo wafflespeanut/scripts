@@ -125,7 +125,7 @@ def get_metadata(path):     # walk over a given path and get the metadata of MP3
         new_name = '-'.join(new_name.split())
 
         lookup_key = album if album else title
-        lookup_key += ' (%d)' % year    # workaround to prevent name collisions in cover images
+        lookup_key += ' (%s)' % year    # workaround to prevent name collisions in cover images
         image_path = image_data.get(lookup_key)
 
         if not image_path:
@@ -187,7 +187,7 @@ def change_meta(rel_path, meta_exists = False):     # get the dumped metadata an
             i, total = 1, len(stuff)
 
             for file_path, data in stuff:
-                decoded_path = file_path.decode('utf-8')
+                decoded_path = file_path.encode('utf-8')
                 try:
                     assert int(data['year']) > 1900, "songs didn't exist before 1900!"
                     for attr in attrs:
@@ -219,6 +219,7 @@ def change_meta(rel_path, meta_exists = False):     # get the dumped metadata an
             raw_input('\nErrors found! Continue after fixing them...')
 
         except Exception as err:
+            print err
             print '%sCannot parse some of the values. Make sure that the data is in valid JSON format!%s' \
                    % (fmt('R'), fmt())
             raw_input('\nContinue after fixing it...')
@@ -264,4 +265,4 @@ def change_meta(rel_path, meta_exists = False):     # get the dumped metadata an
 if __name__ == '__main__':
     args = sys.argv[1:]
     path = args[0] if args else PATH
-    change_meta(path, path.endswith('!'))
+    change_meta(path.rstrip('!'), path.endswith('!'))
