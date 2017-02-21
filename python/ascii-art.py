@@ -1,19 +1,37 @@
 from collections import Counter
-from time import sleep
+from PIL import Image, ImageFilter, ImageFont, ImageDraw, ImageEnhance, ImageOps
 
-import Image
-import ImageFilter
-import ImageFont
-import ImageDraw
-import ImageEnhance
-import ImageOps
 import argparse
+import cgi
 import colorsys
 import string
 
 MIN_LEVEL = 80
 MAX_LEVEL = 127
 GAMMA = 0.78
+
+HTML_PREFIX = '''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ASCII Art</title>
+    <style type="text/css">
+        #text {
+            font-size: 4px;
+            font-family: monospace, Courier;
+            line-height: 0.4;
+        }
+    </style>
+</head>
+<body>
+<pre id='text'>
+'''
+
+HTML_SUFFIX = '''
+</pre>
+</body>
+</html>
+'''
 
 # Level object from https://stackoverflow.com/a/3125421/2313792
 class Level(object):
@@ -45,7 +63,7 @@ def generate_basic_sketch(image, min_level, max_level, gamma):
 
 # Modified from https://github.com/ajalt/pyasciigen/blob/master/asciigen.py
 def generate_art(path, given_width=None, brightness=None, contrast=None,
-                 min_level=MIN_LEVEL, max_level=MAX_LEVEL, gamma=GAMMA):
+                 min_level=MIN_LEVEL, max_level=MAX_LEVEL, gamma=GAMMA, html=False):
     font = ImageFont.load_default()
     char_width, char_height = font.getsize('X')
 
@@ -78,9 +96,19 @@ def generate_art(path, given_width=None, brightness=None, contrast=None,
     image = generate_basic_sketch(image, min_level, max_level, gamma)
     pixels = image.convert('L').load()
 
+    if html:
+        print HTML_PREFIX
+
     for y in xrange(height):
-        print ''.join(chars[int(pixels[x, y] / 255. * (len(chars) - 1) + 0.5)] for x in xrange(width))
-        sleep(0.03)
+        s = ''.join(chars[int(pixels[x, y] / 255. * (len(chars) - 1) + 0.5)] for x in xrange(width))
+        if html:
+            print s
+        else:
+            print cgi.escape(s) + '<br />\n'
+
+    if html:
+        print HTML_SUFFIX
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate ascii art from an image.')
@@ -97,8 +125,10 @@ if __name__ == '__main__':
                         help='Contrast ratio to apply to image.')
     parser.add_argument('--brightness', '-b', metavar='RATIO', type=float,
                         help='Brightness ratio to apply to image.')
-    parser.set_defaults(min_level=MIN_LEVEL, max_level=MAX_LEVEL, gamma=GAMMA)
+    parser.add_argument('--html', '-html', action='store_true',
+                        help='Print HTML in stdout')
+    parser.set_defaults(min_level=MIN_LEVEL, max_level=MAX_LEVEL, gamma=GAMMA, html=False)
     args = parser.parse_args()
 
     generate_art(args.image, args.width, args.brightness, args.contrast,
-                 args.min_level, args.max_level, args.gamma)
+                 args.min_level, args.max_level, args.gamma, args.html)
