@@ -31,7 +31,7 @@ prefer_hyphen = ':_/'
 careful_check = ')-:,]/'
 avoid_start = ['the', 'an', 'a']            # filenames must not begin with articles!
 allowed_puncs = '#!$&\'(),-.'               # symbols that can be allowed for track titles
-avoid_puncs = '"%*+/:;<=>?@[\\]^_`{|}~'     # symbols to be avoided for filenames
+avoid_puncs = '!"%*+/:;<=>?@[\\]^_`{|}~'    # symbols to be avoided for filenames
 
 def get_titled(string):
     return ''.join(s for s in string if s.isupper() or s.isdigit() or s in allowed_puncs)
