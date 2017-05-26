@@ -1,17 +1,26 @@
+from argparse import ArgumentParser
 from datetime import datetime
 from threading import Thread
 from time import sleep
 
-import fcntl, struct, sys, termios, tty, urllib2
+import argparse, fcntl, select, struct, sys, termios, tty, urllib2
+
+CURSOR_TOP_LEFT = '\033[1;1H'
+RED = '\033[91m'
+GREEN = '\033[92m'
+COLOR_NULL = '\033[0m'
 
 class Watcher(object):
     def __init__(self):
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        # reset with `termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)`
+        self.fd = sys.stdin.fileno()
+        self.old = termios.tcgetattr(self.fd)
         tty.setraw(sys.stdin)
         self.llog = []
         self.rlog = []
+
+    def exit(self):
+        termios.tcsetattr(self.fd, termios.TCSADRAIN, self.old)
+        exit()
 
     def update_size(self):
         st = struct.pack('HHHH', 0, 0, 0, 0)
@@ -21,7 +30,7 @@ class Watcher(object):
 
     def set_line_right(self, idx, line):
         while idx >= len(self.rlog):
-            self.rlog.append('')
+            self.rlog.append(' ' * (self.log_width - 1))
         self.rlog[idx] = line
 
     def get_split_lines(self, lines):
@@ -33,7 +42,7 @@ class Watcher(object):
 
     def refresh(self):
         self.update_size()
-        sys.stdout.write('\033[1;1H')
+        sys.stdout.write(CURSOR_TOP_LEFT)
         if len(self.llog) > self.rows:
             self.llog = self.llog[-self.rows:]
         if len(self.rlog) > self.rows:
@@ -48,11 +57,10 @@ class Watcher(object):
                 sys.stdout.write(' ' * self.log_width)
             else:
                 line = llines[r - idx]
-                l = len(line)       # FIXME: account tab-formatted strings
-                sys.stdout.write(line + ' ' * (self.log_width - l))
+                sys.stdout.write(line + ' ' * (self.log_width - len(line)))
             sys.stdout.write(' | ')
             if r < len(rlines):
-                sys.stdout.write(rlines[r])
+                sys.stdout.write(rlines[r] + ' ' * (self.log_width - len(rlines[r]) - 1))
             sys.stdout.write('\r\n')
 
 
@@ -71,9 +79,24 @@ class ReturningThread(Thread):
         return self._return
 
 
-args = sys.argv[1:]
-name = args[0] if args else 'ashley'
-interval_secs = float(args[1]) if len(args) > 1 else 1
+parser = ArgumentParser(description='Watch live updates from NSE')
+parser.add_argument('--market', '-m', type=str, default='ashley',
+                    help='market to watch (default: ashley)')
+parser.add_argument('--quantity', '-q', type=int, default=0,
+                    help='total shares buy/sell (default: null)')
+parser.add_argument('--cost', '-c', type=float, default=0.0,
+                    help='value of share during buy/sell time (default: null)')
+parser.add_argument('--type', '-t', choices=['buy', 'sell'], default='null',
+                    help='buy/sell (default: null)')
+parser.add_argument('--day', '-d', choices=['intra', 'deliver'], default='null',
+                    help='day on which the trade will take place (default: null)')
+parser.add_argument('--interval', '-i', type=float, default=1,
+                    help='sleep interval in seconds (default: 1)')
+parser.add_argument('--output', '-o', action='store_true', default=False,
+                    help='output to log file')
+
+args = parser.parse_args()
+name, amount, cost, interval_secs = args.market, args.quantity, args.cost, args.interval
 
 # url_1 = 'http://getquote.icicidirect.com/trading_stock_quote.aspx?Symbol=%s' % name
 # url_2 = 'https://secure.icicidirect.com/IDirectTrading/trading/trading_stock_bestbid.aspx?Symbol=%s' % name
@@ -111,13 +134,63 @@ while True:
         watcher.llog.append(line)
 
         idx = 116
-        for i in range(5):      # 5 rows
-            end = idx + 7 * offset      # 7 cols
-            line = ' ' * 5 + ''.join(map(lambda i: '%-10s' % l2[i], range(idx, end + 1, offset))[:4])
-            watcher.set_line_right(i, line)
+        max_len = 0
+        x_shift, y_shift = int(0.15 * watcher.columns), int(0.08 * watcher.rows)
+        rows, cols = 5, 7
+        for i in range(rows):
+            end = idx + cols * offset
+            line = ' ' * x_shift + ''.join(map(lambda i: '%-10s' % l2[i], range(idx, end + 1, offset))[:4])
+            if len(line) > max_len:
+                max_len = len(line)
+            watcher.set_line_right(i + y_shift + 1, line)
             idx = end + 5
 
-        with open(filename, 'a') as fd:
-            fd.write(line + '\n')
+        watcher.set_line_right(y_shift - 1, ' ' * x_shift + '-' * (max_len - x_shift - 5))
+        watcher.set_line_right(rows + y_shift + 2, ' ' * x_shift + '-' * (max_len - x_shift - 5))
+
+        watcher.set_line_right(watcher.rows / 3, '=' * (watcher.log_width - 1))
+
+        y_shift = watcher.rows / 3 + 3
+        opp_act = 'buy' if args.type == 'sell' else 'sell' if args.type == 'buy' else 'null'
+
+        if args.day == 'intra':
+            intra_frac = 0.06
+            trade_worth = amount * cost
+            curr_worth = amount * last_price
+            diff = (last_price - cost) if args.type == 'buy' else (cost - last_price)
+            blocked = trade_worth * intra_frac
+            brokerage = (trade_worth + curr_worth) * 0.0005
+            tax = brokerage * 0.14
+            stt = curr_worth * 0.00025
+            stamp = (trade_worth + curr_worth) * 0.00006
+            sebi = (trade_worth + curr_worth) * (0.00002 + 0.0000231)
+            net_comm = brokerage + tax + stt + stamp + sebi
+            final = curr_worth - net_comm
+            earned = amount * diff
+            on_hand = earned - net_comm
+            res = 'gain' if on_hand > 0 else 'loss' if on_hand < 0 else 'neutral'
+
+            watcher.set_line_right(y_shift,
+                                   name.upper() + \
+                                   ' (%s) %s%s%s' % \
+                                   (args.day.title(), RED if res == 'loss' else GREEN, '[%s]' % res.upper(), COLOR_NULL))
+            watcher.set_line_right(y_shift + 2, '%-4s %s at %s' % (args.type.upper(), amount, cost))
+            watcher.set_line_right(y_shift + 3, '%-4s %s at %s' % (opp_act.upper(), amount, last_price))
+            watcher.set_line_right(y_shift + 5, 'DIFF: %s' % diff)
+
+            stuff = [('Stock worth', trade_worth), ('Current worth', curr_worth), ('Blocked amount', blocked),
+                     ('Cash earned', earned), ('Commission', -net_comm), ('Cash on hand', on_hand)]
+            for i, (label, value) in enumerate(stuff):
+                watcher.set_line_right(y_shift + 7 + i, '%-15s : %10.2f' % (label, value))
+        elif args.day == 'deliver':
+            pass
+
+        if args.output:
+            with open(filename, 'a') as fd:
+                fd.write(line + '\n')
+
     last_share = day_volume
-    sleep(interval_secs)
+    inp, out, err = select.select([sys.stdin], [], [], interval_secs)       # listens to key input in the sleep interval
+    for i in inp:
+        if i == sys.stdin:
+            watcher.exit()
