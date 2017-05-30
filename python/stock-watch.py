@@ -15,6 +15,7 @@ class Watcher(object):
         self.fd = sys.stdin.fileno()
         self.old = termios.tcgetattr(self.fd)
         tty.setraw(sys.stdin)
+        self.update_size()
         self.llog = []
         self.rlog = []
 
@@ -94,9 +95,19 @@ parser.add_argument('--interval', '-i', type=float, default=1,
                     help='sleep interval in seconds (default: 1)')
 parser.add_argument('--output', '-o', action='store_true', default=False,
                     help='output to log file')
+parser.add_argument('--old-log', '-l', type=str, default=None,
+                    help='show pivot values estimated from previous log')
 
 args = parser.parse_args()
 name, amount, cost, interval_secs = args.market, args.quantity, args.cost, args.interval
+
+last_log = None
+if args.old_log:
+    with open(args.old_log, 'r') as fd:
+        fd.seek(-256, 2)
+        tail = fd.read()
+        idx = tail.find('\n')
+        last_log = tail[idx:].strip().split('\t')
 
 url_1 = 'http://getquote.icicidirect.com/trading_stock_quote.aspx?Symbol=%s' % name
 url_2 = 'https://secure.icicidirect.com/IDirectTrading/trading/trading_stock_bestbid.aspx?Symbol=%s' % name
@@ -104,6 +115,23 @@ url_2 = 'https://secure.icicidirect.com/IDirectTrading/trading/trading_stock_bes
 last_share = 0
 filename = name + datetime.now().strftime('-%Y-%m-%d')
 watcher = Watcher()
+if last_log:
+    close, low, high = map(float, [last_log[2], last_log[5], last_log[6]])
+    pivot = (low + high + close) / 3.0
+    resist_1 = 2 * pivot - low
+    support_1 = 2 * pivot - high
+    resist_2 = pivot + (resist_1 - support_1)
+    support_2 = pivot - (resist_1 - support_1)
+    resist_3 = high + 2 * (pivot - low)
+    support_3 = low - 2 * (high - pivot)
+    values = [resist_1, support_1, resist_2, support_2, resist_3, support_3]
+    watcher.set_line_right(watcher.rows - 8,
+                           '    Previous High: %s    Previous Low: %s    Previous Close: %s' % (high, low, close))
+    watcher.set_line_right(watcher.rows - 5, '    Pivot: %.2f' % pivot)
+    for i in range(3):
+        watcher.set_line_right(watcher.rows - 4 + i,
+                               '    Resistance (%s): %6.2f    Support (%s): %.2f' % \
+                               (i + 1, values[i * 2], i + 1, values[i * 2 + 1]))
 
 while True:
     watcher.refresh()
