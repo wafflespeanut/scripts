@@ -24,32 +24,32 @@ def mp3_get(link, path):
             name = url.split('/')[-1]
             file_path = os.path.join(dir_path, name)
 
-            if name in os.listdir(dir_path):
-                file_size = int(urllib.urlopen(dlink).info()['Content-Length'])
-                print "[File] %s already exists!" % name      # path.getsize() can also be used
-                if os.stat(file_path).st_size == file_size:
-                    continue
-                elif raw_input("\tFile has different size! Overwrite (y/n)? ") != 'y':
-                    print "\t[File] %s skipped! " % name
-                    continue
+            while True:
+                try:
+                    if name in os.listdir(dir_path):
+                        file_size = int(urllib.urlopen(dlink).info()['Content-Length'])
+                        print "[File] %s already exists!" % name      # path.getsize() can also be used
+                        if os.stat(file_path).st_size == file_size:
+                            break
+                        else:
+                            print '[File] %s varies in size. Redownloading...'
 
-            print "Downloading", dlink, "..."
-            urllib.urlretrieve(dlink, file_path)
+                    print "Downloading", dlink, "..."
+                    urllib.urlretrieve(dlink, file_path)
+                    break
+                except:
+                    print 'Retrying...'
 
         except (IOError, KeyboardInterrupt):
             print '\t[File] %s skipped! ' % name
-            if os.path.exists(file_path):
-                os.remove(file_path)
-            return
+            continue
 
 if __name__ == '__main__':
     args = sys.argv[1:]
     if not args:
-        return
+        exit('Requires links to download pages')
 
-    file_path = args.pop(0)
-    with open(file_path, 'r') as fd:
-        links = map(lambda line: line.strip(), fd.readlines())
+    links = map(lambda line: line.strip(), args)
 
     if not os.path.exists:
         os.mkdir(PATH)
