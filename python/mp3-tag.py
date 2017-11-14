@@ -124,8 +124,7 @@ def get_metadata(path):     # walk over a given path and get the metadata of MP3
         new_name = check_name('%s-%s-%s' % (title, get_titled(album), get_titled(artist)), True)
         new_name = '-'.join(new_name.split())
 
-        lookup_key = album if album else title
-        lookup_key += ' (%s)' % year    # workaround to prevent name collisions in cover images
+        lookup_key = '%s - %s' % (title, artist)
         image_path = image_data.get(lookup_key)
 
         if not image_path:
