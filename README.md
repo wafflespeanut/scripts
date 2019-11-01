@@ -2,6 +2,7 @@ A remnant of merges of my oldest repos (like, really old, back when I was learni
 
 Scripts which helped me with my routines at some point:
 
+ - [`twitter-likes.py`](./twitter-likes.py) (Nov. 2019) for maintaining an archive of liked tweets locally to aid searching.
  - [`git-commit-modify.py`](https://github.com/wafflespeanut/scripts/blob/82162d3b68bf6574054982ff883a43eadf02cf25/python/git-commit-modify.py) (Oct. 2018) for modifying past Git commits efficiently.
  - [`mkv-merge`](https://github.com/wafflespeanut/scripts/blob/82162d3b68bf6574054982ff883a43eadf02cf25/python/mkv-merge.py) (Nov. 2017) for stripping useless stuff from MKVs (in Windows).
  - [`mp3-tag.py`](https://github.com/wafflespeanut/scripts/blob/82162d3b68bf6574054982ff883a43eadf02cf25/python/mp3-tag.py) (Nov. 2017) for tagging my MP3s and keeping them clean.
