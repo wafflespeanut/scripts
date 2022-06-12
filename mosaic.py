@@ -7,10 +7,13 @@ import multiprocessing
 import os
 import shutil
 
-INDEX_HTML = '''<!DOCTYPE html>\n<html lang="en">\n  <head>\n  <title>Medusa Mosaic</title>\n  <meta charset="utf-8" />\n  <meta http-equiv='imagetoolbar' content='no'/>\n  <style type="text/css">\n    html, body {{ overflow: hidden; padding: 0; height: 100%; width: 100%; font-family: 'Lucida Grande',Geneva,Arial,Verdana,sans-serif; }}\n    body {{ margin: 10px; background: #fff; }}\n    .olImageLoadError {{ display: none; }}\n    .olControlLayerSwitcher .layersDiv {{ border-radius: 10px 0 0 10px; }}\n  </style>\n<script src="./OpenLayers-2.12.js"></script>\n<script>\n  var map;\n  var mapBounds = new OpenLayers.Bounds(0.0, -{height}.0, {width}.0, 0.0);\n  var mapMinZoom = {minZoom};\n  var mapMaxZoom = {maxZoom};\n  var emptyTileURL = "./tile-none.png";\n  OpenLayers.IMAGE_RELOAD_ATTEMPTS = 3;\n\n  function init(){{\n    map = new OpenLayers.Map({{\n      div: "map",\n      controls: [],\n      maxExtent: new OpenLayers.Bounds(0.0, -{height}.0, {width}.0, 0.0),\n      maxResolution: 128.000000,\n      numZoomLevels: 8\n    }});\n\n    var layer = new OpenLayers.Layer.TMS("TMS Layer", "", {{\n      serviceVersion: '.',\n      layername: './tiles',\n      type: 'jpg',\n      getURL: getURL,\n    }});\n\n    map.addLayer(layer);\n    map.zoomToExtent(mapBounds);\n\n    map.addControls([new OpenLayers.Control.Navigation(),\n                     new OpenLayers.Control.ArgParser(),\n                     new OpenLayers.Control.Attribution()]);\n  }}\n\n  function getURL(bounds) {{\n    bounds = this.adjustBounds(bounds);\n    var res = this.getServerResolution();\n    var x = Math.round((bounds.left - this.tileOrigin.lon) / (res * this.tileSize.w));\n    var y = Math.round((bounds.bottom - this.tileOrigin.lat) / (res * this.tileSize.h));\n    var z = this.getServerZoom();\n    var path = this.serviceVersion + "/" + this.layername + "/" + z + "/" + x + "/" + y + "." + this.type;\n    var url = this.url;\n    if (OpenLayers.Util.isArray(url)) {{\n      url = this.selectUrl(path, url);\n    }}\n\n    if (mapBounds.intersectsBounds(bounds) && (z >= mapMinZoom) && (z <= mapMaxZoom)) {{\n      return url + path;\n    }} else {{\n      return emptyTileURL;\n    }}\n  }}\n\n  function getWindowHeight() {{\n    if (self.innerHeight) return self.innerHeight;\n    if (document.documentElement && document.documentElement.clientHeight)\n      return document.documentElement.clientHeight;\n    if (document.body) return document.body.clientHeight;\n      return 0;\n  }}\n\n  function getWindowWidth() {{\n    if (self.innerWidth) return self.innerWidth;\n    if (document.documentElement && document.documentElement.clientWidth)\n      return document.documentElement.clientWidth;\n    if (document.body) return document.body.clientWidth;\n      return 0;\n  }}\n\n  function resize() {{\n    var map = document.getElementById("map");\n    map.style.height = (getWindowHeight()-20) + "px";\n    map.style.width = (getWindowWidth()-20) + "px";\n    if (map.updateSize) {{\n      map.updateSize();\n    }}\n  }}\n\n  window.onresize = function() {{ resize(); }};\n\n  </script>\n</head>\n<body onload="init()">\n  <div id="map"></div>\n  <script type="text/javascript" >resize()</script>\n</body>\n</html>\n'''  # noqa: F401
+INDEX_HTML = '''<!DOCTYPE html>\n<html lang="en">\n  <head>\n  <title>Mosaic</title>\n  <meta charset="utf-8" />\n  <meta http-equiv='imagetoolbar' content='no'/>\n  <style type="text/css">\n    html, body {{ overflow: hidden; padding: 0; height: 100%; width: 100%; font-family: 'Lucida Grande',Geneva,Arial,Verdana,sans-serif; }}\n    body {{ margin: 10px; background: #000; }}\n    .olImageLoadError {{ display: none; }}\n    .olControlLayerSwitcher .layersDiv {{ border-radius: 10px 0 0 10px; }}\n  </style>\n<script src="./OpenLayers-2.12.js"></script>\n<script>\n  var map;\n  var mapBounds = new OpenLayers.Bounds(0.0, -{height}.0, {width}.0, 0.0);\n  var mapMinZoom = {minZoom};\n  var mapMaxZoom = {maxZoom};\n  var emptyTileURL = "./tile-none.png";\n  OpenLayers.IMAGE_RELOAD_ATTEMPTS = 3;\n\n  function init(){{\n    map = new OpenLayers.Map({{\n      div: "map",\n      controls: [],\n      maxExtent: new OpenLayers.Bounds(0.0, -{height}.0, {width}.0, 0.0),\n      maxResolution: 64.000000,\n      numZoomLevels: 8\n    }});\n\n    var layer = new OpenLayers.Layer.TMS("TMS Layer", "", {{\n      serviceVersion: '.',\n      layername: './tiles',\n      type: 'jpg',\n      getURL: getURL,\n    }});\n\n    map.addLayer(layer);\n    map.zoomToExtent(mapBounds);\n\n    map.addControls([new OpenLayers.Control.Navigation()]);\n  }}\n\n  function getURL(bounds) {{\n    bounds = this.adjustBounds(bounds);\n    var res = this.getServerResolution();\n    var x = Math.round((bounds.left - this.tileOrigin.lon) / (res * this.tileSize.w));\n    var y = Math.round((bounds.bottom - this.tileOrigin.lat) / (res * this.tileSize.h));\n    var z = this.getServerZoom();\n    var path = this.serviceVersion + "/" + this.layername + "/" + z + "/" + x + "/" + y + "." + this.type;\n    var url = this.url;\n    if (OpenLayers.Util.isArray(url)) {{\n      url = this.selectUrl(path, url);\n    }}\n\n    if (mapBounds.intersectsBounds(bounds) && (z >= mapMinZoom) && (z <= mapMaxZoom)) {{\n      return url + path;\n    }} else {{\n      return emptyTileURL;\n    }}\n  }}\n\n  function getWindowHeight() {{\n    if (self.innerHeight) return self.innerHeight;\n    if (document.documentElement && document.documentElement.clientHeight)\n      return document.documentElement.clientHeight;\n    if (document.body) return document.body.clientHeight;\n      return 0;\n  }}\n\n  function getWindowWidth() {{\n    if (self.innerWidth) return self.innerWidth;\n    if (document.documentElement && document.documentElement.clientWidth)\n      return document.documentElement.clientWidth;\n    if (document.body) return document.body.clientWidth;\n      return 0;\n  }}\n\n  function resize() {{\n    var map = document.getElementById("map");\n    map.style.height = (getWindowHeight()-20) + "px";\n    map.style.width = (getWindowWidth()-20) + "px";\n    if (map.updateSize) {{\n      map.updateSize();\n    }}\n  }}\n\n  window.onresize = function() {{ resize(); }};\n\n  </script>\n</head>\n<body onload="init()">\n  <div id="map"></div>\n  <script type="text/javascript" >resize()</script>\n</body>\n</html>\n'''  # noqa: F401
 NUM_CPUS = os.environ.get('NUM_JOBS', multiprocessing.cpu_count())
-MIN_ZOOM = 2
+MIN_ZOOM = 1
 MAX_ZOOM = 7
+
+Image.MAX_IMAGE_PIXELS = None
+
 
 class TileFinder:
     def __init__(self, tiles):
@@ -44,8 +47,8 @@ class TileFinder:
 
 # Photomosaic builder modified from https://github.com/codebox/mosaic
 class MosaicBuilder:
-    def __init__(self, img, out_path, tile_size=200,
-                 compare_tile_size=5, resize_factor=10):
+    def __init__(self, img, out_path, tile_size=150,
+                 compare_tile_size=25, resize_factor=20):
         img = img.convert('RGB')
         self.out_path = out_path
         self.counter = 0
@@ -60,6 +63,7 @@ class MosaicBuilder:
         w = img.size[0] * self.resize_factor
         h = img.size[1] * self.resize_factor
         self.image = img.resize((w, h), Image.ANTIALIAS)
+        print(f'New size: {self.image.size[0]}x{self.image.size[1]}')
         w_extra, h_extra = (w % self.tile_size) / 2, (h % self.tile_size) / 2
         # Crop if the size isn't a multiple of the tiles.
         if w_extra or h_extra:
@@ -105,7 +109,7 @@ class MosaicBuilder:
                              self.actual_tiles, self.tile_size, out_queue))
         proc.start()
 
-        print('Spawning', num_workers, 'workers for adding tiles.')
+        print('Spawning', num_workers, 'workers for building mosaic.')
         for i in range(num_workers):
             Process(target=MosaicBuilder.__find,
                     args=(in_queue, out_queue, self.compare_tiles)).start()
@@ -192,13 +196,15 @@ class MosaicBuilder:
 
 class Tiler:
     def __init__(self, img_path, out_dir):
+        self.img = Image.open(img_path)
         self.img_path = img_path
         self.out_dir = out_dir
 
     def generate(self):
         gdal2tiles.generate_tiles(self.img_path, self.out_dir,
-                                  profile='raster', resume=True,
+                                  profile='raster',
                                   nb_processes=NUM_CPUS,
+                                  resume=True,
                                   zoom=(MIN_ZOOM, MAX_ZOOM))
         os.remove(os.path.join(self.out_dir, 'openlayers.html'))
 
@@ -212,7 +218,7 @@ class Tiler:
                 leaf = rel_path[len(self.out_dir):]
                 print('  Converting {:40.40}'.format(leaf), flush=True, end='\r')
                 im = Image.open(rel_path)
-                bg = Image.new('RGB', im.size, (255, 255, 255))
+                bg = Image.new('RGB', im.size, (0, 0, 0))
                 bg.paste(im, im.split()[-1])
                 bg.save(rel_path.replace('.png', '.jpg'))
                 os.remove(rel_path)
@@ -229,11 +235,15 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--source', metavar='DIR',
                         help='Directory containing source images for mosaic.')
     parser.add_argument(
-        '-o', '--output',
-        metavar='FILE',
+        '-o', '--output', metavar='FILE',
         help='Mosaic output path (default: obtained from input basename).')
+    parser.add_argument('-m', '--mosaic', action='store_true',
+                        help='Build mosaic only (skip tiles)')
+    parser.add_argument('-t', '--tiles', action='store_true',
+                        help='Build tiles only (skip mosaic)')
     options = parser.parse_args()
-    img = Image.open(options.image)
+    if not options.tiles:
+        img = Image.open(options.image)
 
     if not options.source:
         parser.error('--source must be specified for building mosaic.')
@@ -242,9 +252,12 @@ if __name__ == "__main__":
         base, _ = os.path.splitext(options.image)
         out_path = base + '_mosaic.jpg'
 
-    builder = MosaicBuilder(img, out_path)
-    builder.collect_tiles(options.source)
-    builder.build_mosaic()
+    if not options.tiles:
+        builder = MosaicBuilder(img, out_path)
+        builder.collect_tiles(options.source)
+        builder.build_mosaic()
+    if options.mosaic:
+        exit()
 
     workdir = os.path.dirname(out_path)
     tiles_dir = os.path.join(workdir, 'tiles')
@@ -253,8 +266,8 @@ if __name__ == "__main__":
 
     with open(os.path.join(workdir, 'index.html'), 'w') as fd:
         fd.write(INDEX_HTML.format(
-            width=builder.image.size[0],
-            height=builder.image.size[1],
+            width=tiler.img.width,
+            height=tiler.img.height,
             minZoom=MIN_ZOOM,
             maxZoom=MAX_ZOOM,
         ))
